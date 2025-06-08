@@ -1,3 +1,7 @@
+"use client"
+
+import { useState } from "react"
+import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -146,7 +150,142 @@ const news = [
   },
 ]
 
+// 車両タイプのアイコンデータ
+const vehicleTypeIcons = [
+  { id: 1, type: "クレーン", icon: "/icons/crane.png" },
+  { id: 2, type: "ダンプ", icon: "/icons/dump.png" },
+  { id: 3, type: "平ボディ", icon: "/icons/flatbed.png" },
+  { id: 4, type: "車輌運搬車", icon: "/icons/carrier.png" },
+  { id: 5, type: "ミキサー車", icon: "/icons/mixer.png" },
+  { id: 6, type: "アルミバン", icon: "/icons/van.png" },
+  { id: 7, type: "高所作業車", icon: "/icons/aerial.png" },
+  { id: 8, type: "アルミウィング", icon: "/icons/wing.png" },
+  { id: 9, type: "キャリアカー", icon: "/icons/car-carrier.png" },
+  { id: 10, type: "塵芥車", icon: "/icons/garbage.png" },
+  { id: 11, type: "アームロール", icon: "/icons/arm-roll.png" },
+  { id: 12, type: "特装車・その他", icon: "/icons/special.png" },
+]
+
+// プルダウンの選択肢
+const bodyTypes = [
+  "クレーン",
+  "ダンプ",
+  "平ボディ",
+  "車輌運搬車",
+  "ミキサー車",
+  "高所作業車",
+  "アルミバン",
+  "アルミウィング",
+  "キャリアカー",
+  "塵芥車",
+  "アームロール",
+  "バス",
+  "冷蔵冷凍車",
+  "タンクローリー",
+  "特装車・その他"
+]
+
+const makers = [
+  "日野",
+  "いすゞ",
+  "三菱ふそう",
+  "UD",
+  "その他"
+]
+
+const sizes = [
+  "大型",
+  "増トン",
+  "中型",
+  "小型"
+]
+
+// モックデータ
+const mockVehicles = [
+  {
+    id: "G-00001",
+    name: "日野レンジャー",
+    code: "ABC-JK1MNLI",
+    inquiryNumber: "G-00001",
+    bodyType: "ダンプ",
+    price: "000",
+    year: "平成00年00月",
+    mileage: "00,000km",
+    loadCapacity: "0,000kg",
+    transmission: "AT",
+    inspection: "抹消",
+    status: "商談中"
+  },
+  {
+    id: "G-00002",
+    name: "いすゞ エルフ",
+    code: "DEF-GH2OPQR",
+    inquiryNumber: "G-00002",
+    bodyType: "アルミバン",
+    price: "000",
+    year: "平成00年00月",
+    mileage: "00,000km",
+    loadCapacity: "0,000kg",
+    transmission: "AT",
+    inspection: "抹消",
+    status: ""
+  },
+  {
+    id: "G-00003",
+    name: "いすゞ エルフ",
+    code: "DEF-GH2OPQR",
+    inquiryNumber: "G-00003",
+    bodyType: "アルミバン",
+    price: "000",
+    year: "平成00年00月",
+    mileage: "00,000km",
+    loadCapacity: "0,000kg",
+    transmission: "AT",
+    inspection: "抹消",
+    status: ""
+  },
+  {
+    id: "G-00004",
+    name: "いすゞ エルフ",
+    code: "DEF-GH2OPQR",
+    inquiryNumber: "G-00004",
+    bodyType: "アルミバン",
+    price: "000",
+    year: "平成00年00月",
+    mileage: "00,000km",
+    loadCapacity: "0,000kg",
+    transmission: "AT",
+    inspection: "抹消",
+    status: ""
+  }
+];
+
 export default function HomePage() {
+  // 検索条件の状態管理
+  const [selectedType, setSelectedType] = useState("");
+  const [searchResults, setSearchResults] = useState(mockVehicles);
+
+  // アイコンクリック時のハンドラー
+  const handleIconClick = (type: string) => {
+    setSelectedType(type);
+    filterVehicles(type);
+  };
+
+  // 検索ボタンクリック時のハンドラー
+  const handleSearch = () => {
+    filterVehicles(selectedType);
+  };
+
+  // フィルタリング関数
+  const filterVehicles = (type: string) => {
+    if (!type) {
+      setSearchResults(mockVehicles);
+    } else {
+      const filtered = mockVehicles.filter(vehicle => vehicle.bodyType === type);
+      setSearchResults(filtered);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
@@ -167,16 +306,16 @@ export default function HomePage() {
       <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            {truckTypes.map((type, index) => (
-              <Link key={index} href="/inventory" className="block">
-                <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-                  <CardContent className="p-6 text-center">
-                    <div className="w-16 h-16 bg-blue-100 rounded-full mx-auto mb-4 flex items-center justify-center">
-                      <div className="w-8 h-8 bg-blue-600 rounded"></div>
-                    </div>
-                    <p className="font-medium text-sm">{type}</p>
-                  </CardContent>
-                </Card>
+            {vehicleTypeIcons.map((icon) => (
+              <Link
+                key={icon.id}
+                href={`/inventory?type=${encodeURIComponent(icon.type)}`}
+                className="p-4 rounded-lg flex flex-col items-center justify-center bg-white hover:shadow-lg transition-all"
+              >
+                <div className="w-16 h-16 bg-blue-100 rounded-lg mb-2 flex items-center justify-center">
+                  <div className="w-8 h-8 bg-blue-600 rounded"></div>
+                </div>
+                <span className="text-sm text-center">{icon.type}</span>
               </Link>
             ))}
           </div>
@@ -186,53 +325,51 @@ export default function HomePage() {
       {/* Search Section */}
       <section className="py-12">
         <div className="container mx-auto px-4">
-          <Card className="max-w-4xl mx-auto">
-            <CardContent className="p-8">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                <Select>
-                  <SelectTrigger>
-                    <SelectValue placeholder="ボディタイプ：すべて" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">すべて</SelectItem>
-                    {truckTypes.map((type, index) => (
-                      <SelectItem key={index} value={type}>
-                        {type}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <Select>
-                  <SelectTrigger>
-                    <SelectValue placeholder="メーカー：すべて" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">すべて</SelectItem>
-                    <SelectItem value="hino">日野</SelectItem>
-                    <SelectItem value="isuzu">いすゞ</SelectItem>
-                    <SelectItem value="fuso">三菱ふそう</SelectItem>
-                    <SelectItem value="ud">UD</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Select>
-                  <SelectTrigger>
-                    <SelectValue placeholder="大きさ：すべて" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">すべて</SelectItem>
-                    <SelectItem value="large">大型</SelectItem>
-                    <SelectItem value="medium">中型</SelectItem>
-                    <SelectItem value="small">小型</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Input placeholder="問合せ番号、車台番号など" />
-              </div>
-              <Button className="w-full md:w-auto" size="lg">
-                <Search className="w-4 h-4 mr-2" />
-                検索する
-              </Button>
-            </CardContent>
-          </Card>
+          <div className="bg-white p-6 rounded-lg shadow-sm">
+            <div className="grid grid-cols-4 gap-4 mb-4">
+              <select
+                className="w-full border rounded-lg px-3 py-2"
+                value={selectedType}
+                onChange={(e) => setSelectedType(e.target.value)}
+              >
+                <option value="">ボディタイプ：すべて</option>
+                {vehicleTypeIcons.map((icon) => (
+                  <option key={icon.id} value={icon.type}>{icon.type}</option>
+                ))}
+              </select>
+              <select
+                className="w-full border rounded-lg px-3 py-2"
+                value={selectedType}
+                onChange={(e) => setSelectedType(e.target.value)}
+              >
+                <option value="">メーカー：すべて</option>
+                {makers.map((maker) => (
+                  <option key={maker} value={maker}>{maker}</option>
+                ))}
+              </select>
+              <select
+                className="w-full border rounded-lg px-3 py-2"
+                value={selectedType}
+                onChange={(e) => setSelectedType(e.target.value)}
+              >
+                <option value="">大きさ：すべて</option>
+                {sizes.map((size) => (
+                  <option key={size} value={size}>{size}</option>
+                ))}
+              </select>
+              <input
+                type="text"
+                placeholder="問合せ番号、車台番号など"
+                className="w-full border rounded-lg px-3 py-2"
+              />
+            </div>
+            <button 
+              onClick={handleSearch}
+              className="w-full bg-gray-900 text-white rounded-lg px-4 py-2 hover:bg-gray-800 transition-colors"
+            >
+              検索する
+            </button>
+          </div>
         </div>
       </section>
 
@@ -528,6 +665,87 @@ export default function HomePage() {
                 <Button variant="outline">お知らせ一覧へ</Button>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Search Results */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-2xl font-bold">
+              {selectedType || "すべて"}
+            </h2>
+            <p className="text-gray-600">
+              {searchResults.length}件の結果が見つかりました
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {searchResults.map((vehicle) => (
+              <div key={vehicle.id} className="bg-white rounded-lg shadow-sm overflow-hidden">
+                {/* ステータスバッジ */}
+                {vehicle.status && (
+                  <div className={`
+                    ${vehicle.status === "商談中" ? "bg-red-500" : "bg-gray-500"}
+                    text-white text-sm px-2 py-1 absolute
+                  `}>
+                    {vehicle.status}
+                  </div>
+                )}
+                
+                {/* 車両画像 */}
+                <div className="aspect-video bg-gray-100 relative">
+                  <div className="absolute inset-0 flex items-center justify-center text-gray-400">
+                    車両画像
+                  </div>
+                </div>
+                
+                {/* 車両情報 */}
+                <div className="p-4">
+                  <h3 className="font-bold mb-2">{vehicle.name}</h3>
+                  <p className="text-sm text-gray-600 mb-1">{vehicle.code}</p>
+                  <p className="text-sm text-gray-600 mb-2">問合せ番号：{vehicle.inquiryNumber}</p>
+                  <div className="inline-block bg-blue-100 text-blue-800 text-sm px-2 py-1 rounded mb-4">
+                    {vehicle.bodyType}
+                  </div>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span>本体価格</span>
+                      <span className="font-bold">{vehicle.price}万円(税別)</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>年式</span>
+                      <span>{vehicle.year}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>走行距離</span>
+                      <span>{vehicle.mileage}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>積載量</span>
+                      <span>{vehicle.loadCapacity}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>シフト</span>
+                      <span>{vehicle.transmission}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>車検期限</span>
+                      <span>{vehicle.inspection}</span>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* 詳細リンク */}
+                <Link 
+                  href={`/vehicles/${vehicle.id}`}
+                  className="block bg-gray-900 text-white text-center py-3 hover:bg-gray-800 transition-colors"
+                >
+                  詳細はこちら
+                </Link>
+              </div>
+            ))}
           </div>
         </div>
       </section>

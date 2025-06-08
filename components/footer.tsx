@@ -71,7 +71,10 @@ export function Footer() {
               <ul className="space-y-2 text-sm">
                 {footerLinks.bodyTypes.map((type, index) => (
                   <li key={index}>
-                    <Link href="/inventory" className="text-gray-400 hover:text-white transition-colors">
+                    <Link 
+                      href={`/inventory?type=${encodeURIComponent(type)}`}
+                      className="text-gray-400 hover:text-white transition-colors"
+                    >
                       ー　{type}
                     </Link>
                   </li>
@@ -85,7 +88,10 @@ export function Footer() {
               <ul className="space-y-2 text-sm">
                 {footerLinks.makers.map((maker, index) => (
                   <li key={index}>
-                    <Link href="/inventory" className="text-gray-400 hover:text-white transition-colors">
+                    <Link 
+                      href={`/inventory?maker=${encodeURIComponent(maker)}`}
+                      className="text-gray-400 hover:text-white transition-colors"
+                    >
                       ー　{maker}
                     </Link>
                   </li>
@@ -99,7 +105,10 @@ export function Footer() {
               <ul className="space-y-2 text-sm">
                 {footerLinks.sizes.map((size, index) => (
                   <li key={index}>
-                    <Link href="/inventory" className="text-gray-400 hover:text-white transition-colors">
+                    <Link 
+                      href={`/inventory?size=${encodeURIComponent(size)}`}
+                      className="text-gray-400 hover:text-white transition-colors"
+                    >
                       ー　{size}
                     </Link>
                   </li>

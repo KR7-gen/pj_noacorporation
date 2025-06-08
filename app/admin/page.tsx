@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { useState } from "react"
 
 // モックデータ
 const vehicles = Array(10).fill(null).map((_, i) => ({
@@ -51,6 +52,54 @@ const sizes = [
 ]
 
 export default function AdminVehiclesPage() {
+  // 検索条件の状態管理
+  const [searchParams, setSearchParams] = useState({
+    bodyType: "",
+    maker: "",
+    size: "",
+    keyword: ""
+  });
+
+  // モックデータをより現実的なデータに更新
+  const allVehicles = Array(10).fill(null).map((_, i) => ({
+    id: i + 1,
+    managementNumber: `V${String(i + 1).padStart(5, '0')}`,
+    maker: ['いすゞ', '日野', '三菱ふそう', 'UD'][i % 4],
+    bodyType: ['クレーン', 'ダンプ', '平ボディ', '冷蔵冷凍車'][i % 4],
+    size: ['大型', '中型', '小型'][i % 3],
+    price: 1000000 + (i * 100000),
+    wholesalePrice: 900000 + (i * 90000),
+    totalPayment: 1200000 + (i * 100000),
+    expiryDate: '2024/12/31'
+  }));
+
+  // 検索条件に基づいてフィルタリングを行う
+  const filteredVehicles = allVehicles.filter(vehicle => {
+    const matchesBodyType = !searchParams.bodyType || vehicle.bodyType === searchParams.bodyType;
+    const matchesMaker = !searchParams.maker || vehicle.maker === searchParams.maker;
+    const matchesSize = !searchParams.size || vehicle.size === searchParams.size;
+    const matchesKeyword = !searchParams.keyword || 
+      Object.values(vehicle).some(value => 
+        String(value).toLowerCase().includes(searchParams.keyword.toLowerCase())
+      );
+
+    return matchesBodyType && matchesMaker && matchesSize && matchesKeyword;
+  });
+
+  // 検索条件の更新ハンドラー
+  const handleSearch = () => {
+    // 既に状態は更新されているので、追加のアクションは不要
+    console.log('Searching with params:', searchParams);
+  };
+
+  // 検索フォームの入力ハンドラー
+  const handleInputChange = (field: string, value: string) => {
+    setSearchParams(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
@@ -63,19 +112,31 @@ export default function AdminVehiclesPage() {
       {/* 検索フォーム */}
       <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
         <div className="grid grid-cols-4 gap-4">
-          <select className="border rounded px-2 py-1">
+          <select 
+            className="border rounded px-2 py-1"
+            value={searchParams.bodyType}
+            onChange={(e) => handleInputChange('bodyType', e.target.value)}
+          >
             <option value="">ボディタイプ</option>
             {bodyTypes.map((type) => (
               <option key={type} value={type}>{type}</option>
             ))}
           </select>
-          <select className="border rounded px-2 py-1">
+          <select 
+            className="border rounded px-2 py-1"
+            value={searchParams.maker}
+            onChange={(e) => handleInputChange('maker', e.target.value)}
+          >
             <option value="">メーカー</option>
             {makers.map((maker) => (
               <option key={maker} value={maker}>{maker}</option>
             ))}
           </select>
-          <select className="border rounded px-2 py-1">
+          <select 
+            className="border rounded px-2 py-1"
+            value={searchParams.size}
+            onChange={(e) => handleInputChange('size', e.target.value)}
+          >
             <option value="">大きさ</option>
             {sizes.map((size) => (
               <option key={size} value={size}>{size}</option>
@@ -85,10 +146,12 @@ export default function AdminVehiclesPage() {
             type="text"
             placeholder="フリーワード"
             className="border rounded px-2 py-1"
+            value={searchParams.keyword}
+            onChange={(e) => handleInputChange('keyword', e.target.value)}
           />
         </div>
         <div className="mt-4 text-right">
-          <Button>検索</Button>
+          <Button onClick={handleSearch}>検索</Button>
         </div>
       </div>
 
@@ -109,8 +172,8 @@ export default function AdminVehiclesPage() {
               <th className="px-4 py-3 text-center">操作</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200">
-            {vehicles.map((vehicle) => (
+          <tbody>
+            {filteredVehicles.map((vehicle) => (
               <tr key={vehicle.id}>
                 <td className="px-4 py-3">
                   <div className="w-16 h-16 bg-gray-200 rounded"></div>
