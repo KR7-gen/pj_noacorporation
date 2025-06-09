@@ -8,6 +8,8 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Search, Phone } from "lucide-react"
+import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 const truckTypes = [
   "クレーン",
@@ -134,7 +136,30 @@ export default function InventoryPage() {
   const [formMaker, setFormMaker] = useState(searchParams.get("maker") || "all")
   const [formSize, setFormSize] = useState(searchParams.get("size") || "all")
   const [formKeyword, setFormKeyword] = useState("")
-  const [searchResults, setSearchResults] = useState(allTrucks)
+  const [searchResults, setSearchResults] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  // Firestoreからデータを取得
+  useEffect(() => {
+    const fetchVehicles = async () => {
+      try {
+        setLoading(true);
+        const vehiclesRef = collection(db, "vehicles");
+        const querySnapshot = await getDocs(vehiclesRef);
+        const vehicles = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setSearchResults(vehicles);
+      } catch (error) {
+        console.error("Error fetching vehicles:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchVehicles();
+  }, []);
 
   // URLパラメータに基づいて初期フィルタリングを行う
   useEffect(() => {
@@ -192,41 +217,42 @@ export default function InventoryPage() {
     setSearchResults(filtered)
   }
 
-  // 検索ボタンクリック時の処理
-  const handleSearch = () => {
-    // URLを更新
-    const params = new URLSearchParams()
-    if (formType !== "all") params.set("type", formType)
-    if (formMaker !== "all") params.set("maker", formMaker)
-    if (formSize !== "all") params.set("size", formSize)
-    router.push(`/inventory?${params.toString()}`)
+  // 検索ボタンクリック時のハンドラー
+  const handleSearch = async () => {
+    try {
+      const vehiclesRef = collection(db, "vehicles");
+      let querySnapshot;
 
-    // 選択状態を更新
-    setSelectedType(formType)
+      // 検索条件に基づいてクエリを構築
+      if (formType !== "all") {
+        const q = query(vehiclesRef, where("bodyType", "==", formType));
+        querySnapshot = await getDocs(q);
+      } else {
+        querySnapshot = await getDocs(vehiclesRef);
+      }
 
-    // フィルタリング
-    let filtered = allTrucks
-    if (formType !== "all") {
-      filtered = filtered.filter(truck => truck.bodyType === formType)
+      const vehicles = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+
+      // クライアントサイドでさらにフィルタリング
+      const filtered = vehicles.filter(vehicle => {
+        const matchesMaker = formMaker === "all" || vehicle.maker === formMaker;
+        const matchesSize = formSize === "all" || vehicle.size === formSize;
+        const matchesKeyword = !formKeyword || 
+          Object.values(vehicle).some(value => 
+            String(value).toLowerCase().includes(formKeyword.toLowerCase())
+          );
+
+        return matchesMaker && matchesSize && matchesKeyword;
+      });
+
+      setSearchResults(filtered);
+    } catch (error) {
+      console.error("Error searching vehicles:", error);
     }
-    if (formMaker !== "all") {
-      filtered = filtered.filter(truck => truck.maker === formMaker)
-    }
-    if (formSize !== "all") {
-      filtered = filtered.filter(truck => truck.size === formSize)
-    }
-    if (formKeyword.trim()) {
-      const keyword = formKeyword.toLowerCase()
-      filtered = filtered.filter(truck => 
-        truck.id.toLowerCase().includes(keyword) ||
-        truck.maker.toLowerCase().includes(keyword) ||
-        truck.model.toLowerCase().includes(keyword) ||
-        truck.bodyType.toLowerCase().includes(keyword) ||
-        truck.size.toLowerCase().includes(keyword)
-      )
-    }
-    setSearchResults(filtered)
-  }
+  };
 
   // 価格表示用のフォーマット関数
   const formatPrice = (price: string) => {

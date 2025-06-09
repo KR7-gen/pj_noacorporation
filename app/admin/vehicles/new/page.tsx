@@ -1,6 +1,10 @@
 "use client"
 
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
+import { collection, addDoc } from "firebase/firestore"
+import { db } from "@/lib/firebase"
 
 // プルダウンの選択肢
 const bodyTypes = [
@@ -91,7 +95,126 @@ const vehicleStatuses = [
   "予備検査"
 ]
 
+type MonthlyPaymentField = "twoYear" | "threeYear" | "fourYear" | "fiveYear"
+
+interface VehicleFormData {
+  name: string
+  price: string
+  totalPayment: string
+  monthlyPayments: {
+    [key in MonthlyPaymentField]: string
+  }
+  vehicleInfo: {
+    bodyType: string
+    maker: string
+    size: string
+    model: string
+    year: string
+    mileage: string
+    loadCapacity: string
+    transmission: string
+    shift: string
+    vehicleStatus: string
+    vehicleExpiryDate: string
+    dimensions: {
+      length: string
+      width: string
+      height: string
+    }
+    weight: string
+    engineType: string
+    power: string
+    displacement: string
+    fuel: string
+    inquiryNumber: string
+    vehicleNumber: string
+  }
+  images: string[]
+}
+
 export default function VehicleCreatePage() {
+  const router = useRouter()
+  const [formData, setFormData] = useState<VehicleFormData>({
+    name: "",
+    price: "",
+    totalPayment: "",
+    monthlyPayments: {
+      twoYear: "",
+      threeYear: "",
+      fourYear: "",
+      fiveYear: ""
+    },
+    vehicleInfo: {
+      bodyType: "",
+      maker: "",
+      size: "",
+      model: "",
+      year: "",
+      mileage: "",
+      loadCapacity: "",
+      transmission: "",
+      shift: "",
+      vehicleStatus: "",
+      vehicleExpiryDate: "",
+      dimensions: {
+        length: "",
+        width: "",
+        height: ""
+      },
+      weight: "",
+      engineType: "",
+      power: "",
+      displacement: "",
+      fuel: "",
+      inquiryNumber: "",
+      vehicleNumber: ""
+    },
+    images: []
+  })
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }))
+  }
+
+  const handleVehicleInfoChange = (field: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      vehicleInfo: {
+        ...prev.vehicleInfo,
+        [field]: value
+      }
+    }))
+  }
+
+  const handleMonthlyPaymentChange = (field: MonthlyPaymentField, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      monthlyPayments: {
+        ...prev.monthlyPayments,
+        [field]: value
+      }
+    }))
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    try {
+      const vehiclesRef = collection(db, "vehicles")
+      await addDoc(vehiclesRef, {
+        ...formData,
+        createdAt: new Date(),
+        status: "" // 初期状態
+      })
+      router.push("/admin/vehicles")
+    } catch (error) {
+      console.error("Error adding vehicle:", error)
+      alert("車両の登録に失敗しました。")
+    }
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -99,7 +222,7 @@ export default function VehicleCreatePage() {
       </div>
 
       <div className="bg-white p-6 rounded-lg shadow-sm">
-        <form className="space-y-8">
+        <form className="space-y-8" onSubmit={handleSubmit}>
           {/* 基本情報 */}
           <div className="grid grid-cols-3 gap-6">
             <div className="space-y-2">
@@ -107,6 +230,9 @@ export default function VehicleCreatePage() {
               <input
                 type="text"
                 className="w-full border rounded px-2 py-1"
+                value={formData.name}
+                onChange={(e) => handleInputChange("name", e.target.value)}
+                required
               />
             </div>
             <div className="space-y-2">
@@ -114,6 +240,9 @@ export default function VehicleCreatePage() {
               <input
                 type="number"
                 className="w-full border rounded px-2 py-1"
+                value={formData.price}
+                onChange={(e) => handleInputChange("price", e.target.value)}
+                required
               />
             </div>
             <div className="space-y-2">
@@ -121,6 +250,9 @@ export default function VehicleCreatePage() {
               <input
                 type="number"
                 className="w-full border rounded px-2 py-1"
+                value={formData.totalPayment}
+                onChange={(e) => handleInputChange("totalPayment", e.target.value)}
+                required
               />
             </div>
           </div>
@@ -129,13 +261,20 @@ export default function VehicleCreatePage() {
           <div>
             <h3 className="text-lg font-medium mb-4">毎月支払額シミュレーション</h3>
             <div className="grid grid-cols-4 gap-6">
-              {[2, 3, 4, 4].map((year, index) => (
-                <div key={index} className="space-y-2">
+              {[
+                { year: 2, field: "twoYear" },
+                { year: 3, field: "threeYear" },
+                { year: 4, field: "fourYear" },
+                { year: 5, field: "fiveYear" }
+              ].map(({ year, field }) => (
+                <div key={field} className="space-y-2">
                   <label className="block text-sm font-medium">{year}年</label>
                   <input
                     type="number"
                     className="w-full border rounded px-2 py-1"
                     placeholder="円（税別）〜"
+                    value={formData.monthlyPayments[field]}
+                    onChange={(e) => handleMonthlyPaymentChange(field as MonthlyPaymentField, e.target.value)}
                   />
                 </div>
               ))}
@@ -164,7 +303,12 @@ export default function VehicleCreatePage() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">ボディタイプ</label>
-                  <select className="w-full border rounded px-2 py-1">
+                  <select 
+                    className="w-full border rounded px-2 py-1"
+                    value={formData.vehicleInfo.bodyType}
+                    onChange={(e) => handleVehicleInfoChange("bodyType", e.target.value)}
+                    required
+                  >
                     <option value="">選択</option>
                     {bodyTypes.map((type) => (
                       <option key={type} value={type}>{type}</option>
@@ -173,7 +317,12 @@ export default function VehicleCreatePage() {
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">メーカー</label>
-                  <select className="w-full border rounded px-2 py-1">
+                  <select 
+                    className="w-full border rounded px-2 py-1"
+                    value={formData.vehicleInfo.maker}
+                    onChange={(e) => handleVehicleInfoChange("maker", e.target.value)}
+                    required
+                  >
                     <option value="">選択</option>
                     {makers.map((maker) => (
                       <option key={maker} value={maker}>{maker}</option>
@@ -194,11 +343,19 @@ export default function VehicleCreatePage() {
                   <input
                     type="text"
                     className="w-full border rounded px-2 py-1"
+                    value={formData.vehicleInfo.model}
+                    onChange={(e) => handleVehicleInfoChange("model", e.target.value)}
+                    required
                   />
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">年式</label>
-                  <select className="w-full border rounded px-2 py-1">
+                  <select 
+                    className="w-full border rounded px-2 py-1"
+                    value={formData.vehicleInfo.year}
+                    onChange={(e) => handleVehicleInfoChange("year", e.target.value)}
+                    required
+                  >
                     <option value="">選択</option>
                     {years.map((year) => (
                       <option key={year} value={year}>{year}</option>
@@ -207,7 +364,12 @@ export default function VehicleCreatePage() {
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">走行距離</label>
-                  <select className="w-full border rounded px-2 py-1">
+                  <select 
+                    className="w-full border rounded px-2 py-1"
+                    value={formData.vehicleInfo.mileage}
+                    onChange={(e) => handleVehicleInfoChange("mileage", e.target.value)}
+                    required
+                  >
                     <option value="">選択</option>
                     {mileages.map((mileage) => (
                       <option key={mileage} value={mileage}>{mileage}</option>
@@ -215,17 +377,13 @@ export default function VehicleCreatePage() {
                   </select>
                 </div>
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium">積載量（下限）</label>
-                  <select className="w-full border rounded px-2 py-1">
-                    <option value="">選択</option>
-                    {loadCapacities.map((capacity) => (
-                      <option key={capacity} value={capacity}>{capacity}</option>
-                    ))}
-                  </select>
-                </div>
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium">積載量（上限）</label>
-                  <select className="w-full border rounded px-2 py-1">
+                  <label className="block text-sm font-medium">積載量</label>
+                  <select 
+                    className="w-full border rounded px-2 py-1"
+                    value={formData.vehicleInfo.loadCapacity}
+                    onChange={(e) => handleVehicleInfoChange("loadCapacity", e.target.value)}
+                    required
+                  >
                     <option value="">選択</option>
                     {loadCapacities.map((capacity) => (
                       <option key={capacity} value={capacity}>{capacity}</option>
@@ -234,7 +392,12 @@ export default function VehicleCreatePage() {
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">ミッション</label>
-                  <select className="w-full border rounded px-2 py-1">
+                  <select 
+                    className="w-full border rounded px-2 py-1"
+                    value={formData.vehicleInfo.transmission}
+                    onChange={(e) => handleVehicleInfoChange("transmission", e.target.value)}
+                    required
+                  >
                     <option value="">選択</option>
                     {missions.map((mission) => (
                       <option key={mission} value={mission}>{mission}</option>
@@ -243,7 +406,12 @@ export default function VehicleCreatePage() {
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">車検状態</label>
-                  <select className="w-full border rounded px-2 py-1">
+                  <select 
+                    className="w-full border rounded px-2 py-1"
+                    value={formData.vehicleInfo.vehicleStatus}
+                    onChange={(e) => handleVehicleInfoChange("vehicleStatus", e.target.value)}
+                    required
+                  >
                     <option value="">選択</option>
                     {vehicleStatuses.map((status) => (
                       <option key={status} value={status}>{status}</option>
@@ -418,9 +586,13 @@ export default function VehicleCreatePage() {
             </div>
           </div>
 
-          <div className="flex justify-center">
-            <Button type="submit" className="px-8">
-              登録
+          {/* Submit Button */}
+          <div className="flex justify-end gap-4">
+            <Button type="button" variant="outline" onClick={() => router.back()}>
+              キャンセル
+            </Button>
+            <Button type="submit">
+              登録する
             </Button>
           </div>
         </form>
