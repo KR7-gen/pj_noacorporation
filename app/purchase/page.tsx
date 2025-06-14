@@ -1,3 +1,5 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -5,6 +7,8 @@ import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Phone, Upload, Download } from "lucide-react"
 import Link from "next/link"
+import { useState } from "react"
+import ContactForm from "../components/ContactForm"
 
 const achievements = [
   {
@@ -92,6 +96,35 @@ const faqs = [
 ]
 
 export default function PurchasePage() {
+  const [formData, setFormData] = useState({
+    maker: "",
+    model: "",
+    type: "",
+    year: "",
+    mileage: "",
+    transmission: "",
+    address: "",
+    name: "",
+    phone: "",
+    email: "",
+    privacy: false
+  })
+
+  const handleChange = (field: string, value: string | boolean) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }))
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!formData.privacy) {
+      alert("個人情報の取り扱いに同意してください。")
+      return
+    }
+  }
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -336,142 +369,7 @@ export default function PurchasePage() {
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">無料査定フォーム</h2>
-              <p className="text-lg text-gray-700 mb-4">
-                いただいた情報から、目安となる買取金額を1営業日以内にご連絡差し上げます。
-              </p>
-              <p className="text-sm text-gray-600">
-                車検証や外観など、できるだけ詳細な情報をご提供いただくことで、高額な査定につながります。
-              </p>
-            </div>
-
-            <Card>
-              <CardContent className="p-8">
-                <form className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <Label htmlFor="maker" className="text-base font-medium">
-                        メーカー <span className="text-red-500">必須</span>
-                      </Label>
-                      <Input id="maker" placeholder="テキスト" className="mt-2" />
-                    </div>
-                    <div>
-                      <Label htmlFor="model" className="text-base font-medium">
-                        車種名 <span className="text-red-500">必須</span>
-                      </Label>
-                      <Input id="model" placeholder="テキスト" className="mt-2" />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <Label htmlFor="type" className="text-base font-medium">
-                        型式 <span className="text-gray-500">任意</span>
-                      </Label>
-                      <Input id="type" placeholder="テキスト" className="mt-2" />
-                    </div>
-                    <div>
-                      <Label htmlFor="year" className="text-base font-medium">
-                        年式 <span className="text-red-500">必須</span>
-                      </Label>
-                      <Input id="year" placeholder="テキスト" className="mt-2" />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <Label htmlFor="mileage" className="text-base font-medium">
-                        走行距離 <span className="text-red-500">必須</span>
-                      </Label>
-                      <Input id="mileage" placeholder="テキスト" className="mt-2" />
-                      <p className="text-sm text-gray-500 mt-1">※現在のオドメーターをご確認してください</p>
-                    </div>
-                    <div>
-                      <Label htmlFor="transmission" className="text-base font-medium">
-                        シフト形状 <span className="text-gray-500">任意</span>
-                      </Label>
-                      <Input id="transmission" placeholder="テキスト" className="mt-2" />
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="exterior-photos" className="text-base font-medium">
-                      外観写真 <span className="text-gray-500">任意</span>
-                    </Label>
-                    <div className="mt-2 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-                      <Upload className="w-8 h-8 mx-auto mb-4 text-gray-400" />
-                      <p className="text-gray-600 mb-2">ここにファイルをドロップして追加してください</p>
-                      <p className="text-gray-500 mb-4">or</p>
-                      <Button variant="outline">ファイル選択</Button>
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="registration-photos" className="text-base font-medium">
-                      車検証画像 <span className="text-gray-500">任意</span>
-                    </Label>
-                    <div className="mt-2 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-                      <Upload className="w-8 h-8 mx-auto mb-4 text-gray-400" />
-                      <p className="text-gray-600 mb-2">ここにファイルをドロップして追加してください</p>
-                      <p className="text-gray-500 mb-4">or</p>
-                      <Button variant="outline">ファイル選択</Button>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <Label htmlFor="address" className="text-base font-medium">
-                        ご住所 <span className="text-red-500">必須</span>
-                      </Label>
-                      <Input id="address" placeholder="テキスト" className="mt-2" />
-                    </div>
-                    <div>
-                      <Label htmlFor="name" className="text-base font-medium">
-                        お名前 <span className="text-red-500">必須</span>
-                      </Label>
-                      <Input id="name" placeholder="テキスト" className="mt-2" />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <Label htmlFor="phone" className="text-base font-medium">
-                        電話番号 <span className="text-red-500">必須</span>
-                      </Label>
-                      <Input id="phone" placeholder="テキスト" className="mt-2" />
-                    </div>
-                    <div>
-                      <Label htmlFor="email" className="text-base font-medium">
-                        メールアドレス <span className="text-red-500">必須</span>
-                      </Label>
-                      <Input id="email" placeholder="テキスト" className="mt-2" />
-                    </div>
-                  </div>
-
-                  <div className="space-y-4">
-                    <p className="text-sm text-gray-700">
-                      個人情報の取り扱いについて、下記の内容にご同意いただきましたらチェックをお願いいたします。
-                    </p>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox id="privacy" />
-                      <Label htmlFor="privacy" className="text-sm">
-                        個人情報の取り扱いに同意する
-                      </Label>
-                    </div>
-                    <Button variant="link" className="p-0 h-auto text-blue-600">
-                      個人情報の取り扱いについて
-                    </Button>
-                  </div>
-
-                  <div className="text-center">
-                    <Button size="lg" className="bg-green-600 hover:bg-green-700">
-                      送信する
-                    </Button>
-                  </div>
-                </form>
-              </CardContent>
-            </Card>
+            <ContactForm />
           </div>
         </div>
       </section>

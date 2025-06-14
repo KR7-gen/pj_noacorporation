@@ -27,18 +27,41 @@ const prefectures = [
 
 interface ContactFormProps {
   inquiryNumber?: string;
+  inquiryType?: string;
+  maker?: string;
+  model?: string;
+  year?: string;
+  mileage?: string;
+  name?: string;
+  phone?: string;
+  email?: string;
 }
 
-export default function ContactForm({ inquiryNumber }: ContactFormProps) {
+export default function ContactForm({ 
+  inquiryNumber,
+  inquiryType,
+  maker,
+  model,
+  year,
+  mileage,
+  name,
+  phone,
+  email
+}: ContactFormProps) {
   const [formData, setFormData] = useState({
     companyName: "",
-    name: "",
+    name: name || "",
     prefecture: "",
-    phone: "",
-    email: "",
-    inquiryType: "",
+    phone: phone || "",
+    email: email || "",
+    inquiryType: inquiryType || "",
     inquiryNumber: inquiryNumber || "",
-    remarks: ""
+    remarks: "",
+    // 車両情報
+    maker: maker || "",
+    model: model || "",
+    year: year || "",
+    mileage: mileage || ""
   })
 
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -215,6 +238,51 @@ export default function ContactForm({ inquiryNumber }: ContactFormProps) {
             <p className="text-red-500 text-sm mt-1">{errors.inquiryType}</p>
           )}
         </div>
+
+        {/* 車両情報 */}
+        {formData.inquiryType === "sell" && (
+          <div className="space-y-6 border-t pt-6">
+            <h2 className="text-xl font-bold mb-4">車両情報</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <Label htmlFor="maker">メーカー</Label>
+                <Input
+                  id="maker"
+                  value={formData.maker}
+                  onChange={(e) => handleChange("maker", e.target.value)}
+                  placeholder="例）いすゞ"
+                />
+              </div>
+              <div>
+                <Label htmlFor="model">車種</Label>
+                <Input
+                  id="model"
+                  value={formData.model}
+                  onChange={(e) => handleChange("model", e.target.value)}
+                  placeholder="例）エルフ"
+                />
+              </div>
+              <div>
+                <Label htmlFor="year">年式</Label>
+                <Input
+                  id="year"
+                  value={formData.year}
+                  onChange={(e) => handleChange("year", e.target.value)}
+                  placeholder="例）2020年"
+                />
+              </div>
+              <div>
+                <Label htmlFor="mileage">走行距離</Label>
+                <Input
+                  id="mileage"
+                  value={formData.mileage}
+                  onChange={(e) => handleChange("mileage", e.target.value)}
+                  placeholder="例）100,000km"
+                />
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* 問い合わせ番号 */}
         <div>
