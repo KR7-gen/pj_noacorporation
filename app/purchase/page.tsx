@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Phone, Upload, Download } from "lucide-react"
+import Link from "next/link"
 
 const achievements = [
   {
@@ -111,9 +112,11 @@ export default function PurchasePage() {
               </div>
             </div>
             <p className="text-xl mb-8">簡単5分！車両情報入力で査定額が分かります！</p>
-            <Button size="lg" className="bg-white text-green-600 hover:bg-gray-100">
-              買取査定フォーム
-            </Button>
+            <Link href="/contact">
+              <Button size="lg" className="bg-white text-green-600 hover:bg-gray-100">
+                買取査定フォーム
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
@@ -169,7 +172,9 @@ export default function PurchasePage() {
                 </div>
                 <h3 className="font-bold text-xl mb-4">査定依頼</h3>
                 <p className="text-sm mb-4">車輌情報入力で査定額が分かります！査定申込も受付！</p>
-                <Button className="bg-green-600 hover:bg-green-700">買取査定フォーム</Button>
+                <Link href="/contact">
+                  <Button className="bg-green-600 hover:bg-green-700">買取査定フォーム</Button>
+                </Link>
               </CardContent>
             </Card>
 
@@ -282,7 +287,9 @@ export default function PurchasePage() {
                 </div>
                 <h3 className="font-bold text-xl mb-4">査定依頼</h3>
                 <p className="text-sm mb-4">車輌情報入力で査定額が分かります！査定申込も受付！</p>
-                <Button className="bg-green-600 hover:bg-green-700">買取査定フォーム</Button>
+                <Link href="/contact">
+                  <Button className="bg-green-600 hover:bg-green-700">買取査定フォーム</Button>
+                </Link>
               </CardContent>
             </Card>
 

@@ -26,7 +26,9 @@ export function Header() {
             <div className="font-bold text-lg">000-000-0000</div>
             <div className="text-gray-600">(受付時間)月〜土 00:00~00:00</div>
           </div>
-          <Button className="bg-blue-600 text-white hover:bg-blue-700">お問い合わせフォームへ</Button>
+          <Link href="/contact">
+            <Button className="bg-blue-600 text-white hover:bg-blue-700">お問い合わせフォームへ</Button>
+          </Link>
         </div>
 
         {/* モバイルメニュー */}

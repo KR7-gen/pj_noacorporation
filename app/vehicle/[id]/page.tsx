@@ -347,7 +347,12 @@ export default function VehicleDetailPage() {
                   <div>
                     <h4 className="font-bold mb-2">フォーム・LINEでのお問い合わせ</h4>
                     <div className="flex gap-2">
-                      <Button className="flex-1">お問い合わせフォーム</Button>
+                      <Link 
+                        href={`/contact?inquiryNumber=${vehicleData.details.inquiryNumber}`}
+                        className="flex-1"
+                      >
+                        <Button className="w-full">お問い合わせフォーム</Button>
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -420,7 +425,9 @@ export default function VehicleDetailPage() {
           </div>
 
           <div className="flex gap-4">
-            <Button>この車両で問い合わせ</Button>
+            <Link href={`/contact?inquiryNumber=${vehicleData.details.inquiryNumber}`}>
+              <Button className="w-full">この車両で問い合わせ</Button>
+            </Link>
             <Link href="/inventory">
               <Button variant="outline">在庫一覧へ</Button>
             </Link>

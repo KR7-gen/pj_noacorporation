@@ -1,7 +1,10 @@
+"use client"
+
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Phone, MapPin } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 const companyInfo = {
   name: "会社名",
@@ -50,6 +53,8 @@ const members = [
 ]
 
 export default function AboutPage() {
+  const router = useRouter();
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -316,7 +321,7 @@ export default function AboutPage() {
                   <div className="w-6 h-6 bg-white rounded"></div>
                 </div>
                 <h3 className="font-bold text-xl mb-4">フォームでのお問い合わせ</h3>
-                <Button className="mb-4">お問い合わせフォームへ</Button>
+                <a href="/contact" className="mb-4 inline-block bg-blue-600 text-white hover:bg-blue-700 rounded px-4 py-2">お問い合わせフォームへ</a>
                 <p className="text-sm text-gray-600">24時間受付中</p>
               </CardContent>
             </Card>
