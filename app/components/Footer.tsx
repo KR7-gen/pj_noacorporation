@@ -42,6 +42,14 @@ export function Footer() {
                   お問い合わせ
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/news"
+                  className="text-sm text-gray-600 hover:text-gray-900"
+                >
+                  お知らせ
+                </Link>
+              </li>
             </ul>
           </div>
           <div className="space-y-4">

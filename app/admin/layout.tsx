@@ -7,6 +7,7 @@ const sidebarItems = [
   { name: "車両管理", path: "/admin/vehicles" },
   { name: "店舗管理", path: "/admin/stores" },
   { name: "お問い合わせ管理", path: "/admin/inquiries" },
+  { name: "お知らせ管理", path: "/admin/news" },
 ]
 
 export default function AdminLayout({

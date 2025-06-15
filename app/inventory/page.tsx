@@ -354,67 +354,7 @@ export default function InventoryPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            {searchResults.map((truck, index) => (
-              <Card key={truck.id} className="hover:shadow-lg transition-shadow">
-                <CardContent className="p-0">
-                  <div className="relative">
-                    <div className="w-full h-48 bg-gray-200 rounded-t-lg flex items-center justify-center">
-                      <div className="text-gray-400">車両画像</div>
-                    </div>
-                    {truck.status && (
-                      <div
-                        className={`absolute top-2 left-2 px-2 py-1 rounded text-sm text-white ${
-                          truck.status === "商談中" ? "bg-red-500" : "bg-gray-500"
-                        }`}
-                      >
-                        {truck.status}
-                      </div>
-                    )}
-                  </div>
-                  <div className="p-4">
-                    <h3 className="font-bold text-lg mb-1">{truck.maker}</h3>
-                    <p className="text-gray-600 text-sm mb-2">{truck.model}</p>
-                    <p className="text-sm text-gray-500 mb-2">問合せ番号：{truck.id}</p>
-                    <p className="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded inline-block mb-3">
-                      {truck.bodyType}
-                    </p>
-
-                    <div className="space-y-1 text-sm mb-4">
-                      <div className="flex justify-between">
-                        <span>本体価格</span>
-                        <span className="font-bold" suppressHydrationWarning>{truck.price}万円(税別)</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>年式</span>
-                        <span suppressHydrationWarning>{truck.year}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>走行距離</span>
-                        <span suppressHydrationWarning>{truck.mileage}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>積載量</span>
-                        <span suppressHydrationWarning>{truck.capacity}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>シフト</span>
-                        <span suppressHydrationWarning>{truck.transmission}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>車検期限</span>
-                        <span suppressHydrationWarning>{truck.inspection}</span>
-                      </div>
-                    </div>
-
-                    <Link href={`/vehicle/${truck.id}`}>
-                      <Button className="w-full" disabled={truck.status === "SOLD OUT"}>
-                        詳細はこちら
-                      </Button>
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+            {/* 車両カード（searchResults.mapで表示している部分）を削除 */}
           </div>
         </div>
       </section>

@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Phone, Search } from "lucide-react"
+import { news } from "./news/newsData"
 
 const truckTypes = [
   "クレーン",
@@ -134,19 +135,6 @@ const faqs = [
     question: "在庫にない車も、探してもらうことはできますか?",
     answer:
       "喜んでお手伝いします！オークションや過去の取引事業者など、弊社の持てる限りのネットワークを駆使して、ご希望のトラックを探索します。",
-  },
-]
-
-const news = [
-  {
-    date: "2025.03.01",
-    category: "お知らせ",
-    title: "年末年始の休業日に関して",
-  },
-  {
-    date: "2025.03.01",
-    category: "お知らせ",
-    title: "年末年始の休業日に関して",
   },
 ]
 
@@ -384,64 +372,6 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            {newTrucks.map((truck, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
-                <CardContent className="p-0">
-                  <div className="relative">
-                    <div className="w-full h-48 bg-gray-200 rounded-t-lg flex items-center justify-center">
-                      <div className="text-gray-400">車両画像</div>
-                    </div>
-                    {truck.status && (
-                      <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded text-sm">
-                        {truck.status}
-                      </div>
-                    )}
-                  </div>
-                  <div className="p-4">
-                    <h3 className="font-bold text-lg mb-1">{truck.maker}</h3>
-                    <p className="text-gray-600 text-sm mb-2">{truck.model}</p>
-                    <p className="text-sm text-gray-500 mb-2">問合せ番号：{truck.id}</p>
-                    <p className="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded inline-block mb-3">
-                      {truck.type}
-                    </p>
-
-                    <div className="space-y-1 text-sm mb-4">
-                      <div className="flex justify-between">
-                        <span>本体価格</span>
-                        <span className="font-bold">{truck.price}万円(税別)</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>年式</span>
-                        <span>{truck.year}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>走行距離</span>
-                        <span>{truck.mileage}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>積載量</span>
-                        <span>{truck.capacity}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>シフト</span>
-                        <span>{truck.transmission}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>車検期限</span>
-                        <span>{truck.inspection}</span>
-                      </div>
-                    </div>
-
-                    <Link href={`/vehicle/${truck.id}`}>
-                      <Button className="w-full">詳細はこちら</Button>
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
           <div className="text-center">
             <Link href="/inventory">
               <Button variant="outline" size="lg">
@@ -602,7 +532,7 @@ export default function HomePage() {
       {/* Shop Info & News */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div className="space-y-12">
             {/* Shop Info */}
             <div>
               <h2 className="text-2xl font-bold mb-6">SHOP INFO</h2>
@@ -651,101 +581,26 @@ export default function HomePage() {
               <div className="space-y-4">
                 {news.map((item, index) => (
                   <Card key={index}>
-                    <CardContent className="p-4">
+                    <CardContent className="p-6">
                       <div className="flex items-center gap-4">
                         <span className="text-sm text-gray-500">{item.date}</span>
-                        <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">{item.category}</span>
-                        <span className="text-sm">{item.title}</span>
+                        <span className="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                          {item.category}
+                        </span>
+                        <Link href={`/news/${item.id}`} className="font-medium hover:underline">
+                          {item.title}
+                        </Link>
                       </div>
                     </CardContent>
                   </Card>
                 ))}
               </div>
-              <div className="mt-6">
-                <Button variant="outline">お知らせ一覧へ</Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Search Results */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-bold">
-              {selectedType || "すべて"}
-            </h2>
-            <p className="text-gray-600">
-              {searchResults.length}件の結果が見つかりました
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {searchResults.map((vehicle) => (
-              <div key={vehicle.id} className="bg-white rounded-lg shadow-sm overflow-hidden">
-                {/* ステータスバッジ */}
-                {vehicle.status && (
-                  <div className={`
-                    ${vehicle.status === "商談中" ? "bg-red-500" : "bg-gray-500"}
-                    text-white text-sm px-2 py-1 absolute
-                  `}>
-                    {vehicle.status}
-                  </div>
-                )}
-                
-                {/* 車両画像 */}
-                <div className="aspect-video bg-gray-100 relative">
-                  <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-                    車両画像
-                  </div>
-                </div>
-                
-                {/* 車両情報 */}
-                <div className="p-4">
-                  <h3 className="font-bold mb-2">{vehicle.name}</h3>
-                  <p className="text-sm text-gray-600 mb-1">{vehicle.code}</p>
-                  <p className="text-sm text-gray-600 mb-2">問合せ番号：{vehicle.inquiryNumber}</p>
-                  <div className="inline-block bg-blue-100 text-blue-800 text-sm px-2 py-1 rounded mb-4">
-                    {vehicle.bodyType}
-                  </div>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span>本体価格</span>
-                      <span className="font-bold">{vehicle.price}万円(税別)</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>年式</span>
-                      <span>{vehicle.year}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>走行距離</span>
-                      <span>{vehicle.mileage}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>積載量</span>
-                      <span>{vehicle.loadCapacity}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>シフト</span>
-                      <span>{vehicle.transmission}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>車検期限</span>
-                      <span>{vehicle.inspection}</span>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* 詳細リンク */}
-                <Link 
-                  href={`/vehicles/${vehicle.id}`}
-                  className="block bg-gray-900 text-white text-center py-3 hover:bg-gray-800 transition-colors"
-                >
-                  詳細はこちら
+              <div className="mt-6 text-center">
+                <Link href="/news">
+                  <Button variant="outline">お知らせ一覧へ</Button>
                 </Link>
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </section>
