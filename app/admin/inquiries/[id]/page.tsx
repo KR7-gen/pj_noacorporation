@@ -7,21 +7,13 @@ import { useSearchParams } from "next/navigation"
 const baseInquiryData = {
   id: 1,
   createdAt: "R00/00/00 00:00",
-  maker: "テキスト",
-  vehicleName: "テキスト",
-  model: "テキスト",
-  year: "テキスト",
-  mileage: "テキスト",
-  transmission: "テキスト",
-  exteriorImage: null,
-  vehicleInspectionImage: null,
-  address: "テキスト",
-  name: "テキスト",
-  phone: "テキスト",
-  email: "テキスト",
-  vehicleNumber: "テキスト",
-  inquiryItem: "テキスト",
-  details: "テキスト"
+  companyName: "株式会社サンプル",
+  name: "山田太郎",
+  prefecture: "東京都",
+  phone: "000-0000-0000",
+  email: "sample@example.com",
+  remarks: "備考欄の内容",
+  type: "購入"
 }
 
 export default function InquiryDetailPage() {
@@ -51,29 +43,29 @@ export default function InquiryDetailPage() {
           {/* 左下: お問い合わせ情報 */}
           <div className="bg-white p-6 rounded-lg shadow-sm">
             <div className="space-y-4">
-              <div className="grid grid-cols-[180px,1fr] gap-4 items-center">
-                <p className="text-gray-500">お問い合わせ車両番号</p>
-                <p>{inquiryData.vehicleNumber}</p>
+              <div className="grid grid-cols-[120px,1fr] gap-4 items-center">
+                <p className="text-gray-500">会社名</p>
+                <p>{inquiryData.companyName}</p>
               </div>
-              <div className="grid grid-cols-[180px,1fr] gap-4 items-center">
-                <p className="text-gray-500">お問い合わせ項目</p>
-                <p>{inquiryData.inquiryItem}</p>
-              </div>
-              <div className="grid grid-cols-[180px,1fr] gap-4 items-center">
-                <p className="text-gray-500">名前</p>
+              <div className="grid grid-cols-[120px,1fr] gap-4 items-center">
+                <p className="text-gray-500">お名前</p>
                 <p>{inquiryData.name}</p>
               </div>
-              <div className="grid grid-cols-[180px,1fr] gap-4 items-center">
+              <div className="grid grid-cols-[120px,1fr] gap-4 items-center">
+                <p className="text-gray-500">都道府県</p>
+                <p>{inquiryData.prefecture}</p>
+              </div>
+              <div className="grid grid-cols-[120px,1fr] gap-4 items-center">
                 <p className="text-gray-500">電話番号</p>
                 <p>{inquiryData.phone}</p>
               </div>
-              <div className="grid grid-cols-[180px,1fr] gap-4 items-center">
+              <div className="grid grid-cols-[120px,1fr] gap-4 items-center">
                 <p className="text-gray-500">メールアドレス</p>
                 <p>{inquiryData.email}</p>
               </div>
-              <div className="grid grid-cols-[180px,1fr] gap-4 items-start">
-                <p className="text-gray-500">お問い合わせ内容詳細</p>
-                <p className="whitespace-pre-wrap">{inquiryData.details}</p>
+              <div className="grid grid-cols-[120px,1fr] gap-4 items-center">
+                <p className="text-gray-500">フリー備考欄</p>
+                <p>{inquiryData.remarks}</p>
               </div>
             </div>
           </div>
@@ -126,27 +118,27 @@ export default function InquiryDetailPage() {
           <div className="space-y-4">
             <div className="grid grid-cols-[120px,1fr] gap-4 items-center">
               <p className="text-gray-500">メーカー</p>
-              <p>{inquiryData.maker}</p>
+              <p>{inquiryData.companyName}</p>
             </div>
             <div className="grid grid-cols-[120px,1fr] gap-4 items-center">
               <p className="text-gray-500">車種名</p>
-              <p>{inquiryData.vehicleName}</p>
+              <p>{inquiryData.name}</p>
             </div>
             <div className="grid grid-cols-[120px,1fr] gap-4 items-center">
               <p className="text-gray-500">型式</p>
-              <p>{inquiryData.model}</p>
+              <p>{inquiryData.prefecture}</p>
             </div>
             <div className="grid grid-cols-[120px,1fr] gap-4 items-center">
               <p className="text-gray-500">年式</p>
-              <p>{inquiryData.year}</p>
+              <p>{inquiryData.phone}</p>
             </div>
             <div className="grid grid-cols-[120px,1fr] gap-4 items-center">
               <p className="text-gray-500">走行距離</p>
-              <p>{inquiryData.mileage}</p>
+              <p>{inquiryData.email}</p>
             </div>
             <div className="grid grid-cols-[120px,1fr] gap-4 items-center">
               <p className="text-gray-500">シフト形状</p>
-              <p>{inquiryData.transmission}</p>
+              <p>{inquiryData.remarks}</p>
             </div>
             <div className="grid grid-cols-[120px,1fr] gap-4 items-center">
               <p className="text-gray-500">外観写真</p>
@@ -179,18 +171,6 @@ export default function InquiryDetailPage() {
             <div className="grid grid-cols-[120px,1fr] gap-4 items-center">
               <p className="text-gray-500">住所</p>
               <p>{inquiryData.address}</p>
-            </div>
-            <div className="grid grid-cols-[120px,1fr] gap-4 items-center">
-              <p className="text-gray-500">名前</p>
-              <p>{inquiryData.name}</p>
-            </div>
-            <div className="grid grid-cols-[120px,1fr] gap-4 items-center">
-              <p className="text-gray-500">電話番号</p>
-              <p>{inquiryData.phone}</p>
-            </div>
-            <div className="grid grid-cols-[120px,1fr] gap-4 items-center">
-              <p className="text-gray-500">メールアドレス</p>
-              <p>{inquiryData.email}</p>
             </div>
           </div>
         </div>

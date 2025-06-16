@@ -57,14 +57,6 @@ export default function AboutPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      <section className="bg-blue-600 text-white py-8">
-        <div className="container mx-auto px-4">
-          <h1 className="text-3xl font-bold">私たちについて</h1>
-          <p className="text-xl mt-2">COMPANY INFORMATION</p>
-        </div>
-      </section>
-
       {/* Company Info */}
       <section className="py-16">
         <div className="container mx-auto px-4">

@@ -80,14 +80,39 @@ export default function ContactForm({
     return Object.keys(newErrors).length === 0
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    
-    if (validateForm()) {
-      // TODO: フォームの送信処理を実装
-      console.log("Form submitted:", formData)
-    }
-  }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!validateForm()) return;
+
+    // inquiryTypeの値を日本語にマッピング
+    const typeMap: Record<string, string> = {
+      search: "購入",
+      sell: "買取",
+      other: "その他"
+    };
+    const type = typeMap[formData.inquiryType];
+
+    // 会社名＋名前を連結
+    const fullName = `${formData.companyName} ${formData.name}`;
+
+    // 送信データ
+    const sendData = {
+      ...formData,
+      type,
+      fullName,
+    };
+
+    // ここでAPIに送信（例: /api/inquiries）
+    await fetch('/api/inquiries', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(sendData),
+    });
+
+    // 送信後の処理（例：サンクスページ遷移やアラートなど）
+    alert("送信が完了しました！");
+  };
 
   const handleChange = (field: string, value: string) => {
     setFormData(prev => ({

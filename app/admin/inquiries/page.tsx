@@ -3,16 +3,19 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 
-// モックデータ
-const inquiries = Array(10).fill(null).map((_, i) => ({
-  id: i + 1,
-  type: i % 2 === 0 ? "買取" : "購入",
-  number: `0-${String(i + 1).padStart(6, '0')}`,
-  customerName: `お客様${i + 1}`,
-  phone: "000-0000-0000",
-  email: "example@example.com",
-  createdAt: "2024/03/20"
-}))
+// 仮のデータ取得例（本来はAPIやDBから取得）
+const inquiries = [
+  {
+    id: 1,
+    type: "購入",
+    number: "0-000001",
+    fullName: "株式会社サンプル 山田太郎",
+    phone: "000-0000-0000",
+    email: "sample@example.com",
+    createdAt: "2024/03/20"
+  },
+  // ...他のデータ...
+]
 
 export default function AdminInquiriesPage() {
   return (
@@ -58,7 +61,7 @@ export default function AdminInquiriesPage() {
               <tr key={inquiry.id}>
                 <td className="px-4 py-3">{inquiry.type}</td>
                 <td className="px-4 py-3">{inquiry.number}</td>
-                <td className="px-4 py-3">{inquiry.customerName}</td>
+                <td className="px-4 py-3">{inquiry.fullName}</td>
                 <td className="px-4 py-3">{inquiry.phone}</td>
                 <td className="px-4 py-3">{inquiry.email}</td>
                 <td className="px-4 py-3 text-center">
