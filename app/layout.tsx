@@ -2,8 +2,7 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
-import { Header } from "@/components/Header"
-import { Footer } from "@/components/Footer"
+import ClientLayout from "./components/ClientLayout"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -19,8 +18,12 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="min-h-screen bg-white">
-      {children}
-    </div>
+    <html lang="ja" className={inter.className}>
+      <body>
+        <ClientLayout>
+          {children}
+        </ClientLayout>
+      </body>
+    </html>
   )
 }
