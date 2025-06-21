@@ -94,6 +94,9 @@ const vehicleStatuses = [
 // モックデータ
 const vehicleData = {
   id: 1,
+  name: "日野 レンジャー",
+  price: 5000000,
+  totalPayment: 5500000,
   vehicleInfo: {
     bodyType: "クレーン",
     maker: "日野",

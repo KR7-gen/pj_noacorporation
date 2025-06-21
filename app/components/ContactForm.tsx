@@ -13,6 +13,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { addInquiry } from "@/lib/firebase-utils"
+import { useRouter } from "next/navigation"
 
 // 都道府県のリスト
 const prefectures = [
@@ -48,6 +50,8 @@ export default function ContactForm({
   phone,
   email
 }: ContactFormProps) {
+  const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     companyName: "",
     name: name || "",
@@ -81,38 +85,46 @@ export default function ContactForm({
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+    e.preventDefault()
+    
     if (!validateForm()) return;
 
-    // inquiryTypeの値を日本語にマッピング
-    const typeMap: Record<string, string> = {
-      search: "購入",
-      sell: "買取",
-      other: "その他"
-    };
-    const type = typeMap[formData.inquiryType];
+    setIsSubmitting(true);
 
-    // 会社名＋名前を連結
-    const fullName = `${formData.companyName} ${formData.name}`;
+    try {
+      // inquiryTypeの値を日本語にマッピング
+      const typeMap: Record<string, "購入" | "買取" | "その他"> = {
+        search: "購入",
+        sell: "買取",
+        other: "その他"
+      };
+      const type = typeMap[formData.inquiryType];
 
-    // 送信データ
-    const sendData = {
-      ...formData,
-      type,
-      fullName,
-    };
+      // 会社名＋名前を連結
+      const fullName = `${formData.companyName} ${formData.name}`;
 
-    // ここでAPIに送信（例: /api/inquiries）
-    await fetch('/api/inquiries', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(sendData),
-    });
+      // Firebaseに送信
+      await addInquiry({
+        type,
+        fullName,
+        company: formData.companyName,
+        name: formData.name,
+        prefecture: formData.prefecture,
+        phone: formData.phone,
+        email: formData.email,
+        remarks: formData.remarks,
+      });
 
-    // 送信後の処理（例：サンクスページ遷移やアラートなど）
-    alert("送信が完了しました！");
-  };
+      // 送信成功後の処理
+      alert("お問い合わせを送信しました。ありがとうございます。");
+      router.push("/"); // トップページにリダイレクト
+    } catch (error) {
+      console.error("送信エラー:", error);
+      alert("送信に失敗しました。もう一度お試しください。");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
 
   const handleChange = (field: string, value: string) => {
     setFormData(prev => ({
@@ -337,9 +349,10 @@ export default function ContactForm({
         <div className="text-center">
           <Button
             type="submit"
-            className="px-8 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-full"
+            disabled={isSubmitting}
+            className="px-8 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-full disabled:opacity-50"
           >
-            この内容で問い合わせる
+            {isSubmitting ? "送信中..." : "この内容で問い合わせる"}
           </Button>
         </div>
       </form>

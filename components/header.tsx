@@ -8,7 +8,7 @@ export function Header() {
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         {/* ロゴ */}
         <Link href="/" className="flex items-center space-x-3">
-          <img src="/logo.png" alt="NOA CORPORATION" className="h-10" />
+          <img src="/placeholder-logo.png" alt="NOA CORPORATION" className="h-10" />
           <div className="text-sm text-gray-600">株式会社ノアコーポレーション</div>
         </Link>
 
