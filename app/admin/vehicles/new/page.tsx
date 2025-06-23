@@ -1,294 +1,429 @@
 "use client"
 
-import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { addVehicle } from "@/lib/firebase-utils"
-import { useRouter } from "next/navigation"
-import { ArrowLeft } from "lucide-react"
-import Link from "next/link"
 
-export default function NewVehiclePage() {
-  const router = useRouter()
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [formData, setFormData] = useState({
-    managementNumber: "",
-    maker: "",
-    bodyType: "",
-    size: "",
-    price: "",
-    wholesalePrice: "",
-    totalPayment: "",
-    expiryDate: "",
-    imageUrl: ""
-  })
+// プルダウンの選択肢
+const bodyTypes = [
+  "クレーン",
+  "ダンプ",
+  "平ボディ",
+  "車輌運搬車",
+  "ミキサー車",
+  "高所作業車",
+  "アルミバン",
+  "アルミウィング",
+  "キャリアカー",
+  "塵芥車",
+  "アームロール",
+  "バス",
+  "冷蔵冷凍車",
+  "タンクローリー",
+  "特装車・その他"
+]
 
-  const [errors, setErrors] = useState<Record<string, string>>({})
+const makers = [
+  "日野",
+  "いすゞ",
+  "三菱ふそう",
+  "UD",
+  "その他"
+]
 
-  const validateForm = () => {
-    const newErrors: Record<string, string> = {}
+const sizes = [
+  "大型",
+  "増トン",
+  "中型",
+  "小型"
+]
 
-    if (!formData.managementNumber) newErrors.managementNumber = "管理番号を入力してください"
-    if (!formData.maker) newErrors.maker = "メーカーを入力してください"
-    if (!formData.bodyType) newErrors.bodyType = "車種を入力してください"
-    if (!formData.size) newErrors.size = "サイズを入力してください"
-    if (!formData.price) newErrors.price = "価格を入力してください"
-    if (!formData.wholesalePrice) newErrors.wholesalePrice = "仕入れ価格を入力してください"
-    if (!formData.totalPayment) newErrors.totalPayment = "支払総額を入力してください"
-    if (!formData.expiryDate) newErrors.expiryDate = "有効期限を入力してください"
+const years = [
+  "R7",
+  "R6",
+  "R5",
+  "R4",
+  "R3",
+  "R2",
+  "R1",
+  "H31",
+  "H30",
+  "H29",
+  "H28",
+  "H27"
+]
 
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
+const mileages = [
+  "上限なし",
+  "10万km",
+  "20万km",
+  "30万km",
+  "40万km",
+  "50万km",
+  "60万km",
+  "70万km",
+  "80万km",
+  "90万km",
+  "100万km"
+]
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    
-    if (!validateForm()) return
+const loadCapacities = [
+  "1.0t",
+  "1.5t",
+  "2.0t",
+  "2.5t",
+  "3.0t",
+  "3.5t",
+  "4.0t",
+  "4.5t",
+  "5.0t",
+  "5.5t",
+  "6.0t"
+]
 
-    setIsSubmitting(true)
+const missions = [
+  "MT",
+  "AT・SAT"
+]
 
-    try {
-      await addVehicle({
-        managementNumber: formData.managementNumber,
-        maker: formData.maker,
-        bodyType: formData.bodyType,
-        size: formData.size,
-        price: parseInt(formData.price),
-        wholesalePrice: parseInt(formData.wholesalePrice),
-        totalPayment: parseInt(formData.totalPayment),
-        expiryDate: formData.expiryDate,
-        imageUrl: formData.imageUrl || undefined,
-        // name, model, year, mileage, description, imageUrls, inspectionDate などの不足しているプロパティを適切に追加
-        name: `${formData.maker} ${formData.bodyType}`, // 仮の名前
-        model: '', // 必要に応じてフォームに追加
-        year: new Date().getFullYear(), // 仮の年
-        mileage: 0, // 仮の走行距離
-        description: '', // 必要に応じてフォームに追加
-        imageUrls: formData.imageUrl ? [formData.imageUrl] : [],
-        inspectionDate: formData.expiryDate // 仮
-      })
+const vehicleStatuses = [
+  "車検付き",
+  "車検切れ",
+  "抹消",
+  "予備検査"
+]
 
-      alert("車両を登録しました")
-      router.push("/admin/vehicles")
-    } catch (error) {
-      console.error("登録エラー:", error)
-      alert("登録に失敗しました。もう一度お試しください。")
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
-  const handleChange = (field: string, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }))
-    // エラーをクリア
-    if (errors[field]) {
-      setErrors(prev => {
-        const newErrors = { ...prev }
-        delete newErrors[field]
-        return newErrors
-      })
-    }
-  }
-
+export default function VehicleNewPage() {
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <div className="flex items-center gap-4 mb-6">
-        <Link href="/admin/vehicles">
-          <Button variant="outline" size="sm">
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            戻る
-          </Button>
-        </Link>
-        <h1 className="text-2xl font-bold">車両新規登録</h1>
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold">車両登録</h1>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* 管理番号 */}
-          <div>
-            <Label htmlFor="managementNumber" className="flex items-center">
-              管理番号
-              <span className="ml-2 text-xs text-white bg-red-500 px-2 py-0.5 rounded">必須</span>
-            </Label>
-            <Input
-              id="managementNumber"
-              value={formData.managementNumber}
-              onChange={(e) => handleChange("managementNumber", e.target.value)}
-              placeholder="例）V00001"
-              className={errors.managementNumber ? "border-red-500" : ""}
-            />
-            {errors.managementNumber && (
-              <p className="text-red-500 text-sm mt-1">{errors.managementNumber}</p>
-            )}
+      <div className="bg-white p-6 rounded-lg shadow-sm">
+        <form className="space-y-8">
+          {/* 基本情報 */}
+          <div className="grid grid-cols-3 gap-6">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium">トラック名</label>
+              <input
+                type="text"
+                className="w-full border rounded px-2 py-1"
+                placeholder="日野 レンジャー"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium">車両価格（税抜）</label>
+              <input
+                type="number"
+                className="w-full border rounded px-2 py-1"
+                placeholder="5000000"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium">支払総額（税抜）</label>
+              <input
+                type="number"
+                className="w-full border rounded px-2 py-1"
+                placeholder="5500000"
+              />
+            </div>
           </div>
 
-          {/* メーカー */}
+          {/* 毎月支払額シミュレーション */}
           <div>
-            <Label htmlFor="maker" className="flex items-center">
-              メーカー
-              <span className="ml-2 text-xs text-white bg-red-500 px-2 py-0.5 rounded">必須</span>
-            </Label>
-            <Input
-              id="maker"
-              value={formData.maker}
-              onChange={(e) => handleChange("maker", e.target.value)}
-              placeholder="例）いすゞ"
-              className={errors.maker ? "border-red-500" : ""}
-            />
-            {errors.maker && (
-              <p className="text-red-500 text-sm mt-1">{errors.maker}</p>
-            )}
+            <h3 className="text-lg font-medium mb-4">毎月支払額シミュレーション</h3>
+            <div className="grid grid-cols-4 gap-6">
+              {[2, 3, 4, 4].map((year, index) => (
+                <div key={index} className="space-y-2">
+                  <label className="block text-sm font-medium">{year}年</label>
+                  <input
+                    type="number"
+                    className="w-full border rounded px-2 py-1"
+                    placeholder="円（税別）〜"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
 
-          {/* 車種 */}
+          {/* 画像アップロード */}
           <div>
-            <Label htmlFor="bodyType" className="flex items-center">
-              車種
-              <span className="ml-2 text-xs text-white bg-red-500 px-2 py-0.5 rounded">必須</span>
-            </Label>
-            <Input
-              id="bodyType"
-              value={formData.bodyType}
-              onChange={(e) => handleChange("bodyType", e.target.value)}
-              placeholder="例）エルフ"
-              className={errors.bodyType ? "border-red-500" : ""}
-            />
-            {errors.bodyType && (
-              <p className="text-red-500 text-sm mt-1">{errors.bodyType}</p>
-            )}
+            <h3 className="text-lg font-medium mb-4">画像登録</h3>
+            <div className="grid grid-cols-4 gap-4">
+              {Array(14).fill(null).map((_, index) => (
+                <div
+                  key={index}
+                  className="aspect-square border-2 border-dashed rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-50"
+                >
+                  <span className="text-gray-400">＋</span>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 text-right">
+              <Button variant="destructive">一括削除</Button>
+            </div>
           </div>
 
-          {/* サイズ */}
+          {/* 車両情報 */}
           <div>
-            <Label htmlFor="size" className="flex items-center">
-              サイズ
-              <span className="ml-2 text-xs text-white bg-red-500 px-2 py-0.5 rounded">必須</span>
-            </Label>
-            <Input
-              id="size"
-              value={formData.size}
-              onChange={(e) => handleChange("size", e.target.value)}
-              placeholder="例）2t"
-              className={errors.size ? "border-red-500" : ""}
-            />
-            {errors.size && (
-              <p className="text-red-500 text-sm mt-1">{errors.size}</p>
-            )}
+            <h3 className="text-lg font-medium mb-4">車両情報</h3>
+            <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">ボディタイプ</label>
+                  <select
+                    className="w-full border rounded px-2 py-1"
+                  >
+                    <option value="">選択</option>
+                    {bodyTypes.map((type) => (
+                      <option key={type} value={type}>{type}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">メーカー</label>
+                  <select
+                    className="w-full border rounded px-2 py-1"
+                  >
+                    <option value="">選択</option>
+                    {makers.map((maker) => (
+                      <option key={maker} value={maker}>{maker}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">大きさ</label>
+                  <select
+                    className="w-full border rounded px-2 py-1"
+                  >
+                    <option value="">選択</option>
+                    {sizes.map((size) => (
+                      <option key={size} value={size}>{size}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">型式</label>
+                  <input
+                    type="text"
+                    className="w-full border rounded px-2 py-1"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">年式</label>
+                  <select
+                    className="w-full border rounded px-2 py-1"
+                  >
+                    <option value="">選択</option>
+                    {years.map((year) => (
+                      <option key={year} value={year}>{year}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">走行距離</label>
+                  <select
+                    className="w-full border rounded px-2 py-1"
+                  >
+                    <option value="">選択</option>
+                    {mileages.map((mileage) => (
+                      <option key={mileage} value={mileage}>{mileage}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">積載量（下限）</label>
+                  <select
+                    className="w-full border rounded px-2 py-1"
+                  >
+                    <option value="">選択</option>
+                    {loadCapacities.map((capacity) => (
+                      <option key={capacity} value={capacity}>{capacity}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">積載量（上限）</label>
+                  <select
+                    className="w-full border rounded px-2 py-1"
+                  >
+                    <option value="">選択</option>
+                    {loadCapacities.map((capacity) => (
+                      <option key={capacity} value={capacity}>{capacity}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">ミッション</label>
+                  <select
+                    className="w-full border rounded px-2 py-1"
+                  >
+                    <option value="">選択</option>
+                    {missions.map((mission) => (
+                      <option key={mission} value={mission}>{mission}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">車検状態</label>
+                  <select
+                    className="w-full border rounded px-2 py-1"
+                  >
+                    <option value="">選択</option>
+                    {vehicleStatuses.map((status) => (
+                      <option key={status} value={status}>{status}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">車検有効期限</label>
+                  <input
+                    type="text"
+                    className="w-full border rounded px-2 py-1"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">車体寸法</label>
+                  <div className="space-y-2">
+                    <input
+                      type="number"
+                      className="w-full border rounded px-2 py-1"
+                      placeholder="L (mm)"
+                    />
+                    <input
+                      type="number"
+                      className="w-full border rounded px-2 py-1"
+                      placeholder="W (mm)"
+                    />
+                    <input
+                      type="number"
+                      className="w-full border rounded px-2 py-1"
+                      placeholder="H (mm)"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">車両総重量</label>
+                  <input
+                    type="number"
+                    className="w-full border rounded px-2 py-1"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">原動機型式</label>
+                  <input
+                    type="text"
+                    className="w-full border rounded px-2 py-1"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">馬力</label>
+                  <input
+                    type="text"
+                    className="w-full border rounded px-2 py-1"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">排気量</label>
+                  <input
+                    type="text"
+                    className="w-full border rounded px-2 py-1"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">燃料</label>
+                  <input
+                    type="text"
+                    className="w-full border rounded px-2 py-1"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">問い合わせ番号</label>
+                  <input
+                    type="text"
+                    className="w-full border rounded px-2 py-1"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* 価格 */}
+          {/* 車検証画像 */}
           <div>
-            <Label htmlFor="price" className="flex items-center">
-              価格
-              <span className="ml-2 text-xs text-white bg-red-500 px-2 py-0.5 rounded">必須</span>
-            </Label>
-            <Input
-              id="price"
-              type="number"
-              value={formData.price}
-              onChange={(e) => handleChange("price", e.target.value)}
-              placeholder="例）1500000"
-              className={errors.price ? "border-red-500" : ""}
-            />
-            {errors.price && (
-              <p className="text-red-500 text-sm mt-1">{errors.price}</p>
-            )}
+            <h3 className="text-lg font-medium mb-4">車検証画像</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="aspect-[1.4/1] border-2 border-dashed rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-50">
+                <span className="text-gray-400">＋</span>
+              </div>
+              <div className="aspect-[1.4/1] border-2 border-dashed rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-50">
+                <span className="text-gray-400">＋</span>
+              </div>
+            </div>
           </div>
 
-          {/* 仕入れ価格 */}
+          {/* 状態写真画像 */}
           <div>
-            <Label htmlFor="wholesalePrice" className="flex items-center">
-              仕入れ価格
-              <span className="ml-2 text-xs text-white bg-red-500 px-2 py-0.5 rounded">必須</span>
-            </Label>
-            <Input
-              id="wholesalePrice"
-              type="number"
-              value={formData.wholesalePrice}
-              onChange={(e) => handleChange("wholesalePrice", e.target.value)}
-              placeholder="例）1200000"
-              className={errors.wholesalePrice ? "border-red-500" : ""}
-            />
-            {errors.wholesalePrice && (
-              <p className="text-red-500 text-sm mt-1">{errors.wholesalePrice}</p>
-            )}
+            <h3 className="text-lg font-medium mb-4">状態写真画像</h3>
+            <div className="border-2 border-dashed rounded-lg p-8 text-center cursor-pointer hover:bg-gray-50">
+              <span className="text-gray-400">＋</span>
+            </div>
           </div>
 
-          {/* 支払総額 */}
+          {/* 上物情報 */}
           <div>
-            <Label htmlFor="totalPayment" className="flex items-center">
-              支払総額
-              <span className="ml-2 text-xs text-white bg-red-500 px-2 py-0.5 rounded">必須</span>
-            </Label>
-            <Input
-              id="totalPayment"
-              type="number"
-              value={formData.totalPayment}
-              onChange={(e) => handleChange("totalPayment", e.target.value)}
-              placeholder="例）1300000"
-              className={errors.totalPayment ? "border-red-500" : ""}
-            />
-            {errors.totalPayment && (
-              <p className="text-red-500 text-sm mt-1">{errors.totalPayment}</p>
-            )}
+            <h3 className="text-lg font-medium mb-4">上物情報</h3>
+            <div className="grid grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="block text-sm font-medium">内寸</label>
+                <div className="space-y-2">
+                  <input
+                    type="number"
+                    className="w-full border rounded px-2 py-1"
+                    placeholder="L (mm)"
+                  />
+                  <input
+                    type="number"
+                    className="w-full border rounded px-2 py-1"
+                    placeholder="W (mm)"
+                  />
+                  <input
+                    type="number"
+                    className="w-full border rounded px-2 py-1"
+                    placeholder="H (mm)"
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="block text-sm font-medium">年式</label>
+                <select
+                  className="w-full border rounded px-2 py-1"
+                >
+                  <option value="">選択</option>
+                  {years.map((year) => (
+                    <option key={year} value={year}>{year}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="space-y-2">
+                <label className="block text-sm font-medium">店舗</label>
+                <select
+                  className="w-full border rounded px-2 py-1"
+                >
+                  <option value="">選択</option>
+                  <option value="store1">○○店</option>
+                </select>
+              </div>
+            </div>
           </div>
 
-          {/* 有効期限 */}
-          <div>
-            <Label htmlFor="expiryDate" className="flex items-center">
-              有効期限
-              <span className="ml-2 text-xs text-white bg-red-500 px-2 py-0.5 rounded">必須</span>
-            </Label>
-            <Input
-              id="expiryDate"
-              value={formData.expiryDate}
-              onChange={(e) => handleChange("expiryDate", e.target.value)}
-              placeholder="例）2024年12月31日"
-              className={errors.expiryDate ? "border-red-500" : ""}
-            />
-            {errors.expiryDate && (
-              <p className="text-red-500 text-sm mt-1">{errors.expiryDate}</p>
-            )}
-          </div>
-        </div>
-
-        {/* 画像URL */}
-        <div>
-          <Label htmlFor="imageUrl">画像URL</Label>
-          <Input
-            id="imageUrl"
-            value={formData.imageUrl}
-            onChange={(e) => handleChange("imageUrl", e.target.value)}
-            placeholder="例）https://example.com/image.jpg"
-          />
-        </div>
-
-        {/* 送信ボタン */}
-        <div className="flex gap-4 pt-6">
-          <Button
-            type="submit"
-            disabled={isSubmitting}
-            className="px-8 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-full disabled:opacity-50"
-          >
-            {isSubmitting ? "登録中..." : "車両を登録"}
-          </Button>
-          <Link href="/admin/vehicles">
-            <Button
-              type="button"
-              variant="outline"
-              className="px-8 py-2"
-            >
-              キャンセル
+          <div className="flex justify-center">
+            <Button type="submit" className="px-8">
+              登録完了
             </Button>
-          </Link>
-        </div>
-      </form>
+          </div>
+        </form>
+      </div>
     </div>
   )
 } 
