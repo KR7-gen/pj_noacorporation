@@ -1,8 +1,25 @@
+"use client";
 import Link from "next/link";
-import { news } from "../newsData";
+import { use, useEffect, useState } from "react";
+import { getAnnouncements } from "@/lib/firebase-utils";
+import type { Announcement } from "@/types";
 
-export default function NewsDetailPage({ params }: { params: { id: string } }) {
-  const item = news.find((n) => n.id === params.id);
+export default function NewsDetailPage({ params }: { params: any }) {
+  const id = typeof params.then === "function" ? use(params).id : params.id;
+  const [item, setItem] = useState<Announcement | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getAnnouncements().then((list) => {
+      const found = list.find((n) => n.id === id);
+      setItem(found || null);
+      setLoading(false);
+    });
+  }, [id]);
+
+  if (loading) {
+    return <div className="text-center py-12">読み込み中...</div>;
+  }
 
   if (!item) {
     return (
@@ -21,11 +38,11 @@ export default function NewsDetailPage({ params }: { params: { id: string } }) {
       <main className="flex-1 max-w-3xl mx-auto w-full px-4 py-12">
         <h2 className="text-2xl font-bold mb-4">{item.title}</h2>
         <div className="flex items-center gap-4 mb-8">
-          <span className="text-gray-500">{item.date}</span>
-          <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">{item.category}</span>
+          <span className="text-gray-500">{item.createdAt instanceof Date ? `${item.createdAt.getFullYear()}.${String(item.createdAt.getMonth()+1).padStart(2,"0")}.${String(item.createdAt.getDate()).padStart(2,"0")}` : ""}</span>
+          <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">お知らせ</span>
         </div>
         <div className="whitespace-pre-line text-base text-gray-800 mb-12">
-          {item.detail}
+          {item.content}
         </div>
         <nav className="text-sm text-gray-500 mb-8">
           <Link href="/" className="hover:underline">HOME</Link> &gt; <Link href="/news" className="hover:underline">お知らせ</Link> &gt; {item.title}

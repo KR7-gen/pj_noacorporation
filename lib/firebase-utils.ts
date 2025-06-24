@@ -274,19 +274,14 @@ export const deleteAnnouncement = async (id: string) => {
   }
 };
 
-export const getAnnouncements = async (publishedOnly: boolean = false) => {
+export const getAnnouncements = async () => {
   try {
-    let q = collection(db, "announcements");
-    if (publishedOnly) {
-      q = query(q, where("isPublished", "==", true));
-    }
-    q = query(q, orderBy("createdAt", "desc"));
-    const querySnapshot = await getDocs(q);
+    const querySnapshot = await getDocs(collection(db, "announcements"));
     return querySnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data(),
-      createdAt: convertTimestamp(doc.data().createdAt),
-      updatedAt: convertTimestamp(doc.data().updatedAt)
+      createdAt: doc.data().createdAt?.toDate ? doc.data().createdAt.toDate() : doc.data().createdAt,
+      updatedAt: doc.data().updatedAt?.toDate ? doc.data().updatedAt.toDate() : doc.data().updatedAt
     })) as Announcement[];
   } catch (error) {
     console.error("Error getting announcements: ", error);

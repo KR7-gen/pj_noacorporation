@@ -4,8 +4,8 @@ export interface Vehicle {
   name: string;
   maker: string;
   model: string;
-  year: number;
-  mileage: number;
+  year: string;
+  mileage: string;
   price: number;
   totalPrice?: number;
   description: string;

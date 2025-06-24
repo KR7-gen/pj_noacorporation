@@ -1,7 +1,15 @@
+"use client";
 import Link from "next/link";
-import { news } from "../../news/newsData";
+import { useEffect, useState } from "react";
+import { getAnnouncements } from "@/lib/firebase-utils";
+import type { Announcement } from "@/types";
 
 export default function AdminNewsPage() {
+  const [news, setNews] = useState<Announcement[]>([]);
+  useEffect(() => {
+    getAnnouncements().then(setNews);
+  }, []);
+
   return (
     <div className="p-8">
       <div className="flex justify-between items-center mb-6">
@@ -22,7 +30,7 @@ export default function AdminNewsPage() {
           <tbody className="divide-y divide-gray-200">
             {news.map((item) => (
               <tr key={item.id}>
-                <td className="px-4 py-3">{item.date}</td>
+                <td className="px-4 py-3">{item.createdAt instanceof Date ? `${item.createdAt.getFullYear()}.${String(item.createdAt.getMonth()+1).padStart(2,"0")}.${String(item.createdAt.getDate()).padStart(2,"0")}` : ""}</td>
                 <td className="px-4 py-3">{item.title}</td>
                 <td className="px-4 py-3 text-center">
                   <Link href={`/admin/news/${item.id}`}>

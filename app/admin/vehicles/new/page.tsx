@@ -1,6 +1,10 @@
 "use client"
 
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
+import { addVehicle } from "@/lib/firebase-utils"
+import type { Vehicle } from "@/types"
 
 // プルダウンの選択肢
 const bodyTypes = [
@@ -92,6 +96,68 @@ const vehicleStatuses = [
 ]
 
 export default function VehicleNewPage() {
+  const router = useRouter()
+  const [formData, setFormData] = useState<Partial<Vehicle>>({
+    name: "",
+    price: 0,
+    totalPayment: 0,
+    bodyType: "",
+    maker: "",
+    size: "",
+    model: "",
+    year: "",
+    mileage: "",
+    inspectionDate: "",
+    wholesalePrice: 0,
+    description: "",
+    imageUrls: [],
+    // You may need to add more fields here based on your form
+  })
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target
+    setFormData((prev) => ({
+      ...prev,
+      [name]:
+        name === "price" || name === "totalPayment" || name === "wholesalePrice"
+          ? Number(value)
+          : value,
+    }))
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    // 必須項目チェック
+    if (!formData.maker || !formData.size) {
+      alert('メーカーとサイズは必須です。');
+      return;
+    }
+    try {
+      const vehicleData: Omit<Vehicle, "id" | "createdAt" | "updatedAt"> = {
+        name: formData.name || "",
+        maker: formData.maker || "",
+        model: formData.model || "",
+        year: formData.year || "",
+        mileage: formData.mileage || "",
+        price: Number(formData.price) || 0,
+        description: formData.description || "",
+        imageUrls: formData.imageUrls || [],
+        wholesalePrice: Number(formData.wholesalePrice) || 0,
+        totalPayment: Number(formData.totalPayment) || 0,
+        expiryDate: "", // Add a proper expiryDate field if needed
+        ...formData,
+      }
+      await addVehicle(vehicleData)
+      alert("車両を登録しました。")
+      router.push("/admin/vehicles")
+    } catch (error) {
+      console.error("車両の登録に失敗しました:", error)
+      alert("車両の登録に失敗しました。");
+    }
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -99,13 +165,16 @@ export default function VehicleNewPage() {
       </div>
 
       <div className="bg-white p-6 rounded-lg shadow-sm">
-        <form className="space-y-8">
+        <form className="space-y-8" onSubmit={handleSubmit}>
           {/* 基本情報 */}
           <div className="grid grid-cols-3 gap-6">
             <div className="space-y-2">
               <label className="block text-sm font-medium">トラック名</label>
               <input
                 type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
                 className="w-full border rounded px-2 py-1"
                 placeholder="日野 レンジャー"
               />
@@ -114,6 +183,9 @@ export default function VehicleNewPage() {
               <label className="block text-sm font-medium">車両価格（税抜）</label>
               <input
                 type="number"
+                name="price"
+                value={formData.price}
+                onChange={handleChange}
                 className="w-full border rounded px-2 py-1"
                 placeholder="5000000"
               />
@@ -122,10 +194,25 @@ export default function VehicleNewPage() {
               <label className="block text-sm font-medium">支払総額（税抜）</label>
               <input
                 type="number"
+                name="totalPayment"
+                value={formData.totalPayment}
+                onChange={handleChange}
                 className="w-full border rounded px-2 py-1"
                 placeholder="5500000"
               />
             </div>
+          </div>
+
+          {/* 車両説明 */}
+          <div>
+            <h3 className="text-lg font-medium mb-4">車両説明</h3>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              className="w-full border rounded px-2 py-1 h-32"
+              placeholder="車両の詳細な説明を入力してください..."
+            />
           </div>
 
           {/* 毎月支払額シミュレーション */}
@@ -171,6 +258,9 @@ export default function VehicleNewPage() {
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">ボディタイプ</label>
                   <select
+                    name="bodyType"
+                    value={formData.bodyType}
+                    onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
                   >
                     <option value="">選択</option>
@@ -182,6 +272,9 @@ export default function VehicleNewPage() {
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">メーカー</label>
                   <select
+                    name="maker"
+                    value={formData.maker}
+                    onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
                   >
                     <option value="">選択</option>
@@ -193,6 +286,9 @@ export default function VehicleNewPage() {
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">大きさ</label>
                   <select
+                    name="size"
+                    value={formData.size}
+                    onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
                   >
                     <option value="">選択</option>
@@ -205,12 +301,18 @@ export default function VehicleNewPage() {
                   <label className="block text-sm font-medium">型式</label>
                   <input
                     type="text"
+                    name="model"
+                    value={formData.model}
+                    onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
                   />
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">年式</label>
                   <select
+                    name="year"
+                    value={formData.year}
+                    onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
                   >
                     <option value="">選択</option>
@@ -222,6 +324,9 @@ export default function VehicleNewPage() {
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">走行距離</label>
                   <select
+                    name="mileage"
+                    value={formData.mileage}
+                    onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
                   >
                     <option value="">選択</option>
@@ -255,6 +360,9 @@ export default function VehicleNewPage() {
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">ミッション</label>
                   <select
+                    name="mission"
+                    value={formData.mission}
+                    onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
                   >
                     <option value="">選択</option>
@@ -266,6 +374,9 @@ export default function VehicleNewPage() {
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">車検状態</label>
                   <select
+                    name="inspectionStatus"
+                    value={formData.inspectionStatus}
+                    onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
                   >
                     <option value="">選択</option>
@@ -280,6 +391,9 @@ export default function VehicleNewPage() {
                   <label className="block text-sm font-medium">車検有効期限</label>
                   <input
                     type="text"
+                    name="inspectionDate"
+                    value={formData.inspectionDate}
+                    onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
                   />
                 </div>
@@ -288,16 +402,25 @@ export default function VehicleNewPage() {
                   <div className="space-y-2">
                     <input
                       type="number"
+                      name="length"
+                      value={formData.length}
+                      onChange={handleChange}
                       className="w-full border rounded px-2 py-1"
                       placeholder="L (mm)"
                     />
                     <input
                       type="number"
+                      name="width"
+                      value={formData.width}
+                      onChange={handleChange}
                       className="w-full border rounded px-2 py-1"
                       placeholder="W (mm)"
                     />
                     <input
                       type="number"
+                      name="height"
+                      value={formData.height}
+                      onChange={handleChange}
                       className="w-full border rounded px-2 py-1"
                       placeholder="H (mm)"
                     />

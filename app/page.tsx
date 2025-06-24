@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Phone, Search } from "lucide-react"
 import { news } from "./news/newsData"
+import { getAnnouncements } from "@/lib/firebase-utils"
+import type { Announcement } from "@/types"
 
 const truckTypes = [
   "クレーン",
@@ -252,6 +254,13 @@ export default function HomePage() {
   // 検索条件の状態管理
   const [selectedType, setSelectedType] = useState("");
   const [searchResults, setSearchResults] = useState(mockVehicles);
+  const [newsList, setNewsList] = useState<Announcement[]>([]);
+
+  useEffect(() => {
+    getAnnouncements().then((list) => {
+      setNewsList(list.sort((a, b) => (b.createdAt as any) - (a.createdAt as any)).slice(0, 3));
+    });
+  }, []);
 
   // アイコンクリック時のハンドラー
   const handleIconClick = (type: string) => {
@@ -484,7 +493,9 @@ export default function HomePage() {
                   <div className="w-6 h-6 bg-white rounded"></div>
                 </div>
                 <h3 className="font-bold text-xl mb-4">フォームでのお問い合わせ</h3>
-                <Button className="mb-4">お問い合わせフォームへ</Button>
+                <Link href="/contact">
+                  <Button className="mb-4">お問い合わせフォームへ</Button>
+                </Link>
                 <p className="text-sm text-gray-600">24時間受付中</p>
               </CardContent>
             </Card>
@@ -579,14 +590,12 @@ export default function HomePage() {
               <h2 className="text-2xl font-bold mb-6">NEWS</h2>
               <p className="text-xl text-gray-600 mb-6">お知らせ</p>
               <div className="space-y-4">
-                {news.map((item, index) => (
+                {newsList.map((item, index) => (
                   <Card key={index}>
                     <CardContent className="p-6">
                       <div className="flex items-center gap-4">
-                        <span className="text-sm text-gray-500">{item.date}</span>
-                        <span className="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                          {item.category}
-                        </span>
+                        <span className="text-sm text-gray-500">{item.createdAt instanceof Date ? `${item.createdAt.getFullYear()}.${String(item.createdAt.getMonth()+1).padStart(2,"0")}.${String(item.createdAt.getDate()).padStart(2,"0")}` : ""}</span>
+                        <span className="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">お知らせ</span>
                         <Link href={`/news/${item.id}`} className="font-medium hover:underline">
                           {item.title}
                         </Link>

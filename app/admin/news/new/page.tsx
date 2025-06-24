@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { addAnnouncement } from "@/lib/firebase-utils";
 
 export default function AdminNewsNewPage() {
   const router = useRouter();
@@ -14,12 +15,22 @@ export default function AdminNewsNewPage() {
     return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`;
   };
 
-  // 登録処理（本来はAPIやDB連携だが、ここではalertでモック）
-  const handleRegister = () => {
+  // Firestoreに保存
+  const handleRegister = async () => {
     setDate(getToday());
-    // ここでAPIやDBに保存する処理を入れる
-    alert("お知らせを登録しました（モック）\n\n件名: " + title + "\n内容: " + detail + "\n日付: " + getToday());
-    router.push("/admin/news");
+    try {
+      await addAnnouncement({
+        title,
+        content: detail,
+        isPublished: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+      alert("お知らせを登録しました");
+      router.push("/admin/news");
+    } catch (error) {
+      alert("登録に失敗しました");
+    }
   };
 
   return (
