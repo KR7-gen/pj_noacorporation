@@ -36,24 +36,23 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-2 sm:px-4">
+      <Card className="w-full max-w-[95vw] sm:max-w-md md:max-w-lg lg:max-w-xl shadow-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl">管理者ログイン</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-2xl md:text-3xl">管理者ログイン</CardTitle>
+          <CardDescription className="text-sm md:text-base">
             管理者アカウントでログインしてください
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
             {error && (
               <Alert variant="destructive">
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}
-            
             <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium">
+              <label htmlFor="email" className="text-sm md:text-base font-medium">
                 メールアドレス
               </label>
               <Input
@@ -63,11 +62,11 @@ export default function AdminLoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@example.com"
                 required
+                className="h-10 md:h-12 text-base md:text-lg"
               />
             </div>
-
             <div className="space-y-2">
-              <label htmlFor="password" className="text-sm font-medium">
+              <label htmlFor="password" className="text-sm md:text-base font-medium">
                 パスワード
               </label>
               <Input
@@ -77,12 +76,12 @@ export default function AdminLoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="パスワードを入力"
                 required
+                className="h-10 md:h-12 text-base md:text-lg"
               />
             </div>
-
             <Button 
               type="submit" 
-              className="w-full" 
+              className="w-full h-10 md:h-12 text-base md:text-lg" 
               disabled={isLoading}
             >
               {isLoading ? 'ログイン中...' : 'ログイン'}
