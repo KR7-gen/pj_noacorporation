@@ -61,9 +61,8 @@ export function Header() {
         {/* ドロワーメニュー */}
         {menuOpen && (
           <div className="fixed inset-0 z-50 bg-black bg-opacity-40 flex justify-end">
-            <div className="w-4/5 max-w-xs bg-white h-full shadow-lg p-6 flex flex-col">
-              <div className="flex items-center justify-between mb-8">
-                <span className="text-lg font-bold">NOA CORPORATION</span>
+            <div className="w-4/5 max-w-xs bg-white h-full shadow-lg p-6 flex flex-col justify-center">
+              <div className="flex items-center justify-end mb-8">
                 <button
                   className="p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                   onClick={() => setMenuOpen(false)}
@@ -73,7 +72,6 @@ export function Header() {
                 </button>
               </div>
               <nav className="flex flex-col gap-6">
-                <Link href="/" className="text-base font-medium text-gray-700 hover:text-blue-600" onClick={() => setMenuOpen(false)}>HOME</Link>
                 <Link href="/inventory" className="text-base font-medium text-gray-700 hover:text-blue-600" onClick={() => setMenuOpen(false)}>販売在庫一覧</Link>
                 <Link href="/purchase" className="text-base font-medium text-gray-700 hover:text-blue-600" onClick={() => setMenuOpen(false)}>買取はこちら</Link>
                 <Link href="/about" className="text-base font-medium text-gray-700 hover:text-blue-600" onClick={() => setMenuOpen(false)}>私たちについて</Link>
@@ -81,10 +79,6 @@ export function Header() {
                   お問い合わせフォームへ
                 </Link>
               </nav>
-              <div className="mt-auto pt-8 border-t">
-                <div className="text-base font-bold text-gray-900">000-000-0000</div>
-                <div className="text-xs text-gray-500">(受付時間) 月〜土 00:00-00:00</div>
-              </div>
             </div>
             {/* 背景クリックで閉じる */}
             <div className="flex-1" onClick={() => setMenuOpen(false)} />
