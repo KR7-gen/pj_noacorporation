@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation"
 import { useAuth } from "@/lib/auth-context"
 import { Button } from "@/components/ui/button"
 import AdminAuthGuard from "@/components/AdminAuthGuard"
+import { useState } from "react"
+import { Menu, X } from "lucide-react"
 
 const sidebarItems = [
   { name: "車両管理", path: "/admin/vehicles" },
@@ -20,9 +22,18 @@ export default function AdminLayout({
 }) {
   const pathname = usePathname()
   const { logout } = useAuth()
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const handleLogout = () => {
     logout()
+  }
+
+  const handleSidebarToggle = () => {
+    setSidebarOpen(!sidebarOpen)
+  }
+
+  const handleSidebarClose = () => {
+    setSidebarOpen(false)
   }
 
   // /admin/login では認証ガードを適用しない
@@ -32,10 +43,10 @@ export default function AdminLayout({
 
   return (
     <AdminAuthGuard>
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-white overflow-x-hidden">
         <div className="flex">
-          {/* サイドバー */}
-          <aside className="w-64 min-h-screen bg-white shadow-sm">
+          {/* PC用サイドバー */}
+          <aside className="hidden md:block w-64 min-h-screen bg-white shadow-sm flex-shrink-0">
             <nav className="p-4">
               <div className="mb-6">
                 <h2 className="text-lg font-semibold text-gray-800 mb-4">管理画面</h2>
@@ -68,10 +79,72 @@ export default function AdminLayout({
           </aside>
 
           {/* メインコンテンツ */}
-          <main className="flex-1 p-8">
-            {children}
+          <main className="flex-1 p-4 md:p-8 min-w-0">
+            {/* スマホ用ヘッダー */}
+            <div className="md:hidden flex items-center justify-between mb-6">
+              <h1 className="text-xl font-bold">管理画面</h1>
+              <button
+                onClick={handleSidebarToggle}
+                className="p-2 rounded bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <Menu className="w-6 h-6 text-blue-600" />
+              </button>
+            </div>
+
+            <div className="w-full">
+              {children}
+            </div>
           </main>
         </div>
+
+        {/* スマホ用ドロワーサイドバー */}
+        {sidebarOpen && (
+          <div className="fixed inset-0 z-50 bg-black bg-opacity-40 flex md:hidden">
+            <div className="w-4/5 max-w-xs bg-white h-full shadow-lg flex flex-col">
+              <div className="flex items-center justify-between p-4 border-b">
+                <h2 className="text-lg font-semibold text-gray-800">管理画面</h2>
+                <button
+                  onClick={handleSidebarClose}
+                  className="p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+              
+              <nav className="flex-1 p-4">
+                <div className="mb-6">
+                  <Button 
+                    onClick={handleLogout}
+                    variant="outline" 
+                    className="w-full"
+                  >
+                    ログアウト
+                  </Button>
+                </div>
+                
+                <ul className="space-y-2">
+                  {sidebarItems.map((item) => (
+                    <li key={item.path}>
+                      <Link
+                        href={item.path}
+                        className={`block px-4 py-3 rounded-lg ${
+                          pathname === item.path
+                            ? "bg-blue-500 text-white"
+                            : "hover:bg-gray-100"
+                        }`}
+                        onClick={handleSidebarClose}
+                      >
+                        {item.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            </div>
+            {/* 背景クリックで閉じる */}
+            <div className="flex-1" onClick={handleSidebarClose} />
+          </div>
+        )}
       </div>
     </AdminAuthGuard>
   )

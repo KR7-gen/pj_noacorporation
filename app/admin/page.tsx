@@ -100,7 +100,7 @@ export default function AdminVehiclesPage() {
       <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <select 
-            className="border rounded px-2 py-1"
+            className="border rounded px-2 py-1 w-full"
             value={searchParams.bodyType}
             onChange={(e) => handleInputChange('bodyType', e.target.value)}
           >
@@ -110,7 +110,7 @@ export default function AdminVehiclesPage() {
             ))}
           </select>
           <select 
-            className="border rounded px-2 py-1"
+            className="border rounded px-2 py-1 w-full"
             value={searchParams.maker}
             onChange={(e) => handleInputChange('maker', e.target.value)}
           >
@@ -120,7 +120,7 @@ export default function AdminVehiclesPage() {
             ))}
           </select>
           <select 
-            className="border rounded px-2 py-1"
+            className="border rounded px-2 py-1 w-full"
             value={searchParams.size}
             onChange={(e) => handleInputChange('size', e.target.value)}
           >
@@ -132,7 +132,7 @@ export default function AdminVehiclesPage() {
           <input
             type="text"
             placeholder="フリーワード"
-            className="border rounded px-2 py-1"
+            className="border rounded px-2 py-1 w-full"
             value={searchParams.keyword}
             onChange={(e) => handleInputChange('keyword', e.target.value)}
           />
@@ -144,71 +144,100 @@ export default function AdminVehiclesPage() {
 
       {/* 車両一覧テーブル */}
       <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-4 py-3 text-left">画像</th>
-                <th className="px-4 py-3 text-left">管理番号</th>
-                <th className="px-4 py-3 text-left">メーカー</th>
-                <th className="px-4 py-3 text-left">ボディタイプ</th>
-                <th className="px-4 py-3 text-left">大きさ</th>
-                <th className="px-4 py-3 text-right">車両価格</th>
-                <th className="px-4 py-3 text-right">業販価格</th>
-                <th className="px-4 py-3 text-right">支払総額</th>
-                <th className="px-4 py-3 text-left">車検有効期限</th>
-                <th className="px-4 py-3 text-center">操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredVehicles.map((vehicle) => (
-                <tr key={vehicle.id} className="border-t border-gray-200">
-                  <td className="px-4 py-3">
-                    <div className="w-16 h-16 bg-gray-200 rounded"></div>
-                  </td>
-                  <td className="px-4 py-3">{vehicle.managementNumber}</td>
-                  <td className="px-4 py-3">{vehicle.maker}</td>
-                  <td className="px-4 py-3">{vehicle.bodyType}</td>
-                  <td className="px-4 py-3">{vehicle.size}</td>
-                  <td className="px-4 py-3 text-right">
-                    {vehicle.price.toLocaleString()}円
-                  </td>
-                  <td className="px-4 py-3 text-right">
-                    {vehicle.wholesalePrice.toLocaleString()}円
-                  </td>
-                  <td className="px-4 py-3 text-right">
-                    {vehicle.totalPayment.toLocaleString()}円
-                  </td>
-                  <td className="px-4 py-3">{vehicle.expiryDate}</td>
-                  <td className="px-4 py-3 text-center">
-                    <div className="flex gap-2 justify-center">
-                      <Link href={`/admin/vehicles/${vehicle.id}`}>
-                        <Button variant="secondary" size="sm">
-                          詳細
-                        </Button>
-                      </Link>
-                      <Link href={`/admin/vehicles/${vehicle.id}/edit`}>
-                        <Button variant="outline" size="sm">
-                          編集
-                        </Button>
-                      </Link>
-                    </div>
-                  </td>
+        {/* PC用テーブル */}
+        <div className="hidden md:block">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-full">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">画像</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">管理番号</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">メーカー</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">ボディタイプ</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">大きさ</th>
+                  <th className="px-4 py-3 text-right whitespace-nowrap">車両価格</th>
+                  <th className="px-4 py-3 text-right whitespace-nowrap">業販価格</th>
+                  <th className="px-4 py-3 text-right whitespace-nowrap">支払総額</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">車検有効期限</th>
+                  <th className="px-4 py-3 text-center whitespace-nowrap">操作</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredVehicles.map((vehicle) => (
+                  <tr key={vehicle.id} className="border-t border-gray-200">
+                    <td className="px-4 py-3">
+                      <div className="w-16 h-16 bg-gray-200 rounded"></div>
+                    </td>
+                    <td className="px-4 py-3">{vehicle.managementNumber}</td>
+                    <td className="px-4 py-3">{vehicle.maker}</td>
+                    <td className="px-4 py-3">{vehicle.bodyType}</td>
+                    <td className="px-4 py-3">{vehicle.size}</td>
+                    <td className="px-4 py-3 text-right">
+                      {vehicle.price.toLocaleString()}円
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      {vehicle.wholesalePrice.toLocaleString()}円
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      {vehicle.totalPayment.toLocaleString()}円
+                    </td>
+                    <td className="px-4 py-3">{vehicle.expiryDate}</td>
+                    <td className="px-4 py-3 text-center">
+                      <div className="flex gap-2 justify-center">
+                        <Link href={`/admin/vehicles/${vehicle.id}`}>
+                          <Button variant="secondary" size="sm">
+                            詳細
+                          </Button>
+                        </Link>
+                        <Link href={`/admin/vehicles/${vehicle.id}/edit`}>
+                          <Button variant="outline" size="sm">
+                            編集
+                          </Button>
+                        </Link>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
 
-        {/* ページネーション */}
-        <div className="px-4 py-3 bg-gray-50 border-t border-gray-200">
-          <div className="flex flex-wrap justify-center gap-2">
-            <Button variant="outline" size="sm" className="w-full sm:w-auto">前へ</Button>
-            <Button variant="outline" size="sm" className="w-full sm:w-auto">1</Button>
-            <Button variant="outline" size="sm" className="w-full sm:w-auto">2</Button>
-            <Button variant="outline" size="sm" className="w-full sm:w-auto">3</Button>
-            <Button variant="outline" size="sm" className="w-full sm:w-auto">次へ</Button>
-          </div>
+        {/* スマホ用カード表示 */}
+        <div className="md:hidden">
+          {filteredVehicles.map((vehicle) => (
+            <div key={vehicle.id} className="border-b border-gray-200 p-4">
+              <div className="flex items-start gap-4">
+                <div className="w-16 h-16 bg-gray-200 rounded flex-shrink-0"></div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="font-semibold text-gray-900 truncate">{vehicle.managementNumber}</h3>
+                    <span className="text-sm text-gray-500 flex-shrink-0">{vehicle.size}</span>
+                  </div>
+                  <div className="space-y-1 text-sm text-gray-600">
+                    <p className="truncate">メーカー: {vehicle.maker}</p>
+                    <p className="truncate">ボディタイプ: {vehicle.bodyType}</p>
+                    <p className="truncate">車両価格: {vehicle.price.toLocaleString()}円</p>
+                    <p className="truncate">業販価格: {vehicle.wholesalePrice.toLocaleString()}円</p>
+                    <p className="truncate">支払総額: {vehicle.totalPayment.toLocaleString()}円</p>
+                    <p className="truncate">車検有効期限: {vehicle.expiryDate}</p>
+                  </div>
+                  <div className="flex gap-2 mt-4">
+                    <Link href={`/admin/vehicles/${vehicle.id}`}>
+                      <Button variant="secondary" size="sm" className="text-xs">
+                        詳細
+                      </Button>
+                    </Link>
+                    <Link href={`/admin/vehicles/${vehicle.id}/edit`}>
+                      <Button variant="outline" size="sm" className="text-xs">
+                        編集
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
