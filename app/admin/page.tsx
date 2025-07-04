@@ -91,9 +91,14 @@ export default function AdminVehiclesPage() {
     <div>
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
         <h1 className="text-2xl font-bold">車両一覧</h1>
-        <Link href="/admin/vehicles/new">
-          <Button className="w-full sm:w-auto">新規車両登録</Button>
-        </Link>
+        <div className="flex gap-2">
+          <Link href="/admin/vehicles/import">
+            <Button variant="outline" className="w-full sm:w-auto">CSV一括インポート</Button>
+          </Link>
+          <Link href="/admin/vehicles/new">
+            <Button className="w-full sm:w-auto">新規車両登録</Button>
+          </Link>
+        </div>
       </div>
 
       {/* 検索フォーム */}

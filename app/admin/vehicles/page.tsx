@@ -81,11 +81,19 @@ export default function AdminVehiclesPage() {
 
   return (
     <div className="container mx-auto py-10">
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-4">
         <h1 className="text-2xl font-bold">車両一覧</h1>
-        <Button onClick={() => router.push("/admin/vehicles/new")}>
-          新規車両登録
-        </Button>
+        <div className="flex gap-2">
+          <Button 
+            variant="outline" 
+            onClick={() => router.push("/admin/vehicles/import")}
+          >
+            CSV一括インポート
+          </Button>
+          <Button onClick={() => router.push("/admin/vehicles/new")}>
+            新規車両登録
+          </Button>
+        </div>
       </div>
 
       <div className="rounded-md border">
@@ -113,7 +121,7 @@ export default function AdminVehiclesPage() {
                       vehicle.imageUrl ||
                       "/placeholder.jpg"
                     }
-                    alt={vehicle.name}
+                    alt={`${vehicle.maker} ${vehicle.managementNumber || vehicle.id} の画像`}
                     width={120}
                     height={80}
                     className="rounded-md object-cover"
