@@ -195,14 +195,203 @@ export default function VehicleDetailPage() {
               <CardContent className="p-6">
                 <h2 className="text-2xl font-bold mb-6">装備品</h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                  {vehicle.description && vehicle.description.includes("装備") ? (
-                    <p className="text-gray-600">装備品情報は車両説明をご確認ください</p>
-                  ) : (
-                    <p className="text-gray-600">装備品情報はありません</p>
+                  {vehicle.etc && (
+                    <Badge variant="secondary" className="justify-center">ETC</Badge>
+                  )}
+                  {vehicle.backCamera && (
+                    <Badge variant="secondary" className="justify-center">バックカメラ</Badge>
+                  )}
+                  {vehicle.recordBook && (
+                    <Badge variant="secondary" className="justify-center">記録簿</Badge>
+                  )}
+                  {vehicle.powerWindow && (
+                    <Badge variant="secondary" className="justify-center">パワーウィンドウ</Badge>
+                  )}
+                  {vehicle.driveRecorder && (
+                    <Badge variant="secondary" className="justify-center">ドラレコ</Badge>
+                  )}
+                  {vehicle.airConditioner && (
+                    <Badge variant="secondary" className="justify-center">エアコン</Badge>
+                  )}
+                  {vehicle.electricMirror && (
+                    <Badge variant="secondary" className="justify-center">電動ミラー</Badge>
+                  )}
+                  {vehicle.abs && (
+                    <Badge variant="secondary" className="justify-center">ABS</Badge>
+                  )}
+                  {vehicle.aluminumWheel && (
+                    <Badge variant="secondary" className="justify-center">アルミホイール</Badge>
+                  )}
+                  {vehicle.airSuspensionSeat && (
+                    <Badge variant="secondary" className="justify-center">エアサスシート</Badge>
+                  )}
+                  {vehicle.carNavigation && (
+                    <Badge variant="secondary" className="justify-center">カーナビ</Badge>
+                  )}
+                  {vehicle.dpf && (
+                    <Badge variant="secondary" className="justify-center">DPF</Badge>
+                  )}
+                  {vehicle.pmMuffler && (
+                    <Badge variant="secondary" className="justify-center">PMマフラー</Badge>
+                  )}
+                  {vehicle.centralDoorLock && (
+                    <Badge variant="secondary" className="justify-center">集中ドアロック</Badge>
+                  )}
+                  {vehicle.equipment && (
+                    <div className="col-span-full">
+                      <p className="text-sm text-gray-600 mt-2">その他装備: {vehicle.equipment}</p>
+                    </div>
+                  )}
+                  {!vehicle.etc && !vehicle.backCamera && !vehicle.recordBook && !vehicle.powerWindow && 
+                   !vehicle.driveRecorder && !vehicle.airConditioner && !vehicle.electricMirror && 
+                   !vehicle.abs && !vehicle.aluminumWheel && !vehicle.airSuspensionSeat && 
+                   !vehicle.carNavigation && !vehicle.dpf && !vehicle.pmMuffler && 
+                   !vehicle.centralDoorLock && !vehicle.equipment && (
+                    <p className="text-gray-600 col-span-full">装備品情報はありません</p>
                   )}
                 </div>
               </CardContent>
             </Card>
+
+            {/* Technical Specifications */}
+            {(vehicle.modelCode || vehicle.loadingCapacity || vehicle.mission || vehicle.shift || 
+              vehicle.inspectionStatus || vehicle.outerLength || vehicle.outerWidth || 
+              vehicle.outerHeight || vehicle.innerLength || vehicle.innerWidth || 
+              vehicle.innerHeight || vehicle.totalWeight || vehicle.engineModel || 
+              vehicle.horsepower || vehicle.turbo || vehicle.displacement || vehicle.fuel ||
+              vehicle.bodyMaker || vehicle.bodyModel || vehicle.bodyYear) && (
+              <Card className="mb-8">
+                <CardContent className="p-6">
+                  <h2 className="text-2xl font-bold mb-6">技術仕様</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-3">
+                      {vehicle.modelCode && (
+                        <div className="flex justify-between">
+                          <span className="font-medium">型式</span>
+                          <span>{vehicle.modelCode}</span>
+                        </div>
+                      )}
+                      {vehicle.loadingCapacity && (
+                        <div className="flex justify-between">
+                          <span className="font-medium">積載量</span>
+                          <span>{vehicle.loadingCapacity}kg</span>
+                        </div>
+                      )}
+                      {vehicle.mission && (
+                        <div className="flex justify-between">
+                          <span className="font-medium">ミッション</span>
+                          <span>{vehicle.mission}</span>
+                        </div>
+                      )}
+                      {vehicle.shift && (
+                        <div className="flex justify-between">
+                          <span className="font-medium">シフト</span>
+                          <span>{vehicle.shift}</span>
+                        </div>
+                      )}
+                      {vehicle.inspectionStatus && (
+                        <div className="flex justify-between">
+                          <span className="font-medium">車検状態</span>
+                          <span>{vehicle.inspectionStatus}</span>
+                        </div>
+                      )}
+                      {vehicle.outerLength && (
+                        <div className="flex justify-between">
+                          <span className="font-medium">外寸長</span>
+                          <span>{vehicle.outerLength}mm</span>
+                        </div>
+                      )}
+                      {vehicle.outerWidth && (
+                        <div className="flex justify-between">
+                          <span className="font-medium">外寸幅</span>
+                          <span>{vehicle.outerWidth}mm</span>
+                        </div>
+                      )}
+                      {vehicle.outerHeight && (
+                        <div className="flex justify-between">
+                          <span className="font-medium">外寸高</span>
+                          <span>{vehicle.outerHeight}mm</span>
+                        </div>
+                      )}
+                      {vehicle.innerLength && (
+                        <div className="flex justify-between">
+                          <span className="font-medium">内寸長</span>
+                          <span>{vehicle.innerLength}mm</span>
+                        </div>
+                      )}
+                      {vehicle.innerWidth && (
+                        <div className="flex justify-between">
+                          <span className="font-medium">内寸幅</span>
+                          <span>{vehicle.innerWidth}mm</span>
+                        </div>
+                      )}
+                      {vehicle.innerHeight && (
+                        <div className="flex justify-between">
+                          <span className="font-medium">内寸高</span>
+                          <span>{vehicle.innerHeight}mm</span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="space-y-3">
+                      {vehicle.totalWeight && (
+                        <div className="flex justify-between">
+                          <span className="font-medium">車両総重量</span>
+                          <span>{vehicle.totalWeight}kg</span>
+                        </div>
+                      )}
+                      {vehicle.engineModel && (
+                        <div className="flex justify-between">
+                          <span className="font-medium">原動機型式</span>
+                          <span>{vehicle.engineModel}</span>
+                        </div>
+                      )}
+                      {vehicle.horsepower && (
+                        <div className="flex justify-between">
+                          <span className="font-medium">馬力</span>
+                          <span>{vehicle.horsepower}ps</span>
+                        </div>
+                      )}
+                      {vehicle.turbo && (
+                        <div className="flex justify-between">
+                          <span className="font-medium">ターボ</span>
+                          <span>{vehicle.turbo}</span>
+                        </div>
+                      )}
+                      {vehicle.displacement && (
+                        <div className="flex justify-between">
+                          <span className="font-medium">排気量</span>
+                          <span>{vehicle.displacement}cc</span>
+                        </div>
+                      )}
+                      {vehicle.fuel && (
+                        <div className="flex justify-between">
+                          <span className="font-medium">燃料</span>
+                          <span>{vehicle.fuel}</span>
+                        </div>
+                      )}
+                      {vehicle.bodyMaker && (
+                        <div className="flex justify-between">
+                          <span className="font-medium">上物メーカー</span>
+                          <span>{vehicle.bodyMaker}</span>
+                        </div>
+                      )}
+                      {vehicle.bodyModel && (
+                        <div className="flex justify-between">
+                          <span className="font-medium">上物型式</span>
+                          <span>{vehicle.bodyModel}</span>
+                        </div>
+                      )}
+                      {vehicle.bodyYear && (
+                        <div className="flex justify-between">
+                          <span className="font-medium">上物年式</span>
+                          <span>{vehicle.bodyYear}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </div>
 
           {/* Sidebar */}

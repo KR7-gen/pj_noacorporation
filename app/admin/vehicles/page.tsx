@@ -103,8 +103,12 @@ export default function AdminVehiclesPage() {
               <TableHead>写真</TableHead>
               <TableHead>管理番号</TableHead>
               <TableHead>メーカー</TableHead>
+              <TableHead>車種</TableHead>
+              <TableHead>型式</TableHead>
+              <TableHead>年式</TableHead>
               <TableHead>ボディタイプ</TableHead>
               <TableHead>大きさ</TableHead>
+              <TableHead>積載量</TableHead>
               <TableHead>車検有効期限</TableHead>
               <TableHead>車両価格</TableHead>
               <TableHead>支払総額</TableHead>
@@ -129,8 +133,12 @@ export default function AdminVehiclesPage() {
                 </TableCell>
                 <TableCell>{vehicle.managementNumber || vehicle.id}</TableCell>
                 <TableCell>{vehicle.maker}</TableCell>
+                <TableCell>{vehicle.model || "---"}</TableCell>
+                <TableCell>{vehicle.modelCode || "---"}</TableCell>
+                <TableCell>{vehicle.year || "---"}</TableCell>
                 <TableCell>{vehicle.bodyType || "---"}</TableCell>
                 <TableCell>{vehicle.size || "---"}</TableCell>
+                <TableCell>{vehicle.loadingCapacity ? `${vehicle.loadingCapacity}kg` : "---"}</TableCell>
                 <TableCell>{vehicle.inspectionDate || "---"}</TableCell>
                 <TableCell>
                   {vehicle.price ? `${vehicle.price.toLocaleString()}円` : "---"}

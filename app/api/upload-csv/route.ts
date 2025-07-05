@@ -22,6 +22,9 @@ const fieldMapping: { [key: string]: string } = {
   'シフト': 'shift',
   '車検状態': 'inspectionStatus',
   '車検有効期限': 'inspectionDate',
+  '外寸長（㎜）': 'outerLength',
+  '外寸幅（㎜）': 'outerWidth',
+  '外寸高（㎜）': 'outerHeight',
   '内寸長（㎜）': 'innerLength',
   '内寸幅（㎜）': 'innerWidth',
   '内寸高（㎜）': 'innerHeight',
@@ -33,6 +36,24 @@ const fieldMapping: { [key: string]: string } = {
   '燃料': 'fuel',
   '問合せ番号': 'inquiryNumber',
   '車体番号': 'chassisNumber',
+  '上物メーカー': 'bodyMaker',
+  '上物型式': 'bodyModel',
+  '上物年式': 'bodyYear',
+  '装備・仕様（右記以外の）': 'equipment',
+  'ETC': 'etc',
+  'バックカメラ': 'backCamera',
+  '記録簿': 'recordBook',
+  'パワーウィンドウ': 'powerWindow',
+  'ドラレコ': 'driveRecorder',
+  'エアコン': 'airConditioner',
+  '電動ミラー': 'electricMirror',
+  'ABS': 'abs',
+  'アルミホイール': 'aluminumWheel',
+  'エアサスシート': 'airSuspensionSeat',
+  'カーナビ': 'carNavigation',
+  'DPF': 'dpf',
+  'PMマフラー': 'pmMuffler',
+  '集中ドアロック': 'centralDoorLock',
 }
 
 export async function POST(request: NextRequest) {
@@ -95,7 +116,7 @@ export async function POST(request: NextRequest) {
     console.log('検出されたヘッダー:', headers)
     console.log('ヘッダー数:', headers.length)
     
-    const expectedHeaders = ['NO.', 'トラック名', '車両価格', '支払総額', '業販金額', 'ボディタイプ', 'メーカー', '大きさ', '車種', '型式', '年式', '走行距離（㎞）', '積載量（kg）', 'ミッション', 'シフト', '車検状態', '車検有効期限', '内寸長（㎜）', '内寸幅（㎜）', '内寸高（㎜）', '車両総重量（kg）', '原動機型式', '馬力（ps）', 'ターボ', '排気量（cc）', '燃料', '問合せ番号', '車体番号']
+    const expectedHeaders = ['NO.', 'トラック名', '車両価格', '支払総額', '業販金額', 'ボディタイプ', 'メーカー', '大きさ', '車種', '型式', '年式', '走行距離（㎞）', '積載量（kg）', 'ミッション', 'シフト', '車検状態', '車検有効期限', '外寸長（㎜）', '外寸幅（㎜）', '外寸高（㎜）', '内寸長（㎜）', '内寸幅（㎜）', '内寸高（㎜）', '車両総重量（kg）', '原動機型式', '馬力（ps）', 'ターボ', '排気量（cc）', '燃料', '問合せ番号', '車体番号', '上物メーカー', '上物型式', '上物年式', '装備・仕様（右記以外の）', 'ETC', 'バックカメラ', '記録簿', 'パワーウィンドウ', 'ドラレコ', 'エアコン', '電動ミラー', 'ABS', 'アルミホイール', 'エアサスシート', 'カーナビ', 'DPF', 'PMマフラー', '集中ドアロック']
     console.log('期待されるヘッダー数:', expectedHeaders.length)
     
     const missingHeaders = expectedHeaders.filter(header => !headers.includes(header))
@@ -162,6 +183,15 @@ export async function POST(request: NextRequest) {
         }
         if (vehicleData['loadingCapacity']) {
           vehicleData['loadingCapacity'] = parseInt(vehicleData['loadingCapacity'].toString().replace(/[^\d]/g, '')) || 0
+        }
+        if (vehicleData['outerLength']) {
+          vehicleData['outerLength'] = parseInt(vehicleData['outerLength'].toString().replace(/[^\d]/g, '')) || 0
+        }
+        if (vehicleData['outerWidth']) {
+          vehicleData['outerWidth'] = parseInt(vehicleData['outerWidth'].toString().replace(/[^\d]/g, '')) || 0
+        }
+        if (vehicleData['outerHeight']) {
+          vehicleData['outerHeight'] = parseInt(vehicleData['outerHeight'].toString().replace(/[^\d]/g, '')) || 0
         }
         if (vehicleData['innerLength']) {
           vehicleData['innerLength'] = parseInt(vehicleData['innerLength'].toString().replace(/[^\d]/g, '')) || 0

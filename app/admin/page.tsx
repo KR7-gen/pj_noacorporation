@@ -2,21 +2,10 @@
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { useState } from "react"
-
-// モックデータ
-const vehicles = Array(10).fill(null).map((_, i) => ({
-  id: i + 1,
-  managementNumber: `V${String(i + 1).padStart(5, '0')}`,
-  maker: ['いすゞ', '日野', '三菱ふそう', 'UD'][i % 4],
-  bodyType: ['クレーン', 'ダンプ', '平ボディ', '冷蔵冷凍車'][i % 4],
-  size: ['大型', '中型', '小型'][i % 3],
-  price: 1000000 + (i * 100000),
-  wholesalePrice: 900000 + (i * 90000),
-  totalPayment: 1200000 + (i * 100000),
-  expiryDate: '2024/12/31',
-  imageUrl: '/placeholder.jpg' // 実際の画像パスに置き換える
-}))
+import { useState, useEffect } from "react"
+import { getVehicles } from "@/lib/firebase-utils"
+import type { Vehicle } from "@/types"
+import Image from "next/image"
 
 // プルダウンの選択肢
 const bodyTypes = [
@@ -53,6 +42,10 @@ const sizes = [
 ]
 
 export default function AdminVehiclesPage() {
+  const [vehicles, setVehicles] = useState<Vehicle[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  
   // 検索条件の状態管理
   const [searchParams, setSearchParams] = useState({
     bodyType: "",
@@ -61,8 +54,27 @@ export default function AdminVehiclesPage() {
     keyword: ""
   });
 
+  // 車両データを取得
+  useEffect(() => {
+    const fetchVehicles = async () => {
+      try {
+        setLoading(true)
+        const fetchedVehicles = await getVehicles()
+        setVehicles(fetchedVehicles)
+        setError(null)
+      } catch (err) {
+        setError("車両の読み込みに失敗しました。")
+        console.error(err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchVehicles()
+  }, [])
+
   // 検索条件に基づいてフィルタリングを行う
-  const filteredVehicles = vehicles.filter(vehicle => {
+  const filteredVehicles = vehicles.filter((vehicle: Vehicle) => {
     const matchesBodyType = !searchParams.bodyType || vehicle.bodyType === searchParams.bodyType;
     const matchesMaker = !searchParams.maker || vehicle.maker === searchParams.maker;
     const matchesSize = !searchParams.size || vehicle.size === searchParams.size;
@@ -86,6 +98,14 @@ export default function AdminVehiclesPage() {
       [field]: value
     }));
   };
+
+  if (loading) {
+    return <div>読み込み中...</div>
+  }
+
+  if (error) {
+    return <div>エラー: {error}</div>
+  }
 
   return (
     <div>
@@ -168,25 +188,35 @@ export default function AdminVehiclesPage() {
                 </tr>
               </thead>
               <tbody>
-                {filteredVehicles.map((vehicle) => (
+                {filteredVehicles.map((vehicle: Vehicle) => (
                   <tr key={vehicle.id} className="border-t border-gray-200">
                     <td className="px-4 py-3">
-                      <div className="w-16 h-16 bg-gray-200 rounded"></div>
+                      <Image
+                        src={
+                          vehicle.imageUrls?.[0] ||
+                          vehicle.imageUrl ||
+                          "/placeholder.jpg"
+                        }
+                        alt={`${vehicle.maker} ${vehicle.managementNumber || vehicle.id} の画像`}
+                        width={64}
+                        height={64}
+                        className="rounded object-cover"
+                      />
                     </td>
-                    <td className="px-4 py-3">{vehicle.managementNumber}</td>
+                    <td className="px-4 py-3">{vehicle.managementNumber || vehicle.id}</td>
                     <td className="px-4 py-3">{vehicle.maker}</td>
-                    <td className="px-4 py-3">{vehicle.bodyType}</td>
-                    <td className="px-4 py-3">{vehicle.size}</td>
+                    <td className="px-4 py-3">{vehicle.bodyType || "---"}</td>
+                    <td className="px-4 py-3">{vehicle.size || "---"}</td>
                     <td className="px-4 py-3 text-right">
-                      {vehicle.price.toLocaleString()}円
+                      {vehicle.price ? `${vehicle.price.toLocaleString()}円` : "---"}
                     </td>
                     <td className="px-4 py-3 text-right">
-                      {vehicle.wholesalePrice.toLocaleString()}円
+                      {vehicle.wholesalePrice ? `${vehicle.wholesalePrice.toLocaleString()}円` : "---"}
                     </td>
                     <td className="px-4 py-3 text-right">
-                      {vehicle.totalPayment.toLocaleString()}円
+                      {vehicle.totalPayment ? `${vehicle.totalPayment.toLocaleString()}円` : "---"}
                     </td>
-                    <td className="px-4 py-3">{vehicle.expiryDate}</td>
+                    <td className="px-4 py-3">{vehicle.inspectionDate || "---"}</td>
                     <td className="px-4 py-3 text-center">
                       <div className="flex gap-2 justify-center">
                         <Link href={`/admin/vehicles/${vehicle.id}`}>
@@ -210,22 +240,32 @@ export default function AdminVehiclesPage() {
 
         {/* スマホ用カード表示 */}
         <div className="md:hidden">
-          {filteredVehicles.map((vehicle) => (
+          {filteredVehicles.map((vehicle: Vehicle) => (
             <div key={vehicle.id} className="border-b border-gray-200 p-4">
               <div className="flex items-start gap-4">
-                <div className="w-16 h-16 bg-gray-200 rounded flex-shrink-0"></div>
+                <Image
+                  src={
+                    vehicle.imageUrls?.[0] ||
+                    vehicle.imageUrl ||
+                    "/placeholder.jpg"
+                  }
+                  alt={`${vehicle.maker} ${vehicle.managementNumber || vehicle.id} の画像`}
+                  width={64}
+                  height={64}
+                  className="rounded flex-shrink-0 object-cover"
+                />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-semibold text-gray-900 truncate">{vehicle.managementNumber}</h3>
-                    <span className="text-sm text-gray-500 flex-shrink-0">{vehicle.size}</span>
+                    <h3 className="font-semibold text-gray-900 truncate">{vehicle.managementNumber || vehicle.id}</h3>
+                    <span className="text-sm text-gray-500 flex-shrink-0">{vehicle.size || "---"}</span>
                   </div>
                   <div className="space-y-1 text-sm text-gray-600">
                     <p className="truncate">メーカー: {vehicle.maker}</p>
-                    <p className="truncate">ボディタイプ: {vehicle.bodyType}</p>
-                    <p className="truncate">車両価格: {vehicle.price.toLocaleString()}円</p>
-                    <p className="truncate">業販価格: {vehicle.wholesalePrice.toLocaleString()}円</p>
-                    <p className="truncate">支払総額: {vehicle.totalPayment.toLocaleString()}円</p>
-                    <p className="truncate">車検有効期限: {vehicle.expiryDate}</p>
+                    <p className="truncate">ボディタイプ: {vehicle.bodyType || "---"}</p>
+                    <p className="truncate">車両価格: {vehicle.price ? `${vehicle.price.toLocaleString()}円` : "---"}</p>
+                    <p className="truncate">業販価格: {vehicle.wholesalePrice ? `${vehicle.wholesalePrice.toLocaleString()}円` : "---"}</p>
+                    <p className="truncate">支払総額: {vehicle.totalPayment ? `${vehicle.totalPayment.toLocaleString()}円` : "---"}</p>
+                    <p className="truncate">車検有効期限: {vehicle.inspectionDate || "---"}</p>
                   </div>
                   <div className="flex gap-2 mt-4">
                     <Link href={`/admin/vehicles/${vehicle.id}`}>
