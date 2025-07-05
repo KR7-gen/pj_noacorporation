@@ -63,8 +63,11 @@ export async function POST(request: NextRequest) {
     const csvText = await file.text()
     console.log('CSV内容（最初の500文字）:', csvText.substring(0, 500))
     
-    // PapaParseを使用してCSVを解析
-    const parseResult = Papa.parse(csvText, {
+    // BOMを除去
+    let processedText = csvText.replace(/^\uFEFF/, '')
+    
+    // PapaParseを使用してCSVを解析（元のテキストをそのまま使用）
+    const parseResult = Papa.parse(processedText, {
       header: true,
       skipEmptyLines: true,
       transformHeader: (header) => header.trim(),
@@ -89,10 +92,14 @@ export async function POST(request: NextRequest) {
 
     // ヘッダーの検証
     const headers = Object.keys(rows[0] || {})
-    console.log('ヘッダー:', headers)
+    console.log('検出されたヘッダー:', headers)
+    console.log('ヘッダー数:', headers.length)
     
     const expectedHeaders = ['NO.', 'トラック名', '車両価格', '支払総額', '業販金額', 'ボディタイプ', 'メーカー', '大きさ', '車種', '型式', '年式', '走行距離（㎞）', '積載量（kg）', 'ミッション', 'シフト', '車検状態', '車検有効期限', '内寸長（㎜）', '内寸幅（㎜）', '内寸高（㎜）', '車両総重量（kg）', '原動機型式', '馬力（ps）', 'ターボ', '排気量（cc）', '燃料', '問合せ番号', '車体番号']
+    console.log('期待されるヘッダー数:', expectedHeaders.length)
+    
     const missingHeaders = expectedHeaders.filter(header => !headers.includes(header))
+    console.log('不足しているヘッダー:', missingHeaders)
     
     if (missingHeaders.length > 0) {
       console.log('ヘッダーが不足しています:', missingHeaders)
@@ -106,6 +113,7 @@ export async function POST(request: NextRequest) {
     
     // データ行を処理（2行目をスキップ）
     const vehicles = []
+    const currentUploadVehicles: any[] = [] // 現在のアップロード処理内での重複チェック用
     let successCount = 0
     let errorCount = 0
     let skippedCount = 0
@@ -174,13 +182,33 @@ export async function POST(request: NextRequest) {
           vehicleData['displacement'] = parseInt(vehicleData['displacement'].toString().replace(/[^\d]/g, '')) || 0
         }
 
-        // 重複チェック
+        // 既存データとの重複チェック
         let existingVehicle = null
         if (vehicleData.chassisNumber && vehicleData.chassisNumber.toString().trim() !== '') {
           existingVehicle = existingVehicles.find(v => v.chassisNumber === vehicleData.chassisNumber)
         }
         if (!existingVehicle && vehicleData.inquiryNumber && vehicleData.inquiryNumber.toString().trim() !== '') {
           existingVehicle = existingVehicles.find(v => v.inquiryNumber === vehicleData.inquiryNumber)
+        }
+
+        // 現在のアップロード処理内での重複チェック
+        let currentUploadDuplicate = null
+        if (vehicleData.chassisNumber && vehicleData.chassisNumber.toString().trim() !== '') {
+          currentUploadDuplicate = currentUploadVehicles.find(v => v.chassisNumber === vehicleData.chassisNumber)
+        }
+        if (!currentUploadDuplicate && vehicleData.inquiryNumber && vehicleData.inquiryNumber.toString().trim() !== '') {
+          currentUploadDuplicate = currentUploadVehicles.find(v => v.inquiryNumber === vehicleData.inquiryNumber)
+        }
+
+        if (currentUploadDuplicate) {
+          console.log(`行 ${i + 1}: 現在のアップロード処理内で重複 - 車体番号: "${vehicleData.chassisNumber}", 問合せ番号: "${vehicleData.inquiryNumber}"`)
+          errorCount++
+          detailedResults.push({
+            row: i + 1,
+            status: 'error',
+            message: '現在のアップロード処理内で重複データが検出されました'
+          })
+          continue
         }
 
         if (existingVehicle) {
@@ -224,6 +252,9 @@ export async function POST(request: NextRequest) {
             message: `新規データを追加しました（ID: ${docRef.id}）`
           })
           vehicles.push(vehicleData)
+          
+          // 現在のアップロード処理内での重複チェック用に追加
+          currentUploadVehicles.push(vehicleData)
         }
       } catch (error) {
         console.error(`行 ${i + 1} の処理でエラー:`, error)

@@ -77,14 +77,28 @@ export async function POST(request: NextRequest) {
 
     // CSVファイルを読み取り
     const csvText = await file.text()
+    console.log('CSVファイルの最初の500文字:', csvText.substring(0, 500))
+    console.log('CSVファイルの文字コード:', csvText.charCodeAt(0), csvText.charCodeAt(1), csvText.charCodeAt(2))
+    console.log('BOM確認:', csvText.startsWith('\uFEFF') ? 'BOMあり' : 'BOMなし')
     
-    // PapaParseを使用してCSVを解析
-    const parseResult = Papa.parse(csvText, {
+    // BOMを除去
+    let processedText = csvText.replace(/^\uFEFF/, '')
+    
+    // PapaParseを使用してCSVを解析（元のテキストをそのまま使用）
+    const parseResult = Papa.parse(processedText, {
       header: true,
       skipEmptyLines: true,
       transformHeader: (header) => header.trim(),
       transform: (value) => value.trim()
     })
+    
+    console.log('PapaParse解析結果:', parseResult)
+    
+    // ヘッダー行の詳細分析
+    const firstLine = processedText.split('\n')[0]
+    console.log('ヘッダー行（生データ）:', firstLine)
+    console.log('ヘッダー行の文字数:', firstLine.length)
+    console.log('ヘッダー行の各文字のコード:', Array.from(firstLine).map(char => char.charCodeAt(0)))
 
     if (parseResult.errors.length > 0) {
       return NextResponse.json({ 
@@ -100,8 +114,21 @@ export async function POST(request: NextRequest) {
 
     // ヘッダーの検証
     const headers = Object.keys(rows[0] || {})
+    console.log('検出されたヘッダー:', headers)
+    console.log('ヘッダー数:', headers.length)
+    
     const expectedHeaders = ['NO.', 'トラック名', '車両価格', '支払総額', '業販金額', 'ボディタイプ', 'メーカー', '大きさ', '車種', '型式', '年式', '走行距離（㎞）', '積載量（kg）', 'ミッション', 'シフト', '車検状態', '車検有効期限', '内寸長（㎜）', '内寸幅（㎜）', '内寸高（㎜）', '車両総重量（kg）', '原動機型式', '馬力（ps）', 'ターボ', '排気量（cc）', '燃料', '問合せ番号', '車体番号']
+    console.log('期待されるヘッダー数:', expectedHeaders.length)
+    
+    // 各ヘッダーの詳細比較
+    console.log('=== ヘッダー詳細比較 ===')
+    expectedHeaders.forEach((expected, index) => {
+      const found = headers.find(h => h === expected)
+      console.log(`${index + 1}. 期待: "${expected}" (${expected.length}文字) - 検出: ${found ? `"${found}" (${found.length}文字)` : '見つかりません'}`)
+    })
+    
     const missingHeaders = expectedHeaders.filter(header => !headers.includes(header))
+    console.log('不足しているヘッダー:', missingHeaders)
     
     if (missingHeaders.length > 0) {
       return NextResponse.json({ 
@@ -114,6 +141,7 @@ export async function POST(request: NextRequest) {
 
     // データの検証とプレビュー作成
     const previewData: PreviewData[] = []
+    const currentUploadVehicles: any[] = [] // 現在のアップロード処理内での重複チェック用
     let totalErrors = 0
     let totalDuplicates = 0
 
@@ -159,7 +187,8 @@ export async function POST(request: NextRequest) {
       dateFields.forEach(field => {
         if (vehicleData[field] && vehicleData[field].toString().trim() !== '') {
           const dateValue = vehicleData[field].toString()
-          if (!isValidDate(dateValue)) {
+          // 「-」は許可（一時抹消などの場合）
+          if (dateValue !== '-' && !isValidDate(dateValue)) {
             errors.push({
               row: i + 1,
               field: field,
@@ -169,7 +198,7 @@ export async function POST(request: NextRequest) {
         }
       })
 
-      // 重複チェック
+      // 既存データとの重複チェック
       if (vehicleData.chassisNumber && vehicleData.chassisNumber.toString().trim() !== '') {
         const duplicateByChassis = existingVehicles.find(v => v.chassisNumber === vehicleData.chassisNumber)
         if (duplicateByChassis) {
@@ -188,6 +217,24 @@ export async function POST(request: NextRequest) {
         }
       }
 
+      // 現在のアップロード処理内での重複チェック
+      if (!isDuplicate) {
+        if (vehicleData.chassisNumber && vehicleData.chassisNumber.toString().trim() !== '') {
+          const currentUploadDuplicateByChassis = currentUploadVehicles.find(v => v.chassisNumber === vehicleData.chassisNumber)
+          if (currentUploadDuplicateByChassis) {
+            isDuplicate = true
+            duplicateReason = `車体番号 "${vehicleData.chassisNumber}" が現在のアップロード処理内で重複`
+          }
+        }
+        if (!isDuplicate && vehicleData.inquiryNumber && vehicleData.inquiryNumber.toString().trim() !== '') {
+          const currentUploadDuplicateByInquiry = currentUploadVehicles.find(v => v.inquiryNumber === vehicleData.inquiryNumber)
+          if (currentUploadDuplicateByInquiry) {
+            isDuplicate = true
+            duplicateReason = `問合せ番号 "${vehicleData.inquiryNumber}" が現在のアップロード処理内で重複`
+          }
+        }
+      }
+
       if (errors.length > 0) {
         totalErrors += errors.length
       }
@@ -202,6 +249,11 @@ export async function POST(request: NextRequest) {
         isDuplicate,
         duplicateReason
       })
+
+      // 現在のアップロード処理内での重複チェック用に追加（エラーがない場合のみ）
+      if (errors.length === 0 && !isDuplicate) {
+        currentUploadVehicles.push(vehicleData)
+      }
     }
 
     return NextResponse.json({
