@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { addVehicle } from "@/lib/firebase-utils"
+import ImageUploader from "@/components/ImageUploader"
 import type { Vehicle } from "@/types"
 
 // プルダウンの選択肢
@@ -149,8 +150,8 @@ export default function VehicleNewPage() {
         expiryDate: "", // Add a proper expiryDate field if needed
         ...formData,
       }
-      await addVehicle(vehicleData)
-      alert("車両を登録しました。")
+      const vehicleId = await addVehicle(vehicleData)
+      alert("車両を登録しました。車両ID: " + vehicleId)
       router.push("/admin/vehicles")
     } catch (error) {
       console.error("車両の登録に失敗しました:", error)
@@ -235,19 +236,10 @@ export default function VehicleNewPage() {
           {/* 画像アップロード */}
           <div>
             <h3 className="text-lg font-medium mb-4">画像登録</h3>
-            <div className="grid grid-cols-4 gap-4">
-              {Array(14).fill(null).map((_, index) => (
-                <div
-                  key={index}
-                  className="aspect-square border-2 border-dashed rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-50"
-                >
-                  <span className="text-gray-400">＋</span>
-                </div>
-              ))}
-            </div>
-            <div className="mt-4 text-right">
-              <Button variant="destructive">一括削除</Button>
-            </div>
+            <ImageUploader
+              images={formData.imageUrls || []}
+              onImagesChange={(images) => setFormData(prev => ({ ...prev, imageUrls: images }))}
+            />
           </div>
 
           {/* 車両情報 */}

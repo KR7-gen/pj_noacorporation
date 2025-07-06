@@ -6,7 +6,7 @@ import { useParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { FileText, Camera, Phone } from "lucide-react"
+import { FileText, Camera, Phone, ChevronLeft, ChevronRight } from "lucide-react"
 import { getVehicle, getVehicles } from "@/lib/firebase-utils"
 import type { Vehicle } from "@/types"
 
@@ -17,6 +17,7 @@ export default function VehicleDetailPage() {
   const [relatedVehicles, setRelatedVehicles] = useState<Vehicle[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [currentIndex, setCurrentIndex] = useState(0)
 
   useEffect(() => {
     const fetchVehicle = async () => {
@@ -77,6 +78,23 @@ export default function VehicleDetailPage() {
     )
   }
 
+  // 画像配列（imageUrlsがなければimageUrl単体、なければダミー）
+  const images = vehicle.imageUrls && vehicle.imageUrls.length > 0
+    ? vehicle.imageUrls
+    : vehicle.imageUrl
+      ? [vehicle.imageUrl]
+      : ["/placeholder.jpg"];
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1))
+  }
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1))
+  }
+  const handleThumbClick = (idx: number) => {
+    setCurrentIndex(idx)
+  }
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -100,16 +118,49 @@ export default function VehicleDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2">
-            {/* Vehicle Image */}
+            {/* Vehicle Image Slider */}
             <Card className="mb-8">
               <CardContent className="p-0">
-                <div className="w-full h-96 bg-gray-200 rounded-lg overflow-hidden">
+                <div className="relative w-full h-96 bg-gray-200 rounded-lg overflow-hidden flex items-center justify-center">
+                  {/* 左矢印 */}
+                  {images.length > 1 && (
+                    <button
+                      onClick={handlePrev}
+                      className="absolute left-2 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 rounded-full p-2 shadow hover:bg-opacity-100 z-10"
+                    >
+                      <ChevronLeft className="w-6 h-6" />
+                    </button>
+                  )}
+                  {/* メイン画像 */}
                   <img
-                    src={vehicle.imageUrls?.[0] || vehicle.imageUrl || "/placeholder.jpg"}
+                    src={images[currentIndex]}
                     alt={vehicle.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover select-none"
                   />
+                  {/* 右矢印 */}
+                  {images.length > 1 && (
+                    <button
+                      onClick={handleNext}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 rounded-full p-2 shadow hover:bg-opacity-100 z-10"
+                    >
+                      <ChevronRight className="w-6 h-6" />
+                    </button>
+                  )}
                 </div>
+                {/* サムネイル一覧 */}
+                {images.length > 1 && (
+                  <div className="flex gap-2 mt-4 px-4 pb-4 overflow-x-auto">
+                    {images.map((img, idx) => (
+                      <img
+                        key={img}
+                        src={img}
+                        alt={`サムネイル${idx + 1}`}
+                        className={`w-24 h-16 object-cover rounded cursor-pointer border-2 ${currentIndex === idx ? 'border-blue-600' : 'border-transparent'}`}
+                        onClick={() => handleThumbClick(idx)}
+                      />
+                    ))}
+                  </div>
+                )}
               </CardContent>
             </Card>
 
