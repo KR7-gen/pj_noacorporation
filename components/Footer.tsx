@@ -19,6 +19,7 @@ const footerLinks = {
   sizes: ["大型", "増トン", "中型", "小型"],
   pages: [
     { name: "販売在庫一覧", href: "/inventory" },
+    { name: "レンタル車両", href: "/rental" },
     { name: "トラック買取", href: "/purchase" },
     { name: "私たちについて", href: "/about" },
     { name: "お知らせ", href: "/news" },

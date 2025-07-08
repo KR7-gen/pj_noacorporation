@@ -16,6 +16,7 @@ export function Header() {
         <nav className="hidden md:flex items-center space-x-6 text-sm">
           <Link href="/" className="hover:text-blue-600 transition-colors">HOME</Link>
           <Link href="/inventory" className="hover:text-blue-600 transition-colors">販売在庫一覧</Link>
+          <Link href="/rental" className="hover:text-blue-600 transition-colors">レンタル車両</Link>
           <Link href="/purchase" className="hover:text-blue-600 transition-colors">買取はこちら</Link>
           <Link href="/about" className="hover:text-blue-600 transition-colors">私たちについて</Link>
         </nav>

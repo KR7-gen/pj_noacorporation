@@ -40,6 +40,7 @@ export function Header() {
           <nav className="flex items-center space-x-6">
             <a href="/" className="text-sm font-medium text-gray-600 hover:text-gray-900">HOME</a>
             <a href="/inventory" className="text-sm font-medium text-gray-600 hover:text-gray-900">販売在庫一覧</a>
+            <a href="/rental" className="text-sm font-medium text-gray-600 hover:text-gray-900">レンタル車両</a>
             <a href="/purchase" className="text-sm font-medium text-gray-600 hover:text-gray-900">買取はこちら</a>
             <a href="/about" className="text-sm font-medium text-gray-600 hover:text-gray-900">私たちについて</a>
           </nav>
@@ -85,6 +86,7 @@ export function Header() {
               </div>
               <nav className="flex flex-col gap-6">
                 <Link href="/inventory" className="text-base font-medium text-gray-700 hover:text-blue-600" onClick={handleCloseMenu}>販売在庫一覧</Link>
+                <Link href="/rental" className="text-base font-medium text-gray-700 hover:text-blue-600" onClick={handleCloseMenu}>レンタル車両</Link>
                 <Link href="/purchase" className="text-base font-medium text-gray-700 hover:text-blue-600" onClick={handleCloseMenu}>買取はこちら</Link>
                 <Link href="/about" className="text-base font-medium text-gray-700 hover:text-blue-600" onClick={handleCloseMenu}>私たちについて</Link>
                 <Link href="/contact" className="text-base font-medium text-white bg-[#4169E1] rounded px-4 py-2 text-center hover:bg-[#3154B3] transition-colors duration-200" onClick={handleCloseMenu}>

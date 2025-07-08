@@ -421,24 +421,24 @@ export default function VehicleEditPage() {
                   <div className="space-y-2">
                     <input
                       type="number"
-                      name="length"
-                      value={formData.length || ""}
+                      name="outerLength"
+                      value={formData.outerLength || ""}
                       onChange={handleChange}
                       className="w-full border rounded px-2 py-1"
                       placeholder="L (mm)"
                     />
                     <input
                       type="number"
-                      name="width"
-                      value={formData.width || ""}
+                      name="outerWidth"
+                      value={formData.outerWidth || ""}
                       onChange={handleChange}
                       className="w-full border rounded px-2 py-1"
                       placeholder="W (mm)"
                     />
                     <input
                       type="number"
-                      name="height"
-                      value={formData.height || ""}
+                      name="outerHeight"
+                      value={formData.outerHeight || ""}
                       onChange={handleChange}
                       className="w-full border rounded px-2 py-1"
                       placeholder="H (mm)"
