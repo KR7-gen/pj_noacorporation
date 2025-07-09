@@ -1,0 +1,26 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // 開発中は一時的にすべてのアクセスを許可
+    // 本番環境では適切なセキュリティルールに変更してください
+    match /{allPaths=**} {
+      allow read, write: if true;
+    }
+    
+    // 本番環境用のセキュリティルール（コメントアウト）
+    /*
+    // 認証済みユーザーのみアクセス可能
+    match /{allPaths=**} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // 画像ファイルのアップロード制限
+    match /images/{allPaths=**} {
+      allow read: if true;  // 誰でも読み取り可能
+      allow write: if request.auth != null 
+                   && request.resource.size < 5 * 1024 * 1024  // 5MB以下
+                   && request.resource.contentType.matches('image/.*');  // 画像ファイルのみ
+    }
+    */
+  }
+} 

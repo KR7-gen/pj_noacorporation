@@ -1,0 +1,10 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 開発中は一時的にすべてのアクセスを許可（認証不要）
+    // 本番環境では適切なセキュリティルールに変更してください
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+} 

@@ -5,39 +5,52 @@ import React, { createContext, useContext, useState, useEffect } from 'react'
 interface AuthContextType {
   isAuthenticated: boolean
   login: (email: string, password: string) => Promise<boolean>
-  logout: () => void
+  logout: () => Promise<void>
+  loading: boolean
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-  // ページ読み込み時にローカルストレージから認証状態を復元
+  // 開発中は一時的に認証なしでアクセス可能
   useEffect(() => {
+    // ローカルストレージから認証状態を復元
     const authStatus = localStorage.getItem('admin-auth')
     if (authStatus === 'true') {
       setIsAuthenticated(true)
     }
+    setLoading(false)
   }, [])
 
   const login = async (email: string, password: string): Promise<boolean> => {
-    // ハードコードされた認証情報
-    if (email === 'admin@example.com' && password === 'pj_noacorporation') {
-      setIsAuthenticated(true)
-      localStorage.setItem('admin-auth', 'true')
-      return true
+    try {
+      // 開発中は簡易認証（後でFirebase認証に変更）
+      if (email === 'admin@example.com' && password === 'pj_noacorporation') {
+        setIsAuthenticated(true)
+        localStorage.setItem('admin-auth', 'true')
+        return true
+      }
+      return false
+    } catch (error) {
+      console.error('ログインエラー:', error)
+      return false
     }
-    return false
   }
 
-  const logout = () => {
-    setIsAuthenticated(false)
-    localStorage.removeItem('admin-auth')
+  const logout = async (): Promise<void> => {
+    try {
+      setIsAuthenticated(false)
+      localStorage.removeItem('admin-auth')
+    } catch (error) {
+      console.error('ログアウトエラー:', error)
+    }
   }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   )

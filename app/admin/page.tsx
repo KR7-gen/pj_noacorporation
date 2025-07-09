@@ -1,60 +1,37 @@
 "use client"
 
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
 import { useState, useEffect } from "react"
-import { getVehicles } from "@/lib/firebase-utils"
+import { useRouter } from "next/navigation"
+import { getVehicles, deleteVehicle } from "@/lib/firebase-utils"
 import type { Vehicle } from "@/types"
+import { Button } from "@/components/ui/button"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 import Image from "next/image"
 
-// プルダウンの選択肢
-const bodyTypes = [
-  "クレーン",
-  "ダンプ",
-  "平ボディ",
-  "車輌運搬車",
-  "ミキサー車",
-  "高所作業車",
-  "アルミバン",
-  "アルミウィング",
-  "キャリアカー",
-  "塵芥車",
-  "アームロール",
-  "バス",
-  "冷蔵冷凍車",
-  "タンクローリー",
-  "特装車・その他"
-]
-
-const makers = [
-  "日野",
-  "いすゞ",
-  "三菱ふそう",
-  "UD",
-  "その他"
-]
-
-const sizes = [
-  "大型",
-  "増トン",
-  "中型",
-  "小型"
-]
-
 export default function AdminVehiclesPage() {
+  const router = useRouter()
   const [vehicles, setVehicles] = useState<Vehicle[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  
-  // 検索条件の状態管理
-  const [searchParams, setSearchParams] = useState({
-    bodyType: "",
-    maker: "",
-    size: "",
-    keyword: ""
-  });
+  const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null)
 
-  // 車両データを取得
   useEffect(() => {
     const fetchVehicles = async () => {
       try {
@@ -73,31 +50,26 @@ export default function AdminVehiclesPage() {
     fetchVehicles()
   }, [])
 
-  // 検索条件に基づいてフィルタリングを行う
-  const filteredVehicles = vehicles.filter((vehicle: Vehicle) => {
-    const matchesBodyType = !searchParams.bodyType || vehicle.bodyType === searchParams.bodyType;
-    const matchesMaker = !searchParams.maker || vehicle.maker === searchParams.maker;
-    const matchesSize = !searchParams.size || vehicle.size === searchParams.size;
-    const matchesKeyword = !searchParams.keyword || 
-      Object.values(vehicle).some(value => 
-        String(value).toLowerCase().includes(searchParams.keyword.toLowerCase())
-      );
+  const handleDelete = (vehicle: Vehicle) => {
+    setSelectedVehicle(vehicle)
+  }
 
-    return matchesBodyType && matchesMaker && matchesSize && matchesKeyword;
-  });
+  const confirmDelete = async () => {
+    if (selectedVehicle && selectedVehicle.id) {
+      try {
+        await deleteVehicle(selectedVehicle.id)
+        setVehicles(vehicles.filter((v) => v.id !== selectedVehicle.id))
+        setSelectedVehicle(null)
+      } catch (err) {
+        setError("車両の削除に失敗しました。")
+        console.error(err)
+      }
+    }
+  }
 
-  // 検索条件の更新ハンドラー
-  const handleSearch = () => {
-    console.log('Searching with params:', searchParams);
-  };
-
-  // 検索フォームの入力ハンドラー
-  const handleInputChange = (field: string, value: string) => {
-    setSearchParams(prev => ({
-      ...prev,
-      [field]: value
-    }));
-  };
+  const handleEdit = (id: string) => {
+    router.push(`/admin/vehicles/${id}/edit`)
+  }
 
   if (loading) {
     return <div>読み込み中...</div>
@@ -108,183 +80,117 @@ export default function AdminVehiclesPage() {
   }
 
   return (
-    <div>
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
+    <div className="container mx-auto py-10">
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-4">
         <h1 className="text-2xl font-bold">車両一覧</h1>
         <div className="flex gap-2">
-          <Link href="/admin/vehicles/import">
-            <Button variant="outline" className="w-full sm:w-auto">CSV一括インポート</Button>
-          </Link>
-          <Link href="/admin/vehicles/new">
-            <Button className="w-full sm:w-auto">新規車両登録</Button>
-          </Link>
+          <Button 
+            variant="outline" 
+            onClick={() => router.push("/admin/vehicles/import")}
+          >
+            CSV一括インポート
+          </Button>
+          <Button onClick={() => router.push("/admin/vehicles/new")}>
+            新規車両登録
+          </Button>
         </div>
       </div>
 
-      {/* 検索フォーム */}
-      <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <select 
-            className="border rounded px-2 py-1 w-full"
-            value={searchParams.bodyType}
-            onChange={(e) => handleInputChange('bodyType', e.target.value)}
-          >
-            <option value="">ボディタイプ</option>
-            {bodyTypes.map((type) => (
-              <option key={type} value={type}>{type}</option>
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>写真</TableHead>
+              <TableHead>管理番号</TableHead>
+              <TableHead>メーカー</TableHead>
+              <TableHead>車種</TableHead>
+              <TableHead>型式</TableHead>
+              <TableHead>年式</TableHead>
+              <TableHead>ボディタイプ</TableHead>
+              <TableHead>大きさ</TableHead>
+              <TableHead>積載量</TableHead>
+              <TableHead>車検有効期限</TableHead>
+              <TableHead>車両価格</TableHead>
+              <TableHead>支払総額</TableHead>
+              <TableHead className="text-right">操作</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {vehicles.map((vehicle) => (
+              <TableRow key={vehicle.id}>
+                <TableCell>
+                  <Image
+                    src={
+                      vehicle.imageUrls?.[0] ||
+                      vehicle.imageUrl ||
+                      "/placeholder.jpg"
+                    }
+                    alt={`${vehicle.maker} ${vehicle.managementNumber || vehicle.id} の画像`}
+                    width={120}
+                    height={80}
+                    className="rounded-md object-cover"
+                  />
+                </TableCell>
+                <TableCell>{vehicle.managementNumber || vehicle.id}</TableCell>
+                <TableCell>{vehicle.maker}</TableCell>
+                <TableCell>{vehicle.model || "---"}</TableCell>
+                <TableCell>{vehicle.modelCode || "---"}</TableCell>
+                <TableCell>{vehicle.year || "---"}</TableCell>
+                <TableCell>{vehicle.bodyType || "---"}</TableCell>
+                <TableCell>{vehicle.size || "---"}</TableCell>
+                <TableCell>{vehicle.loadingCapacity ? `${vehicle.loadingCapacity}kg` : "---"}</TableCell>
+                <TableCell>{vehicle.inspectionDate || "---"}</TableCell>
+                <TableCell>
+                  {vehicle.price ? `${vehicle.price.toLocaleString()}円` : "---"}
+                </TableCell>
+                <TableCell>
+                  {vehicle.totalPayment
+                    ? `${vehicle.totalPayment.toLocaleString()}円`
+                    : "---"}
+                </TableCell>
+                <TableCell className="text-right">
+                  <div className="flex gap-2 justify-end">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleEdit(vehicle.id!)}
+                    >
+                      編集
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => handleDelete(vehicle)}
+                    >
+                      削除
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
             ))}
-          </select>
-          <select 
-            className="border rounded px-2 py-1 w-full"
-            value={searchParams.maker}
-            onChange={(e) => handleInputChange('maker', e.target.value)}
-          >
-            <option value="">メーカー</option>
-            {makers.map((maker) => (
-              <option key={maker} value={maker}>{maker}</option>
-            ))}
-          </select>
-          <select 
-            className="border rounded px-2 py-1 w-full"
-            value={searchParams.size}
-            onChange={(e) => handleInputChange('size', e.target.value)}
-          >
-            <option value="">大きさ</option>
-            {sizes.map((size) => (
-              <option key={size} value={size}>{size}</option>
-            ))}
-          </select>
-          <input
-            type="text"
-            placeholder="フリーワード"
-            className="border rounded px-2 py-1 w-full"
-            value={searchParams.keyword}
-            onChange={(e) => handleInputChange('keyword', e.target.value)}
-          />
-        </div>
-        <div className="mt-4 text-right">
-          <Button onClick={handleSearch} className="w-full sm:w-auto">検索</Button>
-        </div>
+          </TableBody>
+        </Table>
       </div>
 
-      {/* 車両一覧テーブル */}
-      <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-        {/* PC用テーブル */}
-        <div className="hidden md:block">
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-4 py-3 text-left whitespace-nowrap">画像</th>
-                  <th className="px-4 py-3 text-left whitespace-nowrap">管理番号</th>
-                  <th className="px-4 py-3 text-left whitespace-nowrap">メーカー</th>
-                  <th className="px-4 py-3 text-left whitespace-nowrap">ボディタイプ</th>
-                  <th className="px-4 py-3 text-left whitespace-nowrap">大きさ</th>
-                  <th className="px-4 py-3 text-right whitespace-nowrap">車両価格</th>
-                  <th className="px-4 py-3 text-right whitespace-nowrap">業販価格</th>
-                  <th className="px-4 py-3 text-right whitespace-nowrap">支払総額</th>
-                  <th className="px-4 py-3 text-left whitespace-nowrap">車検有効期限</th>
-                  <th className="px-4 py-3 text-center whitespace-nowrap">操作</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredVehicles.map((vehicle: Vehicle) => (
-                  <tr key={vehicle.id} className="border-t border-gray-200">
-                    <td className="px-4 py-3">
-                      <Image
-                        src={
-                          vehicle.imageUrls?.[0] ||
-                          vehicle.imageUrl ||
-                          "/placeholder.jpg"
-                        }
-                        alt={`${vehicle.maker} ${vehicle.managementNumber || vehicle.id} の画像`}
-                        width={64}
-                        height={64}
-                        className="rounded object-cover"
-                      />
-                    </td>
-                    <td className="px-4 py-3">{vehicle.managementNumber || vehicle.id}</td>
-                    <td className="px-4 py-3">{vehicle.maker}</td>
-                    <td className="px-4 py-3">{vehicle.bodyType || "---"}</td>
-                    <td className="px-4 py-3">{vehicle.size || "---"}</td>
-                    <td className="px-4 py-3 text-right">
-                      {vehicle.price ? `${vehicle.price.toLocaleString()}円` : "---"}
-                    </td>
-                    <td className="px-4 py-3 text-right">
-                      {vehicle.wholesalePrice ? `${vehicle.wholesalePrice.toLocaleString()}円` : "---"}
-                    </td>
-                    <td className="px-4 py-3 text-right">
-                      {vehicle.totalPayment ? `${vehicle.totalPayment.toLocaleString()}円` : "---"}
-                    </td>
-                    <td className="px-4 py-3">{vehicle.inspectionDate || "---"}</td>
-                    <td className="px-4 py-3 text-center">
-                      <div className="flex gap-2 justify-center">
-                        <Link href={`/admin/vehicles/${vehicle.id}`}>
-                          <Button variant="secondary" size="sm">
-                            詳細
-                          </Button>
-                        </Link>
-                        <Link href={`/admin/vehicles/${vehicle.id}/edit`}>
-                          <Button variant="outline" size="sm">
-                            編集
-                          </Button>
-                        </Link>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {/* スマホ用カード表示 */}
-        <div className="md:hidden">
-          {filteredVehicles.map((vehicle: Vehicle) => (
-            <div key={vehicle.id} className="border-b border-gray-200 p-4">
-              <div className="flex items-start gap-4">
-                <Image
-                  src={
-                    vehicle.imageUrls?.[0] ||
-                    vehicle.imageUrl ||
-                    "/placeholder.jpg"
-                  }
-                  alt={`${vehicle.maker} ${vehicle.managementNumber || vehicle.id} の画像`}
-                  width={64}
-                  height={64}
-                  className="rounded flex-shrink-0 object-cover"
-                />
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-semibold text-gray-900 truncate">{vehicle.managementNumber || vehicle.id}</h3>
-                    <span className="text-sm text-gray-500 flex-shrink-0">{vehicle.size || "---"}</span>
-                  </div>
-                  <div className="space-y-1 text-sm text-gray-600">
-                    <p className="truncate">メーカー: {vehicle.maker}</p>
-                    <p className="truncate">ボディタイプ: {vehicle.bodyType || "---"}</p>
-                    <p className="truncate">車両価格: {vehicle.price ? `${vehicle.price.toLocaleString()}円` : "---"}</p>
-                    <p className="truncate">業販価格: {vehicle.wholesalePrice ? `${vehicle.wholesalePrice.toLocaleString()}円` : "---"}</p>
-                    <p className="truncate">支払総額: {vehicle.totalPayment ? `${vehicle.totalPayment.toLocaleString()}円` : "---"}</p>
-                    <p className="truncate">車検有効期限: {vehicle.inspectionDate || "---"}</p>
-                  </div>
-                  <div className="flex gap-2 mt-4">
-                    <Link href={`/admin/vehicles/${vehicle.id}`}>
-                      <Button variant="secondary" size="sm" className="text-xs">
-                        詳細
-                      </Button>
-                    </Link>
-                    <Link href={`/admin/vehicles/${vehicle.id}/edit`}>
-                      <Button variant="outline" size="sm" className="text-xs">
-                        編集
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      {selectedVehicle && (
+        <AlertDialog open onOpenChange={() => setSelectedVehicle(null)}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>本当に削除しますか？</AlertDialogTitle>
+              <AlertDialogDescription>
+                「{selectedVehicle.name}
+                」を削除すると、元に戻すことはできません。
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>キャンセル</AlertDialogCancel>
+              <AlertDialogAction onClick={confirmDelete}>
+                削除
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
     </div>
   )
 } 

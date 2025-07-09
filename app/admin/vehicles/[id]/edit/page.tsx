@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { getVehicle, updateVehicle } from "@/lib/firebase-utils"
 import ImageUploader from "@/components/ImageUploader"
+import { formatNumberWithCommas, formatInputWithCommas } from "@/lib/utils"
 import type { Vehicle } from "@/types"
 
 // プルダウンの選択肢
@@ -96,12 +97,22 @@ const missions = [
   "AT・SAT"
 ]
 
+// 装備品リスト
+const equipmentList = [
+  "ETC", "バックカメラ", "記録簿", "パワーウィンドウ", "ドラレコ", "エアコン",
+  "電動ミラー", "ABS", "アルミホイール", "エアサスシート", "カーナビ", "DPF",
+  "PMマフラー", "集中ドアロック"
+];
+
 export default function VehicleEditPage() {
   const params = useParams()
   const router = useRouter()
   const vehicleId = params.id as string
   const [vehicle, setVehicle] = useState<Vehicle | null>(null)
-  const [formData, setFormData] = useState<Partial<Vehicle>>({})
+  const [formData, setFormData] = useState<Partial<Vehicle>>({
+    price: "",
+    totalPayment: "",
+  })
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -113,7 +124,19 @@ export default function VehicleEditPage() {
         const fetchedVehicle = await getVehicle(vehicleId)
         if (fetchedVehicle) {
           setVehicle(fetchedVehicle)
-          setFormData(fetchedVehicle)
+          setFormData({
+            ...fetchedVehicle,
+            price: formatNumberWithCommas(fetchedVehicle.price) || "",
+            totalPayment: formatNumberWithCommas(fetchedVehicle.totalPayment) || "",
+            mileage: formatNumberWithCommas(fetchedVehicle.mileage) || "",
+            loadingCapacity: formatNumberWithCommas(fetchedVehicle.loadingCapacity) || "",
+            outerLength: formatNumberWithCommas(fetchedVehicle.outerLength) || "",
+            outerWidth: formatNumberWithCommas(fetchedVehicle.outerWidth) || "",
+            outerHeight: formatNumberWithCommas(fetchedVehicle.outerHeight) || "",
+            totalWeight: formatNumberWithCommas(fetchedVehicle.totalWeight) || "",
+            horsepower: formatNumberWithCommas(fetchedVehicle.horsepower) || "",
+            displacement: formatNumberWithCommas(fetchedVehicle.displacement) || "",
+          })
         } else {
           setError("車両が見つかりませんでした")
         }
@@ -134,14 +157,41 @@ export default function VehicleEditPage() {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target
-    setFormData((prev) => ({
-      ...prev,
-      [name]:
-        name === "price" || name === "totalPayment" || name === "wholesalePrice"
-          ? Number(value)
-          : value,
-    }))
+    
+    // カンマ区切りが必要な項目
+    const commaFields = ['price', 'totalPayment', 'mileage', 'loadingCapacity', 'outerLength', 'outerWidth', 'outerHeight', 'totalWeight', 'horsepower', 'displacement'];
+    
+    if (commaFields.includes(name)) {
+      const formattedValue = formatInputWithCommas(value);
+      setFormData((prev) => ({
+        ...prev,
+        [name]: formattedValue,
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   }
+
+  // 毎月支払額シミュレーション用のハンドラー
+  const handleSimulationChange = (index: number, value: string) => {
+    const formattedValue = formatInputWithCommas(value);
+    // シミュレーションデータを管理する必要がある場合は、stateを追加
+  };
+
+  // 装備品の選択・解除
+  const handleEquipmentToggle = (item: string) => {
+    setFormData((prev) => {
+      const eq = prev.equipment || [];
+      if (eq.includes(item)) {
+        return { ...prev, equipment: eq.filter((e) => e !== item) };
+      } else {
+        return { ...prev, equipment: [...eq, item] };
+      }
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -151,7 +201,17 @@ export default function VehicleEditPage() {
       setSaving(true)
       const updatedVehicle: Partial<Vehicle> = {
         ...formData,
-        updatedAt: new Date()
+        price: Number(formData.price?.toString().replace(/,/g, '')) || 0,
+        totalPayment: Number(formData.totalPayment?.toString().replace(/,/g, '')) || 0,
+        mileage: Number(formData.mileage?.toString().replace(/,/g, '')) || 0,
+        loadingCapacity: Number(formData.loadingCapacity?.toString().replace(/,/g, '')) || 0,
+        outerLength: Number(formData.outerLength?.toString().replace(/,/g, '')) || 0,
+        outerWidth: Number(formData.outerWidth?.toString().replace(/,/g, '')) || 0,
+        outerHeight: Number(formData.outerHeight?.toString().replace(/,/g, '')) || 0,
+        totalWeight: Number(formData.totalWeight?.toString().replace(/,/g, '')) || 0,
+        horsepower: Number(formData.horsepower?.toString().replace(/,/g, '')) || 0,
+        displacement: Number(formData.displacement?.toString().replace(/,/g, '')) || 0,
+        updatedAt: new Date(),
       }
 
       await updateVehicle(vehicleId, updatedVehicle)
@@ -165,7 +225,7 @@ export default function VehicleEditPage() {
   }
 
   if (loading) {
-    return <div className="p-6">読み込み中...</div>
+    return <div className="p-6">読み込み中...</div>;
   }
 
   if (error || !vehicle) {
@@ -179,16 +239,18 @@ export default function VehicleEditPage() {
           </Button>
         </div>
       </div>
-    )
+    );
   }
 
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">車両編集</h1>
-        <Button variant="outline" onClick={() => router.push('/admin/vehicles')}>
-          一覧に戻る
-        </Button>
+        <h1 className="text-2xl font-bold">車両詳細・編集</h1>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => router.push('/admin/vehicles')}>
+            一覧に戻る
+          </Button>
+        </div>
       </div>
 
       <div className="bg-white p-6 rounded-lg shadow-sm">
@@ -209,23 +271,23 @@ export default function VehicleEditPage() {
             <div className="space-y-2">
               <label className="block text-sm font-medium">車両価格（税抜）</label>
               <input
-                type="number"
+                type="text"
                 name="price"
-                value={formData.price || 0}
+                value={formData.price || ""}
                 onChange={handleChange}
                 className="w-full border rounded px-2 py-1"
-                placeholder="5000000"
+                placeholder="5,000,000"
               />
             </div>
             <div className="space-y-2">
-              <label className="block text-sm font-medium">支払総額（税抜）</label>
+              <label className="block text-sm font-medium">支払総額</label>
               <input
-                type="number"
+                type="text"
                 name="totalPayment"
-                value={formData.totalPayment || 0}
+                value={formData.totalPayment || ""}
                 onChange={handleChange}
                 className="w-full border rounded px-2 py-1"
-                placeholder="5500000"
+                placeholder="5,500,000"
               />
             </div>
           </div>
@@ -250,9 +312,10 @@ export default function VehicleEditPage() {
                 <div key={index} className="space-y-2">
                   <label className="block text-sm font-medium">{year}年</label>
                   <input
-                    type="number"
+                    type="text"
                     className="w-full border rounded px-2 py-1"
-                    placeholder="円（税別）〜"
+                    placeholder="100,000"
+                    onChange={(e) => handleSimulationChange(index, e.target.value)}
                   />
                 </div>
               ))}
@@ -324,6 +387,7 @@ export default function VehicleEditPage() {
                     value={formData.model || ""}
                     onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
+                    placeholder="型式を入力"
                   />
                 </div>
                 <div className="space-y-2">
@@ -342,39 +406,27 @@ export default function VehicleEditPage() {
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">走行距離</label>
-                  <select
+                  <input
+                    type="text"
                     name="mileage"
                     value={formData.mileage || ""}
                     onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
-                  >
-                    <option value="">選択</option>
-                    {mileages.map((mileage) => (
-                      <option key={mileage} value={mileage}>{mileage}</option>
-                    ))}
-                  </select>
+                    placeholder="100,000"
+                    style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
+                  />
                 </div>
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium">積載量（下限）</label>
-                  <select
+                  <label className="block text-sm font-medium">積載量</label>
+                  <input
+                    type="text"
+                    name="loadingCapacity"
+                    value={formData.loadingCapacity || ""}
+                    onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
-                  >
-                    <option value="">選択</option>
-                    {loadCapacities.map((capacity) => (
-                      <option key={capacity} value={capacity}>{capacity}</option>
-                    ))}
-                  </select>
-                </div>
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium">積載量（上限）</label>
-                  <select
-                    className="w-full border rounded px-2 py-1"
-                  >
-                    <option value="">選択</option>
-                    {loadCapacities.map((capacity) => (
-                      <option key={capacity} value={capacity}>{capacity}</option>
-                    ))}
-                  </select>
+                    placeholder="2,000"
+                    style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
+                  />
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">ミッション</label>
@@ -414,42 +466,51 @@ export default function VehicleEditPage() {
                     value={formData.inspectionDate || ""}
                     onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
+                    placeholder="2025年12月"
                   />
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">車体寸法</label>
                   <div className="space-y-2">
                     <input
-                      type="number"
+                      type="text"
                       name="outerLength"
                       value={formData.outerLength || ""}
                       onChange={handleChange}
                       className="w-full border rounded px-2 py-1"
-                      placeholder="L (mm)"
+                      placeholder="7,000"
+                      style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                     />
                     <input
-                      type="number"
+                      type="text"
                       name="outerWidth"
                       value={formData.outerWidth || ""}
                       onChange={handleChange}
                       className="w-full border rounded px-2 py-1"
-                      placeholder="W (mm)"
+                      placeholder="2,200"
+                      style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                     />
                     <input
-                      type="number"
+                      type="text"
                       name="outerHeight"
                       value={formData.outerHeight || ""}
                       onChange={handleChange}
                       className="w-full border rounded px-2 py-1"
-                      placeholder="H (mm)"
+                      placeholder="2,800"
+                      style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                     />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">車両総重量</label>
                   <input
-                    type="number"
+                    type="text"
+                    name="totalWeight"
+                    value={formData.totalWeight || ""}
+                    onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
+                    placeholder="8,000"
+                    style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -457,34 +518,53 @@ export default function VehicleEditPage() {
                   <input
                     type="text"
                     className="w-full border rounded px-2 py-1"
+                    placeholder="原動機型式を入力"
                   />
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">馬力</label>
                   <input
                     type="text"
+                    name="horsepower"
+                    value={formData.horsepower || ""}
+                    onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
+                    placeholder="300"
+                    style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                   />
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">排気量</label>
                   <input
                     type="text"
+                    name="displacement"
+                    value={formData.displacement || ""}
+                    onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
+                    placeholder="7,700"
+                    style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                   />
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">燃料</label>
-                  <input
-                    type="text"
+                  <select
+                    name="fuel"
+                    value={formData.fuel || ""}
+                    onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
-                  />
+                  >
+                    <option value="">選択</option>
+                    <option value="軽油">軽油</option>
+                    <option value="ハイブリッド">ハイブリッド</option>
+                    <option value="その他">その他</option>
+                  </select>
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">問い合わせ番号</label>
                   <input
                     type="text"
                     className="w-full border rounded px-2 py-1"
+                    placeholder="問い合わせ番号を入力"
                   />
                 </div>
               </div>
@@ -520,19 +600,22 @@ export default function VehicleEditPage() {
                 <label className="block text-sm font-medium">内寸</label>
                 <div className="space-y-2">
                   <input
-                    type="number"
+                    type="text"
                     className="w-full border rounded px-2 py-1"
                     placeholder="L (mm)"
+                    style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                   />
                   <input
-                    type="number"
+                    type="text"
                     className="w-full border rounded px-2 py-1"
                     placeholder="W (mm)"
+                    style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                   />
                   <input
-                    type="number"
+                    type="text"
                     className="w-full border rounded px-2 py-1"
                     placeholder="H (mm)"
+                    style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                   />
                 </div>
               </div>
@@ -559,13 +642,30 @@ export default function VehicleEditPage() {
             </div>
           </div>
 
+          {/* 装備品セクション */}
+          <div>
+            <h3 className="text-lg font-medium mb-4">装備品</h3>
+            <div className="grid grid-cols-3 md:grid-cols-4 gap-3">
+              {equipmentList.map((item) => (
+                <button
+                  type="button"
+                  key={item}
+                  className={`rounded-full px-4 py-2 font-medium transition border-none focus:outline-none ${formData.equipment?.includes(item) ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-800'}`}
+                  onClick={() => handleEquipmentToggle(item)}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div className="flex justify-center">
             <Button type="submit" className="px-8" disabled={saving}>
-              {saving ? '保存中...' : '保存'}
+              {saving ? '保存中...' : '変更を保存'}
             </Button>
           </div>
         </form>
       </div>
     </div>
-  )
-} 
+  );
+}

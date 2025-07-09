@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { addVehicle } from "@/lib/firebase-utils"
 import ImageUploader from "@/components/ImageUploader"
+import { formatNumberWithCommas, formatInputWithCommas } from "@/lib/utils"
 import type { Vehicle } from "@/types"
 
 // プルダウンの選択肢
@@ -96,37 +97,81 @@ const vehicleStatuses = [
   "予備検査"
 ]
 
+// 装備品リスト
+const equipmentList = [
+  "ETC", "バックカメラ", "記録簿", "パワーウィンドウ", "ドラレコ", "エアコン",
+  "電動ミラー", "ABS", "アルミホイール", "エアサスシート", "カーナビ", "DPF",
+  "PMマフラー", "集中ドアロック"
+];
+
 export default function VehicleNewPage() {
   const router = useRouter()
   const [formData, setFormData] = useState<Partial<Vehicle>>({
     name: "",
-    price: 0,
-    totalPayment: 0,
+    price: "",
+    totalPayment: "",
     bodyType: "",
     maker: "",
     size: "",
     model: "",
     year: "",
     mileage: "",
+    loadingCapacity: "",
+    mission: "",
+    inspectionStatus: "",
     inspectionDate: "",
+    outerLength: "",
+    outerWidth: "",
+    outerHeight: "",
+    totalWeight: "",
+    horsepower: "",
+    displacement: "",
+    fuel: "",
     wholesalePrice: 0,
     description: "",
     imageUrls: [],
-    // You may need to add more fields here based on your form
+    equipment: [],
   })
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target
-    setFormData((prev) => ({
-      ...prev,
-      [name]:
-        name === "price" || name === "totalPayment" || name === "wholesalePrice"
-          ? Number(value)
-          : value,
-    }))
+    
+    // カンマ区切りが必要な項目
+    const commaFields = ['price', 'totalPayment', 'mileage', 'loadingCapacity', 'outerLength', 'outerWidth', 'outerHeight', 'totalWeight', 'horsepower', 'displacement'];
+    
+    if (commaFields.includes(name)) {
+      const formattedValue = formatInputWithCommas(value);
+      setFormData((prev) => ({
+        ...prev,
+        [name]: formattedValue,
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   }
+
+  // 装備品の選択・解除
+  const handleEquipmentToggle = (item: string) => {
+    setFormData((prev) => {
+      const eq = prev.equipment || [];
+      if (eq.includes(item)) {
+        return { ...prev, equipment: eq.filter((e) => e !== item) };
+      } else {
+        return { ...prev, equipment: [...eq, item] };
+      }
+    });
+  };
+
+  // 毎月支払額シミュレーション用のハンドラー
+  const handleSimulationChange = (index: number, value: string) => {
+    const formattedValue = formatInputWithCommas(value);
+    // シミュレーションデータを管理する必要がある場合は、stateを追加
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -141,14 +186,27 @@ export default function VehicleNewPage() {
         maker: formData.maker || "",
         model: formData.model || "",
         year: formData.year || "",
-        mileage: formData.mileage || "",
-        price: Number(formData.price) || 0,
+        mileage: Number(formData.mileage?.toString().replace(/,/g, '')) || 0,
+        price: Number(formData.price?.toString().replace(/,/g, '')) || 0,
         description: formData.description || "",
         imageUrls: formData.imageUrls || [],
         wholesalePrice: Number(formData.wholesalePrice) || 0,
-        totalPayment: Number(formData.totalPayment) || 0,
+        totalPayment: Number(formData.totalPayment?.toString().replace(/,/g, '')) || 0,
         expiryDate: "", // Add a proper expiryDate field if needed
-        ...formData,
+        equipment: formData.equipment || [],
+        outerLength: Number(formData.outerLength?.toString().replace(/,/g, '')) || 0,
+        outerWidth: Number(formData.outerWidth?.toString().replace(/,/g, '')) || 0,
+        outerHeight: Number(formData.outerHeight?.toString().replace(/,/g, '')) || 0,
+        totalWeight: Number(formData.totalWeight?.toString().replace(/,/g, '')) || 0,
+        loadingCapacity: Number(formData.loadingCapacity?.toString().replace(/,/g, '')) || 0,
+        horsepower: Number(formData.horsepower?.toString().replace(/,/g, '')) || 0,
+        displacement: Number(formData.displacement?.toString().replace(/,/g, '')) || 0,
+        bodyType: formData.bodyType || "",
+        size: formData.size || "",
+        mission: formData.mission || "",
+        inspectionStatus: formData.inspectionStatus || "",
+        inspectionDate: formData.inspectionDate || "",
+        fuel: formData.fuel || "",
       }
       const vehicleId = await addVehicle(vehicleData)
       alert("車両を登録しました。車両ID: " + vehicleId)
@@ -183,23 +241,23 @@ export default function VehicleNewPage() {
             <div className="space-y-2">
               <label className="block text-sm font-medium">車両価格（税抜）</label>
               <input
-                type="number"
+                type="text"
                 name="price"
                 value={formData.price}
                 onChange={handleChange}
                 className="w-full border rounded px-2 py-1"
-                placeholder="5000000"
+                placeholder="5,000,000"
               />
             </div>
             <div className="space-y-2">
-              <label className="block text-sm font-medium">支払総額（税抜）</label>
+              <label className="block text-sm font-medium">支払総額</label>
               <input
-                type="number"
+                type="text"
                 name="totalPayment"
                 value={formData.totalPayment}
                 onChange={handleChange}
                 className="w-full border rounded px-2 py-1"
-                placeholder="5500000"
+                placeholder="5,500,000"
               />
             </div>
           </div>
@@ -224,9 +282,10 @@ export default function VehicleNewPage() {
                 <div key={index} className="space-y-2">
                   <label className="block text-sm font-medium">{year}年</label>
                   <input
-                    type="number"
+                    type="text"
                     className="w-full border rounded px-2 py-1"
-                    placeholder="円（税別）〜"
+                    placeholder="100,000"
+                    onChange={(e) => handleSimulationChange(index, e.target.value)}
                   />
                 </div>
               ))}
@@ -236,10 +295,10 @@ export default function VehicleNewPage() {
           {/* 画像アップロード */}
           <div>
             <h3 className="text-lg font-medium mb-4">画像登録</h3>
-            <ImageUploader
-              images={formData.imageUrls || []}
-              onImagesChange={(images) => setFormData(prev => ({ ...prev, imageUrls: images }))}
-            />
+            <div className="border-2 border-dashed rounded-lg p-8 text-center">
+              <p className="text-gray-500 mb-4">車両登録後に画像をアップロードできます</p>
+              <p className="text-sm text-gray-400">車両を保存後、編集ページで画像を追加してください</p>
+            </div>
           </div>
 
           {/* 車両情報 */}
@@ -297,6 +356,7 @@ export default function VehicleNewPage() {
                     value={formData.model}
                     onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
+                    placeholder="型式を入力"
                   />
                 </div>
                 <div className="space-y-2">
@@ -315,39 +375,27 @@ export default function VehicleNewPage() {
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">走行距離</label>
-                  <select
+                  <input
+                    type="text"
                     name="mileage"
                     value={formData.mileage}
                     onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
-                  >
-                    <option value="">選択</option>
-                    {mileages.map((mileage) => (
-                      <option key={mileage} value={mileage}>{mileage}</option>
-                    ))}
-                  </select>
+                    placeholder="100,000"
+                    style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
+                  />
                 </div>
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium">積載量（下限）</label>
-                  <select
+                  <label className="block text-sm font-medium">積載量</label>
+                  <input
+                    type="text"
+                    name="loadingCapacity"
+                    value={formData.loadingCapacity}
+                    onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
-                  >
-                    <option value="">選択</option>
-                    {loadCapacities.map((capacity) => (
-                      <option key={capacity} value={capacity}>{capacity}</option>
-                    ))}
-                  </select>
-                </div>
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium">積載量（上限）</label>
-                  <select
-                    className="w-full border rounded px-2 py-1"
-                  >
-                    <option value="">選択</option>
-                    {loadCapacities.map((capacity) => (
-                      <option key={capacity} value={capacity}>{capacity}</option>
-                    ))}
-                  </select>
+                    placeholder="2,000"
+                    style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
+                  />
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">ミッション</label>
@@ -393,36 +441,44 @@ export default function VehicleNewPage() {
                   <label className="block text-sm font-medium">車体寸法</label>
                   <div className="space-y-2">
                     <input
-                      type="number"
-                      name="length"
-                      value={formData.length}
+                      type="text"
+                      name="outerLength"
+                      value={formData.outerLength}
                       onChange={handleChange}
                       className="w-full border rounded px-2 py-1"
-                      placeholder="L (mm)"
+                      placeholder="7,000"
+                      style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                     />
                     <input
-                      type="number"
-                      name="width"
-                      value={formData.width}
+                      type="text"
+                      name="outerWidth"
+                      value={formData.outerWidth}
                       onChange={handleChange}
                       className="w-full border rounded px-2 py-1"
-                      placeholder="W (mm)"
+                      placeholder="2,200"
+                      style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                     />
                     <input
-                      type="number"
-                      name="height"
-                      value={formData.height}
+                      type="text"
+                      name="outerHeight"
+                      value={formData.outerHeight}
                       onChange={handleChange}
                       className="w-full border rounded px-2 py-1"
-                      placeholder="H (mm)"
+                      placeholder="2,800"
+                      style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                     />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">車両総重量</label>
                   <input
-                    type="number"
+                    type="text"
+                    name="totalWeight"
+                    value={formData.totalWeight}
+                    onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
+                    placeholder="8,000"
+                    style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                   />
                 </div>
                 <div className="space-y-2">
@@ -436,22 +492,39 @@ export default function VehicleNewPage() {
                   <label className="block text-sm font-medium">馬力</label>
                   <input
                     type="text"
+                    name="horsepower"
+                    value={formData.horsepower}
+                    onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
+                    placeholder="300"
+                    style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                   />
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">排気量</label>
                   <input
                     type="text"
+                    name="displacement"
+                    value={formData.displacement}
+                    onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
+                    placeholder="7,700"
+                    style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                   />
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">燃料</label>
-                  <input
-                    type="text"
+                  <select
+                    name="fuel"
+                    value={formData.fuel || ""}
+                    onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
-                  />
+                  >
+                    <option value="">選択</option>
+                    <option value="軽油">軽油</option>
+                    <option value="ハイブリッド">ハイブリッド</option>
+                    <option value="その他">その他</option>
+                  </select>
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">問い合わせ番号</label>
@@ -493,17 +566,17 @@ export default function VehicleNewPage() {
                 <label className="block text-sm font-medium">内寸</label>
                 <div className="space-y-2">
                   <input
-                    type="number"
+                    type="text"
                     className="w-full border rounded px-2 py-1"
                     placeholder="L (mm)"
                   />
                   <input
-                    type="number"
+                    type="text"
                     className="w-full border rounded px-2 py-1"
                     placeholder="W (mm)"
                   />
                   <input
-                    type="number"
+                    type="text"
                     className="w-full border rounded px-2 py-1"
                     placeholder="H (mm)"
                   />
@@ -532,6 +605,23 @@ export default function VehicleNewPage() {
             </div>
           </div>
 
+          {/* 装備品セクション */}
+          <div>
+            <h3 className="text-lg font-medium mb-4">装備品</h3>
+            <div className="grid grid-cols-3 md:grid-cols-4 gap-3">
+              {equipmentList.map((item) => (
+                <button
+                  type="button"
+                  key={item}
+                  className={`rounded-full px-4 py-2 font-medium transition border-none focus:outline-none ${formData.equipment?.includes(item) ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-800'}`}
+                  onClick={() => handleEquipmentToggle(item)}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div className="flex justify-center">
             <Button type="submit" className="px-8">
               登録完了
@@ -540,5 +630,5 @@ export default function VehicleNewPage() {
         </form>
       </div>
     </div>
-  )
-} 
+  );
+}

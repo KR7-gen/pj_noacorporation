@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { FileText, Camera, Phone, ChevronLeft, ChevronRight } from "lucide-react"
 import { getVehicle, getVehicles } from "@/lib/firebase-utils"
+import { formatNumberWithCommas } from "@/lib/utils"
 import type { Vehicle } from "@/types"
 
 export default function VehicleDetailPage() {
@@ -184,7 +185,7 @@ export default function VehicleDetailPage() {
                     </div>
                     <div className="flex justify-between">
                       <span className="font-medium">走行距離</span>
-                      <span>{vehicle.mileage}</span>
+                      <span>{formatNumberWithCommas(vehicle.mileage)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="font-medium">ボディタイプ</span>
@@ -198,34 +199,52 @@ export default function VehicleDetailPage() {
                       <span className="font-medium">車検有効期限</span>
                       <span>{vehicle.inspectionDate || "---"}</span>
                     </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">車両価格（税抜）</span>
+                      <span>{formatNumberWithCommas(vehicle.price)}円</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">支払総額</span>
+                      <span>{formatNumberWithCommas(vehicle.totalPayment)}円</span>
+                    </div>
                   </div>
                   <div className="space-y-3">
                     <div className="flex justify-between">
-                      <span className="font-medium">車両価格</span>
-                      <span className="font-bold text-blue-600">
-                        ¥{(vehicle.price || 0).toLocaleString()}
+                      <span className="font-medium">車体寸法</span>
+                      <span>
+                        L{formatNumberWithCommas(vehicle.outerLength)} × 
+                        W{formatNumberWithCommas(vehicle.outerWidth)} × 
+                        H{formatNumberWithCommas(vehicle.outerHeight)}mm
                       </span>
                     </div>
-                    {vehicle.totalPayment && (
-                      <div className="flex justify-between">
-                        <span className="font-medium">支払総額</span>
-                        <span className="font-bold text-blue-600">
-                          ¥{(vehicle.totalPayment || 0).toLocaleString()}
-                        </span>
-                      </div>
-                    )}
-                    {vehicle.wholesalePrice && (
-                      <div className="flex justify-between">
-                        <span className="font-medium">仕入れ価格</span>
-                        <span>¥{(vehicle.wholesalePrice || 0).toLocaleString()}</span>
-                      </div>
-                    )}
-                    {vehicle.expiryDate && (
-                      <div className="flex justify-between">
-                        <span className="font-medium">有効期限</span>
-                        <span>{vehicle.expiryDate}</span>
-                      </div>
-                    )}
+                    <div className="flex justify-between">
+                      <span className="font-medium">車両総重量</span>
+                      <span>{formatNumberWithCommas(vehicle.totalWeight)}kg</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">積載量</span>
+                      <span>{formatNumberWithCommas(vehicle.loadingCapacity)}kg</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">馬力</span>
+                      <span>{formatNumberWithCommas(vehicle.horsepower)}ps</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">排気量</span>
+                      <span>{formatNumberWithCommas(vehicle.displacement)}cc</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">燃料</span>
+                      <span>{vehicle.fuel || "---"}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">ミッション</span>
+                      <span>{vehicle.mission || "---"}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">車検状態</span>
+                      <span>{vehicle.inspectionStatus || "---"}</span>
+                    </div>
                   </div>
                 </div>
               </CardContent>
@@ -325,7 +344,7 @@ export default function VehicleDetailPage() {
                       {vehicle.loadingCapacity && (
                         <div className="flex justify-between">
                           <span className="font-medium">積載量</span>
-                          <span>{vehicle.loadingCapacity}kg</span>
+                          <span>{formatNumberWithCommas(vehicle.loadingCapacity)}kg</span>
                         </div>
                       )}
                       {vehicle.mission && (
@@ -349,37 +368,37 @@ export default function VehicleDetailPage() {
                       {vehicle.outerLength && (
                         <div className="flex justify-between">
                           <span className="font-medium">外寸長</span>
-                          <span>{vehicle.outerLength}mm</span>
+                          <span>{formatNumberWithCommas(vehicle.outerLength)}mm</span>
                         </div>
                       )}
                       {vehicle.outerWidth && (
                         <div className="flex justify-between">
                           <span className="font-medium">外寸幅</span>
-                          <span>{vehicle.outerWidth}mm</span>
+                          <span>{formatNumberWithCommas(vehicle.outerWidth)}mm</span>
                         </div>
                       )}
                       {vehicle.outerHeight && (
                         <div className="flex justify-between">
                           <span className="font-medium">外寸高</span>
-                          <span>{vehicle.outerHeight}mm</span>
+                          <span>{formatNumberWithCommas(vehicle.outerHeight)}mm</span>
                         </div>
                       )}
                       {vehicle.innerLength && (
                         <div className="flex justify-between">
                           <span className="font-medium">内寸長</span>
-                          <span>{vehicle.innerLength}mm</span>
+                          <span>{formatNumberWithCommas(vehicle.innerLength)}mm</span>
                         </div>
                       )}
                       {vehicle.innerWidth && (
                         <div className="flex justify-between">
                           <span className="font-medium">内寸幅</span>
-                          <span>{vehicle.innerWidth}mm</span>
+                          <span>{formatNumberWithCommas(vehicle.innerWidth)}mm</span>
                         </div>
                       )}
                       {vehicle.innerHeight && (
                         <div className="flex justify-between">
                           <span className="font-medium">内寸高</span>
-                          <span>{vehicle.innerHeight}mm</span>
+                          <span>{formatNumberWithCommas(vehicle.innerHeight)}mm</span>
                         </div>
                       )}
                     </div>
@@ -387,7 +406,7 @@ export default function VehicleDetailPage() {
                       {vehicle.totalWeight && (
                         <div className="flex justify-between">
                           <span className="font-medium">車両総重量</span>
-                          <span>{vehicle.totalWeight}kg</span>
+                          <span>{formatNumberWithCommas(vehicle.totalWeight)}kg</span>
                         </div>
                       )}
                       {vehicle.engineModel && (
@@ -399,7 +418,7 @@ export default function VehicleDetailPage() {
                       {vehicle.horsepower && (
                         <div className="flex justify-between">
                           <span className="font-medium">馬力</span>
-                          <span>{vehicle.horsepower}ps</span>
+                          <span>{formatNumberWithCommas(vehicle.horsepower)}ps</span>
                         </div>
                       )}
                       {vehicle.turbo && (
@@ -411,7 +430,7 @@ export default function VehicleDetailPage() {
                       {vehicle.displacement && (
                         <div className="flex justify-between">
                           <span className="font-medium">排気量</span>
-                          <span>{vehicle.displacement}cc</span>
+                          <span>{formatNumberWithCommas(vehicle.displacement)}cc</span>
                         </div>
                       )}
                       {vehicle.fuel && (

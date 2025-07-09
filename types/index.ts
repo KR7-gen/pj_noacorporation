@@ -40,7 +40,7 @@ export interface Vehicle {
   bodyMaker?: string;
   bodyModel?: string;
   bodyYear?: string;
-  equipment?: string;
+  equipment?: string[]; // ←ここをstring[]に修正
   etc?: string;
   backCamera?: string;
   recordBook?: string;
