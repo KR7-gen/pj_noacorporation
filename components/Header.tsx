@@ -4,21 +4,41 @@ import { Menu } from "lucide-react"
 
 export function Header() {
   return (
-    <header className="bg-white shadow-sm border-b">
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+    <header 
+      className="bg-white"
+      style={{ 
+        width: '1440px', 
+        height: '126px', 
+        opacity: 1,
+        paddingTop: '32px',
+        paddingRight: '8px',
+        paddingBottom: '32px',
+        paddingLeft: '8px',
+        borderBottom: '1px solid #E6E6E6'
+      }}
+    >
+      <div className="container mx-auto flex items-center" style={{ justifyContent: 'space-between' }}>
         {/* ロゴ */}
         <Link href="/" className="flex items-center space-x-3">
-          <img src="/placeholder-logo.png" alt="NOA CORPORATION" className="h-10" />
+          <img
+            src="/logo.png"
+            alt="NOA CORPORATION"
+            className="h-10"
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = "/placeholder-logo.png";
+            }}
+          />
           <div className="text-sm text-gray-600">株式会社ノアコーポレーション</div>
         </Link>
 
         {/* ナビゲーション */}
-        <nav className="hidden md:flex items-center space-x-6 text-sm">
-          <Link href="/" className="hover:text-blue-600 transition-colors">HOME</Link>
-          <Link href="/inventory" className="hover:text-blue-600 transition-colors">販売在庫一覧</Link>
-          <Link href="/rental" className="hover:text-blue-600 transition-colors">レンタル車両</Link>
-          <Link href="/purchase" className="hover:text-blue-600 transition-colors">買取はこちら</Link>
-          <Link href="/about" className="hover:text-blue-600 transition-colors">私たちについて</Link>
+        <nav className="hidden md:flex items-center text-sm" style={{ width: '436px', height: '24px', gap: '20px', opacity: 1 }}>
+          <Link href="/" className="hover:text-blue-600 transition-colors h-6 flex items-center">HOME</Link>
+          <Link href="/inventory" className="hover:text-blue-600 transition-colors h-6 flex items-center">販売在庫一覧</Link>
+          <Link href="/rental" className="hover:text-blue-600 transition-colors h-6 flex items-center">レンタル車両</Link>
+          <Link href="/purchase" className="hover:text-blue-600 transition-colors h-6 flex items-center">買取はこちら</Link>
+          <Link href="/about" className="hover:text-blue-600 transition-colors h-6 flex items-center">私たちについて</Link>
         </nav>
 
         {/* 電話番号とボタン */}
