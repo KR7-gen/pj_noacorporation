@@ -285,47 +285,168 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">業界最安値を目指す、千葉の中古トラック販売店です。</h1>
-            <p className="text-xl md:text-2xl mb-8">
+      {/* Hero, Truck Type Grid, Search Section Combined */}
+      <section 
+        style={{
+          width: "1440px",
+          height: "800px",
+          opacity: 1,
+          margin: "0 auto",
+          display: "flex",
+          flexDirection: "column"
+        }}
+      >
+        {/* Hero Section */}
+        <div 
+          style={{
+            background: "linear-gradient(to right, #2563eb, #1d4ed8)",
+            color: "white",
+            padding: "64px 20px",
+            flex: "1"
+          }}
+        >
+          <div 
+            style={{
+              maxWidth: "800px",
+              margin: "0 auto",
+              textAlign: "center"
+            }}
+          >
+            <h1 
+              style={{
+                fontSize: "48px",
+                fontWeight: "bold",
+                marginBottom: "24px",
+                lineHeight: "1.2"
+              }}
+            >
+              業界最安値を目指す、千葉の中古トラック販売店です。
+            </h1>
+            <p 
+              style={{
+                fontSize: "20px",
+                lineHeight: "1.6"
+              }}
+            >
               中古トラック購入の、無駄なコストをカットしませんか？
               <br />
               限界ギリギリの安さ、ぜひ他店様と比べてみてください！
             </p>
           </div>
         </div>
-      </section>
 
-      {/* Truck Type Grid */}
-      <section className="py-12 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        {/* Truck Type Grid */}
+        <div 
+          style={{
+            backgroundColor: "#f9fafb",
+            padding: "48px 20px",
+            flex: "1"
+          }}
+        >
+          <div 
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(6, 1fr)",
+              gap: "16px",
+              maxWidth: "1200px",
+              margin: "0 auto"
+            }}
+          >
             {vehicleTypeIcons.map((icon) => (
               <Link
                 key={icon.id}
                 href={`/inventory?type=${encodeURIComponent(icon.type)}`}
-                className="p-4 rounded-lg flex flex-col items-center justify-center bg-white hover:shadow-lg transition-all"
+                style={{
+                  padding: "16px",
+                  borderRadius: "8px",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "white",
+                  textDecoration: "none",
+                  transition: "all 0.3s ease",
+                  boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)"
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                  e.currentTarget.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.15)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "0 1px 3px rgba(0, 0, 0, 0.1)";
+                }}
               >
-                <div className="w-16 h-16 bg-blue-100 rounded-lg mb-2 flex items-center justify-center">
-                  <div className="w-8 h-8 bg-blue-600 rounded"></div>
+                <div 
+                  style={{
+                    width: "64px",
+                    height: "64px",
+                    backgroundColor: "#dbeafe",
+                    borderRadius: "8px",
+                    marginBottom: "8px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center"
+                  }}
+                >
+                  <div 
+                    style={{
+                      width: "32px",
+                      height: "32px",
+                      backgroundColor: "#2563eb",
+                      borderRadius: "4px"
+                    }}
+                  ></div>
                 </div>
-                <span className="text-sm text-center">{icon.type}</span>
+                <span 
+                  style={{
+                    fontSize: "14px",
+                    textAlign: "center",
+                    color: "#374151",
+                    fontWeight: "500"
+                  }}
+                >
+                  {icon.type}
+                </span>
               </Link>
             ))}
           </div>
         </div>
-      </section>
 
-      {/* Search Section */}
-      <section className="py-12">
-        <div className="container mx-auto px-4">
-          <div className="bg-white p-6 rounded-lg shadow-sm">
-            <div className="grid grid-cols-4 gap-4 mb-4">
+        {/* Search Section */}
+        <div 
+          style={{
+            backgroundColor: "white",
+            padding: "48px 20px",
+            flex: "1"
+          }}
+        >
+          <div 
+            style={{
+              backgroundColor: "white",
+              padding: "24px",
+              borderRadius: "8px",
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+              maxWidth: "800px",
+              margin: "0 auto"
+            }}
+          >
+            <div 
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(4, 1fr)",
+                gap: "16px",
+                marginBottom: "16px"
+              }}
+            >
               <select
-                className="w-full border rounded-lg px-3 py-2"
+                style={{
+                  width: "100%",
+                  border: "1px solid #d1d5db",
+                  borderRadius: "8px",
+                  padding: "8px 12px",
+                  fontSize: "14px"
+                }}
                 value={selectedType}
                 onChange={(e) => setSelectedType(e.target.value)}
               >
@@ -335,7 +456,13 @@ export default function HomePage() {
                 ))}
               </select>
               <select
-                className="w-full border rounded-lg px-3 py-2"
+                style={{
+                  width: "100%",
+                  border: "1px solid #d1d5db",
+                  borderRadius: "8px",
+                  padding: "8px 12px",
+                  fontSize: "14px"
+                }}
                 value={selectedType}
                 onChange={(e) => setSelectedType(e.target.value)}
               >
@@ -345,7 +472,13 @@ export default function HomePage() {
                 ))}
               </select>
               <select
-                className="w-full border rounded-lg px-3 py-2"
+                style={{
+                  width: "100%",
+                  border: "1px solid #d1d5db",
+                  borderRadius: "8px",
+                  padding: "8px 12px",
+                  fontSize: "14px"
+                }}
                 value={selectedType}
                 onChange={(e) => setSelectedType(e.target.value)}
               >
@@ -357,12 +490,35 @@ export default function HomePage() {
               <input
                 type="text"
                 placeholder="問合せ番号、車台番号など"
-                className="w-full border rounded-lg px-3 py-2"
+                style={{
+                  width: "100%",
+                  border: "1px solid #d1d5db",
+                  borderRadius: "8px",
+                  padding: "8px 12px",
+                  fontSize: "14px"
+                }}
               />
             </div>
             <button 
               onClick={handleSearch}
-              className="w-full bg-gray-900 text-white rounded-lg px-4 py-2 hover:bg-gray-800 transition-colors"
+              style={{
+                width: "100%",
+                backgroundColor: "#111827",
+                color: "white",
+                borderRadius: "8px",
+                padding: "8px 16px",
+                fontSize: "14px",
+                fontWeight: "500",
+                cursor: "pointer",
+                transition: "background-color 0.3s ease",
+                border: "none"
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "#1f2937";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "#111827";
+              }}
             >
               検索する
             </button>
@@ -371,19 +527,62 @@ export default function HomePage() {
       </section>
 
       {/* New Trucks Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">NEW TRUCK</h2>
-            <p className="text-xl text-gray-600 mb-2">新着車輌</p>
-            <p className="text-lg">
-              現在、<span className="text-2xl font-bold text-blue-600">000</span>台の在庫が閲覧可能です
+      <section 
+        style={{
+          width: "1440px",
+          height: "1035px",
+          gap: "40px",
+          opacity: 1,
+          paddingTop: "100px",
+          paddingBottom: "100px",
+          background: "#FFFFFF",
+          margin: "0 auto"
+        }}
+      >
+        <div 
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "0 20px"
+          }}
+        >
+          <div style={{ textAlign: "center", marginBottom: "48px" }}>
+            <h2 style={{ fontSize: "30px", fontWeight: "bold", marginBottom: "16px" }}>NEW TRUCK</h2>
+            <p style={{ fontSize: "20px", color: "#6b7280", marginBottom: "8px" }}>新着車輌</p>
+            <p style={{ fontSize: "18px", color: "#374151" }}>
+              現在、<span style={{ fontSize: "24px", fontWeight: "bold", color: "#2563eb" }}>000</span>台の在庫が閲覧可能です
             </p>
           </div>
 
-          <div className="text-center">
+          <div style={{ textAlign: "center" }}>
             <Link href="/inventory">
-              <Button variant="outline" size="lg">
+              <Button 
+                variant="outline" 
+                size="lg"
+                style={{
+                  backgroundColor: "transparent",
+                  color: "#374151",
+                  border: "2px solid #d1d5db",
+                  borderRadius: "8px",
+                  padding: "12px 24px",
+                  fontSize: "16px",
+                  fontWeight: "500",
+                  cursor: "pointer",
+                  transition: "all 0.3s ease"
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = "#f3f4f6";
+                  e.currentTarget.style.borderColor = "#9ca3af";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "transparent";
+                  e.currentTarget.style.borderColor = "#d1d5db";
+                }}
+              >
                 在庫をもっと見る
               </Button>
             </Link>
@@ -392,13 +591,34 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">FEATURE</h2>
-            <p className="text-xl text-gray-600 mb-8">当社の特徴</p>
-            <div className="max-w-4xl mx-auto">
-              <p className="text-gray-700 leading-relaxed">
+      <section 
+        style={{
+          width: "1440px",
+          height: "1334px",
+          gap: "40px",
+          opacity: 1,
+          paddingTop: "60px",
+          paddingBottom: "60px",
+          background: "#FFFFFF",
+          margin: "0 auto"
+        }}
+      >
+        <div 
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "0 20px"
+          }}
+        >
+          <div style={{ textAlign: "center", marginBottom: "48px" }}>
+            <h2 style={{ fontSize: "30px", fontWeight: "bold", marginBottom: "16px" }}>FEATURE</h2>
+            <p style={{ fontSize: "20px", color: "#6b7280", marginBottom: "32px" }}>当社の特徴</p>
+            <div style={{ maxWidth: "800px", margin: "0 auto", marginBottom: "48px" }}>
+              <p style={{ color: "#374151", lineHeight: "1.8", fontSize: "16px" }}>
                 中古トラックを、価格とスペックだけで選んでいませんか？ 事実、市場に流通する車両は玉石混交。
                 修復歴や車両の状態、載せ替えされたボディや上物など、
                 販売サイトに掲載されている情報だけではわからない事実によって、そのトラックの本当の価値は決まります。
@@ -409,22 +629,98 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div 
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(3, 1fr)",
+              gap: "32px",
+              width: "100%",
+              maxWidth: "1200px",
+              marginBottom: "48px"
+            }}
+          >
             {features.map((feature, index) => (
-              <Card key={index} className="text-center">
-                <CardContent className="p-8">
-                  <div className="text-4xl font-bold text-blue-600 mb-4">reason</div>
-                  <div className="text-6xl font-bold text-gray-300 mb-4">{feature.number}</div>
-                  <h3 className="font-bold text-lg mb-4 leading-tight">{feature.title}</h3>
-                  <p className="text-gray-600 text-sm">{feature.description}</p>
+              <Card 
+                key={index}
+                style={{
+                  backgroundColor: "white",
+                  border: "1px solid #e5e7eb",
+                  borderRadius: "8px",
+                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                  textAlign: "center"
+                }}
+              >
+                <CardContent style={{ padding: "32px" }}>
+                  <div 
+                    style={{
+                      fontSize: "36px",
+                      fontWeight: "bold",
+                      color: "#2563eb",
+                      marginBottom: "16px"
+                    }}
+                  >
+                    reason
+                  </div>
+                  <div 
+                    style={{
+                      fontSize: "60px",
+                      fontWeight: "bold",
+                      color: "#d1d5db",
+                      marginBottom: "16px"
+                    }}
+                  >
+                    {feature.number}
+                  </div>
+                  <h3 
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "18px",
+                      marginBottom: "16px",
+                      color: "#374151",
+                      lineHeight: "1.4"
+                    }}
+                  >
+                    {feature.title}
+                  </h3>
+                  <p 
+                    style={{
+                      color: "#6b7280",
+                      fontSize: "14px",
+                      lineHeight: "1.6"
+                    }}
+                  >
+                    {feature.description}
+                  </p>
                 </CardContent>
               </Card>
             ))}
           </div>
 
-          <div className="text-center mt-8">
+          <div style={{ textAlign: "center" }}>
             <Link href="/about">
-              <Button variant="outline" size="lg">
+              <Button 
+                variant="outline" 
+                size="lg"
+                style={{
+                  backgroundColor: "transparent",
+                  color: "#374151",
+                  border: "2px solid #d1d5db",
+                  borderRadius: "8px",
+                  padding: "12px 24px",
+                  fontSize: "16px",
+                  fontWeight: "500",
+                  cursor: "pointer",
+                  transition: "all 0.3s ease"
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = "#f3f4f6";
+                  e.currentTarget.style.borderColor = "#9ca3af";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "transparent";
+                  e.currentTarget.style.borderColor = "#d1d5db";
+                }}
+              >
                 詳しく見る
               </Button>
             </Link>
@@ -433,28 +729,99 @@ export default function HomePage() {
       </section>
 
       {/* Flow Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">FLOW</h2>
-            <p className="text-xl text-gray-600 mb-4">ご利用の流れ</p>
-            <p className="text-gray-700">
+      <section 
+        style={{
+          width: "1440px",
+          height: "1195px",
+          gap: "40px",
+          opacity: 1,
+          paddingTop: "60px",
+          paddingBottom: "60px",
+          background: "#F2F2F2",
+          margin: "0 auto"
+        }}
+      >
+        <div 
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "0 20px"
+          }}
+        >
+          <div style={{ textAlign: "center", marginBottom: "48px" }}>
+            <h2 style={{ fontSize: "30px", fontWeight: "bold", marginBottom: "16px" }}>FLOW</h2>
+            <p style={{ fontSize: "20px", color: "#6b7280", marginBottom: "16px" }}>ご利用の流れ</p>
+            <p style={{ color: "#374151", lineHeight: "1.6" }}>
               初回お問い合わせからご納車まで、わかりやすくスムーズなお取引を心がけております。
               <br />
               中古トラックの購入がはじめての方も、どうぞお気軽にお問い合わせください。
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div 
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(4, 1fr)",
+              gap: "32px",
+              width: "100%",
+              maxWidth: "1200px"
+            }}
+          >
             {flowSteps.map((step, index) => (
-              <Card key={index}>
-                <CardContent className="p-6">
-                  <div className="text-center mb-4">
-                    <div className="text-2xl font-bold text-blue-600 mb-2">FLOW</div>
-                    <div className="text-4xl font-bold text-gray-300">{step.number}</div>
+              <Card 
+                key={index}
+                style={{
+                  backgroundColor: "white",
+                  border: "1px solid #e5e7eb",
+                  borderRadius: "8px",
+                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)"
+                }}
+              >
+                <CardContent style={{ padding: "24px", textAlign: "center" }}>
+                  <div style={{ marginBottom: "16px" }}>
+                    <div 
+                      style={{
+                        fontSize: "20px",
+                        fontWeight: "bold",
+                        color: "#2563eb",
+                        marginBottom: "8px"
+                      }}
+                    >
+                      FLOW
+                    </div>
+                    <div 
+                      style={{
+                        fontSize: "36px",
+                        fontWeight: "bold",
+                        color: "#d1d5db"
+                      }}
+                    >
+                      {step.number}
+                    </div>
                   </div>
-                  <h3 className="font-bold text-lg mb-4 text-center">{step.title}</h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">{step.description}</p>
+                  <h3 
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "18px",
+                      marginBottom: "16px",
+                      color: "#374151"
+                    }}
+                  >
+                    {step.title}
+                  </h3>
+                  <p 
+                    style={{
+                      color: "#6b7280",
+                      fontSize: "14px",
+                      lineHeight: "1.6"
+                    }}
+                  >
+                    {step.description}
+                  </p>
                 </CardContent>
               </Card>
             ))}
@@ -465,24 +832,101 @@ export default function HomePage() {
 
 
       {/* FAQ Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">QUESTION</h2>
-            <p className="text-xl text-gray-600">よくあるご質問</p>
+      <section 
+        style={{
+          width: "1440px",
+          height: "831px",
+          gap: "40px",
+          opacity: 1,
+          paddingTop: "60px",
+          paddingBottom: "60px",
+          background: "#FFFFFF",
+          margin: "0 auto"
+        }}
+      >
+        <div 
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "0 20px"
+          }}
+        >
+          <div style={{ textAlign: "center", marginBottom: "48px" }}>
+            <h2 style={{ fontSize: "30px", fontWeight: "bold", marginBottom: "16px" }}>QUESTION</h2>
+            <p style={{ fontSize: "20px", color: "#6b7280" }}>よくあるご質問</p>
           </div>
 
-          <div className="max-w-4xl mx-auto space-y-6">
+          <div 
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "24px",
+              width: "100%",
+              maxWidth: "800px"
+            }}
+          >
             {faqs.map((faq, index) => (
-              <Card key={index}>
-                <CardContent className="p-6">
-                  <div className="mb-4">
-                    <span className="bg-blue-600 text-white px-3 py-1 rounded font-bold mr-4">Q.</span>
-                    <span className="font-bold">{faq.question}</span>
+              <Card 
+                key={index}
+                style={{
+                  backgroundColor: "white",
+                  border: "1px solid #e5e7eb",
+                  borderRadius: "8px",
+                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)"
+                }}
+              >
+                <CardContent style={{ padding: "24px" }}>
+                  <div style={{ marginBottom: "16px" }}>
+                    <span 
+                      style={{
+                        backgroundColor: "#2563eb",
+                        color: "white",
+                        padding: "4px 12px",
+                        borderRadius: "4px",
+                        fontWeight: "bold",
+                        marginRight: "16px",
+                        fontSize: "14px"
+                      }}
+                    >
+                      Q.
+                    </span>
+                    <span 
+                      style={{
+                        fontWeight: "bold",
+                        color: "#374151",
+                        fontSize: "16px"
+                      }}
+                    >
+                      {faq.question}
+                    </span>
                   </div>
                   <div>
-                    <span className="bg-gray-600 text-white px-3 py-1 rounded font-bold mr-4">A.</span>
-                    <span className="text-gray-700">{faq.answer}</span>
+                    <span 
+                      style={{
+                        backgroundColor: "#6b7280",
+                        color: "white",
+                        padding: "4px 12px",
+                        borderRadius: "4px",
+                        fontWeight: "bold",
+                        marginRight: "16px",
+                        fontSize: "14px"
+                      }}
+                    >
+                      A.
+                    </span>
+                    <span 
+                      style={{
+                        color: "#6b7280",
+                        fontSize: "14px",
+                        lineHeight: "1.6"
+                      }}
+                    >
+                      {faq.answer}
+                    </span>
                   </div>
                 </CardContent>
               </Card>
@@ -491,87 +935,263 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Shop Info & News */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="space-y-12">
-            {/* Shop Info */}
-            <div>
-              <h2 className="text-2xl font-bold mb-6">SHOP INFO</h2>
-              <p className="text-xl text-gray-600 mb-6">店舗情報</p>
-              <Card>
-                <CardContent className="p-6">
-                  <div className="space-y-4">
-                    <div className="flex justify-between">
-                      <span className="font-medium">所在地</span>
-                      <span>
-                        〒000-0000
-                        <br />
-                        住所テキスト
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="font-medium">TEL</span>
-                      <span>000-000-0000</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="font-medium">FAX</span>
-                      <span>000-000-0000</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="font-medium">営業時間</span>
-                      <span>00:00~00:00</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="font-medium">定休日</span>
-                      <span>日曜日</span>
-                    </div>
-                  </div>
-                  <div className="mt-6">
-                    <Link href="/about#access">
-                      <Button variant="outline">アクセス方法へ</Button>
+      {/* Shop Info Section */}
+      <section 
+        style={{
+          width: "1440px",
+          height: "918.6600341796875px",
+          gap: "40px",
+          opacity: 1,
+          paddingTop: "60px",
+          paddingBottom: "60px",
+          background: "#FFFFFF",
+          margin: "0 auto"
+        }}
+      >
+        <div 
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "0 20px"
+          }}
+        >
+          <div style={{ textAlign: "center", marginBottom: "48px" }}>
+            <h2 style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "24px" }}>SHOP INFO</h2>
+            <p style={{ fontSize: "20px", color: "#6b7280", marginBottom: "24px" }}>店舗情報</p>
+          </div>
+          
+          <Card 
+            style={{
+              backgroundColor: "white",
+              border: "1px solid #e5e7eb",
+              borderRadius: "8px",
+              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+              width: "100%",
+              maxWidth: "800px"
+            }}
+          >
+            <CardContent style={{ padding: "32px" }}>
+              <div 
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "16px",
+                  marginBottom: "24px"
+                }}
+              >
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                  <span style={{ fontWeight: "500", color: "#374151" }}>所在地</span>
+                  <span style={{ textAlign: "right", color: "#374151" }}>
+                    〒000-0000
+                    <br />
+                    住所テキスト
+                  </span>
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span style={{ fontWeight: "500", color: "#374151" }}>TEL</span>
+                  <span style={{ color: "#374151" }}>000-000-0000</span>
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span style={{ fontWeight: "500", color: "#374151" }}>FAX</span>
+                  <span style={{ color: "#374151" }}>000-000-0000</span>
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span style={{ fontWeight: "500", color: "#374151" }}>営業時間</span>
+                  <span style={{ color: "#374151" }}>00:00~00:00</span>
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span style={{ fontWeight: "500", color: "#374151" }}>定休日</span>
+                  <span style={{ color: "#374151" }}>日曜日</span>
+                </div>
+              </div>
+              
+              <div style={{ textAlign: "center" }}>
+                <Link href="/about#access">
+                  <Button 
+                    variant="outline" 
+                    style={{
+                      backgroundColor: "transparent",
+                      color: "#374151",
+                      border: "2px solid #d1d5db",
+                      borderRadius: "8px",
+                      padding: "12px 24px",
+                      fontSize: "16px",
+                      fontWeight: "500",
+                      cursor: "pointer",
+                      transition: "all 0.3s ease"
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = "#f3f4f6";
+                      e.currentTarget.style.borderColor = "#9ca3af";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = "transparent";
+                      e.currentTarget.style.borderColor = "#d1d5db";
+                    }}
+                  >
+                    アクセス方法へ
+                  </Button>
+                </Link>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* News Section */}
+      <section 
+        style={{
+          width: "1440px",
+          height: "443px",
+          gap: "40px",
+          opacity: 1,
+          paddingTop: "60px",
+          paddingBottom: "60px",
+          background: "#FFFFFF",
+          margin: "0 auto"
+        }}
+      >
+        <div 
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "0 20px"
+          }}
+        >
+          <div style={{ textAlign: "center", marginBottom: "32px" }}>
+            <h2 style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "24px" }}>NEWS</h2>
+            <p style={{ fontSize: "20px", color: "#6b7280", marginBottom: "24px" }}>お知らせ</p>
+          </div>
+          
+          <div 
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "16px",
+              width: "100%",
+              maxWidth: "800px",
+              marginBottom: "24px"
+            }}
+          >
+            {newsList.map((item, index) => (
+              <Card 
+                key={index}
+                style={{
+                  backgroundColor: "white",
+                  border: "1px solid #e5e7eb",
+                  borderRadius: "8px",
+                  boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)"
+                }}
+              >
+                <CardContent style={{ padding: "24px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+                    <span style={{ fontSize: "14px", color: "#6b7280" }}>
+                      {item.createdAt instanceof Date ? `${item.createdAt.getFullYear()}.${String(item.createdAt.getMonth()+1).padStart(2,"0")}.${String(item.createdAt.getDate()).padStart(2,"0")}` : ""}
+                    </span>
+                    <span 
+                      style={{
+                        fontSize: "14px",
+                        backgroundColor: "#dbeafe",
+                        color: "#1e40af",
+                        padding: "4px 8px",
+                        borderRadius: "4px"
+                      }}
+                    >
+                      お知らせ
+                    </span>
+                    <Link 
+                      href={`/news/${item.id}`} 
+                      style={{
+                        fontWeight: "500",
+                        color: "#374151",
+                        textDecoration: "none",
+                        transition: "color 0.3s ease"
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = "#1e40af";
+                        e.currentTarget.style.textDecoration = "underline";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = "#374151";
+                        e.currentTarget.style.textDecoration = "none";
+                      }}
+                    >
+                      {item.title}
                     </Link>
                   </div>
                 </CardContent>
               </Card>
-            </div>
-
-            {/* News */}
-            <div>
-              <h2 className="text-2xl font-bold mb-6">NEWS</h2>
-              <p className="text-xl text-gray-600 mb-6">お知らせ</p>
-              <div className="space-y-4">
-                {newsList.map((item, index) => (
-                  <Card key={index}>
-                    <CardContent className="p-6">
-                      <div className="flex items-center gap-4">
-                        <span className="text-sm text-gray-500">{item.createdAt instanceof Date ? `${item.createdAt.getFullYear()}.${String(item.createdAt.getMonth()+1).padStart(2,"0")}.${String(item.createdAt.getDate()).padStart(2,"0")}` : ""}</span>
-                        <span className="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">お知らせ</span>
-                        <Link href={`/news/${item.id}`} className="font-medium hover:underline">
-                          {item.title}
-                        </Link>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-              <div className="mt-6 text-center">
-                <Link href="/news">
-                  <Button variant="outline">お知らせ一覧へ</Button>
-                </Link>
-              </div>
-            </div>
+            ))}
+          </div>
+          
+          <div style={{ textAlign: "center" }}>
+            <Link href="/news">
+              <Button 
+                variant="outline" 
+                style={{
+                  backgroundColor: "transparent",
+                  color: "#374151",
+                  border: "2px solid #d1d5db",
+                  borderRadius: "8px",
+                  padding: "12px 24px",
+                  fontSize: "16px",
+                  fontWeight: "500",
+                  cursor: "pointer",
+                  transition: "all 0.3s ease"
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = "#f3f4f6";
+                  e.currentTarget.style.borderColor = "#9ca3af";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "transparent";
+                  e.currentTarget.style.borderColor = "#d1d5db";
+                }}
+              >
+                お知らせ一覧へ
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
 
       {/* Contact Section */}
-      <section className="py-16 bg-blue-600 text-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">CONTACT</h2>
-            <p className="text-xl mb-4">お問い合わせ</p>
-            <p className="mb-8">
+      <section 
+        style={{
+          width: "1440px",
+          height: "671px",
+          gap: "40px",
+          opacity: 1,
+          paddingTop: "60px",
+          paddingBottom: "60px",
+          background: "#666666",
+          color: "white",
+          margin: "0 auto"
+        }}
+      >
+        <div 
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "0 20px"
+          }}
+        >
+          <div style={{ textAlign: "center", marginBottom: "48px" }}>
+            <h2 style={{ fontSize: "30px", fontWeight: "bold", marginBottom: "16px" }}>CONTACT</h2>
+            <p style={{ fontSize: "20px", marginBottom: "16px" }}>お問い合わせ</p>
+            <p style={{ marginBottom: "32px" }}>
               在庫車輛の詳細/その他お問い合わせ/業販価格のご確認など
               <br />
               お電話またはお問い合わせフォームよりお気軽にお問い合わせください。
@@ -580,36 +1200,118 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <Card className="bg-white text-gray-900">
-              <CardContent className="p-8 text-center">
-                <Phone className="w-12 h-12 mx-auto mb-4 text-blue-600" />
-                <h3 className="font-bold text-xl mb-4">お電話でのお問い合わせ</h3>
-                <p className="text-3xl font-bold mb-2">TEL. 000-000-0000</p>
-                <p className="text-sm text-gray-600">受付時間：月〜土 00:00~00:00</p>
+          <div 
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(2, 1fr)",
+              gap: "32px",
+              maxWidth: "800px",
+              width: "100%",
+              marginBottom: "32px"
+            }}
+          >
+            <Card 
+              style={{
+                backgroundColor: "white",
+                color: "#374151",
+                borderRadius: "8px",
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
+              }}
+            >
+              <CardContent style={{ padding: "32px", textAlign: "center" }}>
+                <Phone style={{ width: "48px", height: "48px", margin: "0 auto 16px auto", color: "#2563eb" }} />
+                <h3 style={{ fontWeight: "bold", fontSize: "20px", marginBottom: "16px" }}>お電話でのお問い合わせ</h3>
+                <p style={{ fontSize: "30px", fontWeight: "bold", marginBottom: "8px" }}>TEL. 000-000-0000</p>
+                <p style={{ fontSize: "14px", color: "#6b7280" }}>受付時間：月〜土 00:00~00:00</p>
               </CardContent>
             </Card>
 
-            <Card className="bg-white text-gray-900">
-              <CardContent className="p-8 text-center">
-                <div className="w-12 h-12 mx-auto mb-4 bg-blue-600 rounded-lg flex items-center justify-center">
-                  <div className="w-6 h-6 bg-white rounded"></div>
+            <Card 
+              style={{
+                backgroundColor: "white",
+                color: "#374151",
+                borderRadius: "8px",
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
+              }}
+            >
+              <CardContent style={{ padding: "32px", textAlign: "center" }}>
+                <div 
+                  style={{
+                    width: "48px",
+                    height: "48px",
+                    margin: "0 auto 16px auto",
+                    backgroundColor: "#2563eb",
+                    borderRadius: "8px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center"
+                  }}
+                >
+                  <div 
+                    style={{
+                      width: "24px",
+                      height: "24px",
+                      backgroundColor: "white",
+                      borderRadius: "4px"
+                    }}
+                  ></div>
                 </div>
-                <h3 className="font-bold text-xl mb-4">フォームでのお問い合わせ</h3>
+                <h3 style={{ fontWeight: "bold", fontSize: "20px", marginBottom: "16px" }}>フォームでのお問い合わせ</h3>
                 <Link href="/contact">
-                  <Button className="mb-4">お問い合わせフォームへ</Button>
+                  <Button 
+                    style={{
+                      marginBottom: "16px",
+                      backgroundColor: "#2563eb",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "6px",
+                      padding: "8px 16px",
+                      fontSize: "14px",
+                      fontWeight: "500",
+                      cursor: "pointer",
+                      transition: "background-color 0.3s ease"
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = "#1d4ed8";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = "#2563eb";
+                    }}
+                  >
+                    お問い合わせフォームへ
+                  </Button>
                 </Link>
-                <p className="text-sm text-gray-600">24時間受付中</p>
+                <p style={{ fontSize: "14px", color: "#6b7280" }}>24時間受付中</p>
               </CardContent>
             </Card>
           </div>
 
-          <div className="text-center mt-8">
+          <div style={{ textAlign: "center" }}>
             <Link href="/purchase">
-              <Button variant="outline" size="lg" className="bg-white text-blue-600 hover:bg-gray-100">
+              <Button 
+                variant="outline" 
+                size="lg" 
+                style={{
+                  backgroundColor: "white",
+                  color: "#2563eb",
+                  border: "2px solid white",
+                  borderRadius: "8px",
+                  padding: "12px 24px",
+                  fontSize: "16px",
+                  fontWeight: "500",
+                  cursor: "pointer",
+                  transition: "all 0.3s ease"
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = "#f3f4f6";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "white";
+                }}
+              >
                 トラック買取をご希望の方はこちら
                 <br />
-                <span className="text-sm">無料査定実施中！！</span>
+                <span style={{ fontSize: "14px" }}>無料査定実施中！！</span>
               </Button>
             </Link>
           </div>

@@ -228,8 +228,8 @@ export function Header() {
                     justifyContent: "center"
                   }}
                 >
-                  <button
-                    type="submit"
+              <button 
+                type="submit"
                     style={{
                       width: "176px",
                       height: "23px",
@@ -246,9 +246,9 @@ export function Header() {
                       cursor: "pointer",
                       background: "transparent"
                     }}
-                  >
-                    お問い合わせフォームへ
-                  </button>
+              >
+                お問い合わせフォームへ
+              </button>
                 </div>
                 {/* アイコン2つを縦並びで独立配置 */}
                 <div style={{
