@@ -462,56 +462,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section className="py-16 bg-blue-600 text-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">CONTACT</h2>
-            <p className="text-xl mb-4">お問い合わせ</p>
-            <p className="mb-8">
-              在庫車輛の詳細/その他お問い合わせ/業販価格のご確認など
-              <br />
-              お電話またはお問い合わせフォームよりお気軽にお問い合わせください。
-              <br />
-              在庫にないトラックのご紹介も可能です。
-            </p>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <Card className="bg-white text-gray-900">
-              <CardContent className="p-8 text-center">
-                <Phone className="w-12 h-12 mx-auto mb-4 text-blue-600" />
-                <h3 className="font-bold text-xl mb-4">お電話でのお問い合わせ</h3>
-                <p className="text-3xl font-bold mb-2">TEL. 000-000-0000</p>
-                <p className="text-sm text-gray-600">受付時間：月〜土 00:00~00:00</p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white text-gray-900">
-              <CardContent className="p-8 text-center">
-                <div className="w-12 h-12 mx-auto mb-4 bg-blue-600 rounded-lg flex items-center justify-center">
-                  <div className="w-6 h-6 bg-white rounded"></div>
-                </div>
-                <h3 className="font-bold text-xl mb-4">フォームでのお問い合わせ</h3>
-                <Link href="/contact">
-                  <Button className="mb-4">お問い合わせフォームへ</Button>
-                </Link>
-                <p className="text-sm text-gray-600">24時間受付中</p>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="text-center mt-8">
-            <Link href="/purchase">
-              <Button variant="outline" size="lg" className="bg-white text-blue-600 hover:bg-gray-100">
-                トラック買取をご希望の方はこちら
-                <br />
-                <span className="text-sm">無料査定実施中！！</span>
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
 
       {/* FAQ Section */}
       <section className="py-16">
@@ -610,6 +561,57 @@ export default function HomePage() {
                 </Link>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section className="py-16 bg-blue-600 text-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">CONTACT</h2>
+            <p className="text-xl mb-4">お問い合わせ</p>
+            <p className="mb-8">
+              在庫車輛の詳細/その他お問い合わせ/業販価格のご確認など
+              <br />
+              お電話またはお問い合わせフォームよりお気軽にお問い合わせください。
+              <br />
+              在庫にないトラックのご紹介も可能です。
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <Card className="bg-white text-gray-900">
+              <CardContent className="p-8 text-center">
+                <Phone className="w-12 h-12 mx-auto mb-4 text-blue-600" />
+                <h3 className="font-bold text-xl mb-4">お電話でのお問い合わせ</h3>
+                <p className="text-3xl font-bold mb-2">TEL. 000-000-0000</p>
+                <p className="text-sm text-gray-600">受付時間：月〜土 00:00~00:00</p>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-white text-gray-900">
+              <CardContent className="p-8 text-center">
+                <div className="w-12 h-12 mx-auto mb-4 bg-blue-600 rounded-lg flex items-center justify-center">
+                  <div className="w-6 h-6 bg-white rounded"></div>
+                </div>
+                <h3 className="font-bold text-xl mb-4">フォームでのお問い合わせ</h3>
+                <Link href="/contact">
+                  <Button className="mb-4">お問い合わせフォームへ</Button>
+                </Link>
+                <p className="text-sm text-gray-600">24時間受付中</p>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="text-center mt-8">
+            <Link href="/purchase">
+              <Button variant="outline" size="lg" className="bg-white text-blue-600 hover:bg-gray-100">
+                トラック買取をご希望の方はこちら
+                <br />
+                <span className="text-sm">無料査定実施中！！</span>
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
