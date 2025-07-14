@@ -291,15 +291,22 @@ export default function HomePage() {
           width: "1440px",
           height: "800px",
           opacity: 1,
-          margin: "0 auto",
+          top: "126px",
+          left: "50%",
+          transform: "translateX(-50%)",
           display: "flex",
-          flexDirection: "column"
+          flexDirection: "column",
+          backgroundImage: "url('/background.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          position: "absolute",
+          zIndex: 1
         }}
       >
         {/* Hero Section */}
         <div 
           style={{
-            background: "linear-gradient(to right, #2563eb, #1d4ed8)",
             color: "white",
             padding: "64px 20px",
             flex: "1"
@@ -338,7 +345,6 @@ export default function HomePage() {
         {/* Truck Type Grid */}
         <div 
           style={{
-            backgroundColor: "#f9fafb",
             padding: "48px 20px",
             flex: "1"
           }}
@@ -416,7 +422,6 @@ export default function HomePage() {
         {/* Search Section */}
         <div 
           style={{
-            backgroundColor: "white",
             padding: "48px 20px",
             flex: "1"
           }}
@@ -536,7 +541,8 @@ export default function HomePage() {
           paddingTop: "100px",
           paddingBottom: "100px",
           background: "#FFFFFF",
-          margin: "0 auto"
+          margin: "0 auto",
+          marginTop: "926px"
         }}
       >
         <div 

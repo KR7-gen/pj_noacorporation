@@ -351,17 +351,162 @@ export default function InventoryPage() {
             ))}
           </div>
         )}
-
-        {/* お問い合わせボタン */}
-        <div className="text-center mt-12">
-          <Link href="/contact">
-            <Button size="lg" className="flex items-center gap-2 mx-auto">
-              <Phone className="w-5 h-5" />
-              お問い合わせ
-            </Button>
-          </Link>
-        </div>
       </div>
+      {/* Contact Section 追加ここから */}
+      <section 
+        style={{
+          width: "1440px",
+          height: "671px",
+          gap: "40px",
+          opacity: 1,
+          paddingTop: "60px",
+          paddingBottom: "60px",
+          background: "#666666",
+          color: "white",
+          margin: "0 auto"
+        }}
+      >
+        <div 
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "0 20px"
+          }}
+        >
+          <div style={{ textAlign: "center", marginBottom: "48px" }}>
+            <h2 style={{ fontSize: "30px", fontWeight: "bold", marginBottom: "16px" }}>CONTACT</h2>
+            <p style={{ fontSize: "20px", marginBottom: "16px" }}>お問い合わせ</p>
+            <p style={{ marginBottom: "32px" }}>
+              在庫車輛の詳細/その他お問い合わせ/業販価格のご確認など
+              <br />
+              お電話またはお問い合わせフォームよりお気軽にお問い合わせください。
+              <br />
+              在庫にないトラックのご紹介も可能です。
+            </p>
+          </div>
+
+          <div 
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(2, 1fr)",
+              gap: "32px",
+              maxWidth: "800px",
+              width: "100%",
+              marginBottom: "32px"
+            }}
+          >
+            <Card 
+              style={{
+                backgroundColor: "white",
+                color: "#374151",
+                borderRadius: "8px",
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
+              }}
+            >
+              <CardContent style={{ padding: "32px", textAlign: "center" }}>
+                <Phone style={{ width: "48px", height: "48px", margin: "0 auto 16px auto", color: "#2563eb" }} />
+                <h3 style={{ fontWeight: "bold", fontSize: "20px", marginBottom: "16px" }}>お電話でのお問い合わせ</h3>
+                <p style={{ fontSize: "30px", fontWeight: "bold", marginBottom: "8px" }}>TEL. 000-000-0000</p>
+                <p style={{ fontSize: "14px", color: "#6b7280" }}>受付時間：月〜土 00:00~00:00</p>
+              </CardContent>
+            </Card>
+
+            <Card 
+              style={{
+                backgroundColor: "white",
+                color: "#374151",
+                borderRadius: "8px",
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
+              }}
+            >
+              <CardContent style={{ padding: "32px", textAlign: "center" }}>
+                <div 
+                  style={{
+                    width: "48px",
+                    height: "48px",
+                    margin: "0 auto 16px auto",
+                    backgroundColor: "#2563eb",
+                    borderRadius: "8px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center"
+                  }}
+                >
+                  <div 
+                    style={{
+                      width: "24px",
+                      height: "24px",
+                      backgroundColor: "white",
+                      borderRadius: "4px"
+                    }}
+                  ></div>
+                </div>
+                <h3 style={{ fontWeight: "bold", fontSize: "20px", marginBottom: "16px" }}>フォームでのお問い合わせ</h3>
+                <Link href="/contact">
+                  <Button 
+                    style={{
+                      marginBottom: "16px",
+                      backgroundColor: "#2563eb",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "6px",
+                      padding: "8px 16px",
+                      fontSize: "14px",
+                      fontWeight: "500",
+                      cursor: "pointer",
+                      transition: "background-color 0.3s ease"
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = "#1d4ed8";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = "#2563eb";
+                    }}
+                  >
+                    お問い合わせフォームへ
+                  </Button>
+                </Link>
+                <p style={{ fontSize: "14px", color: "#6b7280" }}>24時間受付中</p>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div style={{ textAlign: "center" }}>
+            <Link href="/purchase">
+              <Button 
+                variant="outline" 
+                size="lg" 
+                style={{
+                  backgroundColor: "white",
+                  color: "#2563eb",
+                  border: "2px solid white",
+                  borderRadius: "8px",
+                  padding: "12px 24px",
+                  fontSize: "16px",
+                  fontWeight: "500",
+                  cursor: "pointer",
+                  transition: "all 0.3s ease"
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = "#f3f4f6";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "white";
+                }}
+              >
+                トラック買取をご希望の方はこちら
+                <br />
+                <span style={{ fontSize: "14px" }}>無料査定実施中！！</span>
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+      {/* Contact Section 追加ここまで */}
     </div>
   )
 }
