@@ -505,28 +505,96 @@ export default function AboutPage() {
             style={{
               width: "820px",
               height: "634px",
-              gap: "32px",
+              gap: "10px",
               opacity: 1,
               display: "flex",
               flexDirection: "column",
-              marginBottom: "48px"
+              marginBottom: "-80px"
             }}
           >
-            <Card 
-              style={{
-                backgroundColor: "white",
-                border: "1px solid #e5e7eb",
-                borderRadius: "8px",
-                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)"
-              }}
-            >
-              <CardContent style={{ padding: "32px", textAlign: "center" }}>
-                                  <div style={{ display: "flex", flexDirection: "column", gap: "16px", position: "relative" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "16px", position: "relative" }}>
                     <div style={{ 
                       position: "relative",
                       width: "100%",
                       height: "60px"
                     }}>
+                      {/* 吹き出し全体 */}
+                      <div style={{
+                        width: "534px",
+                        height: "61px",
+                        opacity: 1,
+                        position: "absolute",
+                        top: "-50px",
+                        left: "-13px"
+                      }}>
+                        {/* Rectangle 14 - 楕円部分 */}
+                        <div style={{
+                          width: "240px",
+                          height: "48px",
+                          opacity: 1,
+                          position: "absolute",
+                          top: "0px",
+                          left: "0px",
+                          backgroundColor: "#666666",
+                          borderRadius: "25px"
+                        }}></div>
+                        
+                        {/* Polygon 2 - 三角部分 */}
+                        <div style={{
+                          width: "18px",
+                          height: "18px",
+                          opacity: 1,
+                          position: "absolute",
+                          top: "43px",
+                          left: "111px",
+                          backgroundColor: "#666666",
+                          clipPath: "polygon(50% 100%, 0% 0%, 100% 0%)"
+                        }}></div>
+                        
+                        {/* 仕入・保管テキスト */}
+                        <div style={{
+                          width: "120px",
+                          height: "28px",
+                          opacity: 1,
+                          position: "absolute",
+                          top: "11px",
+                          left: "60px",
+                          fontFamily: "Inter, sans-serif",
+                          fontWeight: 700,
+                          fontStyle: "bold",
+                          fontSize: "24px",
+                          lineHeight: "28px",
+                          letterSpacing: 0,
+                          color: "#FFFFFF",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center"
+                        }}>仕入・保管</div>
+                      </div>
+                      <div style={{
+                        width: "214px",
+                        height: "232px",
+                        opacity: 1,
+                        position: "absolute",
+                        top: "13px",
+                        left: "0px",
+                        backgroundColor: "#F2F2F2",
+                        borderRadius: "8px"
+                      }}>
+                        <img 
+                          src="/truck_sales_company.png"
+                          alt="販売事業者"
+                          style={{
+                            width: "161px",
+                            height: "136px",
+                            opacity: 1,
+                            position: "absolute",
+                            top: "62px",
+                            left: "26px",
+                            objectFit: "contain"
+                          }}
+                        />
+                      </div>
                       <div style={{
                         width: "100px",
                         height: "28px",
@@ -541,14 +609,90 @@ export default function AboutPage() {
                         lineHeight: "28px",
                         letterSpacing: 0,
                         color: "#333333",
-                        backgroundColor: "#dbeafe",
-                        padding: "16px",
-                        borderRadius: "8px",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
                         whiteSpace: "nowrap"
-                      }}>販売事業者</div>
+                      }}>販売事業者                      </div>
+                      
+                      {/* 販売代行事業者用の吹き出し全体 */}
+                      <div style={{
+                        width: "534px",
+                        height: "61px",
+                        opacity: 1,
+                        position: "absolute",
+                        top: "-50px",
+                        left: "281px"
+                      }}>
+                        {/* Rectangle 14 - 楕円部分 */}
+                        <div style={{
+                          width: "240px",
+                          height: "48px",
+                          opacity: 1,
+                          position: "absolute",
+                          top: "0px",
+                          left: "0px",
+                          backgroundColor: "#666666",
+                          borderRadius: "25px"
+                        }}></div>
+                        
+                        {/* Polygon 2 - 三角部分 */}
+                        <div style={{
+                          width: "18px",
+                          height: "18px",
+                          opacity: 1,
+                          position: "absolute",
+                          top: "43px",
+                          left: "111px",
+                          backgroundColor: "#666666",
+                          clipPath: "polygon(50% 100%, 0% 0%, 100% 0%)"
+                        }}></div>
+                        
+                        {/* 仕入・保管テキスト */}
+                        <div style={{
+                          width: "120px",
+                          height: "28px",
+                          opacity: 1,
+                          position: "absolute",
+                          top: "11px",
+                          left: "60px",
+                          fontFamily: "Inter, sans-serif",
+                          fontWeight: 700,
+                          fontStyle: "bold",
+                          fontSize: "24px",
+                          lineHeight: "28px",
+                          letterSpacing: 0,
+                          color: "#FFFFFF",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center"
+                        }}>販売のみ</div>
+                      </div>
+                      
+                      <div style={{
+                        width: "216px",
+                        height: "232px",
+                        opacity: 1,
+                        position: "absolute",
+                        top: "13px",
+                        left: "292.57px",
+                        backgroundColor: "#F2F2F2",
+                        borderRadius: "8px"
+                      }}>
+                        <img 
+                          src="/truck_sales_agency.png"
+                          alt="販売代行事業者"
+                          style={{
+                            width: "142px",
+                            height: "120px",
+                            opacity: 1,
+                            position: "absolute",
+                            top: "78px",
+                            left: "37px",
+                            objectFit: "contain"
+                          }}
+                        />
+                      </div>
                       <div style={{
                         width: "140px",
                         height: "28px",
@@ -563,14 +707,35 @@ export default function AboutPage() {
                         lineHeight: "28px",
                         letterSpacing: 0,
                         color: "#333333",
-                        backgroundColor: "#dcfce7",
-                        padding: "16px",
-                        borderRadius: "8px",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
                         whiteSpace: "nowrap"
                       }}>販売代行事業者</div>
+                      <div style={{
+                        width: "214px",
+                        height: "232px",
+                        opacity: 1,
+                        position: "absolute",
+                        top: "13px",
+                        left: "587.14px",
+                        backgroundColor: "#F1F6FF",
+                        borderRadius: "8px"
+                      }}>
+                        <img 
+                          src="/customer.png"
+                          alt="お客様"
+                          style={{
+                            width: "122px",
+                            height: "104px",
+                            opacity: 1,
+                            position: "absolute",
+                            top: "64px",
+                            left: "50px",
+                            objectFit: "contain"
+                          }}
+                        />
+                      </div>
                       <div style={{
                         width: "60px",
                         height: "28px",
@@ -585,53 +750,374 @@ export default function AboutPage() {
                         lineHeight: "28px",
                         letterSpacing: 0,
                         color: "#333333",
-                        backgroundColor: "#fef3c7",
-                        padding: "16px",
-                        borderRadius: "8px",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
                         whiteSpace: "nowrap"
                       }}>お客様</div>
                     </div>
-                    <div style={{ textAlign: "center" }}>
-                      <div style={{ fontSize: "14px", marginBottom: "8px" }}>委託</div>
-                      <div style={{ fontSize: "14px", marginTop: "8px" }}>希望の中古車輌を購入</div>
+
+                    <div style={{
+                      width: "160px",
+                      height: "28px",
+                      opacity: 1,
+                      position: "absolute",
+                      top: "195px",
+                      left: "614.14px",
+                      fontFamily: "Inter, sans-serif",
+                      fontWeight: 700,
+                      fontStyle: "bold",
+                      fontSize: "16px",
+                      lineHeight: "28px",
+                      letterSpacing: 0,
+                      color: "#333333",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center"
+                    }}>希望の中古車輌を購入</div>
+                    
+                    {/* 1つ目の矢印全体 */}
+                    <div style={{
+                      width: "78.57px",
+                      height: "59.54px",
+                      opacity: 1,
+                      position: "absolute",
+                      top: "81.63px",
+                      left: "214px"
+                    }}>
+                      {/* 1つ目の右矢印 - Rectangle 16 */}
+                      <div style={{
+                        width: "53.57px",
+                        height: "35.71px",
+                        opacity: 1,
+                        position: "absolute",
+                        top: "16.96px",
+                        left: "0px",
+                        backgroundColor: "#2B5EC5"
+                      }}></div>
+                      
+                      {/* 1つ目の右矢印 - Polygon 1 */}
+                      <div style={{
+                        width: "25px",
+                        height: "59.54px",
+                        opacity: 1,
+                        position: "absolute",
+                        top: "4px",
+                        left: "53px",
+                        backgroundColor: "#2B5EC5",
+                        clipPath: "polygon(0% 50%, 100% 0%, 100% 100%)",
+                        transform: "rotate(-180deg)"
+                      }}></div>
+                      
+                      {/* 1つ目の矢印内テキスト「委託」 */}
+                      <div style={{
+                        width: "40px",
+                        height: "28px",
+                        opacity: 1,
+                        position: "absolute",
+                        top: "20.6px",
+                        left: "19px",
+                        fontFamily: "Inter, sans-serif",
+                        fontWeight: 700,
+                        fontStyle: "bold",
+                        fontSize: "20px",
+                        lineHeight: "28px",
+                        letterSpacing: 0,
+                        color: "#FFFFFF",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center"
+                      }}>委託</div>
+                    </div>
+                    
+                    {/* 2つ目の矢印全体 */}
+                    <div style={{
+                      width: "78.57px",
+                      height: "59.54px",
+                      opacity: 1,
+                      position: "absolute",
+                      top: "81.63px",
+                      left: "508.57px"
+                    }}>
+                      {/* 2つ目の右矢印 - Rectangle 16 */}
+                      <div style={{
+                        width: "53.57px",
+                        height: "35.71px",
+                        opacity: 1,
+                        position: "absolute",
+                        top: "16.96px",
+                        left: "0px",
+                        backgroundColor: "#2B5EC5"
+                      }}></div>
+                      
+                      {/* 2つ目の右矢印 - Polygon 1 */}
+                      <div style={{
+                        width: "25px",
+                        height: "59.54px",
+                        opacity: 1,
+                        position: "absolute",
+                        top: "4px",
+                        left: "53px",
+                        backgroundColor: "#2B5EC5",
+                        clipPath: "polygon(0% 50%, 100% 0%, 100% 100%)",
+                        transform: "rotate(-180deg)"
+                      }}></div>
+                      
+                      {/* 2つ目の矢印内テキスト「委託」 */}
+                      <div style={{
+                        width: "40px",
+                        height: "28px",
+                        opacity: 1,
+                        position: "absolute",
+                        top: "20.6px",
+                        left: "19px",
+                        fontFamily: "Inter, sans-serif",
+                        fontWeight: 700,
+                        fontStyle: "bold",
+                        fontSize: "20px",
+                        lineHeight: "28px",
+                        letterSpacing: 0,
+                        color: "#FFFFFF",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center"
+                      }}>委託</div>
+                                          </div>
+                    </div>
+                  <div style={{ marginTop: "16px", textAlign: "center" }}>
+                    <span style={{ backgroundColor: "#f3f4f6", padding: "4px 12px", borderRadius: "4px", fontSize: "14px" }}>販売のみ</span>
+                  </div>
+                  
+                  {/* 当社セット */}
+                  <div style={{ 
+                    position: "relative",
+                    width: "100%",
+                    height: "60px",
+                    marginTop: "190px"
+                  }}>
+                    {/* 当社の吹き出し全体 */}
+                    <div style={{
+                      width: "240px",
+                      height: "61px",
+                      opacity: 1,
+                      position: "absolute",
+                      top: "-50px",
+                      left: "-13px"
+                    }}>
+                      {/* Rectangle 14 - 楕円部分 */}
+                      <div style={{
+                        width: "240px",
+                        height: "48px",
+                        opacity: 1,
+                        position: "absolute",
+                        top: "0px",
+                        left: "0px",
+                        backgroundColor: "#666666",
+                        borderRadius: "25px"
+                      }}></div>
+                      
+                      {/* Polygon 2 - 三角部分 */}
+                      <div style={{
+                        width: "18px",
+                        height: "18px",
+                        opacity: 1,
+                        position: "absolute",
+                        top: "43px",
+                        left: "111px",
+                        backgroundColor: "#666666",
+                        clipPath: "polygon(50% 100%, 0% 0%, 100% 0%)"
+                      }}></div>
+                      
+                      {/* 仕入・保管テキスト */}
+                      <div style={{
+                        width: "120px",
+                        height: "28px",
+                        opacity: 1,
+                        position: "absolute",
+                        top: "11px",
+                        left: "60px",
+                        fontFamily: "Inter, sans-serif",
+                        fontWeight: 700,
+                        fontStyle: "bold",
+                        fontSize: "24px",
+                        lineHeight: "28px",
+                        letterSpacing: 0,
+                        color: "#FFFFFF",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center"
+                      }}>仕入・保管</div>
+                    </div>
+                    
+                    {/* 当社背景 */}
+                    <div style={{
+                      width: "214px",
+                      height: "232px",
+                      opacity: 1,
+                      position: "absolute",
+                      top: "13px",
+                      left: "0px",
+                      backgroundColor: "#F2F2F2",
+                      borderRadius: "8px"
+                    }}>
+                      <img 
+                        src="/truck_sales_company.png"
+                        alt="販売事業者"
+                        style={{
+                          width: "161px",
+                          height: "136px",
+                          opacity: 1,
+                          position: "absolute",
+                          top: "62px",
+                          left: "26px",
+                          objectFit: "contain"
+                        }}
+                      />
+                    </div>
+                    
+                    {/* 当社テキスト */}
+                    <div style={{
+                      width: "100px",
+                      height: "28px",
+                      opacity: 1,
+                      position: "absolute",
+                      top: "13px",
+                      left: "56.93px",
+                      fontFamily: "Inter, sans-serif",
+                      fontWeight: 700,
+                      fontStyle: "bold",
+                      fontSize: "20px",
+                      lineHeight: "28px",
+                      letterSpacing: 0,
+                      color: "#333333",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      whiteSpace: "nowrap"
+                    }}>当社</div>
+                    
+                    {/* 2つ目のお客様背景 */}
+                    <div style={{
+                      width: "214px",
+                      height: "232px",
+                      opacity: 1,
+                      position: "absolute",
+                      top: "13px",
+                      left: "587.14px",
+                      backgroundColor: "#F1F6FF",
+                      borderRadius: "8px"
+                    }}>
+                      <img 
+                        src="/customer.png"
+                        alt="お客様"
+                        style={{
+                          width: "122px",
+                          height: "104px",
+                          opacity: 1,
+                          position: "absolute",
+                          top: "64px",
+                          left: "50px",
+                          objectFit: "contain"
+                        }}
+                      />
+                    </div>
+                    
+                    {/* 2つ目のお客様テキスト */}
+                    <div style={{
+                      width: "60px",
+                      height: "28px",
+                      opacity: 1,
+                      position: "absolute",
+                      top: "13px",
+                      left: "664.14px",
+                      fontFamily: "Inter, sans-serif",
+                      fontWeight: 700,
+                      fontStyle: "bold",
+                      fontSize: "20px",
+                      lineHeight: "28px",
+                      letterSpacing: 0,
+                      color: "#333333",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      whiteSpace: "nowrap"
+                    }}>お客様</div>
+                    
+                    {/* 2つ目の希望の中古車輌を購入テキスト */}
+                    <div style={{
+                      width: "160px",
+                      height: "28px",
+                      opacity: 1,
+                      position: "absolute",
+                      top: "195px",
+                      left: "614.14px",
+                      fontFamily: "Inter, sans-serif",
+                      fontWeight: 700,
+                      fontStyle: "bold",
+                      fontSize: "16px",
+                      lineHeight: "28px",
+                      letterSpacing: 0,
+                      color: "#333333",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center"
+                    }}>希望の中古車輌を購入</div>
+                    
+                    {/* 当社から2つ目のお客様への矢印全体 */}
+                    <div style={{
+                      width: "372.98px",
+                      height: "36px",
+                      opacity: 1,
+                      position: "absolute",
+                      top: "98.45px",
+                      left: "214px",
+                      backgroundColor: "transparent"
+                    }}>
+                      {/* Rectangle 16 */}
+                      <div style={{
+                        width: "339px",
+                        height: "36px",
+                        opacity: 1,
+                        position: "absolute",
+                        top: "0px",
+                        left: "0px",
+                        background: "linear-gradient(90deg, #1154AF 0%, #053B65 100%)"
+                      }}></div>
+                      
+                       {/* Polygon 1 */}
+                        <div style={{
+                          width: "33.93px",
+                          height: "68.75px",
+                          opacity: 1,
+                          position: "absolute",
+                          top: "-17px",
+                          left: "338px",
+                          backgroundColor: "#053B65",
+                          clipPath: "polygon(0% 0%, 100% 50%, 0% 100%)"
+                        }}></div>
+                      
+                      {/* 直販テキスト */}
+                      <div style={{
+                        width: "40px",
+                        height: "28px",
+                        opacity: 1,
+                        position: "absolute",
+                        top: "4px",
+                        left: "166px",
+                        fontFamily: "Inter, sans-serif",
+                        fontWeight: 700,
+                        fontStyle: "bold",
+                        fontSize: "20px",
+                        lineHeight: "28px",
+                        letterSpacing: 0,
+                        color: "#FFFFFF",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center"
+                      }}>直販</div>
                     </div>
                   </div>
-                <div style={{ marginTop: "16px", textAlign: "center" }}>
-                  <span style={{ backgroundColor: "#f3f4f6", padding: "4px 12px", borderRadius: "4px", fontSize: "14px" }}>販売のみ</span>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card 
-              style={{
-                backgroundColor: "white",
-                border: "1px solid #e5e7eb",
-                borderRadius: "8px",
-                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)"
-              }}
-            >
-              <CardContent style={{ padding: "32px", textAlign: "center" }}>
-                <h3 style={{ fontSize: "20px", fontWeight: "bold", marginBottom: "24px" }}>当社</h3>
-                <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                    <div style={{ backgroundColor: "#dbeafe", padding: "16px", borderRadius: "8px" }}>当社</div>
-                    <div style={{ fontSize: "14px" }}>直販</div>
-                    <div style={{ backgroundColor: "#fef3c7", padding: "16px", borderRadius: "8px" }}>お客様</div>
-                  </div>
-                  <div style={{ textAlign: "center" }}>
-                    <div style={{ fontSize: "14px" }}>希望の中古車輌を購入</div>
-                  </div>
-                </div>
-                <div style={{ marginTop: "16px", textAlign: "center" }}>
-                  <span style={{ backgroundColor: "#f3f4f6", padding: "4px 12px", borderRadius: "4px", fontSize: "14px" }}>仕入・保管</span>
-                </div>
-              </CardContent>
-            </Card>
           </div>
-
           <div style={{ maxWidth: "800px", textAlign: "left" }}>
             <p style={{ marginBottom: "16px" }}>
               <span style={{
