@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Phone, Search } from "lucide-react"
+import { Phone, Search, ChevronDown, PhoneCall, ChevronRight } from "lucide-react"
 import { news } from "./news/newsData"
 import { getAnnouncements } from "@/lib/firebase-utils"
 import type { Announcement } from "@/types"
@@ -353,7 +353,7 @@ export default function HomePage() {
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(6, 1fr)",
-              gap: "16px",
+              gap: "4px",
               maxWidth: "1200px",
               margin: "0 auto"
             }}
@@ -363,8 +363,9 @@ export default function HomePage() {
                 key={icon.id}
                 href={`/inventory?type=${encodeURIComponent(icon.type)}`}
                 style={{
-                  padding: "16px",
-                  borderRadius: "8px",
+                  width: "176px",
+                  height: "96px",
+                  borderRadius: "4px",
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
@@ -372,7 +373,8 @@ export default function HomePage() {
                   backgroundColor: "white",
                   textDecoration: "none",
                   transition: "all 0.3s ease",
-                  boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)"
+                  boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+                  opacity: 1
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = "translateY(-2px)";
@@ -383,37 +385,71 @@ export default function HomePage() {
                   e.currentTarget.style.boxShadow = "0 1px 3px rgba(0, 0, 0, 0.1)";
                 }}
               >
+
                 <div 
                   style={{
-                    width: "64px",
-                    height: "64px",
-                    backgroundColor: "#dbeafe",
-                    borderRadius: "8px",
-                    marginBottom: "8px",
+                    width: "100%",
+                    height: "100%",
                     display: "flex",
+                    flexDirection: "column",
                     alignItems: "center",
-                    justifyContent: "center"
+                    justifyContent: "center",
+                    position: "relative"
                   }}
                 >
                   <div 
                     style={{
-                      width: "32px",
-                      height: "32px",
-                      backgroundColor: "#2563eb",
-                      borderRadius: "4px"
+                      width: "64px",
+                      height: "64px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginBottom: "8px"
                     }}
-                  ></div>
+                  >
+                    <img 
+                      src={`/${icon.type === "クレーン" ? "crane" : 
+                           icon.type === "ダンプ" ? "dump" :
+                           icon.type === "平ボディ" ? "flatbed" :
+                           icon.type === "車輌運搬車" ? "carrier" :
+                           icon.type === "ミキサー車" ? "mixer" :
+                           icon.type === "アルミバン" ? "van" :
+                           icon.type === "高所作業車" ? "aerial" :
+                           icon.type === "アルミウィング" ? "wing" :
+                           icon.type === "キャリアカー" ? "car_carrier" :
+                           icon.type === "塵芥車" ? "garbage" :
+                           icon.type === "アームロール" ? "arm-roll" :
+                           "special"}.${icon.type === "平ボディ" || icon.type === "アームロール" || icon.type === "キャリアカー" ? "png" : "jpg"}`}
+                      alt={icon.type}
+                      style={{
+                        maxWidth: "100%",
+                        maxHeight: "100%",
+                        objectFit: "contain"
+                      }}
+                      onError={(e) => {
+                        console.error(`画像読み込みエラー: ${icon.type}`, (e.target as HTMLImageElement).src);
+                      }}
+                    />
+                  </div>
+                  <span 
+                    style={{
+                      fontFamily: "'Noto Sans JP', sans-serif",
+                      fontWeight: 700,
+                      fontStyle: "bold",
+                      fontSize: "16px",
+                      lineHeight: "100%",
+                      letterSpacing: "0%",
+                      textAlign: "center",
+                      color: "#1A1A1A",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      maxWidth: "160px"
+                    }}
+                  >
+                    {icon.type}
+                  </span>
                 </div>
-                <span 
-                  style={{
-                    fontSize: "14px",
-                    textAlign: "center",
-                    color: "#374151",
-                    fontWeight: "500"
-                  }}
-                >
-                  {icon.type}
-                </span>
               </Link>
             ))}
           </div>
@@ -423,110 +459,276 @@ export default function HomePage() {
         <div 
           style={{
             padding: "48px 20px",
-            flex: "1"
+            flex: "1",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
           }}
         >
+          {/* 背景 */}
           <div 
             style={{
-              backgroundColor: "white",
-              padding: "24px",
-              borderRadius: "8px",
-              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-              maxWidth: "800px",
-              margin: "0 auto"
+              width: "1180px",
+              height: "55px",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              opacity: 1,
+              borderRadius: "4px",
+              padding: "8px 12px",
+              background: "#CCCCCC"
             }}
           >
+            {/* 左側の検索フィールド群 */}
             <div 
               style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(4, 1fr)",
-                gap: "16px",
-                marginBottom: "16px"
+                display: "flex",
+                gap: "8px",
+                alignItems: "center"
               }}
             >
-              <select
+              {/* 車両検索（ボディタイプ） */}
+              <div 
                 style={{
-                  width: "100%",
-                  border: "1px solid #d1d5db",
-                  borderRadius: "8px",
-                  padding: "8px 12px",
-                  fontSize: "14px"
+                  width: "202px",
+                  height: "32px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "4px",
+                  borderRadius: "4px",
+                  padding: "4px 8px",
+                  background: "#FFFFFF",
+                  position: "relative"
                 }}
-                value={selectedType}
-                onChange={(e) => setSelectedType(e.target.value)}
               >
-                <option value="">ボディタイプ：すべて</option>
-                {vehicleTypeIcons.map((icon) => (
-                  <option key={icon.id} value={icon.type}>{icon.type}</option>
-                ))}
-              </select>
-              <select
+                                  <select
+                    style={{
+                      width: "100%",
+                      border: "none",
+                      background: "transparent",
+                      fontSize: "16px",
+                      fontFamily: "Noto Sans JP",
+                      fontWeight: "400",
+                      color: "#1A1A1A",
+                      outline: "none",
+                      cursor: "pointer",
+                      appearance: "none",
+                      WebkitAppearance: "none",
+                      MozAppearance: "none"
+                    }}
+                    value={selectedType}
+                    onChange={(e) => setSelectedType(e.target.value)}
+                  >
+                    <option value="">ボディタイプ：すべて</option>
+                    {vehicleTypeIcons.map((icon) => (
+                      <option key={icon.id} value={icon.type}>{icon.type}</option>
+                    ))}
+                  </select>
+                  <ChevronDown 
+                    size={24} 
+                    style={{ 
+                      color: "#1A1A1A",
+                      position: "absolute",
+                      right: "8px",
+                      pointerEvents: "none"
+                    }} 
+                  />
+              </div>
+
+              {/* 車両検索（メーカー） */}
+              <div 
                 style={{
-                  width: "100%",
-                  border: "1px solid #d1d5db",
-                  borderRadius: "8px",
-                  padding: "8px 12px",
-                  fontSize: "14px"
+                  width: "172px",
+                  height: "33px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "4px",
+                  borderRadius: "4px",
+                  padding: "4px 8px",
+                  background: "#FFFFFF",
+                  position: "relative"
                 }}
-                value={selectedType}
-                onChange={(e) => setSelectedType(e.target.value)}
               >
-                <option value="">メーカー：すべて</option>
-                {makers.map((maker) => (
-                  <option key={maker} value={maker}>{maker}</option>
-                ))}
-              </select>
-              <select
+                                  <select
+                    style={{
+                      width: "100%",
+                      border: "none",
+                      background: "transparent",
+                      fontSize: "16px",
+                      fontFamily: "Noto Sans JP",
+                      fontWeight: "400",
+                      color: "#1A1A1A",
+                      outline: "none",
+                      cursor: "pointer",
+                      appearance: "none",
+                      WebkitAppearance: "none",
+                      MozAppearance: "none"
+                    }}
+                    value={selectedType}
+                    onChange={(e) => setSelectedType(e.target.value)}
+                  >
+                    <option value="">メーカー：すべて</option>
+                    {makers.map((maker) => (
+                      <option key={maker} value={maker}>{maker}</option>
+                    ))}
+                  </select>
+                  <ChevronDown 
+                    size={25} 
+                    style={{ 
+                      color: "#1A1A1A",
+                      position: "absolute",
+                      right: "8px",
+                      pointerEvents: "none"
+                    }} 
+                  />
+              </div>
+
+              {/* 車両検索（大きさ） */}
+              <div 
                 style={{
-                  width: "100%",
-                  border: "1px solid #d1d5db",
-                  borderRadius: "8px",
-                  padding: "8px 12px",
-                  fontSize: "14px"
+                  width: "155px",
+                  height: "32px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "4px",
+                  borderRadius: "4px",
+                  padding: "4px 8px",
+                  background: "#FFFFFF",
+                  position: "relative"
                 }}
-                value={selectedType}
-                onChange={(e) => setSelectedType(e.target.value)}
               >
-                <option value="">大きさ：すべて</option>
-                {sizes.map((size) => (
-                  <option key={size} value={size}>{size}</option>
-                ))}
-              </select>
-              <input
-                type="text"
-                placeholder="問合せ番号、車台番号など"
-                style={{
-                  width: "100%",
-                  border: "1px solid #d1d5db",
-                  borderRadius: "8px",
-                  padding: "8px 12px",
-                  fontSize: "14px"
-                }}
-              />
+                                  <select
+                    style={{
+                      width: "100%",
+                      border: "none",
+                      background: "transparent",
+                      fontSize: "16px",
+                      fontFamily: "Noto Sans JP",
+                      fontWeight: "400",
+                      color: "#1A1A1A",
+                      outline: "none",
+                      cursor: "pointer",
+                      appearance: "none",
+                      WebkitAppearance: "none",
+                      MozAppearance: "none"
+                    }}
+                    value={selectedType}
+                    onChange={(e) => setSelectedType(e.target.value)}
+                  >
+                    <option value="">大きさ：すべて</option>
+                    {sizes.map((size) => (
+                      <option key={size} value={size}>{size}</option>
+                    ))}
+                  </select>
+                  <ChevronDown 
+                    size={24} 
+                    style={{ 
+                      color: "#1A1A1A",
+                      position: "absolute",
+                      right: "8px",
+                      pointerEvents: "none"
+                    }} 
+                  />
+              </div>
             </div>
-            <button 
-              onClick={handleSearch}
+
+            {/* 右側のフリーワードと検索ボタン */}
+            <div 
               style={{
-                width: "100%",
-                backgroundColor: "#111827",
-                color: "white",
-                borderRadius: "8px",
-                padding: "8px 16px",
-                fontSize: "14px",
-                fontWeight: "500",
-                cursor: "pointer",
-                transition: "background-color 0.3s ease",
-                border: "none"
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#1f2937";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "#111827";
+                display: "flex",
+                gap: "12px",
+                alignItems: "center"
               }}
             >
-              検索する
-            </button>
+              {/* 車両検索（フリーワード） */}
+              <div 
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px"
+                }}
+              >
+                <span 
+                  style={{
+                    fontFamily: "Noto Sans JP",
+                    fontWeight: "400",
+                    fontSize: "16px",
+                    lineHeight: "100%",
+                    letterSpacing: "0%",
+                    color: "#1A1A1A",
+                    whiteSpace: "nowrap"
+                  }}
+                >
+                  フリーワード
+                </span>
+                <div 
+                  style={{
+                    width: "300px",
+                    height: "32px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    borderRadius: "4px",
+                    padding: "4px 8px",
+                    background: "#FFFFFF"
+                  }}
+                >
+                  <input
+                    type="text"
+                    placeholder="問い合わせ番号、車体番号など"
+                    style={{
+                      width: "100%",
+                      border: "none",
+                      background: "transparent",
+                      fontSize: "16px",
+                      fontFamily: "Noto Sans JP",
+                      fontWeight: "400",
+                      color: "#1A1A1A",
+                      outline: "none"
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* 検索するボタン */}
+              <button 
+                onClick={handleSearch}
+                style={{
+                  width: "120px",
+                  height: "39px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "10px",
+                  borderRadius: "4px",
+                  padding: "8px",
+                  background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
+                  border: "none",
+                  cursor: "pointer",
+                  transition: "opacity 0.3s ease"
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.opacity = "0.8";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.opacity = "1";
+                }}
+              >
+                <span 
+                  style={{
+                    fontFamily: "Noto Sans JP",
+                    fontWeight: "700",
+                    fontSize: "16px",
+                    lineHeight: "100%",
+                    letterSpacing: "0%",
+                    textAlign: "center",
+                    color: "#FFFFFF"
+                  }}
+                >
+                  検索する
+                </span>
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -557,8 +759,47 @@ export default function HomePage() {
           }}
         >
           <div style={{ textAlign: "center", marginBottom: "48px" }}>
-            <h2 style={{ fontSize: "30px", fontWeight: "bold", marginBottom: "16px" }}>NEW TRUCK</h2>
-            <p style={{ fontSize: "20px", color: "#6b7280", marginBottom: "8px" }}>新着車輌</p>
+            <div 
+              style={{
+                width: "80px",
+                height: "17px",
+                margin: "0 auto 16px auto",
+                fontFamily: "Noto Sans JP",
+                fontWeight: "400",
+                fontStyle: "Regular",
+                fontSize: "14px",
+                lineHeight: "100%",
+                letterSpacing: "0%",
+                textAlign: "center",
+                color: "#2B5EC5",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: "2px"
+              }}
+            >
+              NEW TRUCK
+            </div>
+            <div 
+              style={{
+                width: "160px",
+                height: "58px",
+                margin: "0 auto 8px auto",
+                fontFamily: "Noto Sans JP",
+                fontWeight: "700",
+                fontStyle: "Bold",
+                fontSize: "40px",
+                lineHeight: "100%",
+                letterSpacing: "0%",
+                textAlign: "center",
+                color: "#1A1A1A",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+              新着車輌
+            </div>
             <p style={{ fontSize: "18px", color: "#374151" }}>
               現在、<span style={{ fontSize: "24px", fontWeight: "bold", color: "#2563eb" }}>000</span>台の在庫が閲覧可能です
             </p>
@@ -621,15 +862,81 @@ export default function HomePage() {
           }}
         >
           <div style={{ textAlign: "center", marginBottom: "48px" }}>
-            <h2 style={{ fontSize: "30px", fontWeight: "bold", marginBottom: "16px" }}>FEATURE</h2>
-            <p style={{ fontSize: "20px", color: "#6b7280", marginBottom: "32px" }}>当社の特徴</p>
-            <div style={{ maxWidth: "800px", margin: "0 auto", marginBottom: "48px" }}>
-              <p style={{ color: "#374151", lineHeight: "1.8", fontSize: "16px" }}>
-                中古トラックを、価格とスペックだけで選んでいませんか？ 事実、市場に流通する車両は玉石混交。
+            <div 
+              style={{
+                width: "80px",
+                height: "17px",
+                margin: "0 auto 16px auto",
+                fontFamily: "Noto Sans JP",
+                fontWeight: "400",
+                fontStyle: "Regular",
+                fontSize: "14px",
+                lineHeight: "100%",
+                letterSpacing: "0%",
+                textAlign: "center",
+                color: "#2B5EC5",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+              FEATURE
+            </div>
+            <div 
+              style={{
+                width: "100%",
+                minWidth: "320px",
+                height: "58px",
+                margin: "0 auto 32px auto",
+                fontFamily: "Noto Sans JP",
+                fontWeight: "700",
+                fontStyle: "Bold",
+                fontSize: "40px",
+                lineHeight: "100%",
+                letterSpacing: "0%",
+                textAlign: "center",
+                color: "#1A1A1A",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                whiteSpace: "nowrap"
+              }}
+            >
+              当社の特徴
+            </div>
+            <div 
+              style={{
+                width: "1100px",
+                height: "224px",
+                margin: "0 auto",
+                marginBottom: "48px",
+                opacity: 1
+              }}
+            >
+              <p 
+                style={{
+                  fontFamily: "Noto Sans JP",
+                  fontWeight: "700",
+                  fontStyle: "Bold",
+                  fontSize: "16px",
+                  lineHeight: "32px",
+                  letterSpacing: "0%",
+                  textAlign: "center",
+                  color: "#1A1A1A"
+                }}
+              >
+                中古トラックを、価格とスペックだけで選んでいませんか？ 
+                <br></br>
+                事実、市場に流通する車両は玉石混交。
+                <br></br>
                 修復歴や車両の状態、載せ替えされたボディや上物など、
+                <br></br>
                 販売サイトに掲載されている情報だけではわからない事実によって、そのトラックの本当の価値は決まります。
+                <br></br>
                 グルーウェーブの自慢は、中古トラックをどこよりも安く仕入れる買い付け力と、
+                <br></br>
                 一見しただけでは分からない車輌の状態を徹底的に明らかにする入庫検査の技術。
+                <br></br>
                 透明な評価基準に基づいた、理由のある安さで、あなたが本当に納得できるトラック選びをお手伝いしています。
               </p>
             </div>
@@ -758,12 +1065,52 @@ export default function HomePage() {
             padding: "0 20px"
           }}
         >
+          {/* FLOWセクション */}
           <div style={{ textAlign: "center", marginBottom: "48px" }}>
-            <h2 style={{ fontSize: "30px", fontWeight: "bold", marginBottom: "16px" }}>FLOW</h2>
-            <p style={{ fontSize: "20px", color: "#6b7280", marginBottom: "16px" }}>ご利用の流れ</p>
+            <div 
+              style={{
+                width: "80px",
+                height: "17px",
+                margin: "0 auto 16px auto",
+                fontFamily: "Noto Sans JP",
+                fontWeight: "400",
+                fontStyle: "Regular",
+                fontSize: "14px",
+                lineHeight: "100%",
+                letterSpacing: "0%",
+                textAlign: "center",
+                color: "#2B5EC5",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+              FLOW
+            </div>
+            <div 
+              style={{
+                width: "100%",
+                minWidth: "320px",
+                height: "58px",
+                margin: "0 auto 16px auto",
+                fontFamily: "Noto Sans JP",
+                fontWeight: "700",
+                fontStyle: "Bold",
+                fontSize: "40px",
+                lineHeight: "100%",
+                letterSpacing: "0%",
+                textAlign: "center",
+                color: "#1A1A1A",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                whiteSpace: "nowrap"
+              }}
+            >
+              ご利用の流れ
+            </div>
             <p style={{ color: "#374151", lineHeight: "1.6" }}>
-              初回お問い合わせからご納車まで、わかりやすくスムーズなお取引を心がけております。
-              <br />
+              初回お問い合わせからご納車まで、わかりやすくスムーズなお取引を心がけております。<br />
               中古トラックの購入がはじめての方も、どうぞお気軽にお問い合わせください。
             </p>
           </div>
@@ -861,9 +1208,50 @@ export default function HomePage() {
             padding: "0 20px"
           }}
         >
+          {/* QUESTIONセクション */}
           <div style={{ textAlign: "center", marginBottom: "48px" }}>
-            <h2 style={{ fontSize: "30px", fontWeight: "bold", marginBottom: "16px" }}>QUESTION</h2>
-            <p style={{ fontSize: "20px", color: "#6b7280" }}>よくあるご質問</p>
+            <div 
+              style={{
+                width: "80px",
+                height: "17px",
+                margin: "0 auto 16px auto",
+                fontFamily: "Noto Sans JP",
+                fontWeight: "400",
+                fontStyle: "Regular",
+                fontSize: "14px",
+                lineHeight: "100%",
+                letterSpacing: "0%",
+                textAlign: "center",
+                color: "#2B5EC5",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+              QUESTION
+            </div>
+            <div 
+              style={{
+                width: "100%",
+                minWidth: "320px",
+                height: "58px",
+                margin: "0 auto 16px auto",
+                fontFamily: "Noto Sans JP",
+                fontWeight: "700",
+                fontStyle: "Bold",
+                fontSize: "40px",
+                lineHeight: "100%",
+                letterSpacing: "0%",
+                textAlign: "center",
+                color: "#1A1A1A",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                whiteSpace: "nowrap"
+              }}
+            >
+              よくあるご質問
+            </div>
           </div>
 
           <div 
@@ -965,9 +1353,50 @@ export default function HomePage() {
             padding: "0 20px"
           }}
         >
+          {/* SHOP INFOセクション */}
           <div style={{ textAlign: "center", marginBottom: "48px" }}>
-            <h2 style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "24px" }}>SHOP INFO</h2>
-            <p style={{ fontSize: "20px", color: "#6b7280", marginBottom: "24px" }}>店舗情報</p>
+            <div 
+              style={{
+                width: "80px",
+                height: "17px",
+                margin: "0 auto 16px auto",
+                fontFamily: "Noto Sans JP",
+                fontWeight: "400",
+                fontStyle: "Regular",
+                fontSize: "14px",
+                lineHeight: "100%",
+                letterSpacing: "0%",
+                textAlign: "center",
+                color: "#2B5EC5",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+              SHOP INFO
+            </div>
+            <div 
+              style={{
+                width: "100%",
+                minWidth: "320px",
+                height: "58px",
+                margin: "0 auto 16px auto",
+                fontFamily: "Noto Sans JP",
+                fontWeight: "700",
+                fontStyle: "Bold",
+                fontSize: "40px",
+                lineHeight: "100%",
+                letterSpacing: "0%",
+                textAlign: "center",
+                color: "#1A1A1A",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                whiteSpace: "nowrap"
+              }}
+            >
+              店舗情報
+            </div>
           </div>
           
           <Card 
@@ -1072,9 +1501,50 @@ export default function HomePage() {
             padding: "0 20px"
           }}
         >
+          {/* NEWSセクション */}
           <div style={{ textAlign: "center", marginBottom: "32px" }}>
-            <h2 style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "24px" }}>NEWS</h2>
-            <p style={{ fontSize: "20px", color: "#6b7280", marginBottom: "24px" }}>お知らせ</p>
+            <div 
+              style={{
+                width: "80px",
+                height: "17px",
+                margin: "0 auto 16px auto",
+                fontFamily: "Noto Sans JP",
+                fontWeight: "400",
+                fontStyle: "Regular",
+                fontSize: "14px",
+                lineHeight: "100%",
+                letterSpacing: "0%",
+                textAlign: "center",
+                color: "#2B5EC5",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+              NEWS
+            </div>
+            <div 
+              style={{
+                width: "100%",
+                minWidth: "320px",
+                height: "58px",
+                margin: "0 auto 16px auto",
+                fontFamily: "Noto Sans JP",
+                fontWeight: "700",
+                fontStyle: "Bold",
+                fontSize: "40px",
+                lineHeight: "100%",
+                letterSpacing: "0%",
+                textAlign: "center",
+                color: "#1A1A1A",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                whiteSpace: "nowrap"
+              }}
+            >
+              お知らせ
+            </div>
           </div>
           
           <div 
@@ -1194,10 +1664,90 @@ export default function HomePage() {
             padding: "0 20px"
           }}
         >
-          <div style={{ textAlign: "center", marginBottom: "48px" }}>
-            <h2 style={{ fontSize: "30px", fontWeight: "bold", marginBottom: "16px" }}>CONTACT</h2>
-            <p style={{ fontSize: "20px", marginBottom: "16px" }}>お問い合わせ</p>
-            <p style={{ marginBottom: "32px" }}>
+          {/* ①と②のコンテナ */}
+          <div 
+            style={{
+              width: "240px",
+              height: "75px",
+              margin: "0 auto 32px auto",
+              opacity: 1,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center"
+            }}
+          >
+            {/* ①CONTACT */}
+            <div 
+              style={{
+                width: "62px",
+                height: "17px",
+                margin: "0 auto 16px auto",
+                fontFamily: "Noto Sans JP",
+                fontWeight: "400",
+                fontStyle: "Regular",
+                fontSize: "14px",
+                lineHeight: "100%",
+                letterSpacing: "0%",
+                textAlign: "center",
+                color: "#FFFFFF",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+              CONTACT
+            </div>
+            {/* ②お問い合わせ */}
+            <div 
+              style={{
+                width: "240px",
+                height: "58px",
+                fontFamily: "Noto Sans JP",
+                fontWeight: "700",
+                fontStyle: "Bold",
+                fontSize: "40px",
+                lineHeight: "100%",
+                letterSpacing: "0%",
+                textAlign: "center",
+                color: "#FFFFFF",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+              お問い合わせ
+            </div>
+          </div>
+
+          {/* ③説明文 */}
+          <div 
+            style={{
+              width: "746px",
+              height: "104px",
+              margin: "0 auto 32px auto",
+              gap: "10px",
+              opacity: 1,
+              padding: "10px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
+            }}
+          >
+            <p 
+              style={{
+                width: "726px",
+                height: "84px",
+                fontFamily: "Noto Sans JP",
+                fontWeight: "700",
+                fontStyle: "Bold",
+                fontSize: "16px",
+                lineHeight: "28px",
+                letterSpacing: "0%",
+                textAlign: "center",
+                color: "#FFFFFF"
+              }}
+            >
               在庫車輛の詳細/その他お問い合わせ/業販価格のご確認など
               <br />
               お電話またはお問い合わせフォームよりお気軽にお問い合わせください。
@@ -1216,110 +1766,278 @@ export default function HomePage() {
               marginBottom: "32px"
             }}
           >
+            {/* ①お電話でのお問い合わせ */}
             <Card 
               style={{
-                backgroundColor: "white",
-                color: "#374151",
+                width: "400px",
+                height: "172px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "8px",
                 borderRadius: "8px",
-                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
+                padding: "32px 40px",
+                border: "1px solid #1A1A1A",
+                background: "#FFFFFF",
+                color: "#1a1a1a",
+                boxShadow: "none"
               }}
             >
-              <CardContent style={{ padding: "32px", textAlign: "center" }}>
-                <Phone style={{ width: "48px", height: "48px", margin: "0 auto 16px auto", color: "#2563eb" }} />
-                <h3 style={{ fontWeight: "bold", fontSize: "20px", marginBottom: "16px" }}>お電話でのお問い合わせ</h3>
-                <p style={{ fontSize: "30px", fontWeight: "bold", marginBottom: "8px" }}>TEL. 000-000-0000</p>
-                <p style={{ fontSize: "14px", color: "#6b7280" }}>受付時間：月〜土 00:00~00:00</p>
+              <CardContent style={{ 
+                padding: 0, 
+                textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100%"
+              }}>
+                {/* ①電話記号＋お電話でのお問い合わせ */}
+                <div 
+                  style={{
+                    width: "204px",
+                    height: "24px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "4px",
+                    opacity: 1,
+                    margin: "0 auto 16px auto"
+                  }}
+                >
+                  <PhoneCall 
+                    style={{ 
+                      width: "18px", 
+                      height: "18px", 
+                      color: "#666666",
+                      marginTop: "2.98px",
+                      marginLeft: "3px"
+                    }} 
+                  />
+                  <h3 style={{ fontWeight: "bold", fontSize: "16px", margin: 0 }}>お電話でのお問い合わせ</h3>
+                </div>
+                {/* ②電話番号＋受付時間 */}
+                <div 
+                  style={{
+                    width: "320px",
+                    height: "69px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "4px",
+                    opacity: 1,
+                    margin: "0 auto"
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
+                    <span 
+                      style={{
+                        width: "43px",
+                        height: "29px",
+                        fontFamily: "Noto Sans JP",
+                        fontWeight: "700",
+                        fontStyle: "Bold",
+                        fontSize: "20px",
+                        lineHeight: "100%",
+                        letterSpacing: "0%",
+                        color: "#2B5EC5",
+                        opacity: 1
+                      }}
+                    >
+                      TEL.
+                    </span>
+                    <span 
+                      style={{
+                        width: "239px",
+                        height: "46px",
+                        fontFamily: "Noto Sans JP",
+                        fontWeight: "700",
+                        fontStyle: "Bold",
+                        fontSize: "36px",
+                        lineHeight: "100%",
+                        letterSpacing: "0%",
+                        color: "#2B5EC5",
+                        opacity: 1,
+                        whiteSpace: "nowrap"
+                      }}
+                    >
+                      028-612-1472
+                    </span>
+                  </div>
+                  <p style={{ fontSize: "14px", color: "#6b7280", margin: 0 }}>受付時間：年中無休 09:00~17:00</p>
+                </div>
               </CardContent>
             </Card>
 
+            {/* ②フォームでのお問い合わせ */}
             <Card 
               style={{
-                backgroundColor: "white",
-                color: "#374151",
+                width: "400px",
+                height: "172px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "24px",
                 borderRadius: "8px",
-                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
+                padding: "32px 40px",
+                border: "1px solid #1A1A1A",
+                background: "#FFFFFF",
+                color: "#374151",
+                boxShadow: "none"
               }}
             >
-              <CardContent style={{ padding: "32px", textAlign: "center" }}>
+              <CardContent style={{ 
+                padding: 0, 
+                textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100%"
+              }}>
+                {/* ③フォームでの問い合わせ */}
                 <div 
                   style={{
-                    width: "48px",
-                    height: "48px",
-                    margin: "0 auto 16px auto",
-                    backgroundColor: "#2563eb",
-                    borderRadius: "8px",
+                    width: "220px",
+                    height: "24px",
                     display: "flex",
                     alignItems: "center",
-                    justifyContent: "center"
+                    gap: "4px",
+                    opacity: 1,
+                    margin: "0 auto 16px auto"
                   }}
                 >
-                  <div 
+                  <img 
+                    src="/forum.png"
+                    alt="フォーラム"
                     style={{
-                      width: "24px",
-                      height: "24px",
-                      backgroundColor: "white",
-                      borderRadius: "4px"
+                      width: "20px",
+                      height: "20px"
                     }}
-                  ></div>
+                  />
+                  <h3 style={{ fontWeight: "bold", fontSize: "16px", margin: 0 }}>フォームでのお問い合わせ</h3>
                 </div>
-                <h3 style={{ fontWeight: "bold", fontSize: "20px", marginBottom: "16px" }}>フォームでのお問い合わせ</h3>
+                {/* ④お問合せフォームへボタン */}
                 <Link href="/contact">
                   <Button 
                     style={{
-                      marginBottom: "16px",
-                      backgroundColor: "#2563eb",
-                      color: "white",
+                      width: "280px",
+                      height: "40px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "16px",
+                      borderRadius: "4px",
+                      padding: "8px 12px",
+                      background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
+                      boxShadow: "2px 2px 2px 0px #00000040",
                       border: "none",
-                      borderRadius: "6px",
-                      padding: "8px 16px",
-                      fontSize: "14px",
-                      fontWeight: "500",
                       cursor: "pointer",
-                      transition: "background-color 0.3s ease"
+                      transition: "opacity 0.3s ease"
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = "#1d4ed8";
+                      e.currentTarget.style.opacity = "0.8";
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = "#2563eb";
+                      e.currentTarget.style.opacity = "1";
                     }}
                   >
                     お問い合わせフォームへ
                   </Button>
                 </Link>
-                <p style={{ fontSize: "14px", color: "#6b7280" }}>24時間受付中</p>
               </CardContent>
             </Card>
           </div>
 
-          <div style={{ textAlign: "center" }}>
-            <Link href="/purchase">
-              <Button 
-                variant="outline" 
-                size="lg" 
-                style={{
-                  backgroundColor: "white",
-                  color: "#2563eb",
-                  border: "2px solid white",
-                  borderRadius: "8px",
-                  padding: "12px 24px",
-                  fontSize: "16px",
-                  fontWeight: "500",
-                  cursor: "pointer",
-                  transition: "all 0.3s ease"
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "#f3f4f6";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "white";
-                }}
-              >
-                トラック買取をご希望の方はこちら
-                <br />
-                <span style={{ fontSize: "14px" }}>無料査定実施中！！</span>
-              </Button>
-            </Link>
+          {/* ③トラック買取の問い合わせ */}
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Card 
+              style={{
+                width: "472px",
+                height: "100px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "4px",
+                borderRadius: "8px",
+                padding: "24px 60px",
+                border: "1px solid #1A1A1A",
+                background: "#FFFFFF",
+                color: "#2563eb",
+                boxShadow: "none"
+              }}
+            >
+              <CardContent style={{ 
+                padding: 0, 
+                textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100%"
+              }}>
+                {/* ⑤トラック買取をご希望の方はこちら */}
+                <Link href="/contact" style={{ textDecoration: "none" }}>
+                  <div 
+                    style={{
+                      width: "360px",
+                      height: "29px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      opacity: 1,
+                      margin: "0 auto 8px auto",
+                      position: "relative",
+                      cursor: "pointer",
+                      transition: "opacity 0.3s ease"
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.opacity = "0.8";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.opacity = "1";
+                    }}
+                  >
+                    <div 
+                      style={{
+                        fontFamily: "Noto Sans JP",
+                        fontWeight: "700",
+                        fontStyle: "Bold",
+                        fontSize: "20px",
+                        lineHeight: "100%",
+                        letterSpacing: "0%",
+                        color: "#2B5EC5"
+                      }}
+                    >
+                      トラック買取をご希望の方はこちら
+                    </div>
+                    <ChevronRight 
+                      style={{
+                        width: "24px",
+                        height: "24px",
+                        color: "#2B5EC5",
+                        position: "absolute",
+                        top: "2.5px",
+                        right: "0px"
+                      }}
+                    />
+                  </div>
+                </Link>
+                {/* ⑥無料査定実施中 */}
+                <div 
+                  style={{
+                    width: "320px",
+                    height: "19px",
+                    fontFamily: "Noto Sans JP",
+                    fontWeight: "400",
+                    fontStyle: "Regular",
+                    fontSize: "16px",
+                    lineHeight: "100%",
+                    letterSpacing: "0%",
+                    color: "#1A1A1A",
+                    opacity: 1,
+                    textAlign: "center"
+                  }}
+                >
+                  無料査定実施中！！
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
