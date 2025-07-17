@@ -1,12 +1,14 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { addVehicle } from "@/lib/firebase-utils"
 import ImageUploader from "@/components/ImageUploader"
 import { formatNumberWithCommas, formatInputWithCommas } from "@/lib/utils"
 import type { Vehicle } from "@/types"
+import { storage } from "@/lib/firebase"
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
 
 // プルダウンの選択肢
 const bodyTypes = [
@@ -132,6 +134,12 @@ export default function VehicleNewPage() {
     imageUrls: [],
     equipment: [],
   })
+  
+  // ファイルアップロード用のref
+  const inspectionFileRef = useRef<HTMLInputElement>(null)
+  const conditionFileRef = useRef<HTMLInputElement>(null)
+  const [uploadingInspection, setUploadingInspection] = useState(false)
+  const [uploadingCondition, setUploadingCondition] = useState(false)
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -139,7 +147,7 @@ export default function VehicleNewPage() {
     const { name, value } = e.target
     
     // カンマ区切りが必要な項目
-    const commaFields = ['price', 'totalPayment', 'mileage', 'loadingCapacity', 'outerLength', 'outerWidth', 'outerHeight', 'totalWeight', 'horsepower', 'displacement'];
+    const commaFields = ['price', 'wholesalePrice', 'totalPayment', 'mileage', 'loadingCapacity', 'outerLength', 'outerWidth', 'outerHeight', 'totalWeight', 'horsepower', 'displacement'];
     
     if (commaFields.includes(name)) {
       const formattedValue = formatInputWithCommas(value);
@@ -173,6 +181,56 @@ export default function VehicleNewPage() {
     // シミュレーションデータを管理する必要がある場合は、stateを追加
   };
 
+  // 車検証画像アップロード
+  const handleInspectionImageUpload = async (file: File) => {
+    try {
+      setUploadingInspection(true)
+      const vehicleId = `temp_${Date.now()}` // 一時的なID
+      const storageRef = ref(storage, `vehicles/${vehicleId}/inspection/${file.name}`)
+      const snapshot = await uploadBytes(storageRef, file)
+      const downloadURL = await getDownloadURL(snapshot.ref)
+      
+      setFormData(prev => ({
+        ...prev,
+        inspectionImageUrl: downloadURL
+      }))
+    } catch (err) {
+      console.error('車検証画像のアップロードに失敗しました:', err)
+    } finally {
+      setUploadingInspection(false)
+    }
+  }
+
+  // 状態表画像アップロード
+  const handleConditionImageUpload = async (file: File) => {
+    try {
+      setUploadingCondition(true)
+      const vehicleId = `temp_${Date.now()}` // 一時的なID
+      const storageRef = ref(storage, `vehicles/${vehicleId}/condition/${file.name}`)
+      const snapshot = await uploadBytes(storageRef, file)
+      const downloadURL = await getDownloadURL(snapshot.ref)
+      
+      setFormData(prev => ({
+        ...prev,
+        conditionImageUrl: downloadURL
+      }))
+    } catch (err) {
+      console.error('状態表画像のアップロードに失敗しました:', err)
+    } finally {
+      setUploadingCondition(false)
+    }
+  }
+
+  // ファイル選択ハンドラー
+  const handleFileSelect = (fileRef: React.RefObject<HTMLInputElement>, uploadHandler: (file: File) => Promise<void>) => {
+    return (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0]
+      if (file) {
+        uploadHandler(file)
+      }
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     // 必須項目チェック
@@ -190,7 +248,7 @@ export default function VehicleNewPage() {
         price: Number(formData.price?.toString().replace(/,/g, '')) || 0,
         description: formData.description || "",
         imageUrls: formData.imageUrls || [],
-        wholesalePrice: Number(formData.wholesalePrice) || 0,
+        wholesalePrice: Number(formData.wholesalePrice?.toString().replace(/,/g, '')) || 0,
         totalPayment: Number(formData.totalPayment?.toString().replace(/,/g, '')) || 0,
         expiryDate: "", // Add a proper expiryDate field if needed
         equipment: formData.equipment || [],
@@ -226,7 +284,7 @@ export default function VehicleNewPage() {
       <div className="bg-white p-6 rounded-lg shadow-sm">
         <form className="space-y-8" onSubmit={handleSubmit}>
           {/* 基本情報 */}
-          <div className="grid grid-cols-3 gap-6">
+          <div className="grid grid-cols-4 gap-6">
             <div className="space-y-2">
               <label className="block text-sm font-medium">トラック名</label>
               <input
@@ -247,6 +305,17 @@ export default function VehicleNewPage() {
                 onChange={handleChange}
                 className="w-full border rounded px-2 py-1"
                 placeholder="5,000,000"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium">業販金額</label>
+              <input
+                type="text"
+                name="wholesalePrice"
+                value={formData.wholesalePrice}
+                onChange={handleChange}
+                className="w-full border rounded px-2 py-1"
+                placeholder="4,500,000"
               />
             </div>
             <div className="space-y-2">
@@ -540,21 +609,130 @@ export default function VehicleNewPage() {
           {/* 車検証画像 */}
           <div>
             <h3 className="text-lg font-medium mb-4">車検証画像</h3>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="aspect-[1.4/1] border-2 border-dashed rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-50">
-                <span className="text-gray-400">＋</span>
-              </div>
-              <div className="aspect-[1.4/1] border-2 border-dashed rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-50">
-                <span className="text-gray-400">＋</span>
-              </div>
+            <div className="space-y-4">
+              <input
+                type="file"
+                ref={inspectionFileRef}
+                onChange={handleFileSelect(inspectionFileRef, handleInspectionImageUpload)}
+                accept="image/*,.pdf"
+                className="hidden"
+              />
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => inspectionFileRef.current?.click()}
+                disabled={uploadingInspection}
+                className="w-full"
+              >
+                {uploadingInspection ? "アップロード中..." : "車検証を選択"}
+              </Button>
+              {formData.inspectionImageUrl && (
+                <div className="mt-4">
+                  <p className="text-sm text-gray-600 mb-2">アップロード済み:</p>
+                  <div className="border rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-red-500">📄</span>
+                      <a 
+                        href={formData.inspectionImageUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:underline"
+                      >
+                        車検証を表示
+                      </a>
+                    </div>
+                    <div className="mt-2">
+                      <img 
+                        src={formData.inspectionImageUrl} 
+                        alt="車検証" 
+                        className="max-w-full h-auto max-h-64 rounded"
+                        onError={(e) => {
+                          // 画像読み込みエラー時はPDFとして扱う
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                          const parent = target.parentElement;
+                          if (parent) {
+                            parent.innerHTML = `
+                              <div class="flex items-center gap-2 p-4 bg-gray-50 rounded">
+                                <span class="text-red-500 text-2xl">📄</span>
+                                <span class="text-gray-700">PDFファイル</span>
+                                <a href="${formData.inspectionImageUrl}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline ml-2">
+                                  開く
+                                </a>
+                              </div>
+                            `;
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
           {/* 状態写真画像 */}
           <div>
             <h3 className="text-lg font-medium mb-4">状態写真画像</h3>
-            <div className="border-2 border-dashed rounded-lg p-8 text-center cursor-pointer hover:bg-gray-50">
-              <span className="text-gray-400">＋</span>
+            <div className="space-y-4">
+              <input
+                type="file"
+                ref={conditionFileRef}
+                onChange={handleFileSelect(conditionFileRef, handleConditionImageUpload)}
+                accept="image/*,.pdf"
+                className="hidden"
+              />
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => conditionFileRef.current?.click()}
+                disabled={uploadingCondition}
+                className="w-full"
+              >
+                {uploadingCondition ? "アップロード中..." : "状態表を選択"}
+              </Button>
+              {formData.conditionImageUrl && (
+                <div className="mt-4">
+                  <p className="text-sm text-gray-600 mb-2">アップロード済み:</p>
+                  <div className="border rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-red-500">📄</span>
+                      <a 
+                        href={formData.conditionImageUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:underline"
+                      >
+                        状態表を表示
+                      </a>
+                    </div>
+                    <div className="mt-2">
+                      <img 
+                        src={formData.conditionImageUrl} 
+                        alt="状態表" 
+                        className="max-w-full h-auto max-h-64 rounded"
+                        onError={(e) => {
+                          // 画像読み込みエラー時はPDFとして扱う
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                          const parent = target.parentElement;
+                          if (parent) {
+                            parent.innerHTML = `
+                              <div class="flex items-center gap-2 p-4 bg-gray-50 rounded">
+                                <span class="text-red-500 text-2xl">📄</span>
+                                <span class="text-gray-700">PDFファイル</span>
+                                <a href="${formData.conditionImageUrl}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline ml-2">
+                                  開く
+                                </a>
+                              </div>
+                            `;
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 

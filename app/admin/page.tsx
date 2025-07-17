@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { getVehicles, deleteVehicle } from "@/lib/firebase-utils"
+import { getVehicles, deleteVehicle, updateVehicle } from "@/lib/firebase-utils"
 import type { Vehicle } from "@/types"
 import { Button } from "@/components/ui/button"
 import {
@@ -24,6 +24,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import Image from "next/image"
+import { formatNumberWithCommas, formatInputWithCommas } from "@/lib/utils"
 
 export default function AdminVehiclesPage() {
   const router = useRouter()
@@ -31,6 +32,14 @@ export default function AdminVehiclesPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null)
+  
+  // インライン編集用の状態
+  const [editingField, setEditingField] = useState<{
+    vehicleId: string;
+    field: 'price' | 'totalPayment' | 'wholesalePrice';
+  } | null>(null)
+  const [editValue, setEditValue] = useState("")
+  const [saving, setSaving] = useState(false)
 
   useEffect(() => {
     const fetchVehicles = async () => {
@@ -69,6 +78,56 @@ export default function AdminVehiclesPage() {
 
   const handleEdit = (id: string) => {
     router.push(`/admin/vehicles/${id}/edit`)
+  }
+
+  // インライン編集開始
+  const startEditing = (vehicleId: string, field: 'price' | 'totalPayment' | 'wholesalePrice', currentValue: number) => {
+    setEditingField({ vehicleId, field })
+    setEditValue(formatNumberWithCommas(currentValue))
+  }
+
+  // インライン編集キャンセル
+  const cancelEditing = () => {
+    setEditingField(null)
+    setEditValue("")
+  }
+
+  // インライン編集保存
+  const saveEditing = async () => {
+    if (!editingField) return
+
+    try {
+      setSaving(true)
+      const numericValue = Number(editValue.replace(/,/g, ''))
+      
+      const updatedVehicle = {
+        [editingField.field]: numericValue,
+        updatedAt: new Date(),
+      }
+
+      await updateVehicle(editingField.vehicleId, updatedVehicle)
+      
+      // ローカル状態を更新
+      setVehicles(prev => prev.map(vehicle => 
+        vehicle.id === editingField.vehicleId 
+          ? { ...vehicle, [editingField.field]: numericValue }
+          : vehicle
+      ))
+
+      setEditingField(null)
+      setEditValue("")
+    } catch (err) {
+      setError("価格の更新に失敗しました。")
+      console.error(err)
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  // 入力値のフォーマット処理
+  const handleEditValueChange = (value: string) => {
+    const formattedValue = formatInputWithCommas(value)
+    setEditValue(formattedValue)
   }
 
   if (loading) {
@@ -112,6 +171,7 @@ export default function AdminVehiclesPage() {
               <TableHead>車検有効期限</TableHead>
               <TableHead>車両価格</TableHead>
               <TableHead>支払総額</TableHead>
+              <TableHead>業販金額</TableHead>
               <TableHead className="text-right">操作</TableHead>
             </TableRow>
           </TableHeader>
@@ -141,12 +201,94 @@ export default function AdminVehiclesPage() {
                 <TableCell>{vehicle.loadingCapacity ? `${vehicle.loadingCapacity}kg` : "---"}</TableCell>
                 <TableCell>{vehicle.inspectionDate || "---"}</TableCell>
                 <TableCell>
-                  {vehicle.price ? `${vehicle.price.toLocaleString()}円` : "---"}
+                  {editingField?.vehicleId === vehicle.id && editingField?.field === 'price' ? (
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        value={editValue}
+                        onChange={(e) => handleEditValueChange(e.target.value)}
+                        className="w-24 border rounded px-2 py-1 text-sm"
+                        placeholder="価格"
+                      />
+                      <Button size="sm" onClick={saveEditing} disabled={saving}>
+                        {saving ? "保存中..." : "保存"}
+                      </Button>
+                      <Button size="sm" variant="outline" onClick={cancelEditing} disabled={saving}>
+                        キャンセル
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <span>{vehicle.price ? `${vehicle.price.toLocaleString()}円` : "---"}</span>
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        onClick={() => startEditing(vehicle.id!, 'price', vehicle.price || 0)}
+                      >
+                        編集
+                      </Button>
+                    </div>
+                  )}
                 </TableCell>
                 <TableCell>
-                  {vehicle.totalPayment
-                    ? `${vehicle.totalPayment.toLocaleString()}円`
-                    : "---"}
+                  {editingField?.vehicleId === vehicle.id && editingField?.field === 'totalPayment' ? (
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        value={editValue}
+                        onChange={(e) => handleEditValueChange(e.target.value)}
+                        className="w-24 border rounded px-2 py-1 text-sm"
+                        placeholder="支払総額"
+                      />
+                      <Button size="sm" onClick={saveEditing} disabled={saving}>
+                        {saving ? "保存中..." : "保存"}
+                      </Button>
+                      <Button size="sm" variant="outline" onClick={cancelEditing} disabled={saving}>
+                        キャンセル
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <span>{vehicle.totalPayment ? `${vehicle.totalPayment.toLocaleString()}円` : "---"}</span>
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        onClick={() => startEditing(vehicle.id!, 'totalPayment', vehicle.totalPayment || 0)}
+                      >
+                        編集
+                      </Button>
+                    </div>
+                  )}
+                </TableCell>
+                <TableCell>
+                  {editingField?.vehicleId === vehicle.id && editingField?.field === 'wholesalePrice' ? (
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        value={editValue}
+                        onChange={(e) => handleEditValueChange(e.target.value)}
+                        className="w-24 border rounded px-2 py-1 text-sm"
+                        placeholder="業販金額"
+                      />
+                      <Button size="sm" onClick={saveEditing} disabled={saving}>
+                        {saving ? "保存中..." : "保存"}
+                      </Button>
+                      <Button size="sm" variant="outline" onClick={cancelEditing} disabled={saving}>
+                        キャンセル
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <span>{vehicle.wholesalePrice ? `${vehicle.wholesalePrice.toLocaleString()}円` : "---"}</span>
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        onClick={() => startEditing(vehicle.id!, 'wholesalePrice', vehicle.wholesalePrice || 0)}
+                      >
+                        編集
+                      </Button>
+                    </div>
+                  )}
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex gap-2 justify-end">

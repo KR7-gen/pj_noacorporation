@@ -324,6 +324,17 @@ export default function InventoryPage() {
                         {vehicle.bodyType}
                       </div>
                     )}
+                    {/* 商談中・SOLD OUT表示 */}
+                    {vehicle.isSoldOut && (
+                      <div className="absolute top-0 left-0 right-0 bg-red-600 text-white text-center py-2 font-bold">
+                        SOLD OUT
+                      </div>
+                    )}
+                    {vehicle.isNegotiating && !vehicle.isSoldOut && (
+                      <div className="absolute top-0 left-0 right-0 bg-orange-500 text-white text-center py-2 font-bold">
+                        商談中
+                      </div>
+                    )}
                   </div>
                   <div className="p-4">
                     <h3 className="font-semibold text-lg mb-2">{vehicle.name}</h3>

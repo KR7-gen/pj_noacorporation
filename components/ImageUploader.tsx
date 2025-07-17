@@ -7,6 +7,7 @@ import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import { uploadImage, deleteImage } from "@/lib/firebase-utils"
 import { X, GripVertical } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 interface ImageUploaderProps {
   images: string[]
@@ -18,9 +19,12 @@ interface SortableImageProps {
   id: string
   imageUrl: string
   onDelete: (imageUrl: string) => void
+  isSelectionMode: boolean
+  isSelected: boolean
+  onToggleSelection: (imageUrl: string) => void
 }
 
-const SortableImage = ({ id, imageUrl, onDelete }: SortableImageProps) => {
+const SortableImage = ({ id, imageUrl, onDelete, isSelectionMode, isSelected, onToggleSelection }: SortableImageProps) => {
   const {
     attributes,
     listeners,
@@ -36,11 +40,20 @@ const SortableImage = ({ id, imageUrl, onDelete }: SortableImageProps) => {
     opacity: isDragging ? 0.5 : 1,
   }
 
+  const handleClick = () => {
+    if (isSelectionMode) {
+      onToggleSelection(imageUrl)
+    }
+  }
+
   return (
     <div
       ref={setNodeRef}
       style={style}
-      className="relative group bg-gray-100 rounded-lg overflow-hidden"
+      className={`relative group bg-gray-100 rounded-lg overflow-hidden cursor-pointer ${
+        isSelectionMode && isSelected ? 'ring-2 ring-blue-500' : ''
+      }`}
+      onClick={handleClick}
     >
       <img
         src={imageUrl}
@@ -48,22 +61,42 @@ const SortableImage = ({ id, imageUrl, onDelete }: SortableImageProps) => {
         className="w-full h-32 object-cover"
       />
       <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-200">
-        <div className="absolute top-2 right-2">
-          <button
-            type="button"
-            onClick={() => onDelete(imageUrl)}
-            className="h-6 w-6 p-0 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
-          >
-            <X className="h-3 w-3" />
-          </button>
-        </div>
-        <div
-          {...attributes}
-          {...listeners}
-          className="absolute top-2 left-2 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity"
-        >
-          <GripVertical className="h-4 w-4 text-white" />
-        </div>
+        {!isSelectionMode && (
+          <>
+            <div className="absolute top-2 right-2">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onDelete(imageUrl)
+                }}
+                className="h-6 w-6 p-0 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            </div>
+            <div
+              {...attributes}
+              {...listeners}
+              className="absolute top-2 left-2 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              <GripVertical className="h-4 w-4 text-white" />
+            </div>
+          </>
+        )}
+        {isSelectionMode && (
+          <div className="absolute top-2 left-2">
+            <input
+              type="checkbox"
+              checked={isSelected}
+              onChange={(e) => {
+                e.stopPropagation()
+                onToggleSelection(imageUrl)
+              }}
+              className="h-4 w-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+            />
+          </div>
+        )}
       </div>
     </div>
   )
@@ -71,6 +104,8 @@ const SortableImage = ({ id, imageUrl, onDelete }: SortableImageProps) => {
 
 export default function ImageUploader({ images, onImagesChange, vehicleId }: ImageUploaderProps) {
   const [uploading, setUploading] = useState(false)
+  const [isSelectionMode, setIsSelectionMode] = useState(false)
+  const [selectedImages, setSelectedImages] = useState<string[]>([])
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -128,6 +163,45 @@ export default function ImageUploader({ images, onImagesChange, vehicleId }: Ima
     }
   }, [images, onImagesChange])
 
+  const handleToggleSelection = useCallback((imageUrl: string) => {
+    setSelectedImages(prev => 
+      prev.includes(imageUrl) 
+        ? prev.filter(img => img !== imageUrl)
+        : [...prev, imageUrl]
+    )
+  }, [])
+
+  const handleBulkDelete = useCallback(async () => {
+    if (selectedImages.length === 0) return
+
+    try {
+      // Firebase Storageから削除
+      const deletePromises = selectedImages.map(async (imageUrl) => {
+        const path = imageUrl.split('/o/')[1]?.split('?')[0]
+        if (path) {
+          const decodedPath = decodeURIComponent(path)
+          await deleteImage(decodedPath)
+        }
+      })
+      await Promise.all(deletePromises)
+      
+      // 配列から削除
+      onImagesChange(images.filter(img => !selectedImages.includes(img)))
+      
+      // 選択モードをリセット
+      setIsSelectionMode(false)
+      setSelectedImages([])
+    } catch (error) {
+      console.error("一括削除エラー:", error)
+      alert("画像の一括削除に失敗しました")
+    }
+  }, [selectedImages, images, onImagesChange])
+
+  const handleCancelSelection = useCallback(() => {
+    setIsSelectionMode(false)
+    setSelectedImages([])
+  }, [])
+
   return (
     <div className="space-y-4">
       <div className="flex items-center space-x-4">
@@ -163,7 +237,42 @@ export default function ImageUploader({ images, onImagesChange, vehicleId }: Ima
       </div>
       {images.length > 0 && (
         <div className="space-y-2">
-          <p className="text-sm font-medium">アップロード済み写真 ({images.length}枚)</p>
+          <div className="flex justify-between items-center">
+            <p className="text-sm font-medium">アップロード済み写真 ({images.length}枚)</p>
+            {!isSelectionMode && (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => setIsSelectionMode(true)}
+              >
+                一括削除モード
+              </Button>
+            )}
+          </div>
+          
+          {isSelectionMode && (
+            <div className="flex gap-2 mb-4">
+              <Button
+                type="button"
+                variant="destructive"
+                size="sm"
+                onClick={handleBulkDelete}
+                disabled={selectedImages.length === 0}
+              >
+                一括削除 ({selectedImages.length}枚)
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleCancelSelection}
+              >
+                キャンセル
+              </Button>
+            </div>
+          )}
+          
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
@@ -180,6 +289,9 @@ export default function ImageUploader({ images, onImagesChange, vehicleId }: Ima
                     id={imageUrl}
                     imageUrl={imageUrl}
                     onDelete={handleDeleteImage}
+                    isSelectionMode={isSelectionMode}
+                    isSelected={selectedImages.includes(imageUrl)}
+                    onToggleSelection={handleToggleSelection}
                   />
                 ))}
               </div>

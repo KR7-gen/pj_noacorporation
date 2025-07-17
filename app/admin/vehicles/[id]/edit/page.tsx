@@ -1,12 +1,24 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Switch } from "@/components/ui/switch"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { getVehicle, updateVehicle } from "@/lib/firebase-utils"
 import ImageUploader from "@/components/ImageUploader"
 import { formatNumberWithCommas, formatInputWithCommas } from "@/lib/utils"
 import type { Vehicle } from "@/types"
+import { storage } from "@/lib/firebase"
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
 
 // プルダウンの選択肢
 const bodyTypes = [
@@ -97,6 +109,9 @@ const missions = [
   "AT・SAT"
 ]
 
+// 営業担当の選択肢
+const salesRepresentatives = ["営業A", "営業B", "営業C"]
+
 // 装備品リスト
 const equipmentList = [
   "ETC", "バックカメラ", "記録簿", "パワーウィンドウ", "ドラレコ", "エアコン",
@@ -111,11 +126,18 @@ export default function VehicleEditPage() {
   const [vehicle, setVehicle] = useState<Vehicle | null>(null)
   const [formData, setFormData] = useState<Partial<Vehicle>>({
     price: "",
+    wholesalePrice: "",
     totalPayment: "",
   })
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  
+  // ファイルアップロード用のref
+  const inspectionFileRef = useRef<HTMLInputElement>(null)
+  const conditionFileRef = useRef<HTMLInputElement>(null)
+  const [uploadingInspection, setUploadingInspection] = useState(false)
+  const [uploadingCondition, setUploadingCondition] = useState(false)
 
   useEffect(() => {
     const fetchVehicle = async () => {
@@ -127,6 +149,7 @@ export default function VehicleEditPage() {
           setFormData({
             ...fetchedVehicle,
             price: formatNumberWithCommas(fetchedVehicle.price) || "",
+            wholesalePrice: formatNumberWithCommas(fetchedVehicle.wholesalePrice) || "",
             totalPayment: formatNumberWithCommas(fetchedVehicle.totalPayment) || "",
             mileage: formatNumberWithCommas(fetchedVehicle.mileage) || "",
             loadingCapacity: formatNumberWithCommas(fetchedVehicle.loadingCapacity) || "",
@@ -159,7 +182,7 @@ export default function VehicleEditPage() {
     const { name, value } = e.target
     
     // カンマ区切りが必要な項目
-    const commaFields = ['price', 'totalPayment', 'mileage', 'loadingCapacity', 'outerLength', 'outerWidth', 'outerHeight', 'totalWeight', 'horsepower', 'displacement'];
+    const commaFields = ['price', 'wholesalePrice', 'totalPayment', 'mileage', 'loadingCapacity', 'outerLength', 'outerWidth', 'outerHeight', 'totalWeight', 'horsepower', 'displacement'];
     
     if (commaFields.includes(name)) {
       const formattedValue = formatInputWithCommas(value);
@@ -175,11 +198,63 @@ export default function VehicleEditPage() {
     }
   }
 
-  // 毎月支払額シミュレーション用のハンドラー
-  const handleSimulationChange = (index: number, value: string) => {
-    const formattedValue = formatInputWithCommas(value);
-    // シミュレーションデータを管理する必要がある場合は、stateを追加
-  };
+  // 商談関連のハンドラー
+  const handleNegotiationChange = (field: string, value: any) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  }
+
+  // 車検証画像アップロード
+  const handleInspectionImageUpload = async (file: File) => {
+    try {
+      setUploadingInspection(true)
+      const storageRef = ref(storage, `vehicles/${vehicleId}/inspection/${file.name}`)
+      const snapshot = await uploadBytes(storageRef, file)
+      const downloadURL = await getDownloadURL(snapshot.ref)
+      
+      setFormData(prev => ({
+        ...prev,
+        inspectionImageUrl: downloadURL
+      }))
+    } catch (err) {
+      console.error('車検証画像のアップロードに失敗しました:', err)
+      setError('車検証画像のアップロードに失敗しました')
+    } finally {
+      setUploadingInspection(false)
+    }
+  }
+
+  // 状態表画像アップロード
+  const handleConditionImageUpload = async (file: File) => {
+    try {
+      setUploadingCondition(true)
+      const storageRef = ref(storage, `vehicles/${vehicleId}/condition/${file.name}`)
+      const snapshot = await uploadBytes(storageRef, file)
+      const downloadURL = await getDownloadURL(snapshot.ref)
+      
+      setFormData(prev => ({
+        ...prev,
+        conditionImageUrl: downloadURL
+      }))
+    } catch (err) {
+      console.error('状態表画像のアップロードに失敗しました:', err)
+      setError('状態表画像のアップロードに失敗しました')
+    } finally {
+      setUploadingCondition(false)
+    }
+  }
+
+  // ファイル選択ハンドラー
+  const handleFileSelect = (fileRef: React.RefObject<HTMLInputElement>, uploadHandler: (file: File) => Promise<void>) => {
+    return (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0]
+      if (file) {
+        uploadHandler(file)
+      }
+    }
+  }
 
   // 装備品の選択・解除
   const handleEquipmentToggle = (item: string) => {
@@ -202,6 +277,7 @@ export default function VehicleEditPage() {
       const updatedVehicle: Partial<Vehicle> = {
         ...formData,
         price: Number(formData.price?.toString().replace(/,/g, '')) || 0,
+        wholesalePrice: Number(formData.wholesalePrice?.toString().replace(/,/g, '')) || 0,
         totalPayment: Number(formData.totalPayment?.toString().replace(/,/g, '')) || 0,
         mileage: Number(formData.mileage?.toString().replace(/,/g, '')) || 0,
         loadingCapacity: Number(formData.loadingCapacity?.toString().replace(/,/g, '')) || 0,
@@ -255,6 +331,74 @@ export default function VehicleEditPage() {
 
       <div className="bg-white p-6 rounded-lg shadow-sm">
         <form className="space-y-8" onSubmit={handleSubmit}>
+          {/* 商談管理セクション */}
+          <div className="bg-gray-50 p-6 rounded-lg border">
+            <h3 className="text-lg font-medium mb-4">商談管理</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* 商談中スイッチ */}
+              <div className="flex items-center justify-between">
+                <Label htmlFor="isNegotiating" className="text-base">商談中</Label>
+                <Switch
+                  id="isNegotiating"
+                  checked={formData.isNegotiating || false}
+                  onCheckedChange={(checked) => handleNegotiationChange('isNegotiating', checked)}
+                  className="data-[state=checked]:bg-orange-500"
+                />
+              </div>
+              
+              {/* SOLD OUTスイッチ */}
+              <div className="flex items-center justify-between">
+                <Label htmlFor="isSoldOut" className="text-base">SOLD OUT</Label>
+                <Switch
+                  id="isSoldOut"
+                  checked={formData.isSoldOut || false}
+                  onCheckedChange={(checked) => handleNegotiationChange('isSoldOut', checked)}
+                  className="data-[state=checked]:bg-red-500"
+                />
+              </div>
+              
+              {/* 商談期限 */}
+              <div>
+                <Label htmlFor="negotiationDeadline">商談期限</Label>
+                <Input 
+                  id="negotiationDeadline" 
+                  type="date" 
+                  value={formData.negotiationDeadline || ""}
+                  onChange={(e) => handleNegotiationChange('negotiationDeadline', e.target.value)}
+                />
+              </div>
+              
+              {/* 営業担当 */}
+              <div>
+                <Label htmlFor="salesRepresentative">営業担当</Label>
+                <Select 
+                  value={formData.salesRepresentative || ""} 
+                  onValueChange={(value) => handleNegotiationChange('salesRepresentative', value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="選択" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {salesRepresentatives.map((rep) => (
+                      <SelectItem key={rep} value={rep}>{rep}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              {/* 顧客名 */}
+              <div className="md:col-span-2">
+                <Label htmlFor="customerName">顧客名</Label>
+                <Input 
+                  id="customerName" 
+                  placeholder="テキスト入力" 
+                  value={formData.customerName || ""}
+                  onChange={(e) => handleNegotiationChange('customerName', e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+
           {/* 基本情報 */}
           <div className="grid grid-cols-3 gap-6">
             <div className="space-y-2">
@@ -280,6 +424,17 @@ export default function VehicleEditPage() {
               />
             </div>
             <div className="space-y-2">
+              <label className="block text-sm font-medium">業販金額</label>
+              <input
+                type="text"
+                name="wholesalePrice"
+                value={formData.wholesalePrice || ""}
+                onChange={handleChange}
+                className="w-full border rounded px-2 py-1"
+                placeholder="4,500,000"
+              />
+            </div>
+            <div className="space-y-2">
               <label className="block text-sm font-medium">支払総額</label>
               <input
                 type="text"
@@ -302,24 +457,6 @@ export default function VehicleEditPage() {
               className="w-full border rounded px-2 py-1 h-32"
               placeholder="車両の詳細な説明を入力してください..."
             />
-          </div>
-
-          {/* 毎月支払額シミュレーション */}
-          <div>
-            <h3 className="text-lg font-medium mb-4">毎月支払額シミュレーション</h3>
-            <div className="grid grid-cols-4 gap-6">
-              {[2, 3, 4, 4].map((year, index) => (
-                <div key={index} className="space-y-2">
-                  <label className="block text-sm font-medium">{year}年</label>
-                  <input
-                    type="text"
-                    className="w-full border rounded px-2 py-1"
-                    placeholder="100,000"
-                    onChange={(e) => handleSimulationChange(index, e.target.value)}
-                  />
-                </div>
-              ))}
-            </div>
           </div>
 
           {/* 画像アップロード */}
@@ -574,71 +711,130 @@ export default function VehicleEditPage() {
           {/* 車検証画像 */}
           <div>
             <h3 className="text-lg font-medium mb-4">車検証画像</h3>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="aspect-[1.4/1] border-2 border-dashed rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-50">
-                <span className="text-gray-400">＋</span>
-              </div>
-              <div className="aspect-[1.4/1] border-2 border-dashed rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-50">
-                <span className="text-gray-400">＋</span>
-              </div>
+            <div className="space-y-4">
+              <input
+                type="file"
+                ref={inspectionFileRef}
+                onChange={handleFileSelect(inspectionFileRef, handleInspectionImageUpload)}
+                accept="image/*,.pdf"
+                className="hidden"
+              />
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => inspectionFileRef.current?.click()}
+                disabled={uploadingInspection}
+                className="w-full"
+              >
+                {uploadingInspection ? "アップロード中..." : "車検証を選択"}
+              </Button>
+              {formData.inspectionImageUrl && (
+                <div className="mt-4">
+                  <p className="text-sm text-gray-600 mb-2">アップロード済み:</p>
+                  <div className="border rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-red-500">📄</span>
+                      <a 
+                        href={formData.inspectionImageUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:underline"
+                      >
+                        車検証を表示
+                      </a>
+                    </div>
+                    <div className="mt-2">
+                      <img 
+                        src={formData.inspectionImageUrl} 
+                        alt="車検証" 
+                        className="max-w-full h-auto max-h-64 rounded"
+                        onError={(e) => {
+                          // 画像読み込みエラー時はPDFとして扱う
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                          const parent = target.parentElement;
+                          if (parent) {
+                            parent.innerHTML = `
+                              <div class="flex items-center gap-2 p-4 bg-gray-50 rounded">
+                                <span class="text-red-500 text-2xl">📄</span>
+                                <span class="text-gray-700">PDFファイル</span>
+                                <a href="${formData.inspectionImageUrl}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline ml-2">
+                                  開く
+                                </a>
+                              </div>
+                            `;
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
           {/* 状態写真画像 */}
           <div>
             <h3 className="text-lg font-medium mb-4">状態写真画像</h3>
-            <div className="border-2 border-dashed rounded-lg p-8 text-center cursor-pointer hover:bg-gray-50">
-              <span className="text-gray-400">＋</span>
-            </div>
-          </div>
-
-          {/* 上物情報 */}
-          <div>
-            <h3 className="text-lg font-medium mb-4">上物情報</h3>
-            <div className="grid grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="block text-sm font-medium">内寸</label>
-                <div className="space-y-2">
-                  <input
-                    type="text"
-                    className="w-full border rounded px-2 py-1"
-                    placeholder="L (mm)"
-                    style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
-                  />
-                  <input
-                    type="text"
-                    className="w-full border rounded px-2 py-1"
-                    placeholder="W (mm)"
-                    style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
-                  />
-                  <input
-                    type="text"
-                    className="w-full border rounded px-2 py-1"
-                    placeholder="H (mm)"
-                    style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
-                  />
+            <div className="space-y-4">
+              <input
+                type="file"
+                ref={conditionFileRef}
+                onChange={handleFileSelect(conditionFileRef, handleConditionImageUpload)}
+                accept="image/*,.pdf"
+                className="hidden"
+              />
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => conditionFileRef.current?.click()}
+                disabled={uploadingCondition}
+                className="w-full"
+              >
+                {uploadingCondition ? "アップロード中..." : "状態表を選択"}
+              </Button>
+              {formData.conditionImageUrl && (
+                <div className="mt-4">
+                  <p className="text-sm text-gray-600 mb-2">アップロード済み:</p>
+                  <div className="border rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-red-500">📄</span>
+                      <a 
+                        href={formData.conditionImageUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:underline"
+                      >
+                        状態表を表示
+                      </a>
+                    </div>
+                    <div className="mt-2">
+                      <img 
+                        src={formData.conditionImageUrl} 
+                        alt="状態表" 
+                        className="max-w-full h-auto max-h-64 rounded"
+                        onError={(e) => {
+                          // 画像読み込みエラー時はPDFとして扱う
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                          const parent = target.parentElement;
+                          if (parent) {
+                            parent.innerHTML = `
+                              <div class="flex items-center gap-2 p-4 bg-gray-50 rounded">
+                                <span class="text-red-500 text-2xl">📄</span>
+                                <span class="text-gray-700">PDFファイル</span>
+                                <a href="${formData.conditionImageUrl}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline ml-2">
+                                  開く
+                                </a>
+                              </div>
+                            `;
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className="space-y-2">
-                <label className="block text-sm font-medium">年式</label>
-                <select
-                  className="w-full border rounded px-2 py-1"
-                >
-                  <option value="">選択</option>
-                  {years.map((year) => (
-                    <option key={year} value={year}>{year}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="space-y-2">
-                <label className="block text-sm font-medium">店舗</label>
-                <select
-                  className="w-full border rounded px-2 py-1"
-                >
-                  <option value="">選択</option>
-                  <option value="store1">○○店</option>
-                </select>
-              </div>
+              )}
             </div>
           </div>
 

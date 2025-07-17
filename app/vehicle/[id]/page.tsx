@@ -115,6 +115,23 @@ export default function VehicleDetailPage() {
         </div>
       </section>
 
+      {/* 車検状態・有効期限表示 */}
+      {vehicle.inspectionStatus && (
+        <section className="bg-gray-50 py-4 border-b">
+          <div className="container mx-auto px-4">
+            <div className="flex items-center gap-4 text-lg">
+              <span className="text-gray-900">{vehicle.inspectionStatus}</span>
+              {(vehicle.inspectionStatus === "車検付き" || vehicle.inspectionStatus === "予備検査") && vehicle.inspectionDate && (
+                <>
+                  <span className="text-gray-400">｜</span>
+                  <span className="text-gray-900">{vehicle.inspectionDate}</span>
+                </>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
@@ -123,6 +140,18 @@ export default function VehicleDetailPage() {
             <Card className="mb-8">
               <CardContent className="p-0">
                 <div className="relative w-full h-96 bg-gray-200 rounded-lg overflow-hidden flex items-center justify-center">
+                  {/* 商談中・SOLD OUT表示 */}
+                  {vehicle.isSoldOut && (
+                    <div className="absolute top-0 left-0 right-0 bg-red-600 text-white text-center py-3 font-bold text-lg z-20">
+                      SOLD OUT
+                    </div>
+                  )}
+                  {vehicle.isNegotiating && !vehicle.isSoldOut && (
+                    <div className="absolute top-0 left-0 right-0 bg-orange-500 text-white text-center py-3 font-bold text-lg z-20">
+                      商談中
+                    </div>
+                  )}
+                  
                   {/* 左矢印 */}
                   {images.length > 1 && (
                     <button
@@ -247,6 +276,35 @@ export default function VehicleDetailPage() {
                     </div>
                   </div>
                 </div>
+                
+                {/* 車検証・状態表確認ボタン */}
+                {(vehicle.inspectionImageUrl || vehicle.conditionImageUrl) && (
+                  <div className="mt-6 pt-6 border-t">
+                    <h3 className="text-lg font-semibold mb-4">書類確認</h3>
+                    <div className="flex flex-wrap gap-3">
+                      {vehicle.inspectionImageUrl && (
+                        <Button
+                          variant="outline"
+                          onClick={() => window.open(vehicle.inspectionImageUrl, '_blank')}
+                          className="flex items-center gap-2"
+                        >
+                          <span className="text-red-500">📄</span>
+                          車検証を確認
+                        </Button>
+                      )}
+                      {vehicle.conditionImageUrl && (
+                        <Button
+                          variant="outline"
+                          onClick={() => window.open(vehicle.conditionImageUrl, '_blank')}
+                          className="flex items-center gap-2"
+                        >
+                          <span className="text-red-500">📄</span>
+                          状態表を確認
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
 
@@ -322,6 +380,99 @@ export default function VehicleDetailPage() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* 車検証・状態表 */}
+            {(vehicle.inspectionImageUrl || vehicle.conditionImageUrl) && (
+              <Card className="mb-8">
+                <CardContent className="p-6">
+                  <h2 className="text-2xl font-bold mb-6">書類・資料</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {vehicle.inspectionImageUrl && (
+                      <div>
+                        <h3 className="text-lg font-semibold mb-3">車検証</h3>
+                        <div className="border rounded-lg p-4">
+                          <div className="flex items-center gap-2 mb-3">
+                            <span className="text-red-500 text-2xl">📄</span>
+                            <a 
+                              href={vehicle.inspectionImageUrl} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:underline font-medium"
+                            >
+                              車検証を表示
+                            </a>
+                          </div>
+                          <img 
+                            src={vehicle.inspectionImageUrl} 
+                            alt="車検証" 
+                            className="max-w-full h-auto max-h-64 rounded cursor-pointer hover:opacity-80 transition-opacity"
+                            onClick={() => window.open(vehicle.inspectionImageUrl, '_blank')}
+                            onError={(e) => {
+                              // 画像読み込みエラー時はPDFとして扱う
+                              const target = e.target as HTMLImageElement;
+                              target.style.display = 'none';
+                              const parent = target.parentElement;
+                              if (parent) {
+                                parent.innerHTML = `
+                                  <div class="flex items-center gap-2 p-4 bg-gray-50 rounded">
+                                    <span class="text-red-500 text-2xl">📄</span>
+                                    <span class="text-gray-700">PDFファイル</span>
+                                    <a href="${vehicle.inspectionImageUrl}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline ml-2">
+                                      開く
+                                    </a>
+                                  </div>
+                                `;
+                              }
+                            }}
+                          />
+                        </div>
+                      </div>
+                    )}
+                    {vehicle.conditionImageUrl && (
+                      <div>
+                        <h3 className="text-lg font-semibold mb-3">状態表</h3>
+                        <div className="border rounded-lg p-4">
+                          <div className="flex items-center gap-2 mb-3">
+                            <span className="text-red-500 text-2xl">📄</span>
+                            <a 
+                              href={vehicle.conditionImageUrl} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:underline font-medium"
+                            >
+                              状態表を表示
+                            </a>
+                          </div>
+                          <img 
+                            src={vehicle.conditionImageUrl} 
+                            alt="状態表" 
+                            className="max-w-full h-auto max-h-64 rounded cursor-pointer hover:opacity-80 transition-opacity"
+                            onClick={() => window.open(vehicle.conditionImageUrl, '_blank')}
+                            onError={(e) => {
+                              // 画像読み込みエラー時はPDFとして扱う
+                              const target = e.target as HTMLImageElement;
+                              target.style.display = 'none';
+                              const parent = target.parentElement;
+                              if (parent) {
+                                parent.innerHTML = `
+                                  <div class="flex items-center gap-2 p-4 bg-gray-50 rounded">
+                                    <span class="text-red-500 text-2xl">📄</span>
+                                    <span class="text-gray-700">PDFファイル</span>
+                                    <a href="${vehicle.conditionImageUrl}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline ml-2">
+                                      開く
+                                    </a>
+                                  </div>
+                                `;
+                              }
+                            }}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Technical Specifications */}
             {(vehicle.modelCode || vehicle.loadingCapacity || vehicle.mission || vehicle.shift || 
