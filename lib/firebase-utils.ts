@@ -36,6 +36,23 @@ const convertTimestamp = (timestamp: any) => {
   return timestamp;
 };
 
+// 年式を日本語の元号形式に変換する関数
+export const convertYearToJapaneseEra = (year: string | number): string => {
+  if (!year) return "";
+  
+  const yearNum = typeof year === 'string' ? parseInt(year, 10) : year;
+  
+  if (yearNum >= 2019) {
+    return `令和${yearNum - 2018}年`;
+  } else if (yearNum >= 1989) {
+    return `平成${yearNum - 1988}年`;
+  } else if (yearNum >= 1926) {
+    return `昭和${yearNum - 1925}年`;
+  } else {
+    return `${yearNum}年`;
+  }
+};
+
 // 問い合わせ番号の自動生成関数
 const generateInquiryNumber = async (): Promise<string> => {
   try {
@@ -225,6 +242,83 @@ export const getVehicle = async (id: string) => {
     return null;
   } catch (error) {
     console.error("Error getting vehicle: ", error);
+    throw error;
+  }
+};
+
+// SOLD OUTの車両を取得する関数
+export const getSoldOutVehicles = async (limit: number = 3) => {
+  try {
+    console.log("SOLD OUT車両データを取得中...");
+    
+    const vehiclesCollection = collection(db, "vehicles");
+    
+    // インデックスが構築中の場合のフォールバック処理
+    try {
+      // まず、インデックス付きクエリを試行
+      const soldOutQuery = query(
+        vehiclesCollection,
+        where("isSoldOut", "==", true),
+        orderBy("updatedAt", "desc")
+      );
+      
+      const querySnapshot = await getDocs(soldOutQuery);
+      console.log("SOLD OUT車両数:", querySnapshot.docs.length);
+      
+      const vehicles = querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        
+        // 画像URLを正規化
+        const normalizedImageUrls = normalizeImageUrls(data);
+        
+        return {
+          id: doc.id,
+          ...data,
+          imageUrls: normalizedImageUrls,
+          createdAt: convertTimestamp(data.createdAt),
+          updatedAt: convertTimestamp(data.updatedAt)
+        };
+      }) as Vehicle[];
+      
+      // 最新の3台を返す
+      return vehicles.slice(0, limit);
+    } catch (indexError) {
+      console.log("インデックスがまだ構築中です。フォールバック処理を実行します。");
+      
+      // インデックスなしで全車両を取得し、クライアント側でフィルタリング
+      const allVehiclesQuery = query(vehiclesCollection);
+      const querySnapshot = await getDocs(allVehiclesQuery);
+      
+      const allVehicles = querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        
+        // 画像URLを正規化
+        const normalizedImageUrls = normalizeImageUrls(data);
+        
+        return {
+          id: doc.id,
+          ...data,
+          imageUrls: normalizedImageUrls,
+          createdAt: convertTimestamp(data.createdAt),
+          updatedAt: convertTimestamp(data.updatedAt)
+        };
+      }) as Vehicle[];
+      
+      // SOLD OUT車両をフィルタリングし、updatedAtでソート
+      const soldOutVehicles = allVehicles
+        .filter(vehicle => vehicle.isSoldOut === true)
+        .sort((a, b) => {
+          const dateA = a.updatedAt instanceof Date ? a.updatedAt : new Date(a.updatedAt);
+          const dateB = b.updatedAt instanceof Date ? b.updatedAt : new Date(b.updatedAt);
+          return dateB.getTime() - dateA.getTime();
+        })
+        .slice(0, limit);
+      
+      console.log("フォールバック処理でSOLD OUT車両数:", soldOutVehicles.length);
+      return soldOutVehicles;
+    }
+  } catch (error) {
+    console.error("Error getting sold out vehicles: ", error);
     throw error;
   }
 };

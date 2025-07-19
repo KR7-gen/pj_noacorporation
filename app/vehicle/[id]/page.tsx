@@ -19,6 +19,7 @@ export default function VehicleDetailPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [selectedPaymentPeriod, setSelectedPaymentPeriod] = useState(5) // デフォルト5年
 
   useEffect(() => {
     const fetchVehicle = async () => {
@@ -53,6 +54,48 @@ export default function VehicleDetailPage() {
     }
   }, [vehicleId])
 
+  // デバッグ用：シミュレーション条件チェック
+  useEffect(() => {
+    if (vehicle) {
+      const currentYear = new Date().getFullYear();
+      
+      // 年式条件: 2022年以内（R4まで）
+      let isWithinYearLimit = false;
+      let gregorianYear = null;
+      if (vehicle.year) {
+        const yearStr = String(vehicle.year);
+        if (yearStr.startsWith('R')) {
+          // 令和の場合: R6 → 令和6年 → 2024年
+          const reiwaYear = parseInt(yearStr.substring(1));
+          gregorianYear = 2018 + reiwaYear; // 令和元年は2019年
+          isWithinYearLimit = gregorianYear >= 2022;
+        } else {
+          // 西暦の場合
+          gregorianYear = Number(vehicle.year);
+          isWithinYearLimit = gregorianYear >= 2022;
+        }
+      }
+      
+      const isWithin10kKm = Number(vehicle.mileage) <= 10000;
+      
+      console.log('シミュレーション条件チェック:', {
+        vehicleYear: vehicle.year,
+        gregorianYear,
+        isWithinYearLimit,
+        mileage: vehicle.mileage,
+        mileageType: typeof vehicle.mileage,
+        isWithin10kKm,
+        shouldShow: isWithinYearLimit && isWithin10kKm,
+        rawVehicleData: {
+          year: vehicle.year,
+          yearType: typeof vehicle.year,
+          mileage: vehicle.mileage,
+          mileageType: typeof vehicle.mileage
+        }
+      });
+    }
+  }, [vehicle]);
+
   // 画像配列（imageUrlsがなければimageUrl単体、なければダミー）
   const images = useMemo(() => {
     if (!vehicle) return ["/placeholder.jpg"];
@@ -75,6 +118,32 @@ export default function VehicleDetailPage() {
     
     return ["/placeholder.jpg"];
   }, [vehicle?.imageUrls, vehicle?.imageUrl]);
+
+  // シミュレーション表示条件チェック
+  const shouldShowSimulation = vehicle ? (() => {
+    const currentYear = new Date().getFullYear();
+    
+    // 年式条件: 2022年以内（R4まで）
+    let isWithinYearLimit = false;
+    if (vehicle.year) {
+      const yearStr = String(vehicle.year);
+      if (yearStr.startsWith('R')) {
+        // 令和の場合: R6 → 令和6年 → 2024年
+        const reiwaYear = parseInt(yearStr.substring(1));
+        const gregorianYear = 2018 + reiwaYear; // 令和元年は2019年
+        isWithinYearLimit = gregorianYear >= 2022;
+      } else {
+        // 西暦の場合
+        const vehicleYear = Number(vehicle.year);
+        isWithinYearLimit = vehicleYear >= 2022;
+      }
+    }
+    
+    // 走行距離条件: 1万km以内
+    const isWithin10kKm = Number(vehicle.mileage) <= 10000;
+    
+    return isWithinYearLimit && isWithin10kKm;
+  })() : false;
 
   if (loading) {
     return (
@@ -171,6 +240,11 @@ export default function VehicleDetailPage() {
                   {vehicle.isNegotiating && !vehicle.isSoldOut && (
                     <div className="absolute top-0 left-0 right-0 bg-orange-500 text-white text-center py-3 font-bold text-lg z-20">
                       商談中
+                      {vehicle.negotiationDeadline && (
+                        <span className="ml-2 text-sm font-normal">
+                          ～{new Date(vehicle.negotiationDeadline).toLocaleDateString('ja-JP', { month: 'numeric', day: 'numeric' })}まで
+                        </span>
+                      )}
                     </div>
                   )}
                   
@@ -218,6 +292,40 @@ export default function VehicleDetailPage() {
               </CardContent>
             </Card>
 
+            {/* 毎月支払額シミュレーション */}
+            {shouldShowSimulation && (
+              <Card className="mb-8 w-[488px] h-[153px] ml-auto mt-0 mr-0">
+                <CardContent className="p-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="font-medium">毎月の支払額</span>
+                    <span className="text-xl font-bold text-blue-600">
+                      {vehicle[`simulation${selectedPaymentPeriod}Year` as keyof Vehicle] 
+                        ? formatNumberWithCommas(Number(vehicle[`simulation${selectedPaymentPeriod}Year` as keyof Vehicle])) 
+                        : "---"}円
+                    </span>
+                  </div>
+                  <div>
+                    <span className="font-medium block mb-2">返済期間</span>
+                    <div className="flex gap-2">
+                      {[2, 3, 4, 5].map((year) => (
+                        <button
+                          key={year}
+                          onClick={() => setSelectedPaymentPeriod(year)}
+                          className={`px-3 py-1 rounded border transition-colors text-sm ${
+                            selectedPaymentPeriod === year
+                              ? 'bg-blue-500 text-white border-blue-500'
+                              : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                          }`}
+                        >
+                          {year}年
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Vehicle Details */}
             <Card className="mb-8">
               <CardContent className="p-6">
@@ -257,7 +365,7 @@ export default function VehicleDetailPage() {
                       <span>{formatNumberWithCommas(vehicle.price)}円</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="font-medium">支払総額</span>
+                      <span className="font-medium">車両価格（税込）</span>
                       <span>{formatNumberWithCommas(vehicle.totalPayment)}円</span>
                     </div>
                   </div>
@@ -654,7 +762,7 @@ export default function VehicleDetailPage() {
                   </div>
                   {vehicle.totalPayment && (
                     <div className="flex justify-between items-center">
-                      <span>支払総額</span>
+                      <span>車両価格（税込）</span>
                       <span className="font-semibold">
                         ¥{(vehicle.totalPayment || 0).toLocaleString()}
                       </span>

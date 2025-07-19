@@ -35,7 +35,7 @@ const vehicleSchema = z.object({
   ),
   totalPrice: z.preprocess(
     (a) => parseInt(z.string().parse(a), 10),
-    z.number().positive("支払総額は必須です")
+    z.number().positive("車両価格（税込）は必須です")
   ),
   managementNumber: z.string().optional(),
   maker: z.string().min(1, "メーカーは必須です"),
@@ -265,7 +265,7 @@ export default function VehicleForm({
         </div>
 
         <div>
-          <Label htmlFor="totalPrice">支払総額 *</Label>
+                          <Label htmlFor="totalPrice">車両価格（税込） *</Label>
           <Input
             id="totalPrice"
             type="number"

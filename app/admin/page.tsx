@@ -170,7 +170,7 @@ export default function AdminVehiclesPage() {
               <TableHead>積載量</TableHead>
               <TableHead>車検有効期限</TableHead>
               <TableHead>車両価格</TableHead>
-              <TableHead>支払総額</TableHead>
+              <TableHead>車両価格（税込）</TableHead>
               <TableHead>業販金額</TableHead>
               <TableHead className="text-right">操作</TableHead>
             </TableRow>
@@ -238,7 +238,7 @@ export default function AdminVehiclesPage() {
                         value={editValue}
                         onChange={(e) => handleEditValueChange(e.target.value)}
                         className="w-24 border rounded px-2 py-1 text-sm"
-                        placeholder="支払総額"
+                        placeholder="車両価格（税込）"
                       />
                       <Button size="sm" onClick={saveEditing} disabled={saving}>
                         {saving ? "保存中..." : "保存"}

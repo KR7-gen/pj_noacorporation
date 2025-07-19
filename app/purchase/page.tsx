@@ -7,10 +7,14 @@ import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Phone, Upload, Download } from "lucide-react"
 import Link from "next/link"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import ContactForm from "../components/ContactForm"
+import { getSoldOutVehicles, convertYearToJapaneseEra } from "@/lib/firebase-utils"
+import type { Vehicle } from "@/types"
+import Image from "next/image"
 
-const achievements = [
+// デフォルトの買取実績（データがない場合のフォールバック）
+const defaultAchievements = [
   {
     maker: "日野レンジャー",
     year: "平成00年",
@@ -109,6 +113,9 @@ export default function PurchasePage() {
     email: "",
     privacy: false
   })
+  
+  const [achievements, setAchievements] = useState<Vehicle[]>([])
+  const [loading, setLoading] = useState(true)
 
   const handleChange = (field: string, value: string | boolean) => {
     setFormData(prev => ({
@@ -123,6 +130,29 @@ export default function PurchasePage() {
       alert("個人情報の取り扱いに同意してください。")
       return
     }
+  }
+
+  // SOLD OUT車両を取得して買取実績として表示
+  useEffect(() => {
+    const fetchSoldOutVehicles = async () => {
+      try {
+        setLoading(true)
+        const soldOutVehicles = await getSoldOutVehicles(3)
+        setAchievements(soldOutVehicles)
+      } catch (error) {
+        console.error("SOLD OUT車両の取得に失敗:", error)
+        setAchievements([])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchSoldOutVehicles()
+  }, [])
+
+  // 買取価格を計算（車両価格（税込）から100万円を引く）
+  const calculatePurchasePrice = (totalPayment: number): number => {
+    return Math.max(0, totalPayment - 1000000)
   }
 
   return (
@@ -163,21 +193,81 @@ export default function PurchasePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-            {achievements.map((item, index) => (
-              <Card key={index} className="text-center">
-                <CardContent className="p-8">
-                  <div className="w-full h-48 bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
-                    <div className="text-gray-400">車両画像</div>
-                  </div>
-                  <h3 className="font-bold text-lg mb-2">{item.maker}</h3>
-                  <p className="text-gray-600 mb-4">年式: {item.year}</p>
-                  <div className="mb-4">
-                    <span className="text-2xl font-bold">当社買取額：{item.price}万円</span>
-                    <div className="bg-red-500 text-white px-3 py-1 rounded-full inline-block ml-2">{item.status}</div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+            {loading ? (
+              // ローディング中はデフォルトの表示
+              defaultAchievements.map((item, index) => (
+                <Card key={index} className="text-center">
+                  <CardContent className="p-8">
+                    <div className="w-full h-48 bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
+                      <div className="text-gray-400">車両画像</div>
+                    </div>
+                    <h3 className="font-bold text-lg mb-2">{item.maker}</h3>
+                    <p className="text-gray-600 mb-4">年式: {item.year}</p>
+                    <div className="mb-4">
+                      <span className="text-2xl font-bold">当社買取額：{item.price}万円</span>
+                      <div className="bg-red-500 text-white px-3 py-1 rounded-full inline-block ml-2">{item.status}</div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            ) : achievements.length > 0 ? (
+              // 実際のSOLD OUT車両データを表示
+              achievements.map((vehicle, index) => {
+                const purchasePrice = calculatePurchasePrice(vehicle.totalPayment || 0)
+                const japaneseYear = convertYearToJapaneseEra(vehicle.year)
+                const vehicleName = `${vehicle.maker || ""} ${vehicle.vehicleType || ""}`.trim()
+                
+                return (
+                  <Card key={vehicle.id} className="text-center">
+                    <CardContent className="p-8">
+                      <div className="w-full h-48 bg-gray-200 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+                        {vehicle.imageUrls && vehicle.imageUrls.length > 0 ? (
+                          <Image
+                            src={vehicle.imageUrls[0]}
+                            alt={vehicleName}
+                            width={200}
+                            height={150}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.currentTarget.src = "/placeholder.jpg"
+                            }}
+                          />
+                        ) : (
+                          <div className="text-gray-400">車両画像</div>
+                        )}
+                      </div>
+                      <h3 className="font-bold text-lg mb-2">{vehicleName}</h3>
+                      <p className="text-gray-600 mb-4">年式: {japaneseYear}</p>
+                      <div className="mb-4">
+                        <span className="text-2xl font-bold">
+                          当社買取額：{Math.floor(purchasePrice / 10000)}万円
+                        </span>
+                        <div className="bg-red-500 text-white px-3 py-1 rounded-full inline-block ml-2">
+                          高価買取
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )
+              })
+            ) : (
+              // データがない場合はデフォルト表示
+              defaultAchievements.map((item, index) => (
+                <Card key={index} className="text-center">
+                  <CardContent className="p-8">
+                    <div className="w-full h-48 bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
+                      <div className="text-gray-400">車両画像</div>
+                    </div>
+                    <h3 className="font-bold text-lg mb-2">{item.maker}</h3>
+                    <p className="text-gray-600 mb-4">年式: {item.year}</p>
+                    <div className="mb-4">
+                      <span className="text-2xl font-bold">当社買取額：{item.price}万円</span>
+                      <div className="bg-red-500 text-white px-3 py-1 rounded-full inline-block ml-2">{item.status}</div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            )}
           </div>
 
           <div className="text-center">
@@ -388,11 +478,43 @@ export default function PurchasePage() {
                 <div className="text-center mb-6">
                   <p className="text-lg font-medium mb-4">ダウンロードはこちら</p>
                   <div className="flex justify-center gap-4">
-                    <Button variant="outline">
+                    <Button 
+                      variant="outline"
+                      onClick={() => {
+                        try {
+                          const link = document.createElement('a');
+                          link.href = '/transfer-certificate.pdf';
+                          link.download = '譲渡証明書.pdf';
+                          link.target = '_blank';
+                          document.body.appendChild(link);
+                          link.click();
+                          document.body.removeChild(link);
+                        } catch (error) {
+                          console.error('PDFダウンロードエラー:', error);
+                          alert('PDFのダウンロードに失敗しました。');
+                        }
+                      }}
+                    >
                       <Download className="w-4 h-4 mr-2" />
                       譲渡証明書PDF
                     </Button>
-                    <Button variant="outline">
+                    <Button 
+                      variant="outline"
+                      onClick={() => {
+                        try {
+                          const link = document.createElement('a');
+                          link.href = '/power-of-attorney.pdf';
+                          link.download = '委任状.pdf';
+                          link.target = '_blank';
+                          document.body.appendChild(link);
+                          link.click();
+                          document.body.removeChild(link);
+                        } catch (error) {
+                          console.error('PDFダウンロードエラー:', error);
+                          alert('PDFのダウンロードに失敗しました。');
+                        }
+                      }}
+                    >
                       <Download className="w-4 h-4 mr-2" />
                       委任状PDF
                     </Button>

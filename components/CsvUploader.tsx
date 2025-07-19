@@ -395,7 +395,7 @@ export default function CsvUploader() {
           <h4 className="font-medium mb-2">CSVファイル形式</h4>
           <p className="mb-2">以下のヘッダーを含むCSVファイルをアップロードしてください：</p>
           <code className="text-xs bg-white p-2 rounded block">
-            NO.,トラック名,車両価格,支払総額,業販金額,ボディタイプ,メーカー,大きさ,車種,型式,年式,走行距離（㎞）,積載量（kg）,ミッション,シフト,車検状態,車検有効期限,内寸長（㎜）,内寸幅（㎜）,内寸高（㎜）,車両総重量（kg）,原動機型式,馬力（ps）,ターボ,排気量（cc）,燃料,問合せ番号,車体番号
+            NO.,トラック名,車両価格,車両価格（税込）,業販金額,ボディタイプ,メーカー,大きさ,車種,型式,年式,走行距離（㎞）,積載量（kg）,ミッション,シフト,車検状態,車検有効期限,内寸長（㎜）,内寸幅（㎜）,内寸高（㎜）,車両総重量（kg）,原動機型式,馬力（ps）,ターボ,排気量（cc）,燃料,問合せ番号,車体番号
           </code>
           <p className="mt-2 text-xs">※ NO.とメーカーは必須項目です</p>
           <div className="mt-3 p-2 bg-yellow-50 border border-yellow-200 rounded">

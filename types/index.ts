@@ -66,6 +66,11 @@ export interface Vehicle {
   customerName?: string;
   isNegotiating?: boolean;
   isSoldOut?: boolean;
+  // 支払額シミュレーション
+  simulation2Year?: string;
+  simulation3Year?: string;
+  simulation4Year?: string;
+  simulation5Year?: string;
   createdAt: Date;
   updatedAt: Date;
 }

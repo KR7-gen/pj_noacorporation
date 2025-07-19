@@ -225,10 +225,32 @@ export default function VehicleEditPage() {
 
   // 商談関連のハンドラー
   const handleNegotiationChange = (field: string, value: any) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+    setFormData((prev) => {
+      // SOLD OUTと商談中の排他的制御
+      if (field === 'isSoldOut' && value === true) {
+        // SOLD OUTをONにしたら商談中をOFFにする
+        return {
+          ...prev,
+          isSoldOut: true,
+          isNegotiating: false,
+          [field]: value,
+        };
+      } else if (field === 'isNegotiating' && value === true) {
+        // 商談中をONにしたらSOLD OUTをOFFにする
+        return {
+          ...prev,
+          isNegotiating: true,
+          isSoldOut: false,
+          [field]: value,
+        };
+      } else {
+        // その他のフィールドは通常通り更新
+        return {
+          ...prev,
+          [field]: value,
+        };
+      }
+    });
   }
 
   // 車検証画像アップロード
@@ -293,9 +315,27 @@ export default function VehicleEditPage() {
     });
   };
 
+  // 支払額シミュレーションの変更
+  const handleSimulationChange = (index: number, value: string) => {
+    const formattedValue = formatInputWithCommas(value);
+    const simulationKey = `simulation${index + 2}Year` as keyof Vehicle
+    setFormData(prev => ({
+      ...prev,
+      [simulationKey]: formattedValue
+    }))
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!vehicle) return
+
+    // 商談中の必須項目チェック
+    if (formData.isNegotiating) {
+      if (!formData.negotiationDeadline || !formData.salesRepresentative || !formData.customerName) {
+        setError("商談中の場合、商談期限・営業担当・顧客名は必須です")
+        return
+      }
+    }
 
     try {
       setSaving(true)
@@ -390,23 +430,29 @@ export default function VehicleEditPage() {
               
               {/* 商談期限 */}
               <div>
-                <Label htmlFor="negotiationDeadline">商談期限</Label>
+                <Label htmlFor="negotiationDeadline" className={formData.isNegotiating ? "text-red-600" : ""}>
+                  商談期限{formData.isNegotiating && <span className="text-red-500">*</span>}
+                </Label>
                 <Input 
                   id="negotiationDeadline" 
                   type="date" 
                   value={formData.negotiationDeadline || ""}
                   onChange={(e) => handleNegotiationChange('negotiationDeadline', e.target.value)}
+                  required={formData.isNegotiating}
+                  className={formData.isNegotiating && !formData.negotiationDeadline ? "border-red-500" : ""}
                 />
               </div>
               
               {/* 営業担当 */}
               <div>
-                <Label htmlFor="salesRepresentative">営業担当</Label>
+                <Label htmlFor="salesRepresentative" className={formData.isNegotiating ? "text-red-600" : ""}>
+                  営業担当{formData.isNegotiating && <span className="text-red-500">*</span>}
+                </Label>
                 <Select 
                   value={formData.salesRepresentative || ""} 
                   onValueChange={(value) => handleNegotiationChange('salesRepresentative', value)}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className={formData.isNegotiating && !formData.salesRepresentative ? "border-red-500" : ""}>
                     <SelectValue placeholder="選択" />
                   </SelectTrigger>
                   <SelectContent>
@@ -419,12 +465,16 @@ export default function VehicleEditPage() {
               
               {/* 顧客名 */}
               <div className="md:col-span-2">
-                <Label htmlFor="customerName">顧客名</Label>
+                <Label htmlFor="customerName" className={formData.isNegotiating ? "text-red-600" : ""}>
+                  顧客名{formData.isNegotiating && <span className="text-red-500">*</span>}
+                </Label>
                 <Input 
                   id="customerName" 
                   placeholder="テキスト入力" 
                   value={formData.customerName || ""}
                   onChange={(e) => handleNegotiationChange('customerName', e.target.value)}
+                  required={formData.isNegotiating}
+                  className={formData.isNegotiating && !formData.customerName ? "border-red-500" : ""}
                 />
               </div>
             </div>
@@ -477,7 +527,7 @@ export default function VehicleEditPage() {
               />
             </div>
             <div className="space-y-2">
-              <label className="block text-sm font-medium">支払総額</label>
+              <label className="block text-sm font-medium">車両価格（税込）</label>
               <input
                 type="text"
                 name="totalPayment"
@@ -499,6 +549,25 @@ export default function VehicleEditPage() {
               className="w-full border rounded px-2 py-1 h-32"
               placeholder="車両の詳細な説明を入力してください..."
             />
+          </div>
+
+          {/* 毎月支払額シミュレーション */}
+          <div>
+            <h3 className="text-lg font-medium mb-4">毎月支払額シミュレーション</h3>
+            <div className="grid grid-cols-4 gap-6">
+              {[2, 3, 4, 5].map((year, index) => (
+                <div key={index} className="space-y-2">
+                  <label className="block text-sm font-medium">{year}年</label>
+                  <input
+                    type="text"
+                    className="w-full border rounded px-2 py-1"
+                    placeholder="100,000"
+                    value={formData[`simulation${year}Year` as keyof Vehicle] as string || ""}
+                    onChange={(e) => handleSimulationChange(index, e.target.value)}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* 画像アップロード */}

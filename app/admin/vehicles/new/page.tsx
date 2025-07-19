@@ -243,7 +243,11 @@ export default function VehicleNewPage() {
   // 毎月支払額シミュレーション用のハンドラー
   const handleSimulationChange = (index: number, value: string) => {
     const formattedValue = formatInputWithCommas(value);
-    // シミュレーションデータを管理する必要がある場合は、stateを追加
+    const simulationKey = `simulation${index + 2}Year` as keyof Vehicle;
+    setFormData(prev => ({
+      ...prev,
+      [simulationKey]: formattedValue
+    }));
   };
 
   // 車検証画像アップロード
@@ -421,7 +425,7 @@ export default function VehicleNewPage() {
               />
             </div>
             <div className="space-y-2">
-              <label className="block text-sm font-medium">支払総額</label>
+              <label className="block text-sm font-medium">車両価格（税込）</label>
               <input
                 type="text"
                 name="totalPayment"
@@ -449,13 +453,14 @@ export default function VehicleNewPage() {
           <div>
             <h3 className="text-lg font-medium mb-4">毎月支払額シミュレーション</h3>
             <div className="grid grid-cols-4 gap-6">
-              {[2, 3, 4, 4].map((year, index) => (
+              {[2, 3, 4, 5].map((year, index) => (
                 <div key={index} className="space-y-2">
                   <label className="block text-sm font-medium">{year}年</label>
                   <input
                     type="text"
                     className="w-full border rounded px-2 py-1"
                     placeholder="100,000"
+                    value={formData[`simulation${year}Year` as keyof Vehicle] as string || ""}
                     onChange={(e) => handleSimulationChange(index, e.target.value)}
                   />
                 </div>

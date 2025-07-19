@@ -337,6 +337,11 @@ export default function InventoryPage() {
                     {vehicle.isNegotiating && !vehicle.isSoldOut && (
                       <div className="absolute top-0 left-0 right-0 bg-orange-500 text-white text-center py-2 font-bold">
                         商談中
+                        {vehicle.negotiationDeadline && (
+                          <span className="ml-2 text-sm font-normal">
+                            ～{new Date(vehicle.negotiationDeadline).toLocaleDateString('ja-JP', { month: 'numeric', day: 'numeric' })}まで
+                          </span>
+                        )}
                       </div>
                     )}
                   </div>
