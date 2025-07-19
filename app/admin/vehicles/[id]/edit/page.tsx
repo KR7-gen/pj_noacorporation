@@ -47,6 +47,28 @@ const makers = [
   "その他"
 ]
 
+const vehicleTypes = [
+  "デュトロ",
+  "レンジャー",
+  "プロフィア",
+  "エルフ",
+  "フォワード",
+  "ギガ",
+  "キャンター",
+  "ファイター",
+  "スーパーグレート",
+  "カゼット",
+  "コンドル",
+  "クオン",
+  "ビックサム",
+  "その他"
+]
+
+const months = [
+  "1月", "2月", "3月", "4月", "5月", "6月",
+  "7月", "8月", "9月", "10月", "11月", "12月"
+]
+
 const sizes = [
   "大型",
   "増トン",
@@ -159,6 +181,9 @@ export default function VehicleEditPage() {
             totalWeight: formatNumberWithCommas(fetchedVehicle.totalWeight) || "",
             horsepower: formatNumberWithCommas(fetchedVehicle.horsepower) || "",
             displacement: formatNumberWithCommas(fetchedVehicle.displacement) || "",
+            vehicleType: fetchedVehicle.vehicleType || "",
+            chassisNumber: fetchedVehicle.chassisNumber || "",
+            month: fetchedVehicle.month || "",
           })
         } else {
           setError("車両が見つかりませんでした")
@@ -274,8 +299,11 @@ export default function VehicleEditPage() {
 
     try {
       setSaving(true)
+      // 問い合わせ番号を除外して更新データを作成
+      const { inquiryNumber, ...updateData } = formData;
+      
       const updatedVehicle: Partial<Vehicle> = {
-        ...formData,
+        ...updateData,
         price: Number(formData.price?.toString().replace(/,/g, '')) || 0,
         wholesalePrice: Number(formData.wholesalePrice?.toString().replace(/,/g, '')) || 0,
         totalPayment: Number(formData.totalPayment?.toString().replace(/,/g, '')) || 0,
@@ -287,6 +315,9 @@ export default function VehicleEditPage() {
         totalWeight: Number(formData.totalWeight?.toString().replace(/,/g, '')) || 0,
         horsepower: Number(formData.horsepower?.toString().replace(/,/g, '')) || 0,
         displacement: Number(formData.displacement?.toString().replace(/,/g, '')) || 0,
+        vehicleType: formData.vehicleType,
+        chassisNumber: formData.chassisNumber,
+        month: formData.month,
         updatedAt: new Date(),
       }
 
@@ -400,7 +431,18 @@ export default function VehicleEditPage() {
           </div>
 
           {/* 基本情報 */}
-          <div className="grid grid-cols-3 gap-6">
+          <div className="grid grid-cols-5 gap-6">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium">問い合わせ番号</label>
+              <input
+                type="text"
+                name="inquiryNumber"
+                value={formData.inquiryNumber || ""}
+                className="w-full border rounded px-2 py-1 bg-gray-100 text-gray-700"
+                disabled
+                readOnly
+              />
+            </div>
             <div className="space-y-2">
               <label className="block text-sm font-medium">トラック名</label>
               <input
@@ -517,6 +559,20 @@ export default function VehicleEditPage() {
                   </select>
                 </div>
                 <div className="space-y-2">
+                  <label className="block text-sm font-medium">車種</label>
+                  <select
+                    name="vehicleType"
+                    value={formData.vehicleType || ""}
+                    onChange={handleChange}
+                    className="w-full border rounded px-2 py-1"
+                  >
+                    <option value="">選択</option>
+                    {vehicleTypes.map((type) => (
+                      <option key={type} value={type}>{type}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="space-y-2">
                   <label className="block text-sm font-medium">型式</label>
                   <input
                     type="text"
@@ -528,18 +584,42 @@ export default function VehicleEditPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium">年式</label>
-                  <select
-                    name="year"
-                    value={formData.year || ""}
+                  <label className="block text-sm font-medium">車体番号</label>
+                  <input
+                    type="text"
+                    name="chassisNumber"
+                    value={formData.chassisNumber || ""}
                     onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
-                  >
-                    <option value="">選択</option>
-                    {years.map((year) => (
-                      <option key={year} value={year}>{year}</option>
-                    ))}
-                  </select>
+                    placeholder="車体番号を入力"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">年式</label>
+                  <div className="flex gap-2">
+                    <select
+                      name="year"
+                      value={formData.year || ""}
+                      onChange={handleChange}
+                      className="w-1/2 border rounded px-2 py-1"
+                    >
+                      <option value="">選択</option>
+                      {years.map((year) => (
+                        <option key={year} value={year}>{year}</option>
+                      ))}
+                    </select>
+                    <select
+                      name="month"
+                      value={formData.month || ""}
+                      onChange={handleChange}
+                      className="w-1/2 border rounded px-2 py-1"
+                    >
+                      <option value="">月</option>
+                      {months.map((month) => (
+                        <option key={month} value={month}>{month}</option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">走行距離</label>
@@ -695,14 +775,6 @@ export default function VehicleEditPage() {
                     <option value="ハイブリッド">ハイブリッド</option>
                     <option value="その他">その他</option>
                   </select>
-                </div>
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium">問い合わせ番号</label>
-                  <input
-                    type="text"
-                    className="w-full border rounded px-2 py-1"
-                    placeholder="問い合わせ番号を入力"
-                  />
                 </div>
               </div>
             </div>

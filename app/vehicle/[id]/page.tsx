@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -53,6 +53,29 @@ export default function VehicleDetailPage() {
     }
   }, [vehicleId])
 
+  // 画像配列（imageUrlsがなければimageUrl単体、なければダミー）
+  const images = useMemo(() => {
+    if (!vehicle) return ["/placeholder.jpg"];
+    
+    if (vehicle.imageUrls && vehicle.imageUrls.length > 0) {
+      // 有効な画像URLのみをフィルタリング
+      const validImages = vehicle.imageUrls.filter(url => 
+        url && 
+        url.trim() !== "" && 
+        !url.includes("temp_") && 
+        !url.startsWith("blob:") &&
+        !url.startsWith("data:")
+      );
+      return validImages.length > 0 ? validImages : ["/placeholder.jpg"];
+    }
+    
+    if (vehicle.imageUrl && vehicle.imageUrl.trim() !== "") {
+      return [vehicle.imageUrl];
+    }
+    
+    return ["/placeholder.jpg"];
+  }, [vehicle?.imageUrls, vehicle?.imageUrl]);
+
   if (loading) {
     return (
       <div className="min-h-screen bg-white">
@@ -79,13 +102,6 @@ export default function VehicleDetailPage() {
     )
   }
 
-  // 画像配列（imageUrlsがなければimageUrl単体、なければダミー）
-  const images = vehicle.imageUrls && vehicle.imageUrls.length > 0
-    ? vehicle.imageUrls
-    : vehicle.imageUrl
-      ? [vehicle.imageUrl]
-      : ["/placeholder.jpg"];
-
   const handlePrev = () => {
     setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1))
   }
@@ -96,13 +112,19 @@ export default function VehicleDetailPage() {
     setCurrentIndex(idx)
   }
 
+  // 画像エラーハンドラー
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    console.log("画像読み込みエラー:", e.currentTarget.src);
+    e.currentTarget.src = "/placeholder.jpg";
+  }
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
       <section className="bg-blue-600 text-white py-8">
         <div className="container mx-auto px-4">
           <div className="flex items-center gap-4 text-lg">
-            <span>{vehicle.managementNumber || vehicle.id}</span>
+            <span>{vehicle.inquiryNumber || vehicle.id}</span>
             <span>｜</span>
             <span>{vehicle.maker}</span>
             <span>｜</span>
@@ -166,6 +188,7 @@ export default function VehicleDetailPage() {
                     src={images[currentIndex]}
                     alt={vehicle.name}
                     className="w-full h-full object-cover select-none"
+                    onError={handleImageError}
                   />
                   {/* 右矢印 */}
                   {images.length > 1 && (
@@ -187,6 +210,7 @@ export default function VehicleDetailPage() {
                         alt={`サムネイル${idx + 1}`}
                         className={`w-24 h-16 object-cover rounded cursor-pointer border-2 ${currentIndex === idx ? 'border-blue-600' : 'border-transparent'}`}
                         onClick={() => handleThumbClick(idx)}
+                        onError={handleImageError}
                       />
                     ))}
                   </div>
@@ -206,11 +230,11 @@ export default function VehicleDetailPage() {
                     </div>
                     <div className="flex justify-between">
                       <span className="font-medium">車種</span>
-                      <span>{vehicle.model}</span>
+                      <span>{vehicle.vehicleType || vehicle.model}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="font-medium">年式</span>
-                      <span>{String(vehicle.year || "")}</span>
+                      <span>{vehicle.year && vehicle.month ? `${vehicle.year}年${vehicle.month}` : String(vehicle.year || "")}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="font-medium">走行距離</span>

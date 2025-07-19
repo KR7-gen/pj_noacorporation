@@ -29,9 +29,11 @@ import { formatNumberWithCommas, formatInputWithCommas } from "@/lib/utils"
 export default function AdminVehiclesPage() {
   const router = useRouter()
   const [vehicles, setVehicles] = useState<Vehicle[]>([])
+  const [filteredVehicles, setFilteredVehicles] = useState<Vehicle[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null)
+  const [searchQuery, setSearchQuery] = useState("")
   
   // インライン編集用の状態
   const [editingField, setEditingField] = useState<{
@@ -47,6 +49,7 @@ export default function AdminVehiclesPage() {
         setLoading(true)
         const fetchedVehicles = await getVehicles()
         setVehicles(fetchedVehicles)
+        setFilteredVehicles(fetchedVehicles)
         setError(null)
       } catch (err) {
         setError("車両の読み込みに失敗しました。")
@@ -58,6 +61,24 @@ export default function AdminVehiclesPage() {
 
     fetchVehicles()
   }, [])
+
+  // 検索フィルタリング
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setFilteredVehicles(vehicles)
+      return
+    }
+
+    const filtered = vehicles.filter(vehicle => {
+      const query = searchQuery.toLowerCase()
+      const inquiryNumber = vehicle.inquiryNumber?.toLowerCase() || ""
+      const chassisNumber = vehicle.chassisNumber?.toLowerCase() || ""
+      
+      return inquiryNumber.includes(query) || chassisNumber.includes(query)
+    })
+    
+    setFilteredVehicles(filtered)
+  }, [searchQuery, vehicles])
 
   const handleDelete = (vehicle: Vehicle) => {
     setSelectedVehicle(vehicle)
@@ -155,12 +176,42 @@ export default function AdminVehiclesPage() {
         </div>
       </div>
 
+      {/* 検索欄 */}
+      <div className="mb-6">
+        <div className="flex items-center gap-4">
+          <div className="flex-1 max-w-md">
+            <input
+              type="text"
+              placeholder="問い合わせ番号または車体番号で検索..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+          {searchQuery && (
+            <Button
+              variant="outline"
+              onClick={() => setSearchQuery("")}
+              className="px-4 py-2"
+            >
+              クリア
+            </Button>
+          )}
+        </div>
+        {searchQuery && (
+          <p className="text-sm text-gray-600 mt-2">
+            検索結果: {filteredVehicles.length}件
+          </p>
+        )}
+      </div>
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>写真</TableHead>
-              <TableHead>管理番号</TableHead>
+              <TableHead>問い合わせ番号</TableHead>
+              <TableHead>車体番号</TableHead>
               <TableHead>メーカー</TableHead>
               <TableHead>車種</TableHead>
               <TableHead>型式</TableHead>
@@ -177,7 +228,7 @@ export default function AdminVehiclesPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {vehicles.map((vehicle) => (
+            {filteredVehicles.map((vehicle) => (
               <TableRow key={vehicle.id}>
                 <TableCell>
                   <Image
@@ -190,12 +241,17 @@ export default function AdminVehiclesPage() {
                     width={120}
                     height={80}
                     className="rounded-md object-cover"
+                    onError={(e) => {
+                      console.log("画像読み込みエラー:", e.currentTarget.src);
+                      e.currentTarget.src = "/placeholder.jpg";
+                    }}
                   />
                 </TableCell>
-                <TableCell>{vehicle.managementNumber || vehicle.id}</TableCell>
+                <TableCell>{vehicle.inquiryNumber || "---"}</TableCell>
+                <TableCell>{vehicle.chassisNumber || "---"}</TableCell>
                 <TableCell>{vehicle.maker}</TableCell>
+                <TableCell>{vehicle.vehicleType || "---"}</TableCell>
                 <TableCell>{vehicle.model || "---"}</TableCell>
-                <TableCell>{vehicle.modelCode || "---"}</TableCell>
                 <TableCell>{vehicle.year || "---"}</TableCell>
                 <TableCell>{vehicle.bodyType || "---"}</TableCell>
                 <TableCell>{vehicle.size || "---"}</TableCell>

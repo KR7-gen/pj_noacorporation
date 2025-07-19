@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState, useCallback, useMemo } from "react"
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from "@dnd-kit/core"
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable"
 import { useSortable } from "@dnd-kit/sortable"
@@ -22,9 +22,10 @@ interface SortableImageProps {
   isSelectionMode: boolean
   isSelected: boolean
   onToggleSelection: (imageUrl: string) => void
+  onImageError: (e: React.SyntheticEvent<HTMLImageElement, Event>) => void
 }
 
-const SortableImage = ({ id, imageUrl, onDelete, isSelectionMode, isSelected, onToggleSelection }: SortableImageProps) => {
+const SortableImage = ({ id, imageUrl, onDelete, isSelectionMode, isSelected, onToggleSelection, onImageError }: SortableImageProps) => {
   const {
     attributes,
     listeners,
@@ -59,6 +60,7 @@ const SortableImage = ({ id, imageUrl, onDelete, isSelectionMode, isSelected, on
         src={imageUrl}
         alt="車両画像"
         className="w-full h-32 object-cover"
+        onError={onImageError}
       />
       <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-200">
         {!isSelectionMode && (
@@ -114,6 +116,19 @@ export default function ImageUploader({ images, onImagesChange, vehicleId }: Ima
     })
   )
 
+  // フィルタリングされた画像URL（一時的なURLを除外）
+  const filteredImageUrls = useMemo(() => {
+    if (!images || !Array.isArray(images)) return [];
+    
+    return images.filter(url => 
+      url && 
+      url.trim() !== "" && 
+      !url.includes("temp_") && 
+      !url.startsWith("blob:") &&
+      !url.startsWith("data:")
+    );
+  }, [images]);
+
   const handleFileUpload = useCallback(async (files: FileList) => {
     if (!vehicleId) {
       alert("車両IDが必要です")
@@ -137,31 +152,22 @@ export default function ImageUploader({ images, onImagesChange, vehicleId }: Ima
     }
   }, [images, onImagesChange, vehicleId])
 
-  const handleDeleteImage = useCallback(async (imageUrl: string) => {
-    try {
-      // Firebase Storageから削除
-      const path = imageUrl.split('/o/')[1]?.split('?')[0]
-      if (path) {
-        const decodedPath = decodeURIComponent(path)
-        await deleteImage(decodedPath)
-      }
-      // 配列から削除
-      onImagesChange(images.filter(img => img !== imageUrl))
-    } catch (error) {
-      console.error("画像削除エラー:", error)
-      alert("画像の削除に失敗しました")
-    }
-  }, [images, onImagesChange])
+  const handleDelete = useCallback((imageUrl: string) => {
+    const newImages = filteredImageUrls.filter(img => img !== imageUrl)
+    onImagesChange(newImages)
+  }, [filteredImageUrls, onImagesChange])
 
   const handleDragEnd = useCallback((event: any) => {
     const { active, over } = event
+
     if (active.id !== over.id) {
-      const oldIndex = images.findIndex(img => img === active.id)
-      const newIndex = images.findIndex(img => img === over.id)
-      const newImages = arrayMove(images, oldIndex, newIndex)
+      const oldIndex = filteredImageUrls.indexOf(active.id)
+      const newIndex = filteredImageUrls.indexOf(over.id)
+      
+      const newImages = arrayMove(filteredImageUrls, oldIndex, newIndex)
       onImagesChange(newImages)
     }
-  }, [images, onImagesChange])
+  }, [filteredImageUrls, onImagesChange])
 
   const handleToggleSelection = useCallback((imageUrl: string) => {
     setSelectedImages(prev => 
@@ -171,36 +177,22 @@ export default function ImageUploader({ images, onImagesChange, vehicleId }: Ima
     )
   }, [])
 
-  const handleBulkDelete = useCallback(async () => {
-    if (selectedImages.length === 0) return
-
-    try {
-      // Firebase Storageから削除
-      const deletePromises = selectedImages.map(async (imageUrl) => {
-        const path = imageUrl.split('/o/')[1]?.split('?')[0]
-        if (path) {
-          const decodedPath = decodeURIComponent(path)
-          await deleteImage(decodedPath)
-        }
-      })
-      await Promise.all(deletePromises)
-      
-      // 配列から削除
-      onImagesChange(images.filter(img => !selectedImages.includes(img)))
-      
-      // 選択モードをリセット
-      setIsSelectionMode(false)
-      setSelectedImages([])
-    } catch (error) {
-      console.error("一括削除エラー:", error)
-      alert("画像の一括削除に失敗しました")
-    }
-  }, [selectedImages, images, onImagesChange])
+  const handleBulkDelete = useCallback(() => {
+    const newImages = filteredImageUrls.filter(img => !selectedImages.includes(img))
+    onImagesChange(newImages)
+    setSelectedImages([])
+  }, [filteredImageUrls, selectedImages, onImagesChange])
 
   const handleCancelSelection = useCallback(() => {
     setIsSelectionMode(false)
     setSelectedImages([])
   }, [])
+
+  // 画像エラーハンドラー
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    console.log("ImageUploader - 画像読み込みエラー:", e.currentTarget.src);
+    e.currentTarget.src = "/placeholder.jpg";
+  };
 
   return (
     <div className="space-y-4">
@@ -235,10 +227,10 @@ export default function ImageUploader({ images, onImagesChange, vehicleId }: Ima
           </p>
         )}
       </div>
-      {images.length > 0 && (
+      {filteredImageUrls.length > 0 && (
         <div className="space-y-2">
           <div className="flex justify-between items-center">
-            <p className="text-sm font-medium">アップロード済み写真 ({images.length}枚)</p>
+            <p className="text-sm font-medium">アップロード済み写真 ({filteredImageUrls.length}枚)</p>
             {!isSelectionMode && (
               <Button
                 type="button"
@@ -279,19 +271,20 @@ export default function ImageUploader({ images, onImagesChange, vehicleId }: Ima
             onDragEnd={handleDragEnd}
           >
             <SortableContext
-              items={images}
+              items={filteredImageUrls}
               strategy={verticalListSortingStrategy}
             >
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {images.map((imageUrl) => (
+                {filteredImageUrls.map((imageUrl) => (
                   <SortableImage
                     key={imageUrl}
                     id={imageUrl}
                     imageUrl={imageUrl}
-                    onDelete={handleDeleteImage}
+                    onDelete={handleDelete}
                     isSelectionMode={isSelectionMode}
                     isSelected={selectedImages.includes(imageUrl)}
                     onToggleSelection={handleToggleSelection}
+                    onImageError={handleImageError}
                   />
                 ))}
               </div>

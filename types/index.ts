@@ -5,6 +5,7 @@ export interface Vehicle {
   maker: string;
   model: string;
   year: string;
+  month?: string; // 月を追加
   mileage: string;
   price: number;
   totalPrice?: number;
@@ -12,6 +13,8 @@ export interface Vehicle {
   imageUrls: string[];
   bodyType?: string;
   size?: string;
+  vehicleType?: string; // 車種を追加
+  chassisNumber?: string; // 車体番号を追加
   inspectionDate?: string;
   wholesalePrice: number;
   totalPayment: number;
@@ -36,7 +39,6 @@ export interface Vehicle {
   displacement?: number;
   fuel?: string;
   inquiryNumber?: string;
-  chassisNumber?: string;
   bodyMaker?: string;
   bodyModel?: string;
   bodyYear?: string;

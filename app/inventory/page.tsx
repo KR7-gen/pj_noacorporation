@@ -318,6 +318,10 @@ export default function InventoryPage() {
                       src={vehicle.imageUrls?.[0] || vehicle.imageUrl || "/placeholder.jpg"}
                       alt={vehicle.name}
                       className="w-full h-48 object-cover"
+                      onError={(e) => {
+                        console.log("画像読み込みエラー:", e.currentTarget.src);
+                        e.currentTarget.src = "/placeholder.jpg";
+                      }}
                     />
                     {vehicle.bodyType && (
                       <div className="absolute top-2 left-2 bg-blue-500 text-white px-2 py-1 rounded text-xs">

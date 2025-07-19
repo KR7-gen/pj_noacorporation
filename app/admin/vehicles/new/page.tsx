@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { addVehicle } from "@/lib/firebase-utils"
@@ -35,6 +35,28 @@ const makers = [
   "三菱ふそう",
   "UD",
   "その他"
+]
+
+const vehicleTypes = [
+  "デュトロ",
+  "レンジャー",
+  "プロフィア",
+  "エルフ",
+  "フォワード",
+  "ギガ",
+  "キャンター",
+  "ファイター",
+  "スーパーグレート",
+  "カゼット",
+  "コンドル",
+  "クオン",
+  "ビックサム",
+  "その他"
+]
+
+const months = [
+  "1月", "2月", "3月", "4月", "5月", "6月",
+  "7月", "8月", "9月", "10月", "11月", "12月"
 ]
 
 const sizes = [
@@ -115,8 +137,10 @@ export default function VehicleNewPage() {
     bodyType: "",
     maker: "",
     size: "",
+    vehicleType: "",
     model: "",
     year: "",
+    month: "",
     mileage: "",
     loadingCapacity: "",
     mission: "",
@@ -133,13 +157,54 @@ export default function VehicleNewPage() {
     description: "",
     imageUrls: [],
     equipment: [],
+    chassisNumber: "",
   })
+  const [generatedInquiryNumber, setGeneratedInquiryNumber] = useState<string>("生成中...")
   
   // ファイルアップロード用のref
   const inspectionFileRef = useRef<HTMLInputElement>(null)
   const conditionFileRef = useRef<HTMLInputElement>(null)
   const [uploadingInspection, setUploadingInspection] = useState(false)
   const [uploadingCondition, setUploadingCondition] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // ページ読み込み時に問い合わせ番号を生成
+  useEffect(() => {
+    const generateInquiryNumber = async () => {
+      try {
+        // 既存の車両から最大の問い合わせ番号を取得
+        const { collection, getDocs } = await import("firebase/firestore")
+        const { db } = await import("@/lib/firebase")
+        
+        const vehiclesCollection = collection(db, "vehicles")
+        const querySnapshot = await getDocs(vehiclesCollection)
+        
+        let maxNumber = 10000 // 10001からスタートするため、初期値は10000
+        
+        querySnapshot.docs.forEach(doc => {
+          const data = doc.data()
+          if (data.inquiryNumber) {
+            // "N"プレフィックスを除去して数値部分のみを取得
+            const numberPart = data.inquiryNumber.replace(/^N/, '')
+            const number = parseInt(numberPart, 10)
+            if (!isNaN(number) && number > maxNumber) {
+              maxNumber = number
+            }
+          }
+        })
+        
+        // 次の番号を生成（N + 5桁以上）
+        const nextNumber = maxNumber + 1
+        const generatedNumber = `N${nextNumber.toString()}`
+        setGeneratedInquiryNumber(generatedNumber)
+      } catch (error) {
+        console.error("問い合わせ番号生成エラー:", error)
+        setGeneratedInquiryNumber("エラー")
+      }
+    }
+
+    generateInquiryNumber()
+  }, [])
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -231,47 +296,70 @@ export default function VehicleNewPage() {
     }
   }
 
+  // 車両保存時の画像URL処理を改善
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // 必須項目チェック
-    if (!formData.maker || !formData.size) {
-      alert('メーカーとサイズは必須です。');
-      return;
-    }
+    setIsSubmitting(true)
+
     try {
-      const vehicleData: Omit<Vehicle, "id" | "createdAt" | "updatedAt"> = {
-        name: formData.name || "",
-        maker: formData.maker || "",
-        model: formData.model || "",
-        year: formData.year || "",
-        mileage: Number(formData.mileage?.toString().replace(/,/g, '')) || 0,
-        price: Number(formData.price?.toString().replace(/,/g, '')) || 0,
-        description: formData.description || "",
-        imageUrls: formData.imageUrls || [],
-        wholesalePrice: Number(formData.wholesalePrice?.toString().replace(/,/g, '')) || 0,
-        totalPayment: Number(formData.totalPayment?.toString().replace(/,/g, '')) || 0,
-        expiryDate: "", // Add a proper expiryDate field if needed
-        equipment: formData.equipment || [],
-        outerLength: Number(formData.outerLength?.toString().replace(/,/g, '')) || 0,
-        outerWidth: Number(formData.outerWidth?.toString().replace(/,/g, '')) || 0,
-        outerHeight: Number(formData.outerHeight?.toString().replace(/,/g, '')) || 0,
-        totalWeight: Number(formData.totalWeight?.toString().replace(/,/g, '')) || 0,
-        loadingCapacity: Number(formData.loadingCapacity?.toString().replace(/,/g, '')) || 0,
-        horsepower: Number(formData.horsepower?.toString().replace(/,/g, '')) || 0,
-        displacement: Number(formData.displacement?.toString().replace(/,/g, '')) || 0,
-        bodyType: formData.bodyType || "",
-        size: formData.size || "",
-        mission: formData.mission || "",
-        inspectionStatus: formData.inspectionStatus || "",
-        inspectionDate: formData.inspectionDate || "",
-        fuel: formData.fuel || "",
+      // 一時的な画像URLを除外して有効な画像URLのみを取得
+      const validImageUrls = formData.imageUrls?.filter(url => 
+        url && 
+        url.trim() !== "" && 
+        !url.includes("temp_") && 
+        !url.startsWith("blob:") &&
+        !url.startsWith("data:")
+      ) || [];
+
+      console.log("保存する画像URL:", validImageUrls);
+
+      const vehicleData = {
+        name: formData.name,
+        maker: formData.maker,
+        model: formData.model,
+        year: formData.year,
+        month: formData.month,
+        mileage: formData.mileage,
+        price: Number(formData.price?.toString().replace(/,/g, '')),
+        description: formData.description,
+        imageUrls: validImageUrls, // 有効な画像URLのみを保存
+        wholesalePrice: Number(formData.wholesalePrice?.toString().replace(/,/g, '')),
+        totalPayment: Number(formData.totalPayment?.toString().replace(/,/g, '')),
+        expiryDate: formData.inspectionDate,
+        // その他のフィールド
+        bodyType: formData.bodyType,
+        size: formData.size,
+        vehicleType: formData.vehicleType,
+        chassisNumber: formData.chassisNumber,
+        mission: formData.mission,
+        inspectionStatus: formData.inspectionStatus,
+        outerLength: formData.outerLength ? Number(formData.outerLength?.toString().replace(/,/g, '')) : undefined,
+        outerWidth: formData.outerWidth ? Number(formData.outerWidth?.toString().replace(/,/g, '')) : undefined,
+        outerHeight: formData.outerHeight ? Number(formData.outerHeight?.toString().replace(/,/g, '')) : undefined,
+        totalWeight: formData.totalWeight ? Number(formData.totalWeight?.toString().replace(/,/g, '')) : undefined,
+        horsepower: formData.horsepower ? Number(formData.horsepower?.toString().replace(/,/g, '')) : undefined,
+        displacement: formData.displacement ? Number(formData.displacement?.toString().replace(/,/g, '')) : undefined,
+        fuel: formData.fuel,
+        equipment: formData.equipment ? formData.equipment.join(',') : undefined,
+        inspectionImageUrl: formData.inspectionImageUrl,
+        conditionImageUrl: formData.conditionImageUrl,
       }
+
+      console.log("保存する車両データ:", vehicleData)
+
       const vehicleId = await addVehicle(vehicleData)
-      alert("車両を登録しました。車両ID: " + vehicleId)
+      console.log("車両保存成功:", vehicleId)
+
+      // 成功メッセージを表示
+      alert("車両が正常に登録されました")
+      
+      // 管理画面の車両一覧にリダイレクト
       router.push("/admin/vehicles")
     } catch (error) {
-      console.error("車両の登録に失敗しました:", error)
-      alert("車両の登録に失敗しました。");
+      console.error("車両保存エラー:", error)
+      alert("車両の登録に失敗しました")
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -284,7 +372,21 @@ export default function VehicleNewPage() {
       <div className="bg-white p-6 rounded-lg shadow-sm">
         <form className="space-y-8" onSubmit={handleSubmit}>
           {/* 基本情報 */}
-          <div className="grid grid-cols-4 gap-6">
+          <div className="grid grid-cols-5 gap-6">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium">問い合わせ番号</label>
+              <input
+                type="text"
+                value={generatedInquiryNumber}
+                className={`w-full border rounded px-2 py-1 ${
+                  generatedInquiryNumber === "生成中..." || generatedInquiryNumber === "エラー"
+                    ? "bg-gray-100 text-gray-500"
+                    : "bg-blue-50 text-blue-700 font-medium"
+                }`}
+                disabled
+                readOnly
+              />
+            </div>
             <div className="space-y-2">
               <label className="block text-sm font-medium">トラック名</label>
               <input
@@ -418,6 +520,20 @@ export default function VehicleNewPage() {
                   </select>
                 </div>
                 <div className="space-y-2">
+                  <label className="block text-sm font-medium">車種</label>
+                  <select
+                    name="vehicleType"
+                    value={formData.vehicleType}
+                    onChange={handleChange}
+                    className="w-full border rounded px-2 py-1"
+                  >
+                    <option value="">選択</option>
+                    {vehicleTypes.map((type) => (
+                      <option key={type} value={type}>{type}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="space-y-2">
                   <label className="block text-sm font-medium">型式</label>
                   <input
                     type="text"
@@ -429,18 +545,42 @@ export default function VehicleNewPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium">年式</label>
-                  <select
-                    name="year"
-                    value={formData.year}
+                  <label className="block text-sm font-medium">車体番号</label>
+                  <input
+                    type="text"
+                    name="chassisNumber"
+                    value={formData.chassisNumber}
                     onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
-                  >
-                    <option value="">選択</option>
-                    {years.map((year) => (
-                      <option key={year} value={year}>{year}</option>
-                    ))}
-                  </select>
+                    placeholder="車体番号を入力"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">年式</label>
+                  <div className="flex gap-2">
+                    <select
+                      name="year"
+                      value={formData.year}
+                      onChange={handleChange}
+                      className="w-1/2 border rounded px-2 py-1"
+                    >
+                      <option value="">選択</option>
+                      {years.map((year) => (
+                        <option key={year} value={year}>{year}</option>
+                      ))}
+                    </select>
+                    <select
+                      name="month"
+                      value={formData.month}
+                      onChange={handleChange}
+                      className="w-1/2 border rounded px-2 py-1"
+                    >
+                      <option value="">月</option>
+                      {months.map((month) => (
+                        <option key={month} value={month}>{month}</option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">走行距離</label>
@@ -595,13 +735,7 @@ export default function VehicleNewPage() {
                     <option value="その他">その他</option>
                   </select>
                 </div>
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium">問い合わせ番号</label>
-                  <input
-                    type="text"
-                    className="w-full border rounded px-2 py-1"
-                  />
-                </div>
+
               </div>
             </div>
           </div>
@@ -801,8 +935,8 @@ export default function VehicleNewPage() {
           </div>
 
           <div className="flex justify-center">
-            <Button type="submit" className="px-8">
-              登録完了
+            <Button type="submit" className="px-8" disabled={isSubmitting}>
+              {isSubmitting ? "登録中..." : "登録完了"}
             </Button>
           </div>
         </form>
