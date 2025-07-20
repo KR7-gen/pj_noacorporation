@@ -9,7 +9,8 @@ import {
   query,
   where,
   orderBy,
-  Timestamp 
+  Timestamp,
+  limit
 } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import { db, storage } from "./firebase";
@@ -180,6 +181,62 @@ export const normalizeImageUrls = (vehicle: any): string[] => {
   return filteredUrls.length > 0 ? filteredUrls : ["/placeholder.jpg"];
 };
 
+// 最新の車両を取得する関数（新着車輌用）
+export const getLatestVehicles = async (limit: number = 4): Promise<Vehicle[]> => {
+  try {
+    console.log(`最新${limit}台の車両を取得中...`);
+    
+    const vehiclesCollection = collection(db, "vehicles");
+    const q = query(
+      vehiclesCollection,
+      orderBy("createdAt", "desc"),
+      // limit(limit) // Firestoreの制限により、インデックスが必要な場合があるため一時的にコメントアウト
+    );
+    
+    const querySnapshot = await getDocs(q);
+    console.log("最新車両クエリ結果:", querySnapshot.docs.length, "件のドキュメント");
+    
+    const vehicles = querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      console.log("最新車両データ:", doc.id, data);
+      
+      // 画像URLを正規化
+      const normalizedImageUrls = normalizeImageUrls(data);
+      
+      return {
+        id: doc.id,
+        ...data,
+        imageUrls: normalizedImageUrls,
+        createdAt: convertTimestamp(data.createdAt),
+        updatedAt: convertTimestamp(data.updatedAt)
+      } as Vehicle;
+    });
+    
+    // 作成日時でソートして最新の4台を返す
+    const sortedVehicles = vehicles
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .slice(0, limit);
+    
+    console.log("最新車両取得完了:", sortedVehicles.length, "台");
+    return sortedVehicles;
+  } catch (error) {
+    console.error("最新車両取得エラー:", error);
+    // インデックスが構築中の場合は、全件取得してソート
+    try {
+      console.log("インデックス構築中のため、全件取得でフォールバック...");
+      const allVehicles = await getVehicles();
+      const sortedVehicles = allVehicles
+        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+        .slice(0, limit);
+      console.log("フォールバック成功:", sortedVehicles.length, "台");
+      return sortedVehicles;
+    } catch (fallbackError) {
+      console.error("フォールバックエラー:", fallbackError);
+      return [];
+    }
+  }
+};
+
 // 車両データ取得時の画像URL処理を改善
 export const getVehicles = async () => {
   try {
@@ -320,6 +377,83 @@ export const getSoldOutVehicles = async (limit: number = 3) => {
   } catch (error) {
     console.error("Error getting sold out vehicles: ", error);
     throw error;
+  }
+};
+
+// 新規登録された車両を最新順で取得する関数
+export const getNewlyRegisteredVehicles = async (limit: number = 4): Promise<Vehicle[]> => {
+  try {
+    console.log("新規登録車両データを取得中...");
+    
+    const vehiclesCollection = collection(db, "vehicles");
+    
+    // インデックスが構築中の場合のフォールバック処理
+    try {
+      // まず、インデックス付きクエリを試行（作成日時で降順ソート）
+      const newVehiclesQuery = query(
+        vehiclesCollection,
+        orderBy("createdAt", "desc"),
+        limit(limit)
+      );
+      
+      const querySnapshot = await getDocs(newVehiclesQuery);
+      console.log("新規登録車両数:", querySnapshot.docs.length);
+      
+      const vehicles = querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        console.log("新規登録車両データ:", doc.id, data);
+        
+        // 画像URLを正規化
+        const normalizedImageUrls = normalizeImageUrls(data);
+        
+        return {
+          id: doc.id,
+          ...data,
+          imageUrls: normalizedImageUrls,
+          createdAt: convertTimestamp(data.createdAt),
+          updatedAt: convertTimestamp(data.updatedAt)
+        } as Vehicle;
+      });
+      
+      console.log("新規登録車両取得完了:", vehicles.length, "台");
+      return vehicles;
+    } catch (indexError) {
+      console.log("インデックスがまだ構築中です。フォールバック処理を実行します。");
+      
+      // インデックスなしで全車両を取得し、クライアント側でソート
+      const allVehiclesQuery = query(vehiclesCollection);
+      const querySnapshot = await getDocs(allVehiclesQuery);
+      
+      const allVehicles = querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        
+        // 画像URLを正規化
+        const normalizedImageUrls = normalizeImageUrls(data);
+        
+        return {
+          id: doc.id,
+          ...data,
+          imageUrls: normalizedImageUrls,
+          createdAt: convertTimestamp(data.createdAt),
+          updatedAt: convertTimestamp(data.updatedAt)
+        };
+      }) as Vehicle[];
+      
+      // 作成日時でソートして最新の車両を返す
+      const sortedVehicles = allVehicles
+        .sort((a, b) => {
+          const dateA = a.createdAt instanceof Date ? a.createdAt : new Date(a.createdAt);
+          const dateB = b.createdAt instanceof Date ? b.createdAt : new Date(b.createdAt);
+          return dateB.getTime() - dateA.getTime();
+        })
+        .slice(0, limit);
+      
+      console.log("フォールバック処理で新規登録車両数:", sortedVehicles.length);
+      return sortedVehicles;
+    }
+  } catch (error) {
+    console.error("新規登録車両取得エラー:", error);
+    return [];
   }
 };
 

@@ -26,12 +26,14 @@ import {
 import Image from "next/image"
 import { formatNumberWithCommas, formatInputWithCommas } from "@/lib/utils"
 
-export default function AdminVehiclesPage() {
+export default function AdminPage() {
   const router = useRouter()
   const [vehicles, setVehicles] = useState<Vehicle[]>([])
+  const [filteredVehicles, setFilteredVehicles] = useState<Vehicle[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null)
+  const [searchQuery, setSearchQuery] = useState("")
   
   // インライン編集用の状態
   const [editingField, setEditingField] = useState<{
@@ -47,6 +49,7 @@ export default function AdminVehiclesPage() {
         setLoading(true)
         const fetchedVehicles = await getVehicles()
         setVehicles(fetchedVehicles)
+        setFilteredVehicles(fetchedVehicles)
         setError(null)
       } catch (err) {
         setError("車両の読み込みに失敗しました。")
@@ -58,6 +61,24 @@ export default function AdminVehiclesPage() {
 
     fetchVehicles()
   }, [])
+
+  // 検索フィルタリング
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setFilteredVehicles(vehicles)
+      return
+    }
+
+    const filtered = vehicles.filter(vehicle => {
+      const query = searchQuery.toLowerCase()
+      const inquiryNumber = vehicle.inquiryNumber?.toLowerCase() || ""
+      const chassisNumber = vehicle.chassisNumber?.toLowerCase() || ""
+      
+      return inquiryNumber.includes(query) || chassisNumber.includes(query)
+    })
+    
+    setFilteredVehicles(filtered)
+  }, [searchQuery, vehicles])
 
   const handleDelete = (vehicle: Vehicle) => {
     setSelectedVehicle(vehicle)
@@ -155,12 +176,42 @@ export default function AdminVehiclesPage() {
         </div>
       </div>
 
+      {/* 検索欄 */}
+      <div className="mb-6">
+        <div className="flex items-center gap-4">
+          <div className="flex-1 max-w-md">
+            <input
+              type="text"
+              placeholder="問い合わせ番号または車体番号で検索..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+          {searchQuery && (
+            <Button
+              variant="outline"
+              onClick={() => setSearchQuery("")}
+              className="px-4 py-2"
+            >
+              クリア
+            </Button>
+          )}
+        </div>
+        {searchQuery && (
+          <p className="text-sm text-gray-600 mt-2">
+            検索結果: {filteredVehicles.length}件
+          </p>
+        )}
+      </div>
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>写真</TableHead>
-              <TableHead>管理番号</TableHead>
+              <TableHead>問い合わせ番号</TableHead>
+              <TableHead>車体番号</TableHead>
               <TableHead>メーカー</TableHead>
               <TableHead>車種</TableHead>
               <TableHead>型式</TableHead>
@@ -168,6 +219,7 @@ export default function AdminVehiclesPage() {
               <TableHead>ボディタイプ</TableHead>
               <TableHead>大きさ</TableHead>
               <TableHead>積載量</TableHead>
+              <TableHead>車検状態</TableHead>
               <TableHead>車検有効期限</TableHead>
               <TableHead>車両価格</TableHead>
               <TableHead>車両価格（税込）</TableHead>
@@ -176,7 +228,7 @@ export default function AdminVehiclesPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {vehicles.map((vehicle) => (
+            {filteredVehicles.map((vehicle) => (
               <TableRow key={vehicle.id}>
                 <TableCell>
                   <Image
@@ -189,17 +241,23 @@ export default function AdminVehiclesPage() {
                     width={120}
                     height={80}
                     className="rounded-md object-cover"
+                    onError={(e) => {
+                      console.log("画像読み込みエラー:", e.currentTarget.src);
+                      e.currentTarget.src = "/placeholder.jpg";
+                    }}
                   />
                 </TableCell>
-                <TableCell>{vehicle.managementNumber || vehicle.id}</TableCell>
-                <TableCell>{vehicle.maker}</TableCell>
+                <TableCell>{vehicle.inquiryNumber || "---"}</TableCell>
+                <TableCell>{vehicle.chassisNumber || "---"}</TableCell>
+                <TableCell>{vehicle.maker || "---"}</TableCell>
                 <TableCell>{vehicle.model || "---"}</TableCell>
-                <TableCell>{vehicle.modelCode || "---"}</TableCell>
+                <TableCell>{vehicle.type || "---"}</TableCell>
                 <TableCell>{vehicle.year || "---"}</TableCell>
                 <TableCell>{vehicle.bodyType || "---"}</TableCell>
                 <TableCell>{vehicle.size || "---"}</TableCell>
-                <TableCell>{vehicle.loadingCapacity ? `${vehicle.loadingCapacity}kg` : "---"}</TableCell>
-                <TableCell>{vehicle.inspectionDate || "---"}</TableCell>
+                <TableCell>{vehicle.loadCapacity || "---"}</TableCell>
+                <TableCell>{vehicle.inspectionStatus || "---"}</TableCell>
+                <TableCell>{vehicle.inspectionExpiry || "---"}</TableCell>
                 <TableCell>
                   {editingField?.vehicleId === vehicle.id && editingField?.field === 'price' ? (
                     <div className="flex items-center gap-2">
@@ -207,26 +265,21 @@ export default function AdminVehiclesPage() {
                         type="text"
                         value={editValue}
                         onChange={(e) => handleEditValueChange(e.target.value)}
-                        className="w-24 border rounded px-2 py-1 text-sm"
-                        placeholder="価格"
+                        className="w-20 px-2 py-1 border rounded text-sm"
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') saveEditing();
+                          if (e.key === 'Escape') cancelEditing();
+                        }}
                       />
-                      <Button size="sm" onClick={saveEditing} disabled={saving}>
-                        {saving ? "保存中..." : "保存"}
-                      </Button>
-                      <Button size="sm" variant="outline" onClick={cancelEditing} disabled={saving}>
-                        キャンセル
-                      </Button>
+                      <Button size="sm" onClick={saveEditing} disabled={saving}>保存</Button>
+                      <Button size="sm" variant="outline" onClick={cancelEditing}>キャンセル</Button>
                     </div>
                   ) : (
-                    <div className="flex items-center gap-2">
-                      <span>{vehicle.price ? `${vehicle.price.toLocaleString()}円` : "---"}</span>
-                      <Button 
-                        size="sm" 
-                        variant="outline" 
-                        onClick={() => startEditing(vehicle.id!, 'price', vehicle.price || 0)}
-                      >
-                        編集
-                      </Button>
+                    <div 
+                      className="cursor-pointer hover:bg-gray-100 p-1 rounded"
+                      onClick={() => startEditing(vehicle.id!, 'price', vehicle.price || 0)}
+                    >
+                      {vehicle.price ? `¥${formatNumberWithCommas(vehicle.price)}` : "---"}
                     </div>
                   )}
                 </TableCell>
@@ -237,26 +290,21 @@ export default function AdminVehiclesPage() {
                         type="text"
                         value={editValue}
                         onChange={(e) => handleEditValueChange(e.target.value)}
-                        className="w-24 border rounded px-2 py-1 text-sm"
-                        placeholder="車両価格（税込）"
+                        className="w-20 px-2 py-1 border rounded text-sm"
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') saveEditing();
+                          if (e.key === 'Escape') cancelEditing();
+                        }}
                       />
-                      <Button size="sm" onClick={saveEditing} disabled={saving}>
-                        {saving ? "保存中..." : "保存"}
-                      </Button>
-                      <Button size="sm" variant="outline" onClick={cancelEditing} disabled={saving}>
-                        キャンセル
-                      </Button>
+                      <Button size="sm" onClick={saveEditing} disabled={saving}>保存</Button>
+                      <Button size="sm" variant="outline" onClick={cancelEditing}>キャンセル</Button>
                     </div>
                   ) : (
-                    <div className="flex items-center gap-2">
-                      <span>{vehicle.totalPayment ? `${vehicle.totalPayment.toLocaleString()}円` : "---"}</span>
-                      <Button 
-                        size="sm" 
-                        variant="outline" 
-                        onClick={() => startEditing(vehicle.id!, 'totalPayment', vehicle.totalPayment || 0)}
-                      >
-                        編集
-                      </Button>
+                    <div 
+                      className="cursor-pointer hover:bg-gray-100 p-1 rounded"
+                      onClick={() => startEditing(vehicle.id!, 'totalPayment', vehicle.totalPayment || 0)}
+                    >
+                      {vehicle.totalPayment ? `¥${formatNumberWithCommas(vehicle.totalPayment)}` : "---"}
                     </div>
                   )}
                 </TableCell>
@@ -267,41 +315,36 @@ export default function AdminVehiclesPage() {
                         type="text"
                         value={editValue}
                         onChange={(e) => handleEditValueChange(e.target.value)}
-                        className="w-24 border rounded px-2 py-1 text-sm"
-                        placeholder="業販金額"
+                        className="w-20 px-2 py-1 border rounded text-sm"
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') saveEditing();
+                          if (e.key === 'Escape') cancelEditing();
+                        }}
                       />
-                      <Button size="sm" onClick={saveEditing} disabled={saving}>
-                        {saving ? "保存中..." : "保存"}
-                      </Button>
-                      <Button size="sm" variant="outline" onClick={cancelEditing} disabled={saving}>
-                        キャンセル
-                      </Button>
+                      <Button size="sm" onClick={saveEditing} disabled={saving}>保存</Button>
+                      <Button size="sm" variant="outline" onClick={cancelEditing}>キャンセル</Button>
                     </div>
                   ) : (
-                    <div className="flex items-center gap-2">
-                      <span>{vehicle.wholesalePrice ? `${vehicle.wholesalePrice.toLocaleString()}円` : "---"}</span>
-                      <Button 
-                        size="sm" 
-                        variant="outline" 
-                        onClick={() => startEditing(vehicle.id!, 'wholesalePrice', vehicle.wholesalePrice || 0)}
-                      >
-                        編集
-                      </Button>
+                    <div 
+                      className="cursor-pointer hover:bg-gray-100 p-1 rounded"
+                      onClick={() => startEditing(vehicle.id!, 'wholesalePrice', vehicle.wholesalePrice || 0)}
+                    >
+                      {vehicle.wholesalePrice ? `¥${formatNumberWithCommas(vehicle.wholesalePrice)}` : "---"}
                     </div>
                   )}
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex gap-2 justify-end">
                     <Button
-                      variant="outline"
                       size="sm"
+                      variant="outline"
                       onClick={() => handleEdit(vehicle.id!)}
                     >
                       編集
                     </Button>
                     <Button
-                      variant="destructive"
                       size="sm"
+                      variant="destructive"
                       onClick={() => handleDelete(vehicle)}
                     >
                       削除
@@ -314,25 +357,21 @@ export default function AdminVehiclesPage() {
         </Table>
       </div>
 
-      {selectedVehicle && (
-        <AlertDialog open onOpenChange={() => setSelectedVehicle(null)}>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>本当に削除しますか？</AlertDialogTitle>
-              <AlertDialogDescription>
-                「{selectedVehicle.name}
-                」を削除すると、元に戻すことはできません。
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>キャンセル</AlertDialogCancel>
-              <AlertDialogAction onClick={confirmDelete}>
-                削除
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      )}
+      {/* 削除確認ダイアログ */}
+      <AlertDialog open={!!selectedVehicle} onOpenChange={() => setSelectedVehicle(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>車両を削除しますか？</AlertDialogTitle>
+            <AlertDialogDescription>
+              この操作は取り消すことができません。車両「{selectedVehicle?.maker} {selectedVehicle?.model}」を削除しますか？
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>キャンセル</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete}>削除</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 } 
