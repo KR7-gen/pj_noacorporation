@@ -18,8 +18,8 @@ const getEmailConfig = () => {
   const configPass = functions.config().email?.password;
   
   return {
-    user: envUser || configUser || 'your-email@gmail.com',
-    pass: envPass || configPass || 'your-app-password'
+    user:envUser||configUser||'your-email@gmail.com',
+    pass:envPass||configPass||'your-app-password',
   };
 };
 
@@ -101,7 +101,7 @@ export const sendNegotiationDeadlineAlert = functions.pubsub
       const emailConfig = getEmailConfig();
       const mailOptions = {
         from: emailConfig.user,
-        to: 'kuribayashi0515@gmail.com',
+        to: 'kuribayashi0515@gmail.com, kosaku.tsubata@gmail.com',
         subject: `【商談期限アラート】本日商談期限の車両があります（${todayString}）`,
         text: emailBody
       };
@@ -114,7 +114,7 @@ export const sendNegotiationDeadlineAlert = functions.pubsub
       await db.collection('emailLogs').add({
         type: 'negotiationDeadlineAlert',
         sentAt: admin.firestore.FieldValue.serverTimestamp(),
-        recipient: 'kuribayashi0515@gmail.com',
+        recipient: 'kuribayashi0515@gmail.com, kosaku.tsubata@gmail.com',
         subject: mailOptions.subject,
         vehicleCount: snapshot.docs.length,
         vehicleIds: snapshot.docs.map(doc => doc.id),
@@ -131,7 +131,7 @@ export const sendNegotiationDeadlineAlert = functions.pubsub
         await db.collection('emailLogs').add({
           type: 'negotiationDeadlineAlert',
           sentAt: admin.firestore.FieldValue.serverTimestamp(),
-          recipient: 'kuribayashi0515@gmail.com',
+          recipient: 'kuribayashi0515@gmail.com, kosaku.tsubata@gmail.com',
           error: error instanceof Error ? error.message : String(error),
           success: false
         });
@@ -236,7 +236,7 @@ export const testNegotiationDeadlineAlert = functions.https.onRequest(async (req
     const emailConfig = getEmailConfig();
     const mailOptions = {
       from: emailConfig.user,
-      to: 'kuribayashi0515@gmail.com',
+      to: 'kuribayashi0515@gmail.com, kosaku.tsubata@gmail.com',
       subject: `【商談期限アラート】本日商談期限の車両があります（${todayString}）`,
       text: emailBody
     };
