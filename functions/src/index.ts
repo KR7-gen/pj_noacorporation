@@ -30,30 +30,31 @@ const transporter = nodemailer.createTransport({
 
 // 商談期限アラート機能
 export const sendNegotiationDeadlineAlert = functions.pubsub
-  .schedule('0 13 * * *') // 毎日13時に実行
+  .schedule('0 9 * * *') // 毎日9時に実行
   .timeZone('Asia/Tokyo')
   .onRun(async (context) => {
     try {
       console.log('商談期限アラート機能開始:', new Date().toISOString());
       
-      // 今日の日付を取得（日本時間）
+      // 明日の日付を取得（日本時間）
       const today = new Date();
       const japanTime = new Date(today.getTime() + (9 * 60 * 60 * 1000)); // UTC+9
-      const todayString = japanTime.toISOString().split('T')[0]; // YYYY-MM-DD形式
+      japanTime.setDate(japanTime.getDate() + 1); // 明日
+      const tomorrowString = japanTime.toISOString().split('T')[0]; // YYYY-MM-DD形式
       
-      console.log('今日の日付:', todayString);
+      console.log('明日の日付:', tomorrowString);
       
-      // 商談中の車両で、今日が商談期限の車両を取得
+      // 商談中の車両で、明日が商談期限の車両を取得
       const vehiclesRef = db.collection('vehicles');
       const snapshot = await vehiclesRef
         .where('isNegotiating', '==', true)
-        .where('negotiationDeadline', '==', todayString)
+        .where('negotiationDeadline', '==', tomorrowString)
         .get();
       
       console.log('対象車両数:', snapshot.docs.length);
       
       if (snapshot.empty) {
-        console.log('商談期限当日の車両はありません');
+        console.log('商談期限前日の車両はありません');
         return null;
       }
       
@@ -102,7 +103,7 @@ export const sendNegotiationDeadlineAlert = functions.pubsub
       const mailOptions = {
         from: emailConfig.user,
         to: 'kuribayashi0515@gmail.com, kosaku.tsubata@gmail.com',
-        subject: `【商談期限アラート】本日商談期限の車両があります（${todayString}）`,
+        subject: `【商談期限アラート】本日商談期限の車両があります（${tomorrowString}）`,
         text: emailBody
       };
       
