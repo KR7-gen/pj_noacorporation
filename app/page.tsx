@@ -138,6 +138,16 @@ const faqs = [
     answer:
       "喜んでお手伝いします！オークションや過去の取引事業者など、弊社の持てる限りのネットワークを駆使して、ご希望のトラックを探索します。",
   },
+  {
+    question: "展示場はいつでも見学可能ですか？",
+    answer:
+      "日曜・祝日を除く毎日、9:00-18:00 までご見学いただけます。対応できる人員に限りがあるため、事前にお電話か問い合わせフォームにて見学ご希望とお知らせの上、お越しください。",
+  },
+  {
+    question: "在庫にない車も、探してもらうことはできますか?",
+    answer:
+      "喜んでお手伝いします！オークションや過去の取引事業者など、弊社の持てる限りのネットワークを駆使して、ご希望のトラックを探索します。",
+  },
 ]
 
 // 車両タイプのアイコンデータ
@@ -1417,9 +1427,10 @@ export default function HomePage() {
             height: "100%",
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center",
+            justifyContent: "flex-start",
             alignItems: "center",
-            padding: "0 20px"
+            padding: "0 20px",
+            paddingTop: "40px"
           }}
         >
           {/* QUESTIONセクション */}
@@ -1484,55 +1495,105 @@ export default function HomePage() {
                   backgroundColor: "white",
                   border: "1px solid #e5e7eb",
                   borderRadius: "8px",
-                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)"
+                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                  margin: 0
                 }}
               >
-                <CardContent style={{ padding: "24px" }}>
-                  <div style={{ marginBottom: "16px" }}>
-                    <span 
-                      style={{
-                        backgroundColor: "#2563eb",
-                        color: "white",
-                        padding: "4px 12px",
-                        borderRadius: "4px",
-                        fontWeight: "bold",
-                        marginRight: "16px",
-                        fontSize: "14px"
-                      }}
-                    >
+                <CardContent style={{ padding: 0 }}>
+                  {/* Q部分デザイン */}
+                  <div style={{
+                    width: "820px",
+                    height: "45px",
+                    opacity: 1,
+                    padding: "4px 12px",
+                    borderRadius: "4px",
+                    background: "#F2F2F2",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "16px"
+                  }}>
+                    <span style={{
+                      width: "26px",
+                      height: "29px",
+                      fontFamily: "Noto Sans JP, sans-serif",
+                      fontWeight: 700,
+                      fontStyle: "bold",
+                      fontSize: "20px",
+                      lineHeight: "100%",
+                      letterSpacing: "0%",
+                      color: "#1CA0C8",
+                      borderRadius: "4px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginRight: "12px"
+                    }}>
                       Q.
                     </span>
-                    <span 
-                      style={{
-                        fontWeight: "bold",
-                        color: "#374151",
-                        fontSize: "16px"
-                      }}
-                    >
+                    <span style={{
+                      width: "320px",
+                      height: "29px",
+                      fontFamily: "Noto Sans JP, sans-serif",
+                      fontWeight: 700,
+                      fontStyle: "bold",
+                      fontSize: "20px",
+                      lineHeight: "100%",
+                      letterSpacing: "0%",
+                      color: "#1A1A1A",
+                      display: "flex",
+                      alignItems: "center",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis"
+                    }}>
                       {faq.question}
                     </span>
                   </div>
-                  <div>
+                  {/* A部分デザイン */}
+                  <div style={{
+                    width: "820px",
+                    height: "80px",
+                    opacity: 1,
+                    padding: "8px 12px",
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: "12px"
+                  }}>
                     <span 
                       style={{
-                        backgroundColor: "#6b7280",
-                        color: "white",
-                        padding: "4px 12px",
-                        borderRadius: "4px",
-                        fontWeight: "bold",
-                        marginRight: "16px",
-                        fontSize: "14px"
+                        width: "26px",
+                        height: "29px",
+                        fontFamily: "Noto Sans JP, sans-serif",
+                        fontWeight: 700,
+                        fontStyle: "bold",
+                        fontSize: "20px",
+                        lineHeight: "100%",
+                        letterSpacing: "0%",
+                        color: "#EA1313",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginRight: "12px"
                       }}
                     >
                       A.
                     </span>
-                    <span 
-                      style={{
-                        color: "#6b7280",
-                        fontSize: "14px",
-                        lineHeight: "1.6"
-                      }}
-                    >
+                    <span style={{
+                      width: "722px",
+                      height: "56px",
+                      fontFamily: "Noto Sans JP, sans-serif",
+                      fontWeight: 700,
+                      fontStyle: "bold",
+                      fontSize: "16px",
+                      lineHeight: "28px",
+                      letterSpacing: "0%",
+                      color: "#1A1A1A",
+                      display: "flex",
+                      alignItems: "center",
+                      whiteSpace: "pre-line",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis"
+                    }}>
                       {faq.answer}
                     </span>
                   </div>
@@ -1998,20 +2059,55 @@ export default function HomePage() {
                   overflow: "hidden"
                 }}
               >
-                <CardContent style={{ padding: "0" }}>
-                  <div 
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      backgroundColor: "#f3f4f6",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      color: "#6b7280",
-                      fontSize: "14px"
-                    }}
-                  >
-                    店舗写真
+                <CardContent style={{ padding: 0, width: "100%", height: "100%", position: "relative", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+                  {/* 1段目：大きい画像 */}
+                  <div style={{ width: "383.84px", height: "293.88px", marginBottom: "8px" }}>
+                    <img
+                      src="/shopinfo_truck1.jpg"
+                      alt="店舗写真1"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        borderRadius: "8px"
+                      }}
+                    />
+                  </div>
+                  {/* 2段目：小さい画像3枚横並び */}
+                  <div style={{ display: "flex", gap: "8px", justifyContent: "center" }}>
+                    <img
+                      src="/shopinfo_truck2.jpg"
+                      alt="店舗写真2"
+                      style={{
+                        width: "121.27px",
+                        height: "92.85px",
+                        objectFit: "cover",
+                        borderRadius: "4px",
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.10)"
+                      }}
+                    />
+                    <img
+                      src="/shopinfo_truck3.jpg"
+                      alt="店舗写真3"
+                      style={{
+                        width: "121.27px",
+                        height: "90.95px",
+                        objectFit: "cover",
+                        borderRadius: "4px",
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.10)"
+                      }}
+                    />
+                    <img
+                      src="/shopinfo_truck4.jpg"
+                      alt="店舗写真4"
+                      style={{
+                        width: "133.53px",
+                        height: "89.09px",
+                        objectFit: "cover",
+                        borderRadius: "4px",
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.10)"
+                      }}
+                    />
                   </div>
                 </CardContent>
               </Card>
@@ -2019,23 +2115,31 @@ export default function HomePage() {
           </div>
 
           {/* 3. GoogleMapフレーム */}
-          <div 
+          <a
+            href="https://www.google.com/maps/place/%E6%A0%83%E6%9C%A8%E7%9C%8C%E3%81%95%E3%81%8F%E3%82%89%E5%B8%82%E5%90%91%E6%B2%B3%E5%8E%9F3994-1/"
+            target="_blank"
+            rel="noopener noreferrer"
             style={{
               width: "820px",
-              height: "256.6600036621094px",
-              opacity: 1,
-              backgroundColor: "#111827", // Grey-900
+              height: "256.66px",
+              display: "block",
               borderRadius: "8px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "white",
-              fontSize: "16px",
+              overflow: "hidden",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.10)",
               marginTop: "16px"
             }}
           >
-            Google Map
-          </div>
+            <iframe
+              title="Google Map"
+              src="https://www.google.com/maps?q=%E6%A0%83%E6%9C%A8%E7%9C%8C%E3%81%95%E3%81%8F%E3%82%89%E5%B8%82%E5%90%91%E6%B2%B3%E5%8E%9F3994-1&output=embed"
+              width="820"
+              height="256.66"
+              style={{ border: 0, width: "100%", height: "100%", pointerEvents: "none" }}
+              allowFullScreen={false}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </a>
         </div>
       </section>
 
