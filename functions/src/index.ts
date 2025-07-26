@@ -14,12 +14,12 @@ const getEmailConfig = () => {
   const envPass = process.env.EMAIL_PASSWORD;
   
   // Firebase Functions Configから取得を試行
-  const configUser = functions.config().email?.user;
-  const configPass = functions.config().email?.password;
+  const configUser = functions.config().gmail?.user;
+  const configPass = functions.config().gmail?.pass;
   
   return {
-    user:envUser||configUser||'your-email@gmail.com',
-    pass:envPass||configPass||'your-app-password',
+    user: envUser || configUser || 'your-email@gmail.com',
+    pass: envPass || configPass || 'your-app-password',
   };
 };
 

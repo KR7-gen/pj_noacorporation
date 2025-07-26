@@ -13,8 +13,8 @@ console.log('NEXT_PUBLIC_BASE_URL:', process.env.NEXT_PUBLIC_BASE_URL);
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: process.env.EMAIL_USER || 'your-email@gmail.com',
-    pass: process.env.EMAIL_PASSWORD || 'your-app-password'
+    user: process.env.EMAIL_USER || 'kuribayashi0515@gmail.com',
+    pass: process.env.EMAIL_PASSWORD || 'ystufoeahxjlgnwu'
   }
 });
 
@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
       const inquiryNumber = vehicle.inquiryNumber || '未設定';
       const year = vehicle.year || '未設定';
       const modelCode = vehicle.modelCode || '未設定';
-      const vehicleUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3002'}/vehicle/${doc.id}`;
+      const vehicleUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3001'}/vehicle/${doc.id}`;
       
       vehicles.push({
         id: doc.id,
@@ -114,6 +114,12 @@ export async function POST(request: NextRequest) {
     };
     
     console.log('メール送信開始...');
+    
+    // メール送信前の設定確認
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
+      console.log('環境変数が設定されていません。デフォルト値を使用します。');
+    }
+    
     const result = await transporter.sendMail(mailOptions);
     console.log('メール送信成功:', result.messageId);
     
@@ -134,12 +140,24 @@ export async function POST(request: NextRequest) {
       stack: error instanceof Error ? error.stack : undefined
     });
     
+    // エラーメッセージをユーザーフレンドリーにする
+    let errorMessage = 'メール送信に失敗しました';
+    if (error instanceof Error) {
+      if (error.message.includes('Invalid login')) {
+        errorMessage = 'メール認証に失敗しました。環境変数を確認してください。';
+      } else if (error.message.includes('ENOTFOUND')) {
+        errorMessage = 'ネットワーク接続に失敗しました。';
+      } else {
+        errorMessage = error.message;
+      }
+    }
+    
     return NextResponse.json({ 
       success: false, 
-      error: error instanceof Error ? error.message : String(error),
+      error: errorMessage,
       details: {
         name: error instanceof Error ? error.name : 'Unknown',
-        stack: error instanceof Error ? error.stack : undefined
+        message: error instanceof Error ? error.message : String(error)
       }
     }, { status: 500 });
   }

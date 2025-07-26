@@ -191,7 +191,7 @@ export default function InventoryPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 max-w-7xl">
         {/* ヘッダー */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">在庫車両一覧</h1>
@@ -202,32 +202,32 @@ export default function InventoryPage() {
         <div className="mb-8">
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
             <div
-              className={`flex flex-col items-center p-4 rounded-lg cursor-pointer transition-all ${
+              className={`flex flex-col items-center p-4 rounded-lg cursor-pointer transition-all shadow-sm ${
                 selectedType === "all"
                   ? "bg-blue-100 border-2 border-blue-500"
-                  : "bg-white border-2 border-gray-200 hover:border-blue-300"
+                  : "bg-white border-2 border-gray-200 hover:border-blue-300 hover:shadow-md"
               }`}
               onClick={() => handleIconClick("all")}
             >
-              <div className="w-12 h-12 bg-gray-300 rounded-full mb-2 flex items-center justify-center">
-                <span className="text-gray-600 font-bold">ALL</span>
+              <div className="w-12 h-12 bg-blue-500 rounded-full mb-2 flex items-center justify-center">
+                <span className="text-white font-bold text-sm">ALL</span>
               </div>
               <span className="text-sm font-medium text-gray-700">すべて</span>
             </div>
             {vehicleTypeIcons.map((icon) => (
               <div
                 key={icon.id}
-                className={`flex flex-col items-center p-4 rounded-lg cursor-pointer transition-all ${
+                className={`flex flex-col items-center p-4 rounded-lg cursor-pointer transition-all shadow-sm ${
                   selectedType === icon.type
                     ? "bg-blue-100 border-2 border-blue-500"
-                    : "bg-white border-2 border-gray-200 hover:border-blue-300"
+                    : "bg-white border-2 border-gray-200 hover:border-blue-300 hover:shadow-md"
                 }`}
                 onClick={() => handleIconClick(icon.type)}
               >
-                <div className="w-12 h-12 bg-gray-300 rounded-full mb-2 flex items-center justify-center">
-                  <span className="text-gray-600 font-bold">{icon.type.charAt(0)}</span>
+                <div className="w-12 h-12 bg-blue-500 rounded-full mb-2 flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">{icon.type.charAt(0)}</span>
                 </div>
-                <span className="text-sm font-medium text-gray-700">{icon.type}</span>
+                <span className="text-sm font-medium text-gray-700 text-center">{icon.type}</span>
               </div>
             ))}
           </div>

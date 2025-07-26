@@ -47,11 +47,11 @@ const getEmailConfig = () => {
     const envUser = process.env.EMAIL_USER;
     const envPass = process.env.EMAIL_PASSWORD;
     // Firebase Functions Configから取得を試行
-    const configUser = (_a = functions.config().email) === null || _a === void 0 ? void 0 : _a.user;
-    const configPass = (_b = functions.config().email) === null || _b === void 0 ? void 0 : _b.password;
+    const configUser = (_a = functions.config().gmail) === null || _a === void 0 ? void 0 : _a.user;
+    const configPass = (_b = functions.config().gmail) === null || _b === void 0 ? void 0 : _b.pass;
     return {
         user: envUser || configUser || 'your-email@gmail.com',
-        pass: envPass || configPass || 'your-app-password'
+        pass: envPass || configPass || 'your-app-password',
     };
 };
 const transporter = nodemailer.createTransport({
@@ -60,25 +60,26 @@ const transporter = nodemailer.createTransport({
 });
 // 商談期限アラート機能
 exports.sendNegotiationDeadlineAlert = functions.pubsub
-    .schedule('0 13 * * *') // 毎日13時に実行
+    .schedule('0 9 * * *') // 毎日9時に実行
     .timeZone('Asia/Tokyo')
     .onRun(async (context) => {
     try {
         console.log('商談期限アラート機能開始:', new Date().toISOString());
-        // 今日の日付を取得（日本時間）
+        // 明日の日付を取得（日本時間）
         const today = new Date();
         const japanTime = new Date(today.getTime() + (9 * 60 * 60 * 1000)); // UTC+9
-        const todayString = japanTime.toISOString().split('T')[0]; // YYYY-MM-DD形式
-        console.log('今日の日付:', todayString);
-        // 商談中の車両で、今日が商談期限の車両を取得
+        japanTime.setDate(japanTime.getDate() + 1); // 明日
+        const tomorrowString = japanTime.toISOString().split('T')[0]; // YYYY-MM-DD形式
+        console.log('明日の日付:', tomorrowString);
+        // 商談中の車両で、明日が商談期限の車両を取得
         const vehiclesRef = db.collection('vehicles');
         const snapshot = await vehiclesRef
             .where('isNegotiating', '==', true)
-            .where('negotiationDeadline', '==', todayString)
+            .where('negotiationDeadline', '==', tomorrowString)
             .get();
         console.log('対象車両数:', snapshot.docs.length);
         if (snapshot.empty) {
-            console.log('商談期限当日の車両はありません');
+            console.log('商談期限前日の車両はありません');
             return null;
         }
         // メール本文を作成
@@ -121,8 +122,8 @@ exports.sendNegotiationDeadlineAlert = functions.pubsub
         const emailConfig = getEmailConfig();
         const mailOptions = {
             from: emailConfig.user,
-            to: 'kuribayashi0515@gmail.com',
-            subject: `【商談期限アラート】本日商談期限の車両があります（${todayString}）`,
+            to: 'kuribayashi0515@gmail.com, kosaku.tsubata@gmail.com',
+            subject: `【商談期限アラート】本日商談期限の車両があります（${tomorrowString}）`,
             text: emailBody
         };
         console.log('メール送信開始...');
@@ -132,7 +133,7 @@ exports.sendNegotiationDeadlineAlert = functions.pubsub
         await db.collection('emailLogs').add({
             type: 'negotiationDeadlineAlert',
             sentAt: admin.firestore.FieldValue.serverTimestamp(),
-            recipient: 'kuribayashi0515@gmail.com',
+            recipient: 'kuribayashi0515@gmail.com, kosaku.tsubata@gmail.com',
             subject: mailOptions.subject,
             vehicleCount: snapshot.docs.length,
             vehicleIds: snapshot.docs.map(doc => doc.id),
@@ -147,7 +148,7 @@ exports.sendNegotiationDeadlineAlert = functions.pubsub
             await db.collection('emailLogs').add({
                 type: 'negotiationDeadlineAlert',
                 sentAt: admin.firestore.FieldValue.serverTimestamp(),
-                recipient: 'kuribayashi0515@gmail.com',
+                recipient: 'kuribayashi0515@gmail.com, kosaku.tsubata@gmail.com',
                 error: error instanceof Error ? error.message : String(error),
                 success: false
             });
@@ -232,7 +233,7 @@ exports.testNegotiationDeadlineAlert = functions.https.onRequest(async (req, res
         const emailConfig = getEmailConfig();
         const mailOptions = {
             from: emailConfig.user,
-            to: 'kuribayashi0515@gmail.com',
+            to: 'kuribayashi0515@gmail.com, kosaku.tsubata@gmail.com',
             subject: `【商談期限アラート】本日商談期限の車両があります（${todayString}）`,
             text: emailBody
         };
