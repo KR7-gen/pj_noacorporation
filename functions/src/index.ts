@@ -61,7 +61,7 @@ export const sendNegotiationDeadlineAlert = functions.pubsub
       // メール本文を作成
       let emailBody = `お疲れ様です。
 
-以下の車両が本日、商談期限を迎えます。
+以下の車両が明日、商談期限を迎えます。
 ご確認の上、必要な対応をお願いいたします。
 
 ------------------------------------
@@ -90,7 +90,7 @@ export const sendNegotiationDeadlineAlert = functions.pubsub
       
       emailBody += `------------------------------------
 
-※13時時点での自動通知です。
+※9時時点での自動通知です。
 ※ステータス変更などご対応後は、改めて商談状況をご確認ください。
 
 ---
@@ -103,7 +103,7 @@ export const sendNegotiationDeadlineAlert = functions.pubsub
       const mailOptions = {
         from: emailConfig.user,
         to: 'kuribayashi0515@gmail.com, kosaku.tsubata@gmail.com',
-        subject: `【商談期限アラート】本日商談期限の車両があります（${tomorrowString}）`,
+        subject: `【商談期限アラート】明日商談期限の車両があります（${tomorrowString}）`,
         text: emailBody
       };
       
