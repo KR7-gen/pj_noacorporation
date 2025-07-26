@@ -1168,68 +1168,358 @@ export default function HomePage() {
 
           <div 
             style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
+              display: "flex",
+              flexDirection: "column",
               gap: "32px",
               width: "100%",
               maxWidth: "1200px",
-              marginBottom: "48px"
+              marginBottom: "48px",
+              alignItems: "center"
             }}
           >
             {features.map((feature, index) => (
-              <Card 
+              <div 
                 key={index}
                 style={{
-                  backgroundColor: "white",
-                  border: "1px solid #e5e7eb",
-                  borderRadius: "8px",
-                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-                  textAlign: "center"
+                  width: index === 2 ? "809.81px" : "808px",
+                  height: "225px",
+                  opacity: 1,
+                  display: "flex",
+                  overflow: "hidden"
                 }}
               >
-                <CardContent style={{ padding: "32px" }}>
-                  <div 
-                    style={{
-                      fontSize: "36px",
-                      fontWeight: "bold",
-                      color: "#2563eb",
-                      marginBottom: "16px"
-                    }}
-                  >
-                    reason
-                  </div>
-                  <div 
-                    style={{
-                      fontSize: "60px",
-                      fontWeight: "bold",
-                      color: "#d1d5db",
-                      marginBottom: "16px"
-                    }}
-                  >
-                    {feature.number}
-                  </div>
-                  <h3 
-                    style={{
-                      fontWeight: "bold",
-                      fontSize: "18px",
-                      marginBottom: "16px",
-                      color: "#374151",
-                      lineHeight: "1.4"
-                    }}
-                  >
-                    {feature.title}
-                  </h3>
-                  <p 
-                    style={{
-                      color: "#6b7280",
-                      fontSize: "14px",
-                      lineHeight: "1.6"
-                    }}
-                  >
-                    {feature.description}
-                  </p>
-                </CardContent>
-              </Card>
+                {/* REASON1: 画像 → グレー背景 → 白背景 */}
+                {index === 0 && (
+                  <>
+                    <div 
+                      style={{
+                        width: "337px",
+                        height: "100%",
+                        backgroundImage: "url('/reason1.jpg')",
+                        backgroundSize: "cover",
+                        backgroundPosition: "center"
+                      }}
+                    />
+                    <div 
+                      style={{
+                        width: "360px",
+                        height: "100%",
+                        backgroundColor: "#E6E6E6",
+                        position: "relative"
+                      }}
+                    >
+                      <h3 
+                        style={{
+                          width: "240px",
+                          height: "58px",
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "700",
+                          fontStyle: "Bold",
+                          fontSize: "20px",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          textAlign: "center",
+                          color: "#2B5EC5",
+                          margin: "0",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          position: "absolute",
+                          top: "50%",
+                          left: "50%",
+                          transform: "translate(-50%, -50%)"
+                        }}
+                      >
+                        {feature.title}
+                      </h3>
+                    </div>
+                    <div 
+                      style={{
+                        width: "111px",
+                        height: "100%",
+                        backgroundColor: "white",
+                        position: "relative"
+                      }}
+                    >
+                      <div 
+                        style={{
+                          position: "absolute",
+                          bottom: "0px",
+                          right: "20px",
+                          display: "flex",
+                          flexDirection: "row",
+                          alignItems: "center",
+                          gap: "12px"
+                        }}
+                      >
+                        <div 
+                          style={{
+                            width: "64px",
+                            height: "24px",
+                            opacity: 1,
+                            fontFamily: "Noto Sans JP",
+                            fontWeight: "400",
+                            fontStyle: "Regular",
+                            fontSize: "20px",
+                            lineHeight: "100%",
+                            letterSpacing: "0%",
+                            color: "#2B5EC5",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center"
+                          }}
+                        >
+                          reason
+                        </div>
+                        <div 
+                          style={{
+                            width: "75px",
+                            height: "47px",
+                            opacity: 1,
+                            fontFamily: "Noto Sans JP",
+                            fontWeight: "600",
+                            fontStyle: "SemiBold",
+                            fontSize: "64px",
+                            lineHeight: "100%",
+                            letterSpacing: "0%",
+                            color: "#2B5EC5",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            transform: "translateY(-8px)"
+                          }}
+                        >
+                          {feature.number}
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {/* REASON2: 白背景 → グレー背景 → 画像 */}
+                {index === 1 && (
+                  <>
+                    <div 
+                      style={{
+                        width: "111px",
+                        height: "100%",
+                        backgroundColor: "white",
+                        position: "relative"
+                      }}
+                    >
+                      <div 
+                        style={{
+                          position: "absolute",
+                          bottom: "0px",
+                          left: "20px",
+                          display: "flex",
+                          flexDirection: "row",
+                          alignItems: "center",
+                          gap: "12px",
+                          zIndex: 10
+                        }}
+                      >
+                        <div 
+                          style={{
+                            width: "64px",
+                            height: "24px",
+                            opacity: 1,
+                            fontFamily: "Noto Sans JP",
+                            fontWeight: "400",
+                            fontStyle: "Regular",
+                            fontSize: "20px",
+                            lineHeight: "100%",
+                            letterSpacing: "0%",
+                            color: "#2B5EC5",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center"
+                          }}
+                        >
+                          reason
+                        </div>
+                        <div 
+                          style={{
+                            width: "75px",
+                            height: "47px",
+                            opacity: 1,
+                            fontFamily: "Noto Sans JP",
+                            fontWeight: "600",
+                            fontStyle: "SemiBold",
+                            fontSize: "64px",
+                            lineHeight: "100%",
+                            letterSpacing: "0%",
+                            color: "#2B5EC5",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            transform: "translateY(-8px)"
+                          }}
+                        >
+                          {feature.number}
+                        </div>
+                      </div>
+                    </div>
+                    <div 
+                      style={{
+                        width: "360px",
+                        height: "100%",
+                        backgroundColor: "#E6E6E6",
+                        position: "relative",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center"
+                      }}
+                    >
+                      <h3 
+                        style={{
+                          width: "301px",
+                          height: "58px",
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "700",
+                          fontStyle: "Bold",
+                          fontSize: "20px",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          textAlign: "center",
+                          color: "#2B5EC5",
+                          margin: "0",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          position: "absolute",
+                          top: "50%",
+                          left: "50%",
+                          transform: "translate(-50%, -50%)"
+                        }}
+                      >
+                        {feature.title}
+                      </h3>
+                    </div>
+                    <div 
+                      style={{
+                        width: "337px",
+                        height: "100%",
+                        backgroundImage: "url('/reason2.jpg')",
+                        backgroundSize: "cover",
+                        backgroundPosition: "center"
+                      }}
+                    />
+                  </>
+                )}
+
+                {/* REASON3: 画像 → グレー背景 → 白背景 */}
+                {index === 2 && (
+                  <>
+                    <div 
+                      style={{
+                        width: "337px",
+                        height: "100%",
+                        backgroundImage: "url('/reason3.jpg')",
+                        backgroundSize: "cover",
+                        backgroundPosition: "center"
+                      }}
+                    />
+                    <div 
+                      style={{
+                        width: "360px",
+                        height: "100%",
+                        backgroundColor: "#E6E6E6",
+                        position: "relative"
+                      }}
+                    >
+                      <h3 
+                        style={{
+                          width: "320px",
+                          height: "58px",
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "700",
+                          fontStyle: "Bold",
+                          fontSize: "20px",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          textAlign: "center",
+                          color: "#2B5EC5",
+                          margin: "0",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          position: "absolute",
+                          top: "50%",
+                          left: "50%",
+                          transform: "translate(-50%, -50%)"
+                        }}
+                      >
+                        {feature.title}
+                      </h3>
+                    </div>
+                    <div 
+                      style={{
+                        width: "112.81px",
+                        height: "100%",
+                        backgroundColor: "white",
+                        position: "relative"
+                      }}
+                    >
+                      <div 
+                        style={{
+                          position: "absolute",
+                          bottom: "0px",
+                          right: "20px",
+                          display: "flex",
+                          flexDirection: "row",
+                          alignItems: "center",
+                          gap: "12px"
+                        }}
+                      >
+                        <div 
+                          style={{
+                            width: "64px",
+                            height: "24px",
+                            opacity: 1,
+                            fontFamily: "Noto Sans JP",
+                            fontWeight: "400",
+                            fontStyle: "Regular",
+                            fontSize: "20px",
+                            lineHeight: "100%",
+                            letterSpacing: "0%",
+                            color: "#2B5EC5",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center"
+                          }}
+                        >
+                          reason
+                        </div>
+                        <div 
+                          style={{
+                            width: "75px",
+                            height: "47px",
+                            opacity: 1,
+                            fontFamily: "Noto Sans JP",
+                            fontWeight: "600",
+                            fontStyle: "SemiBold",
+                            fontSize: "64px",
+                            lineHeight: "100%",
+                            letterSpacing: "0%",
+                            color: "#2B5EC5",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            transform: "translateY(-8px)"
+                          }}
+                        >
+                          {feature.number}
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
             ))}
           </div>
 
@@ -1268,8 +1558,9 @@ export default function HomePage() {
       {/* Flow Section */}
       <section 
         style={{
-          width: "1440px",
-          height: "1195px",
+          width: "100%",
+          maxWidth: "1440px",
+          minHeight: "800px",
           gap: "40px",
           opacity: 1,
           paddingTop: "60px",
@@ -1290,117 +1581,224 @@ export default function HomePage() {
           }}
         >
           {/* FLOWセクション */}
-          <div style={{ textAlign: "center", marginBottom: "48px" }}>
-            <div 
-              style={{
-                width: "80px",
-                height: "17px",
-                margin: "0 auto 16px auto",
-                fontFamily: "Noto Sans JP",
-                fontWeight: "400",
-                fontStyle: "Regular",
-                fontSize: "14px",
-                lineHeight: "100%",
-                letterSpacing: "0%",
-                textAlign: "center",
-                color: "#2B5EC5",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center"
-              }}
-            >
-              FLOW
-            </div>
-            <div 
-              style={{
-                width: "100%",
-                minWidth: "320px",
-                height: "58px",
-                margin: "0 auto 16px auto",
-                fontFamily: "Noto Sans JP",
-                fontWeight: "700",
-                fontStyle: "Bold",
-                fontSize: "40px",
-                lineHeight: "100%",
-                letterSpacing: "0%",
-                textAlign: "center",
-                color: "#1A1A1A",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                whiteSpace: "nowrap"
-              }}
-            >
-              ご利用の流れ
-            </div>
-            <p style={{ color: "#374151", lineHeight: "1.6" }}>
-              初回お問い合わせからご納車まで、わかりやすくスムーズなお取引を心がけております。<br />
-              中古トラックの購入がはじめての方も、どうぞお気軽にお問い合わせください。
-            </p>
-          </div>
-
           <div 
             style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(4, 1fr)",
-              gap: "32px",
-              width: "100%",
-              maxWidth: "1200px"
+              width: "820px",
+              height: "960px",
+              backgroundColor: "white",
+              border: "2px dashed #87CEEB",
+              borderRadius: "12px",
+              padding: "16px 12px",
+              margin: "0 auto",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "12px"
             }}
           >
-            {flowSteps.map((step, index) => (
-              <Card 
-                key={index}
+            <div style={{ textAlign: "center" }}>
+              <div 
                 style={{
-                  backgroundColor: "white",
-                  border: "1px solid #e5e7eb",
-                  borderRadius: "8px",
-                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)"
+                  width: "80px",
+                  height: "17px",
+                  margin: "0 auto 16px auto",
+                  fontFamily: "Noto Sans JP",
+                  fontWeight: "400",
+                  fontStyle: "Regular",
+                  fontSize: "14px",
+                  lineHeight: "100%",
+                  letterSpacing: "0%",
+                  textAlign: "center",
+                  color: "#2B5EC5",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center"
                 }}
               >
-                <CardContent style={{ padding: "24px", textAlign: "center" }}>
-                  <div style={{ marginBottom: "16px" }}>
+                FLOW
+              </div>
+              <div 
+                style={{
+                  width: "100%",
+                  minWidth: "320px",
+                  height: "58px",
+                  margin: "0 auto 16px auto",
+                  fontFamily: "Noto Sans JP",
+                  fontWeight: "700",
+                  fontStyle: "Bold",
+                  fontSize: "40px",
+                  lineHeight: "100%",
+                  letterSpacing: "0%",
+                  textAlign: "center",
+                  color: "#1A1A1A",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  whiteSpace: "nowrap"
+                }}
+              >
+                ご利用の流れ
+              </div>
+              <p 
+                style={{ 
+                  width: "776px",
+                  height: "56px",
+                  opacity: 1,
+                  fontFamily: "Noto Sans JP",
+                  fontWeight: "400",
+                  fontStyle: "Regular",
+                  fontSize: "16px",
+                  lineHeight: "28px",
+                  letterSpacing: "0%",
+                  textAlign: "center",
+                  color: "#1A1A1A",
+                  margin: 0
+                }}
+              >
+                初回お問い合わせからご納車まで、わかりやすくスムーズなお取引を心がけております。<br />
+                中古トラックの購入がはじめての方も、どうぞお気軽にお問い合わせください。
+              </p>
+            </div>
+            {flowSteps.map((step, index) => (
+              <div key={index}>
+                <div 
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    marginBottom: index < flowSteps.length - 1 ? "8px" : "0",
+                    width: "100%"
+                  }}
+                >
+                  <div 
+                    style={{
+                      width: "108px",
+                      height: "auto",
+                      opacity: 1,
+                      borderRight: "1px solid #DEEBEF",
+                      padding: "16px 8px",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginRight: "24px"
+                    }}
+                  >
                     <div 
                       style={{
-                        fontSize: "20px",
-                        fontWeight: "bold",
-                        color: "#2563eb",
-                        marginBottom: "8px"
+                        width: "40px",
+                        height: "20px",
+                        opacity: 1,
+                        fontFamily: "Noto Sans JP",
+                        fontWeight: "700",
+                        fontStyle: "Bold",
+                        fontSize: "14px",
+                        lineHeight: "100%",
+                        letterSpacing: "0%",
+                        color: "#2B5EC5",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center"
                       }}
                     >
                       FLOW
                     </div>
                     <div 
                       style={{
+                        width: "43px",
+                        height: "46px",
+                        opacity: 1,
+                        fontFamily: "Noto Sans JP",
+                        fontWeight: "700",
+                        fontStyle: "Bold",
                         fontSize: "36px",
-                        fontWeight: "bold",
-                        color: "#d1d5db"
+                        lineHeight: "100%",
+                        letterSpacing: "0%",
+                        color: "#2B5EC5",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center"
                       }}
                     >
                       {step.number}
                     </div>
                   </div>
-                  <h3 
+                  <div style={{ flex: 1 }}>
+                    <h3 
+                      style={{
+                        width: "120px",
+                        opacity: 1,
+                        fontFamily: "Noto Sans JP",
+                        fontWeight: "700",
+                        fontStyle: "Bold",
+                        fontSize: "20px",
+                        lineHeight: "100%",
+                        letterSpacing: "0%",
+                        color: "#1A1A1A",
+                        marginBottom: "12px",
+                        whiteSpace: "nowrap",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px"
+                      }}
+                    >
+                      {step.title}
+                      <span 
+                        style={{
+                          width: step.number === "01" ? "33.33px" : "40px",
+                          height: step.number === "01" ? "26.67px" : "40px",
+                          opacity: 1,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center"
+                        }}
+                      >
+                        {step.number === "01" && "📧"}
+                        {step.number === "02" && "🚐"}
+                        {step.number === "03" && "🧮"}
+                        {step.number === "04" && "🤝"}
+                      </span>
+                    </h3>
+                    <p 
+                      style={{
+                        width: "648px",
+                        height: "84px",
+                        opacity: 1,
+                        fontFamily: "Noto Sans JP",
+                        fontWeight: "400",
+                        fontStyle: "Regular",
+                        fontSize: "16px",
+                        lineHeight: "28px",
+                        letterSpacing: "0%",
+                        color: "#1A1A1A"
+                      }}
+                    >
+                      {step.description}
+                    </p>
+                  </div>
+                </div>
+                {index < flowSteps.length - 1 && (
+                  <div 
                     style={{
-                      fontWeight: "bold",
-                      fontSize: "18px",
-                      marginBottom: "16px",
-                      color: "#374151"
+                      display: "flex",
+                      justifyContent: "center",
+                      marginBottom: "8px"
                     }}
                   >
-                    {step.title}
-                  </h3>
-                  <p 
-                    style={{
-                      color: "#6b7280",
-                      fontSize: "14px",
-                      lineHeight: "1.6"
-                    }}
-                  >
-                    {step.description}
-                  </p>
-                </CardContent>
-              </Card>
+                    <div 
+                      style={{
+                        width: "62px",
+                        height: "20px",
+                        opacity: 1,
+                        display: "block",
+                        background: "none",
+                        borderLeft: "31px solid transparent",
+                        borderRight: "31px solid transparent",
+                        borderTop: "20px solid #2563eb"
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
             ))}
           </div>
         </div>
