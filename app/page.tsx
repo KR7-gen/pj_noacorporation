@@ -828,8 +828,8 @@ export default function HomePage() {
             >
               新着車両
             </div>
-            <p style={{ fontSize: "18px", color: "#374151" }}>
-              最新の新規登録車両を<span style={{ fontSize: "24px", fontWeight: "bold", color: "#2563eb" }}>{latestVehicles.length}</span>台表示中
+            <p style={{ opacity: 1, fontFamily: "Noto Sans JP", fontWeight: "700", fontStyle: "Bold", fontSize: "16px", lineHeight: "100%", letterSpacing: "0%", color: "#1A1A1A" }}>
+              現在、<span style={{ opacity: 1, fontFamily: "Noto Sans JP", fontWeight: "700", fontStyle: "Bold", fontSize: "32px", lineHeight: "100%", letterSpacing: "0%", color: "#1CA0C8" }}>{latestVehicles.length}</span>台の在庫が閲覧可能です
             </p>
           </div>
 
@@ -848,10 +848,14 @@ export default function HomePage() {
               <Card 
                 key={vehicle.id}
                 style={{
-                  backgroundColor: "white",
-                  border: "1px solid #e5e7eb",
-                  borderRadius: "8px",
-                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                  width: "260px",
+                  height: "587px",
+                  gap: "12px",
+                  opacity: 1,
+                  paddingBottom: "16px",
+                  borderWidth: "1px",
+                  background: "#FFFFFF",
+                  border: "1px solid #F2F2F2",
                   overflow: "hidden",
                   position: "relative"
                 }}
@@ -860,32 +864,72 @@ export default function HomePage() {
                   {/* ヘッダーバー */}
                   <div 
                     style={{
-                      backgroundColor: "#374151",
-                      color: "white",
+                      height: "39px",
+                      background: "#1A1A1A",
                       padding: "8px 12px",
                       display: "flex",
                       justifyContent: "space-between",
-                      alignItems: "center",
-                      fontSize: "12px"
+                      alignItems: "center"
                     }}
                   >
-                    <span style={{ fontWeight: "bold" }}>
-                      {vehicle.maker} {vehicle.name}
+                    <span style={{ 
+                      width: "140px",
+                      height: "23px",
+                      opacity: 1,
+                      fontFamily: "Noto Sans JP",
+                      fontWeight: "700",
+                      fontStyle: "Bold",
+                      fontSize: "16px",
+                      lineHeight: "100%",
+                      letterSpacing: "0%",
+                      color: "#FFFFFF",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap"
+                    }}>
+                      {(vehicle.maker === "三菱ふそう" ? "三菱" : vehicle.maker)} {vehicle.vehicleType || vehicle.bodyType || vehicle.name}
                     </span>
-                    <span>{vehicle.modelCode || vehicle.model}</span>
+                    <span style={{ 
+                      width: "89px",
+                      height: "17px",
+                      opacity: 1,
+                      fontFamily: "Noto Sans JP",
+                      fontWeight: "400",
+                      fontStyle: "Regular",
+                      fontSize: "14px",
+                      lineHeight: "100%",
+                      letterSpacing: "0%",
+                      color: "#FFFFFF"
+                    }}>
+                      {vehicle.modelCode || vehicle.model}
+                    </span>
                   </div>
                   
                   {/* 問い合わせ番号 */}
                   <div 
                     style={{
-                      padding: "4px 12px",
-                      backgroundColor: "#f3f4f6",
-                      fontSize: "11px",
-                      color: "#374151",
-                      borderBottom: "1px solid #e5e7eb"
+                      height: "35px",
+                      background: "#FFFFFF",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center"
                     }}
                   >
-                    問合せ番号: {vehicle.inquiryNumber || "N00000"}
+                    <span style={{
+                      width: "157px",
+                      height: "19px",
+                      opacity: 1,
+                      fontFamily: "Noto Sans JP",
+                      fontWeight: "400",
+                      fontStyle: "Regular",
+                      fontSize: "16px",
+                      lineHeight: "100%",
+                      letterSpacing: "0%",
+                      color: "#1A1A1A",
+                      textAlign: "center"
+                    }}>
+                      問合せ番号: {vehicle.inquiryNumber || "N00000"}
+                    </span>
                   </div>
 
                   {/* 車両画像 */}
@@ -893,7 +937,7 @@ export default function HomePage() {
                     style={{
                       position: "relative",
                       width: "100%",
-                      height: "160px",
+                      height: "180px",
                       overflow: "hidden"
                     }}
                   >
@@ -910,117 +954,520 @@ export default function HomePage() {
                       }}
                     />
                     
-                    {/* 商談中オーバーレイ */}
-                    {vehicle.isNegotiating && (
+                    {/* 商談中・SOLD OUTオーバーレイ */}
+                    {(vehicle.isNegotiating || vehicle.isSoldOut) && (
                       <div 
                         style={{
                           position: "absolute",
                           top: "0",
                           left: "0",
-                          right: "0",
-                          bottom: "0",
-                          backgroundColor: "rgba(55, 65, 81, 0.8)",
+                          width: "100%",
+                          height: "39px",
+                          backgroundColor: vehicle.isSoldOut ? "#EA1313" : "#666666",
                           display: "flex",
                           alignItems: "center",
-                          justifyContent: "center",
-                          color: "white",
-                          fontSize: "14px",
-                          fontWeight: "bold"
+                          justifyContent: "center"
                         }}
                       >
-                        商談中
+                        <span style={{
+                          width: "48px",
+                          height: "23px",
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "700",
+                          fontStyle: "Bold",
+                          fontSize: "16px",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#FFFFFF"
+                        }}>
+                          {vehicle.isSoldOut ? "SOLD OUT" : "商談中"}
+                        </span>
                       </div>
                     )}
                   </div>
 
-                  {/* ボディタイプ */}
+                  {/* ボディタイプ + 詳細テーブル */}
                   <div 
                     style={{
-                      padding: "8px 12px",
-                      backgroundColor: "#f9fafb",
-                      fontSize: "12px",
-                      fontWeight: "bold",
-                      color: "#374151",
-                      borderBottom: "1px solid #e5e7eb"
+                      height: "273px",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "space-between"
                     }}
                   >
-                    {vehicle.bodyType || vehicle.vehicleType || "未設定"}
-                  </div>
+                    {/* ボディタイプ */}
+                    <div 
+                      style={{
+                        height: "calc(273px / 6)",
+                        display: "flex",
+                        alignItems: "center",
+                        background: "#FFFFFF",
+                        borderBottom: "1px solid #F2F2F2"
+                      }}
+                    >
+                      <div style={{
+                        width: "260px",
+                        height: "100%",
+                        background: "#FFFFFF",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center"
+                      }}>
+                        <span style={{
+                          width: "232px",
+                          height: "17px",
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "400",
+                          fontStyle: "Regular",
+                          fontSize: "14px",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#1A1A1A"
+                        }}>
+                          {vehicle.bodyType || vehicle.vehicleType || "未設定"}
+                        </span>
+                      </div>
+                    </div>
 
-                  {/* 詳細テーブル */}
-                  <div style={{ padding: "12px" }}>
-                    <table style={{ width: "100%", fontSize: "11px", color: "#374151" }}>
-                      <tbody>
-                        <tr>
-                          <td style={{ fontWeight: "bold", paddingBottom: "4px" }}>本体価格</td>
-                          <td style={{ textAlign: "right", paddingBottom: "4px" }}>
-                            <span style={{ fontSize: "16px", fontWeight: "bold", color: "#2563eb" }}>
-                              {vehicle.price ? `${vehicle.price}万円` : "000万円"}
-                            </span>
-                            <span style={{ fontSize: "10px" }}>(税別)</span>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td style={{ fontWeight: "bold", paddingBottom: "4px" }}>年式</td>
-                          <td style={{ textAlign: "right", paddingBottom: "4px" }}>
-                            {vehicle.year ? `${vehicle.year}年${vehicle.month || ""}月` : "平成00年00月"}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td style={{ fontWeight: "bold", paddingBottom: "4px" }}>走行距離</td>
-                          <td style={{ textAlign: "right", paddingBottom: "4px" }}>
-                            {vehicle.mileage ? `${vehicle.mileage}km` : "00,000km"}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td style={{ fontWeight: "bold", paddingBottom: "4px" }}>積載量</td>
-                          <td style={{ textAlign: "right", paddingBottom: "4px" }}>
-                            {vehicle.loadingCapacity ? `${vehicle.loadingCapacity}kg` : "0,000kg"}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td style={{ fontWeight: "bold", paddingBottom: "4px" }}>ミッション</td>
-                          <td style={{ textAlign: "right", paddingBottom: "4px" }}>
-                            {vehicle.mission || vehicle.shift || "AT"}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td style={{ fontWeight: "bold" }}>車検状態</td>
-                          <td style={{ textAlign: "right" }}>
-                            {vehicle.inspectionStatus || "抹消"}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                    {/* 本体価格 */}
+                    <div 
+                      style={{
+                        height: "calc(273px / 6)",
+                        display: "flex",
+                        alignItems: "center",
+                        fontSize: "11px",
+                        color: "#374151",
+                        borderBottom: "1px solid #F2F2F2"
+                      }}
+                    >
+                      <div style={{
+                        width: "80px",
+                        height: "100%",
+                        background: "#E6E6E6",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center"
+                      }}>
+                        <span style={{
+                          width: "56px",
+                          height: "20px",
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "700",
+                          fontStyle: "Bold",
+                          fontSize: "14px",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#1A1A1A"
+                        }}>本体価格</span>
+                      </div>
+                      <div style={{ 
+                        width: "180px",
+                        height: "100%",
+                        background: "#FFFFFF",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                        paddingLeft: "12px"
+                      }}>
+                        <div>
+                          <span style={{
+                            width: "57px",
+                            height: "23px",
+                            opacity: 1,
+                            fontFamily: "Noto Sans JP",
+                            fontWeight: "700",
+                            fontStyle: "Bold",
+                            fontSize: "32px",
+                            lineHeight: "100%",
+                            letterSpacing: "0%",
+                            color: "#2B5EC5"
+                          }}>
+                            {vehicle.price ? Math.floor(vehicle.price / 10000) : "000"}
+                          </span>
+                          <span style={{
+                            width: "57px",
+                            height: "14px",
+                            opacity: 1,
+                            fontFamily: "Noto Sans JP",
+                            fontWeight: "400",
+                            fontStyle: "Regular",
+                            fontSize: "12px",
+                            lineHeight: "100%",
+                            letterSpacing: "0%",
+                            color: "#2B5EC5"
+                          }}>万円(税別)</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 年式 */}
+                    <div 
+                      style={{
+                        height: "calc(273px / 6)",
+                        display: "flex",
+                        alignItems: "center",
+                        fontSize: "11px",
+                        color: "#374151",
+                        borderBottom: "1px solid #F2F2F2"
+                      }}
+                    >
+                      <div style={{
+                        width: "80px",
+                        height: "100%",
+                        background: "#E6E6E6",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center"
+                      }}>
+                        <span style={{
+                          width: "56px",
+                          height: "20px",
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "700",
+                          fontStyle: "Bold",
+                          fontSize: "14px",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#1A1A1A"
+                        }}>年式</span>
+                      </div>
+                      <div style={{ 
+                        width: "180px",
+                        height: "100%",
+                        background: "#FFFFFF",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                        paddingLeft: "12px"
+                      }}>
+                        <span style={{
+                          width: "88px",
+                          height: "17px",
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "400",
+                          fontStyle: "Regular",
+                          fontSize: "14px",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#1A1A1A"
+                        }}>
+                          {vehicle.year ? `${vehicle.year}年${vehicle.month ? vehicle.month.replace('月', '') + '月' : ''}` : "R6年9月"}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* 走行距離 */}
+                    <div 
+                      style={{
+                        height: "calc(273px / 6)",
+                        display: "flex",
+                        alignItems: "center",
+                        fontSize: "11px",
+                        color: "#374151",
+                        borderBottom: "1px solid #F2F2F2"
+                      }}
+                    >
+                      <div style={{
+                        width: "80px",
+                        height: "100%",
+                        background: "#E6E6E6",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center"
+                      }}>
+                        <span style={{
+                          width: "56px",
+                          height: "20px",
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "700",
+                          fontStyle: "Bold",
+                          fontSize: "14px",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#1A1A1A"
+                        }}>走行距離</span>
+                      </div>
+                      <div style={{ 
+                        width: "180px",
+                        height: "100%",
+                        background: "#FFFFFF",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                        paddingLeft: "12px"
+                      }}>
+                        <span style={{
+                          width: "88px",
+                          height: "17px",
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "400",
+                          fontStyle: "Regular",
+                          fontSize: "14px",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#1A1A1A"
+                        }}>
+                          {vehicle.mileage ? `${vehicle.mileage.toLocaleString()}km` : "00,000km"}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* 積載量 */}
+                    <div 
+                      style={{
+                        height: "calc(273px / 6)",
+                        display: "flex",
+                        alignItems: "center",
+                        fontSize: "11px",
+                        color: "#374151",
+                        borderBottom: "1px solid #F2F2F2"
+                      }}
+                    >
+                      <div style={{
+                        width: "80px",
+                        height: "100%",
+                        background: "#E6E6E6",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center"
+                      }}>
+                        <span style={{
+                          width: "56px",
+                          height: "20px",
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "700",
+                          fontStyle: "Bold",
+                          fontSize: "14px",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#1A1A1A"
+                        }}>積載量</span>
+                      </div>
+                      <div style={{ 
+                        width: "180px",
+                        height: "100%",
+                        background: "#FFFFFF",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                        paddingLeft: "12px"
+                      }}>
+                        <span style={{
+                          width: "88px",
+                          height: "17px",
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "400",
+                          fontStyle: "Regular",
+                          fontSize: "14px",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#1A1A1A"
+                        }}>
+                          {vehicle.loadingCapacity ? `${vehicle.loadingCapacity.toLocaleString()}kg` : "0,000kg"}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* シフト */}
+                    <div 
+                      style={{
+                        height: "calc(273px / 6)",
+                        display: "flex",
+                        alignItems: "center",
+                        fontSize: "11px",
+                        color: "#374151",
+                        borderBottom: "1px solid #F2F2F2"
+                      }}
+                    >
+                      <div style={{
+                        width: "80px",
+                        height: "100%",
+                        background: "#E6E6E6",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center"
+                      }}>
+                        <span style={{
+                          width: "56px",
+                          height: "20px",
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "700",
+                          fontStyle: "Bold",
+                          fontSize: "14px",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#1A1A1A"
+                        }}>シフト</span>
+                      </div>
+                      <div style={{ 
+                        width: "180px",
+                        height: "100%",
+                        background: "#FFFFFF",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                        paddingLeft: "12px"
+                      }}>
+                        <span style={{
+                          width: "88px",
+                          height: "17px",
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "400",
+                          fontStyle: "Regular",
+                          fontSize: "14px",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#1A1A1A"
+                        }}>
+                          {vehicle.mission || vehicle.shift || "AT"}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* 車検期限 */}
+                    <div 
+                      style={{
+                        height: "calc(273px / 6)",
+                        display: "flex",
+                        alignItems: "center",
+                        fontSize: "11px",
+                        color: "#374151",
+                        borderBottom: "1px solid #F2F2F2"
+                      }}
+                    >
+                      <div style={{
+                        width: "80px",
+                        height: "100%",
+                        background: "#E6E6E6",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center"
+                      }}>
+                        <span style={{
+                          width: "56px",
+                          height: "20px",
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "700",
+                          fontStyle: "Bold",
+                          fontSize: "14px",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#1A1A1A"
+                        }}>車検期限</span>
+                      </div>
+                      <div style={{ 
+                        width: "180px",
+                        height: "100%",
+                        background: "#FFFFFF",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                        paddingLeft: "12px"
+                      }}>
+                        <span style={{
+                          width: "88px",
+                          height: "17px",
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "400",
+                          fontStyle: "Regular",
+                          fontSize: "14px",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#1A1A1A"
+                        }}>
+                          {vehicle.inspectionStatus || "抹消"}
+                        </span>
+                      </div>
+                    </div>
                   </div>
 
                   {/* 詳細ボタン */}
-                  <div style={{ padding: "0 12px 12px 12px" }}>
+                  <div style={{ 
+                    height: "60px", 
+                    display: "flex", 
+                    alignItems: "center", 
+                    justifyContent: "center",
+                    background: "#FFFFFF"
+                  }}>
                     <Link href={`/vehicle/${vehicle.id}`}>
                       <Button 
-                        variant="outline"
                         style={{
-                          width: "100%",
-                          backgroundColor: "white",
-                          color: "#374151",
-                          border: "1px solid #d1d5db",
+                          width: "160px",
+                          height: "32px",
+                          gap: "8px",
+                          opacity: 1,
+                          paddingTop: "4px",
+                          paddingRight: "8px",
+                          paddingBottom: "4px",
+                          paddingLeft: "8px",
                           borderRadius: "4px",
-                          padding: "8px",
-                          fontSize: "12px",
-                          fontWeight: "500",
+                          border: "1px solid #333333",
+                          background: "#FFFFFF",
+                          boxShadow: "2px 2px 2px 0px #00000040",
                           cursor: "pointer",
-                          transition: "all 0.3s ease"
+                          transition: "all 0.3s ease",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center"
                         }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = "#f3f4f6";
-                          e.currentTarget.style.borderColor = "#9ca3af";
+                          e.currentTarget.style.opacity = "0.9";
                         }}
                         onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = "white";
-                          e.currentTarget.style.borderColor = "#d1d5db";
+                          e.currentTarget.style.opacity = "1";
                         }}
                       >
-                        詳細はこちら &gt;
+                        <span style={{
+                          width: "84px",
+                          height: "20px",
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "700",
+                          fontStyle: "Bold",
+                          fontSize: "14px",
+                          lineHeight: "20px",
+                          letterSpacing: "0%",
+                          color: "#333333",
+                          display: "flex",
+                          alignItems: "center",
+                          transform: "translateY(-1px)"
+                        }}>
+                          詳細はこちら
+                        </span>
+                        <svg
+                          width="7.4"
+                          height="12"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          style={{
+                            color: "#333333",
+                            height: "20px",
+                            display: "flex",
+                            alignItems: "center"
+                          }}
+                        >
+                          <path
+                            d="M9 18L15 12L9 6"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
                       </Button>
                     </Link>
                   </div>
@@ -1526,29 +1973,61 @@ export default function HomePage() {
           <div style={{ textAlign: "center" }}>
             <Link href="/about">
               <Button 
-                variant="outline" 
-                size="lg"
                 style={{
-                  backgroundColor: "transparent",
-                  color: "#374151",
-                  border: "2px solid #d1d5db",
-                  borderRadius: "8px",
-                  padding: "12px 24px",
+                  width: "220px",
+                  height: "40px",
+                  gap: "36px",
+                  opacity: 1,
+                  paddingTop: "8px",
+                  paddingRight: "12px",
+                  paddingBottom: "8px",
+                  paddingLeft: "12px",
+                  borderRadius: "4px",
+                  background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
+                  boxShadow: "2px 2px 2px 0px #00000040",
+                  color: "#FFFFFF",
+                  fontFamily: "Noto Sans JP",
+                  fontWeight: "700",
+                  fontStyle: "Bold",
                   fontSize: "16px",
-                  fontWeight: "500",
+                  lineHeight: "100%",
+                  letterSpacing: "0%",
                   cursor: "pointer",
-                  transition: "all 0.3s ease"
+                  transition: "all 0.3s ease",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  position: "relative"
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "#f3f4f6";
-                  e.currentTarget.style.borderColor = "#9ca3af";
+                  e.currentTarget.style.opacity = "0.9";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "transparent";
-                  e.currentTarget.style.borderColor = "#d1d5db";
+                  e.currentTarget.style.opacity = "1";
                 }}
               >
-                詳しく見る
+                <span style={{ width: "80px", height: "23px" }}>詳しく見る</span>
+                <svg
+                  width="7.4"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{
+                    position: "absolute",
+                    top: "14px",
+                    left: "192px",
+                    color: "#FFFFFF"
+                  }}
+                >
+                  <path
+                    d="M9 18L15 12L9 6"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </Button>
             </Link>
           </div>
