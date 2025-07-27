@@ -324,7 +324,7 @@ export default function HomePage() {
           transform: "translateX(-50%)",
           display: "flex",
           flexDirection: "column",
-          backgroundImage: "url('/background.png')",
+          background: "linear-gradient(90deg, rgba(0, 0, 0, 0.4) 43.5%, rgba(255, 255, 255, 0) 100%), url('/background.png')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -343,30 +343,52 @@ export default function HomePage() {
           <div 
             style={{
               maxWidth: "800px",
-              margin: "0 auto",
-              textAlign: "center"
+              margin: "0",
+              textAlign: "left"
             }}
           >
             <h1 
               style={{
+                width: "632px",
+                height: "70px",
+                opacity: 1,
+                fontFamily: "Noto Sans JP",
+                fontWeight: 700,
+                fontStyle: "Bold",
                 fontSize: "48px",
-                fontWeight: "bold",
-                marginBottom: "24px",
-                lineHeight: "1.2"
+                lineHeight: "100%",
+                letterSpacing: "0%",
+                color: "#FFFFFF",
+                textShadow: "4px 4px 4px 0px #0000004D",
+                margin: "0 0 24px 0",
+                textAlign: "left"
+              }}
+            >
+              キャッチコピー
+            </h1>
+            <div 
+              style={{
+                width: "632px",
+                height: "120px",
+                opacity: 1,
+                fontFamily: "Noto Sans JP",
+                fontWeight: 700,
+                fontStyle: "Bold",
+                fontSize: "24px",
+                lineHeight: "40px",
+                letterSpacing: "0%",
+                color: "#FFFFFF",
+                textShadow: "2px 2px 2px rgba(0, 0, 0, 0.3)",
+                margin: "0",
+                textAlign: "left"
               }}
             >
               業界最安値を目指す、千葉の中古トラック販売店です。
-            </h1>
-            <p 
-              style={{
-                fontSize: "20px",
-                lineHeight: "1.6"
-              }}
-            >
+              <br />
               中古トラック購入の、無駄なコストをカットしませんか？
               <br />
               限界ギリギリの安さ、ぜひ他店様と比べてみてください！
-            </p>
+            </div>
           </div>
         </div>
 
@@ -1482,26 +1504,45 @@ export default function HomePage() {
                 variant="outline" 
                 size="lg"
                 style={{
-                  backgroundColor: "transparent",
-                  color: "#374151",
-                  border: "2px solid #d1d5db",
-                  borderRadius: "8px",
-                  padding: "12px 24px",
-                  fontSize: "16px",
-                  fontWeight: "500",
+                  width: "220px",
+                  height: "40px",
+                  gap: "12px",
+                  opacity: 1,
+                  padding: "8px 12px",
+                  borderRadius: "4px",
+                  background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
+                  boxShadow: "2px 2px 2px 0px #00000040",
+                  border: "none",
                   cursor: "pointer",
-                  transition: "all 0.3s ease"
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "#f3f4f6";
-                  e.currentTarget.style.borderColor = "#9ca3af";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "transparent";
-                  e.currentTarget.style.borderColor = "#d1d5db";
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center"
                 }}
               >
-                在庫をもっと見る &gt;
+                <span
+                  style={{
+                    width: "128px",
+                    height: "23px",
+                    opacity: 1,
+                    fontFamily: "Noto Sans JP",
+                    fontWeight: 700,
+                    fontStyle: "Bold",
+                    fontSize: "16px",
+                    lineHeight: "100%",
+                    letterSpacing: "0%",
+                    color: "#FFFFFF"
+                  }}
+                >
+                  在庫をもっと見る
+                </span>
+                <ChevronRight
+                  style={{
+                    width: "24px",
+                    height: "24px",
+                    opacity: 1,
+                    color: "#FFFFFF"
+                  }}
+                />
               </Button>
             </Link>
           </div>
