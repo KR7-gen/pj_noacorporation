@@ -10,6 +10,15 @@ const config: Config = {
   ],
   theme: {
   	extend: {
+  		fontSize: {
+  			base: '14px',  // 基準サイズ
+  			sm: '12px',
+  			lg: '16px',
+  			xl: '18px',
+  			'2xl': '20px',
+  			'3xl': '24px',
+  			'4xl': '32px',
+  		},
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
