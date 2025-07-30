@@ -214,8 +214,11 @@ export default function AdminVehiclesPage() {
               <TableHead>車体番号</TableHead>
               <TableHead>メーカー</TableHead>
               <TableHead>車種</TableHead>
-              <TableHead>型式</TableHead>
+              <TableHead>型式（modelCode）</TableHead>
               <TableHead>年式</TableHead>
+              <TableHead>シフト</TableHead>
+              <TableHead>原動機型式</TableHead>
+              <TableHead>過給機</TableHead>
               <TableHead>ボディタイプ</TableHead>
               <TableHead>大きさ</TableHead>
               <TableHead>積載量</TableHead>
@@ -251,8 +254,11 @@ export default function AdminVehiclesPage() {
                 <TableCell>{vehicle.chassisNumber || "---"}</TableCell>
                 <TableCell>{vehicle.maker}</TableCell>
                 <TableCell>{vehicle.vehicleType || "---"}</TableCell>
-                <TableCell>{vehicle.model || "---"}</TableCell>
+                <TableCell>{vehicle.modelCode || "---"}</TableCell>
                 <TableCell>{vehicle.year || "---"}</TableCell>
+                <TableCell>{vehicle.shift || "---"}</TableCell>
+                <TableCell>{vehicle.engineModel || "---"}</TableCell>
+                <TableCell>{vehicle.turbo || "---"}</TableCell>
                 <TableCell>{vehicle.bodyType || "---"}</TableCell>
                 <TableCell>{vehicle.size || "---"}</TableCell>
                 <TableCell>{vehicle.loadingCapacity ? `${vehicle.loadingCapacity}kg` : "---"}</TableCell>

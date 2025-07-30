@@ -1,14 +1,5 @@
 "use client"
 
-// フォントサイズ基準値
-// base: 14px (0.875rem)
-// sm: 12px (0.75rem) 
-// lg: 16px (1rem)
-// xl: 18px (1.125rem)
-// 2xl: 20px (1.25rem)
-// 3xl: 24px (1.5rem)
-// 4xl: 32px (2rem)
-
 import { useState, useEffect, useMemo } from "react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
@@ -28,7 +19,7 @@ export default function VehicleDetailPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [selectedPaymentPeriod, setSelectedPaymentPeriod] = useState(5) // デフォルト5年
+  const [selectedPaymentPeriod, setSelectedPaymentPeriod] = useState(5)
 
   useEffect(() => {
     const fetchVehicle = async () => {
@@ -37,7 +28,6 @@ export default function VehicleDetailPage() {
         const fetchedVehicle = await getVehicle(vehicleId)
         if (fetchedVehicle) {
           setVehicle(fetchedVehicle)
-          // 関連車両を取得（同じメーカーまたはボディタイプの車両）
           const allVehicles = await getVehicles()
           const related = allVehicles
             .filter(v => v.id !== vehicleId)
@@ -63,54 +53,33 @@ export default function VehicleDetailPage() {
     }
   }, [vehicleId])
 
-  // デバッグ用：シミュレーション条件チェック
+  // デバッグ用：車両データチェック
   useEffect(() => {
     if (vehicle) {
-      const currentYear = new Date().getFullYear();
+      console.log('車両データ全体:', JSON.stringify(vehicle, null, 2));
+      console.log('車両情報フィールド:', {
+        modelCode: vehicle.modelCode,
+        shift: vehicle.shift,
+        engineModel: vehicle.engineModel,
+        turbo: vehicle.turbo
+      });
+      console.log('個別フィールド値:');
+      console.log('- modelCode:', vehicle.modelCode);
+      console.log('- shift:', vehicle.shift);
+      console.log('- engineModel:', vehicle.engineModel);
+      console.log('- turbo:', vehicle.turbo);
       
-      // 年式条件: 2022年以内（R4まで）
-      let isWithinYearLimit = false;
-      let gregorianYear = null;
-      if (vehicle.year) {
-        const yearStr = String(vehicle.year);
-        if (yearStr.startsWith('R')) {
-          // 令和の場合: R6 → 令和6年 → 2024年
-          const reiwaYear = parseInt(yearStr.substring(1));
-          gregorianYear = 2018 + reiwaYear; // 令和元年は2019年
-          isWithinYearLimit = gregorianYear >= 2022;
-        } else {
-          // 西暦の場合
-          gregorianYear = Number(vehicle.year);
-          isWithinYearLimit = gregorianYear >= 2022;
-        }
-      }
-      
-      const isWithin10kKm = Number(vehicle.mileage) <= 10000;
-      
-      console.log('シミュレーション条件チェック:', {
-        vehicleYear: vehicle.year,
-        gregorianYear,
-        isWithinYearLimit,
-        mileage: vehicle.mileage,
-        mileageType: typeof vehicle.mileage,
-        isWithin10kKm,
-        shouldShow: isWithinYearLimit && isWithin10kKm,
-        rawVehicleData: {
-          year: vehicle.year,
-          yearType: typeof vehicle.year,
-          mileage: vehicle.mileage,
-          mileageType: typeof vehicle.mileage
-        }
+      console.log('データベースの全フィールド名:');
+      Object.keys(vehicle).forEach(key => {
+        console.log(`- ${key}:`, vehicle[key as keyof Vehicle]);
       });
     }
   }, [vehicle]);
 
-  // 画像配列（imageUrlsがなければimageUrl単体、なければダミー）
   const images = useMemo(() => {
     if (!vehicle) return ["/placeholder.jpg"];
     
     if (vehicle.imageUrls && vehicle.imageUrls.length > 0) {
-      // 有効な画像URLのみをフィルタリング
       const validImages = vehicle.imageUrls.filter(url => 
         url && 
         url.trim() !== "" && 
@@ -128,27 +97,22 @@ export default function VehicleDetailPage() {
     return ["/placeholder.jpg"];
   }, [vehicle?.imageUrls, vehicle?.imageUrl]);
 
-  // シミュレーション表示条件チェック
   const shouldShowSimulation = vehicle ? (() => {
     const currentYear = new Date().getFullYear();
     
-    // 年式条件: 2022年以内（R4まで）
     let isWithinYearLimit = false;
     if (vehicle.year) {
       const yearStr = String(vehicle.year);
       if (yearStr.startsWith('R')) {
-        // 令和の場合: R6 → 令和6年 → 2024年
         const reiwaYear = parseInt(yearStr.substring(1));
-        const gregorianYear = 2018 + reiwaYear; // 令和元年は2019年
+        const gregorianYear = 2018 + reiwaYear;
         isWithinYearLimit = gregorianYear >= 2022;
       } else {
-        // 西暦の場合
         const vehicleYear = Number(vehicle.year);
         isWithinYearLimit = vehicleYear >= 2022;
       }
     }
     
-    // 走行距離条件: 1万km以内
     const isWithin10kKm = Number(vehicle.mileage) <= 10000;
     
     return isWithinYearLimit && isWithin10kKm;
@@ -190,7 +154,6 @@ export default function VehicleDetailPage() {
     setCurrentIndex(idx)
   }
 
-  // 画像エラーハンドラー
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     console.log("画像読み込みエラー:", e.currentTarget.src);
     e.currentTarget.src = "/placeholder.jpg";
@@ -198,191 +161,28 @@ export default function VehicleDetailPage() {
 
   return (
     <div className="bg-white" style={{ minHeight: '2800px', paddingBottom: '100px' }}>
-      {/* ①車両ページ */}
-      <section 
-        className="w-[1440px] mx-auto"
-        style={{
-          gap: '20px',
-          paddingTop: '60px',
-          paddingRight: '40px',
-          paddingBottom: '40px',
-          paddingLeft: '40px',
-          background: '#FFFFFF',
-          opacity: 1
-        }}
-      >
-        {/* a車両タイトル */}
-        <div 
-          className="w-[1000px] h-[45px] mx-auto"
-          style={{
-            padding: '8px',
-            background: '#1A1A1A',
-            opacity: 1,
-            marginBottom: '8px'
-          }}
-        >
+      
+      {/* 1. 車両タイトル */}
+      <section className="w-[70%] mx-auto pt-15 pb-10 bg-white opacity-100">
+        <div className="w-full max-w-[1000px] h-[45px] mx-auto p-2 bg-[#1A1A1A] opacity-100 mb-2">
           <div className="flex items-center gap-4" style={{ whiteSpace: 'nowrap', overflow: 'visible' }}>
-            <span 
-              style={{
-                width: 'auto',
-                minWidth: '70px',
-                height: '29px',
-                opacity: 1,
-                fontFamily: 'Noto Sans JP',
-                fontWeight: 700,
-                fontStyle: 'Bold',
-                fontSize: 'clamp(0.875rem, 2.5vw, 1.25rem)',
-                lineHeight: '100%',
-                letterSpacing: '0%',
-                textAlign: 'center',
-                color: '#FFFFFF',
-                whiteSpace: 'nowrap'
-              }}
-            >
+            <span className="w-auto min-w-[70px] h-[29px] opacity-100 font-bold text-center text-white whitespace-nowrap">
               {vehicle.inquiryNumber || vehicle.id}
             </span>
-            <span 
-              style={{
-                width: '20px',
-                height: '29px',
-                opacity: 1,
-                fontFamily: 'Noto Sans JP',
-                fontWeight: 700,
-                fontStyle: 'Bold',
-                fontSize: 'clamp(0.875rem, 2.5vw, 1.25rem)',
-                lineHeight: '100%',
-                letterSpacing: '0%',
-                textAlign: 'center',
-                color: '#FFFFFF'
-              }}
-            >
-              ｜
-            </span>
-            <span 
-              style={{
-                width: 'auto',
-                minWidth: '70px',
-                height: '29px',
-                opacity: 1,
-                fontFamily: 'Noto Sans JP',
-                fontWeight: 700,
-                fontStyle: 'Bold',
-                fontSize: 'clamp(0.875rem, 2.5vw, 1.25rem)',
-                lineHeight: '100%',
-                letterSpacing: '0%',
-                textAlign: 'center',
-                color: '#FFFFFF',
-                whiteSpace: 'nowrap'
-              }}
-            >
+            <span className="w-5 h-[29px] opacity-100 font-bold text-center text-white">｜</span>
+            <span className="w-auto min-w-[70px] h-[29px] opacity-100 font-bold text-center text-white whitespace-nowrap">
               {vehicle.maker}
             </span>
-            <span 
-              style={{
-                width: '20px',
-                height: '29px',
-                opacity: 1,
-                fontFamily: 'Noto Sans JP',
-                fontWeight: 700,
-                fontStyle: 'Bold',
-                fontSize: 'clamp(0.875rem, 2.5vw, 1.25rem)',
-                lineHeight: '100%',
-                letterSpacing: '0%',
-                textAlign: 'center',
-                color: '#FFFFFF'
-              }}
-            >
-              ｜
-            </span>
-            <span 
-              style={{
-                width: 'auto',
-                minWidth: '70px',
-                height: '29px',
-                opacity: 1,
-                fontFamily: 'Noto Sans JP',
-                fontWeight: 700,
-                fontStyle: 'Bold',
-                fontSize: 'clamp(0.875rem, 2.5vw, 1.25rem)',
-                lineHeight: '100%',
-                letterSpacing: '0%',
-                textAlign: 'center',
-                color: '#FFFFFF',
-                whiteSpace: 'nowrap'
-              }}
-            >
+            <span className="w-5 h-[29px] opacity-100 font-bold text-center text-white">｜</span>
+            <span className="w-auto min-w-[70px] h-[29px] opacity-100 font-bold text-center text-white whitespace-nowrap">
               {vehicle.bodyType || "---"}
             </span>
-            <span 
-              style={{
-                width: '20px',
-                height: '29px',
-                opacity: 1,
-                fontFamily: 'Noto Sans JP',
-                fontWeight: 700,
-                fontStyle: 'Bold',
-                fontSize: 'clamp(0.875rem, 2.5vw, 1.25rem)',
-                lineHeight: '100%',
-                letterSpacing: '0%',
-                textAlign: 'center',
-                color: '#FFFFFF'
-              }}
-            >
-              ｜
-            </span>
-            <span 
-              style={{
-                width: 'auto',
-                minWidth: '70px',
-                height: '29px',
-                opacity: 1,
-                fontFamily: 'Noto Sans JP',
-                fontWeight: 700,
-                fontStyle: 'Bold',
-                fontSize: 'clamp(0.875rem, 2.5vw, 1.25rem)',
-                lineHeight: '100%',
-                letterSpacing: '0%',
-                textAlign: 'center',
-                color: '#FFFFFF',
-                whiteSpace: 'nowrap'
-              }}
-            >
+            <span className="w-5 h-[29px] opacity-100 font-bold text-center text-white">｜</span>
+            <span className="w-auto min-w-[70px] h-[29px] opacity-100 font-bold text-center text-white whitespace-nowrap">
               {vehicle.model}
             </span>
-            <span 
-              style={{
-                width: '20px',
-                height: '29px',
-                opacity: 1,
-                fontFamily: 'Noto Sans JP',
-                fontWeight: 700,
-                fontStyle: 'Bold',
-                fontSize: 'clamp(0.875rem, 2.5vw, 1.25rem)',
-                lineHeight: '100%',
-                letterSpacing: '0%',
-                textAlign: 'center',
-                color: '#FFFFFF'
-              }}
-            >
-              ｜
-            </span>
-            <span 
-              style={{
-                width: 'auto',
-                minWidth: '70px',
-                height: '29px',
-                opacity: 1,
-                fontFamily: 'Noto Sans JP',
-                fontWeight: 700,
-                fontStyle: 'Bold',
-                fontSize: 'clamp(0.875rem, 2.5vw, 1.25rem)',
-                lineHeight: '100%',
-                letterSpacing: '0%',
-                textAlign: 'center',
-                color: '#FFFFFF',
-                whiteSpace: 'nowrap'
-              }}
-            >
+            <span className="w-5 h-[29px] opacity-100 font-bold text-center text-white">｜</span>
+            <span className="w-auto min-w-[70px] h-[29px] opacity-100 font-bold text-center text-white whitespace-nowrap">
               {vehicle.year && vehicle.month 
                 ? `${vehicle.year}年${String(vehicle.month).replace(/月$/, '')}月` 
                 : vehicle.year 
@@ -392,117 +192,49 @@ export default function VehicleDetailPage() {
             </span>
           </div>
         </div>
+      </section>
 
-        {/* b車検期限 */}
+      {/* 2. 車検期限の表示 */}
+      <section className="w-[1440px] mx-auto pr-10 pb-10 pl-10 bg-white opacity-100">
         {vehicle.inspectionStatus && (
-          <div 
-            className="w-[1000px] h-[39px] mx-auto"
-            style={{
-              gap: '8px',
-              opacity: 1,
-              marginBottom: '8px'
-            }}
-          >
+          <div className="w-[1000px] h-[39px] mx-auto gap-2 opacity-100 mb-2">
             <div className="flex items-center gap-4">
-              <div 
-                className="w-[88px] h-[39px]"
-                style={{
-                  background: '#2B5EC5',
-                  opacity: 1,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-              >
-                <span 
-                  style={{
-                    width: '64px',
-                    height: '23px',
-                    opacity: 1,
-                    fontFamily: 'Noto Sans JP',
-                    fontWeight: 700,
-                    fontStyle: 'Bold',
-                    fontSize: 'clamp(0.875rem, 1.5vw, 1rem)',
-                    lineHeight: '100%',
-                    letterSpacing: '0%',
-                    color: '#FFFFFF',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}
-                >
+              <div className="w-[88px] h-[39px] bg-[#2B5EC5] opacity-100 flex items-center justify-center">
+                <span className="w-16 h-[23px] opacity-100 font-bold text-white flex items-center justify-center">
                   {vehicle.inspectionStatus}
                 </span>
               </div>
               {(vehicle.inspectionStatus === "車検付き" || vehicle.inspectionStatus === "予備検査") && vehicle.inspectionDate && (
-                <span 
-                  className="text-gray-900"
-                  style={{
-                    fontFamily: 'Noto Sans JP',
-                    fontSize: 'clamp(0.875rem, 1.5vw, 1rem)'
-                  }}
-                >
+                <span className="text-gray-900">
                   {vehicle.inspectionDate}
                 </span>
               )}
             </div>
           </div>
         )}
+      </section>
 
-        {/* c車両写真、価格、ローンシュミレーション */}
-        <div 
-          className="w-[1000px] h-[470px] mx-auto"
-          style={{
-            gap: '32px',
-            opacity: 1,
-            marginBottom: '32px'
-          }}
-        >
+      {/* 3. 写真・価格情報 */}
+      <section className="w-[70%] mx-auto pb-10 bg-white opacity-100">
+        <div className="w-full max-w-[1000px] h-[470px] mx-auto gap-8 opacity-100 mb-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 h-full">
-            {/* Main Content */}
+            
+            {/* 3-1. 車両写真 */}
             <div className="lg:col-span-2">
-              {/* Vehicle Image Slider */}
               <div className="h-full">
                 {/* メイン写真 */}
-                <div 
-                  className="relative h-[360px] overflow-hidden flex items-center justify-center"
-                  style={{
-                    width: '480.38671875px',
-                    opacity: 1,
-                    left: '-0.39px'
-                  }}
-                >
+                <div className="relative h-[360px] overflow-hidden flex items-center justify-center w-[480px] opacity-100">
                   {/* 商談中・SOLD OUT表示 */}
                   {vehicle.isSoldOut && (
-                    <div 
-                      className="absolute top-0 left-0 right-0 text-white text-center py-3 font-bold z-20" 
-                      style={{ 
-                        backgroundColor: "#EA1313",
-                        fontFamily: 'Noto Sans JP',
-                        fontSize: 'clamp(0.875rem, 2vw, 1.125rem)'
-                      }}
-                    >
+                    <div className="absolute top-0 left-0 right-0 text-white text-center py-3 font-bold z-20 bg-[#EA1313]">
                       SOLD OUT
                     </div>
                   )}
                   {vehicle.isNegotiating && !vehicle.isSoldOut && (
-                    <div 
-                      className="absolute top-0 left-0 right-0 text-white text-center py-3 font-bold z-20" 
-                      style={{ 
-                        backgroundColor: "#666666",
-                        fontFamily: 'Noto Sans JP',
-                        fontSize: 'clamp(0.875rem, 2vw, 1.125rem)'
-                      }}
-                    >
+                    <div className="absolute top-0 left-0 right-0 text-white text-center py-3 font-bold z-20 bg-[#666666]">
                       商談中
                       {vehicle.negotiationDeadline && (
-                        <span 
-                          className="ml-2 font-normal"
-                          style={{
-                            fontFamily: 'Noto Sans JP',
-                            fontSize: 'clamp(0.75rem, 1.5vw, 0.875rem)'
-                          }}
-                        >
+                        <span className="ml-2 font-normal">
                           ～{new Date(vehicle.negotiationDeadline).toLocaleDateString('ja-JP', { month: 'numeric', day: 'numeric' })}まで
                         </span>
                       )}
@@ -538,7 +270,7 @@ export default function VehicleDetailPage() {
                 
                 {/* その他写真 - カルーセル */}
                 {images.length > 1 && (
-                  <div className="mt-4 relative" style={{ width: '472px', height: '98px' }}>
+                  <div className="mt-4 relative w-[472px] h-[98px]">
                     <div 
                       className="flex gap-1 transition-transform duration-300"
                       style={{ 
@@ -600,56 +332,22 @@ export default function VehicleDetailPage() {
               </div>
             </div>
 
-            {/* Sidebar - 価格とローンシミュレーション */}
-            <div 
-              className="space-y-4"
-              style={{
-                width: '488px',
-                height: '273px',
-                position: 'relative',
-                left: '-176px'
-              }}
-            >
+            {/* 3-2. 車両価格 */}
+            <div className="space-y-4 w-[488px] h-[273px] relative -left-[176px]">
               {/* Price Card */}
               <Card>
                 <CardContent className="p-4">
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
-                      <span 
-                        style={{
-                          fontFamily: 'Noto Sans JP',
-                          fontSize: 'clamp(0.875rem, 1.5vw, 1rem)'
-                        }}
-                      >
-                        車両価格
-                      </span>
-                      <span 
-                        className="font-bold text-blue-600"
-                        style={{
-                          fontFamily: 'Noto Sans JP',
-                          fontSize: 'clamp(0.875rem, 2.5vw, 1.25rem)'
-                        }}
-                      >
+                      <span>車両価格</span>
+                      <span className="font-bold text-blue-600">
                         ¥{(vehicle.price || 0).toLocaleString()}
                       </span>
                     </div>
                     {vehicle.totalPayment && (
                       <div className="flex justify-between items-center">
-                        <span 
-                          style={{
-                            fontFamily: 'Noto Sans JP',
-                            fontSize: 'clamp(0.875rem, 1.5vw, 1rem)'
-                          }}
-                        >
-                          車両価格（税込）
-                        </span>
-                        <span 
-                          className="font-semibold"
-                          style={{
-                            fontFamily: 'Noto Sans JP',
-                            fontSize: 'clamp(0.875rem, 1.5vw, 1rem)'
-                          }}
-                        >
+                        <span>車両価格（税込）</span>
+                        <span className="font-semibold">
                           ¥{(vehicle.totalPayment || 0).toLocaleString()}
                         </span>
                       </div>
@@ -658,42 +356,20 @@ export default function VehicleDetailPage() {
                 </CardContent>
               </Card>
 
-              {/* ローンシミュレーション */}
+              {/* 3-3. 価格シュミレーション */}
               {shouldShowSimulation && (
                 <Card>
                   <CardContent className="p-4">
                     <div className="flex justify-between items-center mb-2">
-                      <span 
-                        className="font-medium"
-                        style={{
-                          fontFamily: 'Noto Sans JP',
-                          fontSize: 'clamp(0.875rem, 1.5vw, 1rem)'
-                        }}
-                      >
-                        毎月の支払額
-                      </span>
-                      <span 
-                        className="font-bold text-blue-600"
-                        style={{
-                          fontFamily: 'Noto Sans JP',
-                          fontSize: 'clamp(0.875rem, 2vw, 1.125rem)'
-                        }}
-                      >
+                      <span className="font-medium">毎月の支払額</span>
+                      <span className="font-bold text-blue-600">
                         {vehicle[`simulation${selectedPaymentPeriod}Year` as keyof Vehicle] 
                           ? formatNumberWithCommas(Number(vehicle[`simulation${selectedPaymentPeriod}Year` as keyof Vehicle])) 
                           : "---"}円
                       </span>
                     </div>
                     <div>
-                      <span 
-                        className="font-medium block mb-2"
-                        style={{
-                          fontFamily: 'Noto Sans JP',
-                          fontSize: 'clamp(0.875rem, 1.5vw, 1rem)'
-                        }}
-                      >
-                        返済期間
-                      </span>
+                      <span className="font-medium block mb-2">返済期間</span>
                       <div className="flex gap-1">
                         {[2, 3, 4, 5].map((year) => (
                           <button
@@ -704,10 +380,6 @@ export default function VehicleDetailPage() {
                                 ? 'bg-blue-500 text-white border-blue-500'
                                 : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
                             }`}
-                            style={{
-                              fontFamily: 'Noto Sans JP',
-                              fontSize: 'clamp(0.75rem, 1.5vw, 0.875rem)'
-                            }}
                           >
                             {year}年
                           </button>
@@ -720,238 +392,161 @@ export default function VehicleDetailPage() {
             </div>
           </div>
         </div>
+      </section>
 
-        {/* d車両情報 */}
-        <div 
-          className="w-[1000px] h-[421px] mx-auto"
-          style={{
-            gap: '12px',
-            opacity: 1,
-            marginBottom: '24px'
-          }}
-        >
-          <Card>
-            <CardContent className="p-6 h-full">
-              <h2 className="text-2xl font-bold mb-6">DETAIL(車輌情報)</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="font-medium">メーカー</span>
-                    <span>{vehicle.maker}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="font-medium">車種</span>
-                    <span>{vehicle.vehicleType || vehicle.model}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="font-medium">年式</span>
-                    <span>
-                      {vehicle.year && vehicle.month 
-                        ? `${vehicle.year}年${vehicle.month}月` 
-                        : vehicle.year 
-                          ? `${vehicle.year}年` 
-                          : ""
-                      }
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="font-medium">走行距離</span>
-                    <span>{formatNumberWithCommas(vehicle.mileage)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="font-medium">ボディタイプ</span>
-                    <span>{vehicle.bodyType || "---"}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="font-medium">サイズ</span>
-                    <span>{vehicle.size || "---"}</span>
-                  </div>
-                                      <div className="flex justify-between">
-                      <span className="font-medium">車検有効期限</span>
-                      <span>{vehicle.inspectionDate || "---"}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="font-medium">車両価格（税抜）</span>
-                      <span>{formatNumberWithCommas(vehicle.price)}円</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="font-medium">車両価格（税込）</span>
-                      <span>{formatNumberWithCommas(vehicle.totalPayment)}円</span>
-                    </div>
-                  </div>
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="font-medium">車体寸法</span>
-                    <span>
-                      L{formatNumberWithCommas(vehicle.outerLength)} × 
-                      W{formatNumberWithCommas(vehicle.outerWidth)} × 
-                      H{formatNumberWithCommas(vehicle.outerHeight)}mm
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="font-medium">車両総重量</span>
-                    <span>{formatNumberWithCommas(vehicle.totalWeight)}kg</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="font-medium">積載量</span>
-                    <span>{formatNumberWithCommas(vehicle.loadingCapacity)}kg</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="font-medium">馬力</span>
-                    <span>{formatNumberWithCommas(vehicle.horsepower)}ps</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="font-medium">排気量</span>
-                    <span>{formatNumberWithCommas(vehicle.displacement)}cc</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="font-medium">燃料</span>
-                    <span>{vehicle.fuel || "---"}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="font-medium">ミッション</span>
-                    <span>{vehicle.mission || "---"}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="font-medium">車検状態</span>
-                    <span>{vehicle.inspectionStatus || "---"}</span>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* e車検証・状態表 */}
-        {(vehicle.inspectionImageUrl || vehicle.conditionImageUrl) && (
-          <div 
-            className="w-[296px] h-[40px] mx-auto"
-            style={{
-              gap: '24px',
-              opacity: 1,
-              marginBottom: '24px'
-            }}
-          >
-            <div className="flex gap-6">
-              {vehicle.inspectionImageUrl && (
-                <Button
-                  variant="outline"
-                  onClick={() => window.open(vehicle.inspectionImageUrl, '_blank')}
-                  className="flex items-center gap-2"
-                >
-                  <span className="text-red-500">📄</span>
-                  車検証
-                </Button>
-              )}
-              {vehicle.conditionImageUrl && (
-                <Button
-                  variant="outline"
-                  onClick={() => window.open(vehicle.conditionImageUrl, '_blank')}
-                  className="flex items-center gap-2"
-                >
-                  <span className="text-red-500">📄</span>
-                  状態表
-                </Button>
-              )}
+      {/* 4. 車両メイン情報 */}
+      <section className="w-[70%] mx-auto pb-10 bg-white opacity-100">
+        
+        {/* 4-1. 車両情報 */}
+        <div className="w-full max-w-[1000px] mx-auto gap-3 opacity-100 mb-6">
+          <h2 className="text-2xl font-bold mb-6">DETAIL(車輌情報)</h2>
+          <div style={{height: '25.143rem'}}>
+            <div className="grid grid-rows-8 grid-cols-4">
+              {/* 1行目 */}
+              <span className="font-medium px-4 flex items-center" style={{background: '#F2F2F2', height: '3.143rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>メーカー</span>
+              <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0'}}>{vehicle.maker}</span>
+              <span className="font-medium px-4 flex items-center" style={{background: '#F2F2F2', height: '3.143rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>車体寸法（mm）</span>
+              <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0'}}>L{formatNumberWithCommas(vehicle.outerLength)} × W{formatNumberWithCommas(vehicle.outerWidth)} × H{formatNumberWithCommas(vehicle.outerHeight)}</span>
+              {/* 2行目 */}
+              <span className="font-medium px-4 flex items-center" style={{background: '#F2F2F2', height: '3.143rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>車種</span>
+              <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0'}}>{vehicle.vehicleType || vehicle.model}</span>
+              <span className="font-medium px-4 flex items-center" style={{background: '#F2F2F2', height: '3.143rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>車両総重量</span>
+              <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0'}}>{formatNumberWithCommas(vehicle.totalWeight)}kg</span>
+              {/* 3行目 */}
+              <span className="font-medium px-4 flex items-center" style={{background: '#F2F2F2', height: '3.143rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>型式</span>
+              <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0'}}>{vehicle.modelCode || vehicle.model || "---"}</span>
+              <span className="font-medium px-4 flex items-center" style={{background: '#F2F2F2', height: '3.143rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>原動機型式</span>
+              <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0'}}>{vehicle.engineModel || "---"}</span>
+              {/* 4行目 */}
+              <span className="font-medium px-4 flex items-center" style={{background: '#F2F2F2', height: '3.143rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>年式</span>
+              <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0'}}>{vehicle.year && vehicle.month ? `${vehicle.year}年${vehicle.month}月` : vehicle.year ? `${vehicle.year}年` : ""}</span>
+              <span className="font-medium px-4 flex items-center" style={{background: '#F2F2F2', height: '3.143rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>馬力</span>
+              <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0'}}>{formatNumberWithCommas(vehicle.horsepower)}ps</span>
+              {/* 5行目 */}
+              <span className="font-medium px-4 flex items-center" style={{background: '#F2F2F2', height: '3.143rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>走行距離</span>
+              <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0'}}>{formatNumberWithCommas(vehicle.mileage)}</span>
+              <span className="font-medium px-4 flex items-center" style={{background: '#F2F2F2', height: '3.143rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>過給機</span>
+              <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0'}}>{vehicle.turbo || "---"}</span>
+              {/* 6行目 */}
+              <span className="font-medium px-4 flex items-center" style={{background: '#F2F2F2', height: '3.143rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>最大積載量</span>
+              <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0'}}>{formatNumberWithCommas(vehicle.loadingCapacity)}kg</span>
+              <span className="font-medium px-4 flex items-center" style={{background: '#F2F2F2', height: '3.143rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>排気量</span>
+              <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0'}}>{formatNumberWithCommas(vehicle.displacement)}cc</span>
+              {/* 7行目 */}
+              <span className="font-medium px-4 flex items-center" style={{background: '#F2F2F2', height: '3.143rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>シフト</span>
+              <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0'}}>{vehicle.mission || vehicle.shift || "---"}</span>
+              <span className="font-medium px-4 flex items-center" style={{background: '#F2F2F2', height: '3.143rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>燃料</span>
+              <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0'}}>{vehicle.fuel || "---"}</span>
+              {/* 8行目 */}
+              <span className="font-medium px-4 flex items-center" style={{background: '#F2F2F2', height: '3.143rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 1px 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>車検有効期限</span>
+              <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 1px 0'}}>{vehicle.inspectionDate || "---"}</span>
+              <span className="font-medium px-4 flex items-center" style={{background: '#F2F2F2', height: '3.143rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 1px 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>お問合せ番号</span>
+              <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 1px 0'}}>{vehicle.inquiryNumber || vehicle.id}</span>
             </div>
           </div>
-        )}
+          
+          <div className="w-full max-w-[1000px] mx-auto text-sm text-gray-600 space-y-1 mb-6">
+            <p>※1 支払い総額は、千葉ナンバー登録にかかる費用を基に算出しています。また、店頭でお渡しでの価格となります。</p>
+            <p>※2 抹消車両は、登録時最大積載量が減トンされる可能性が御座います。</p>
+          </div>
+        </div>
 
-        {/* f上物情報 */}
-        <div 
-          className="w-[1000px] h-[201px] mx-auto"
-          style={{
-            gap: '8px',
-            opacity: 1,
-            marginBottom: '40px'
-          }}
-        >
-          <Card>
-            <CardContent className="p-6 h-full">
-              <h2 className="text-2xl font-bold mb-6">上物情報</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-3">
-                  {vehicle.bodyMaker && (
-                    <div className="flex justify-between">
-                      <span className="font-medium">上物メーカー</span>
-                      <span>{vehicle.bodyMaker}</span>
-                    </div>
-                  )}
-                  {vehicle.bodyModel && (
-                    <div className="flex justify-between">
-                      <span className="font-medium">上物型式</span>
-                      <span>{vehicle.bodyModel}</span>
-                    </div>
-                  )}
-                  {vehicle.bodyYear && (
-                    <div className="flex justify-between">
-                      <span className="font-medium">上物年式</span>
-                      <span>{vehicle.bodyYear}</span>
-                    </div>
-                  )}
-                  {vehicle.modelCode && (
-                    <div className="flex justify-between">
-                      <span className="font-medium">型式</span>
-                      <span>{vehicle.modelCode}</span>
-                    </div>
-                  )}
-                </div>
-                <div className="space-y-3">
-                  {vehicle.engineModel && (
-                    <div className="flex justify-between">
-                      <span className="font-medium">原動機型式</span>
-                      <span>{vehicle.engineModel}</span>
-                    </div>
-                  )}
-                  {vehicle.turbo && (
-                    <div className="flex justify-between">
-                      <span className="font-medium">ターボ</span>
-                      <span>{vehicle.turbo}</span>
-                    </div>
-                  )}
-                  {vehicle.shift && (
-                    <div className="flex justify-between">
-                      <span className="font-medium">シフト</span>
-                      <span>{vehicle.shift}</span>
-                    </div>
-                  )}
-                  {vehicle.innerLength && (
-                    <div className="flex justify-between">
-                      <span className="font-medium">内寸長</span>
-                      <span>{formatNumberWithCommas(vehicle.innerLength)}mm</span>
-                    </div>
-                  )}
-                  {vehicle.innerWidth && (
-                    <div className="flex justify-between">
-                      <span className="font-medium">内寸幅</span>
-                      <span>{formatNumberWithCommas(vehicle.innerWidth)}mm</span>
-                    </div>
-                  )}
-                  {vehicle.innerHeight && (
-                    <div className="flex justify-between">
-                      <span className="font-medium">内寸高</span>
-                      <span>{formatNumberWithCommas(vehicle.innerHeight)}mm</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+        {/* 4-2. 車検証・状態表 */}
+        <div className="w-full max-w-[1000px] mx-auto mb-6">
+          <div className="flex gap-6">
+            <button
+              onClick={() => vehicle.inspectionImageUrl && window.open(vehicle.inspectionImageUrl, '_blank')}
+              className="bg-[#333333] text-white px-3 py-2 rounded flex items-center justify-center gap-1"
+              style={{
+                height: '2.5rem',
+                width: '8.5rem',
+              }}
+            >
+              <svg
+                width="0.875rem"
+                height="1.125rem"
+                viewBox="0 0 16 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                style={{
+                  opacity: 1,
+                  transform: 'rotate(0deg)',
+                }}
+              >
+                <path
+                  d="M14 2H2C1.45 2 1 2.45 1 3V17C1 17.55 1.45 18 2 18H14C14.55 18 15 17.55 15 17V3C15 2.45 14.55 2 14 2ZM14 17H2V3H14V17Z"
+                  fill="white"
+                />
+                <path
+                  d="M4 5H12V7H4V5ZM4 9H12V11H4V9ZM4 13H8V15H4V13Z"
+                  fill="white"
+                />
+              </svg>
+              <span className="font-bold text-sm">車検証を確認</span>
+            </button>
+            <button
+              onClick={() => vehicle.conditionImageUrl && window.open(vehicle.conditionImageUrl, '_blank')}
+              className="bg-[#333333] text-white px-3 py-2 rounded flex items-center justify-center gap-1"
+              style={{
+                height: '2.5rem',
+                width: '8.5rem',
+              }}
+            >
+              <svg
+                width="0.875rem"
+                height="1.125rem"
+                viewBox="0 0 16 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                style={{
+                  opacity: 1,
+                  transform: 'rotate(0deg)',
+                }}
+              >
+                <path
+                  d="M14 2H2C1.45 2 1 2.45 1 3V17C1 17.55 1.45 18 2 18H14C14.55 18 15 17.55 15 17V3C15 2.45 14.55 2 14 2ZM14 17H2V3H14V17Z"
+                  fill="white"
+                />
+                <path
+                  d="M4 5H12V7H4V5ZM4 9H12V11H4V9ZM4 13H8V15H4V13Z"
+                  fill="white"
+                />
+              </svg>
+              <span className="font-bold text-sm">状態表を確認</span>
+            </button>
+          </div>
+        </div>
+
+        {/* 4-3. 上物情報 */}
+        <div className="w-full max-w-[1000px] mx-auto gap-3 opacity-100 mb-6">
+          <h2 className="text-2xl font-bold mb-6">上物情報</h2>
+          <div style={{height: '12.571rem'}}>
+            <div className="grid grid-rows-4 grid-cols-4" style={{gap: '0'}}>
+              {/* 1行目 */}
+              <span className="font-medium px-4 flex items-center" style={{background: '#F2F2F2', height: '3.143rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>メーカー</span>
+              <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0'}}>{vehicle.bodyMaker || "---"}</span>
+              <span className="font-medium px-4 flex items-center" style={{background: '#F2F2F2', height: '3.143rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>内寸（L）</span>
+              <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0'}}>{vehicle.innerLength ? `${formatNumberWithCommas(vehicle.innerLength)}mm` : "---"}</span>
+              {/* 2行目 */}
+              <span className="font-medium px-4 flex items-center" style={{background: '#F2F2F2', height: '3.143rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>型式</span>
+              <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0'}}>{vehicle.bodyModel || vehicle.modelCode || "---"}</span>
+              <span className="font-medium px-4 flex items-center" style={{background: '#F2F2F2', height: '3.143rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>内寸（W）</span>
+              <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0'}}>{vehicle.innerWidth ? `${formatNumberWithCommas(vehicle.innerWidth)}mm` : "---"}</span>
+              {/* 3行目 */}
+              <span className="font-medium px-4 flex items-center" style={{background: '#F2F2F2', height: '3.143rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>年式</span>
+              <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0'}}>{vehicle.bodyYear || "---"}</span>
+              <span className="font-medium px-4 flex items-center" style={{background: '#F2F2F2', height: '3.143rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>内寸（H）</span>
+              <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0'}}>{vehicle.innerHeight ? `${formatNumberWithCommas(vehicle.innerHeight)}mm` : "---"}</span>
+              {/* 4行目 */}
+              <span className="font-medium px-4 flex items-center" style={{background: '#F2F2F2', height: '3.143rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 1px 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>装備/仕様</span>
+              <span className="px-4 flex items-center col-span-3" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 1px 0'}}>{vehicle.equipment || "---"}</span>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ②装備・仕様 */}
-      <section 
-        className="w-[1440px] h-[161px] mx-auto"
-        style={{
-          gap: '20px',
-          paddingRight: '40px',
-          paddingBottom: '40px',
-          paddingLeft: '40px',
-          opacity: 1,
-          marginBottom: '20px'
-        }}
-      >
+      {/* 5. 装備情報 */}
+      <section className="w-[70%] h-[161px] mx-auto pb-10 opacity-100 mb-5">
         <Card>
           <CardContent className="p-6">
             <h2 className="text-2xl font-bold mb-6">装備品</h2>
@@ -1015,14 +610,8 @@ export default function VehicleDetailPage() {
         </Card>
       </section>
 
-      {/* ③問い合わせフォーム */}
-      <section 
-        className="w-[1440px] h-[312px] mx-auto"
-        style={{
-          opacity: 1,
-          marginBottom: '20px'
-        }}
-      >
+      {/* 6. 問い合わせフォーム */}
+      <section className="w-[70%] h-[312px] mx-auto opacity-100 mb-5">
         <Card>
           <CardContent className="p-6">
             <h2 className="text-2xl font-bold mb-6">お問い合わせ</h2>
@@ -1077,14 +666,8 @@ export default function VehicleDetailPage() {
         </Card>
       </section>
 
-      {/* ④関連車両 */}
-      <section 
-        className="w-[1440px] h-[312px] mx-auto"
-        style={{
-          opacity: 1,
-          marginBottom: '20px'
-        }}
-      >
+      {/* 7. 関連車両 */}
+      <section className="w-[70%] h-[312px] mx-auto opacity-100 mb-5">
         {relatedVehicles.length > 0 && (
           <Card>
             <CardContent className="p-6">
@@ -1119,13 +702,8 @@ export default function VehicleDetailPage() {
         )}
       </section>
 
-      {/* ⑤他の車両 */}
-      <section 
-        className="w-[1440px] h-[453px] mx-auto"
-        style={{
-          opacity: 1
-        }}
-      >
+      {/* 8. 検索ボタン */}
+      <section className="w-[70%] h-[453px] mx-auto opacity-100">
         <Card>
           <CardContent className="p-6">
             <h2 className="text-2xl font-bold mb-6">他の車両</h2>
@@ -1150,13 +728,4 @@ export default function VehicleDetailPage() {
       </section>
     </div>
   )
-}
-
-
-
-
-
-
-
-
-
+} 

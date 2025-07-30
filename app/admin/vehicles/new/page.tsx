@@ -109,7 +109,7 @@ const loadCapacities = [
   "6.0t"
 ]
 
-const missions = [
+const shifts = [
   "MT",
   "AT・SAT"
 ]
@@ -143,6 +143,7 @@ export default function VehicleNewPage() {
     month: "",
     mileage: "",
     loadingCapacity: "",
+    shift: "",
     mission: "",
     inspectionStatus: "",
     inspectionDate: "",
@@ -153,11 +154,19 @@ export default function VehicleNewPage() {
     horsepower: "",
     displacement: "",
     fuel: "",
+    turbo: "",
     wholesalePrice: 0,
     description: "",
     imageUrls: [],
     equipment: [],
     chassisNumber: "",
+    // 上物情報
+    bodyMaker: "",
+    bodyModel: "",
+    bodyYear: "",
+    innerLength: "",
+    innerWidth: "",
+    innerHeight: "",
   })
   const [generatedInquiryNumber, setGeneratedInquiryNumber] = useState<string>("生成中...")
   
@@ -335,7 +344,7 @@ export default function VehicleNewPage() {
         size: formData.size,
         vehicleType: formData.vehicleType,
         chassisNumber: formData.chassisNumber,
-        mission: formData.mission,
+        shift: formData.shift,
         inspectionStatus: formData.inspectionStatus,
         outerLength: formData.outerLength ? Number(formData.outerLength?.toString().replace(/,/g, '')) : undefined,
         outerWidth: formData.outerWidth ? Number(formData.outerWidth?.toString().replace(/,/g, '')) : undefined,
@@ -542,8 +551,8 @@ export default function VehicleNewPage() {
                   <label className="block text-sm font-medium">型式</label>
                   <input
                     type="text"
-                    name="model"
-                    value={formData.model}
+                    name="modelCode"
+                    value={formData.modelCode}
                     onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
                     placeholder="型式を入力"
@@ -612,18 +621,29 @@ export default function VehicleNewPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium">ミッション</label>
+                  <label className="block text-sm font-medium">シフト</label>
                   <select
-                    name="mission"
-                    value={formData.mission}
+                    name="shift"
+                    value={formData.shift}
                     onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
                   >
                     <option value="">選択</option>
-                    {missions.map((mission) => (
-                      <option key={mission} value={mission}>{mission}</option>
+                    {shifts.map((shift) => (
+                      <option key={shift} value={shift}>{shift}</option>
                     ))}
                   </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">ミッション</label>
+                  <input
+                    type="text"
+                    name="mission"
+                    value={formData.mission}
+                    onChange={handleChange}
+                    className="w-full border rounded px-2 py-1"
+                    placeholder="ミッションを入力"
+                  />
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">車検状態</label>
@@ -699,7 +719,11 @@ export default function VehicleNewPage() {
                   <label className="block text-sm font-medium">原動機型式</label>
                   <input
                     type="text"
+                    name="engineModel"
+                    value={formData.engineModel}
+                    onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
+                    placeholder="原動機型式を入力"
                   />
                 </div>
                 <div className="space-y-2">
@@ -714,6 +738,19 @@ export default function VehicleNewPage() {
                     style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                   />
                 </div>
+                                         <div className="space-y-2">
+                           <label className="block text-sm font-medium">過給機</label>
+                           <select
+                             name="turbo"
+                             value={formData.turbo}
+                             onChange={handleChange}
+                             className="w-full border rounded px-2 py-1"
+                           >
+                             <option value="">選択</option>
+                             <option value="有">有</option>
+                             <option value="無">無</option>
+                           </select>
+                         </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">排気量</label>
                   <input
@@ -880,28 +917,33 @@ export default function VehicleNewPage() {
             <h3 className="text-lg font-medium mb-4">上物情報</h3>
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="block text-sm font-medium">内寸</label>
-                <div className="space-y-2">
-                  <input
-                    type="text"
-                    className="w-full border rounded px-2 py-1"
-                    placeholder="L (mm)"
-                  />
-                  <input
-                    type="text"
-                    className="w-full border rounded px-2 py-1"
-                    placeholder="W (mm)"
-                  />
-                  <input
-                    type="text"
-                    className="w-full border rounded px-2 py-1"
-                    placeholder="H (mm)"
-                  />
-                </div>
+                <label className="block text-sm font-medium">上物メーカー</label>
+                <input
+                  type="text"
+                  name="bodyMaker"
+                  value={formData.bodyMaker}
+                  onChange={handleChange}
+                  className="w-full border rounded px-2 py-1"
+                  placeholder="上物メーカーを入力"
+                />
               </div>
               <div className="space-y-2">
-                <label className="block text-sm font-medium">年式</label>
+                <label className="block text-sm font-medium">上物型式</label>
+                <input
+                  type="text"
+                  name="bodyModel"
+                  value={formData.bodyModel}
+                  onChange={handleChange}
+                  className="w-full border rounded px-2 py-1"
+                  placeholder="上物型式を入力"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="block text-sm font-medium">上物年式</label>
                 <select
+                  name="bodyYear"
+                  value={formData.bodyYear}
+                  onChange={handleChange}
                   className="w-full border rounded px-2 py-1"
                 >
                   <option value="">選択</option>
@@ -911,13 +953,40 @@ export default function VehicleNewPage() {
                 </select>
               </div>
               <div className="space-y-2">
-                <label className="block text-sm font-medium">店舗</label>
-                <select
+                <label className="block text-sm font-medium">内寸長</label>
+                <input
+                  type="text"
+                  name="innerLength"
+                  value={formData.innerLength}
+                  onChange={handleChange}
                   className="w-full border rounded px-2 py-1"
-                >
-                  <option value="">選択</option>
-                  <option value="store1">○○店</option>
-                </select>
+                  placeholder="内寸長 (mm)"
+                  style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="block text-sm font-medium">内寸幅</label>
+                <input
+                  type="text"
+                  name="innerWidth"
+                  value={formData.innerWidth}
+                  onChange={handleChange}
+                  className="w-full border rounded px-2 py-1"
+                  placeholder="内寸幅 (mm)"
+                  style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="block text-sm font-medium">内寸高</label>
+                <input
+                  type="text"
+                  name="innerHeight"
+                  value={formData.innerHeight}
+                  onChange={handleChange}
+                  className="w-full border rounded px-2 py-1"
+                  placeholder="内寸高 (mm)"
+                  style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
+                />
               </div>
             </div>
           </div>
@@ -936,6 +1005,16 @@ export default function VehicleNewPage() {
                   {item}
                 </button>
               ))}
+            </div>
+            <div className="mt-4">
+              <label className="block text-sm font-medium mb-2">装備/仕様</label>
+              <textarea
+                name="equipment"
+                value={formData.equipment || ""}
+                onChange={handleChange}
+                className="w-full border rounded px-2 py-1 h-20"
+                placeholder="その他の装備や仕様を入力してください..."
+              />
             </div>
           </div>
 
