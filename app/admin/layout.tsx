@@ -2,9 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useAuth } from "@/lib/auth-context"
 import { Button } from "@/components/ui/button"
-import AdminAuthGuard from "@/components/AdminAuthGuard"
 import { useState } from "react"
 import { Menu, X } from "lucide-react"
 
@@ -21,12 +19,7 @@ export default function AdminLayout({
   children: React.ReactNode
 }) {
   const pathname = usePathname()
-  const { logout } = useAuth()
   const [sidebarOpen, setSidebarOpen] = useState(false)
-
-  const handleLogout = () => {
-    logout()
-  }
 
   const handleSidebarToggle = () => {
     setSidebarOpen(!sidebarOpen)
@@ -36,13 +29,7 @@ export default function AdminLayout({
     setSidebarOpen(false)
   }
 
-  // /admin/login では認証ガードを適用しない
-  if (pathname === "/admin/login") {
-    return <>{children}</>
-  }
-
   return (
-    <AdminAuthGuard>
       <div className="min-h-screen bg-white overflow-x-hidden">
         <div className="flex">
           {/* PC用サイドバー */}
@@ -50,13 +37,6 @@ export default function AdminLayout({
             <nav className="p-4">
               <div className="mb-6">
                 <h2 className="text-lg font-semibold text-gray-800 mb-4">管理画面</h2>
-                <Button 
-                  onClick={handleLogout}
-                  variant="outline" 
-                  className="w-full"
-                >
-                  ログアウト
-                </Button>
               </div>
               
               <ul className="space-y-2">
@@ -113,13 +93,6 @@ export default function AdminLayout({
               
               <nav className="flex-1 p-4">
                 <div className="mb-6">
-                  <Button 
-                    onClick={handleLogout}
-                    variant="outline" 
-                    className="w-full"
-                  >
-                    ログアウト
-                  </Button>
                 </div>
                 
                 <ul className="space-y-2">
@@ -146,6 +119,5 @@ export default function AdminLayout({
           </div>
         )}
       </div>
-    </AdminAuthGuard>
-  )
-} 
+    )
+  } 

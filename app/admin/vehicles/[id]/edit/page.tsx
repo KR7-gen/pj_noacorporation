@@ -19,6 +19,7 @@ import { formatNumberWithCommas, formatInputWithCommas } from "@/lib/utils"
 import type { Vehicle } from "@/types"
 import { storage } from "@/lib/firebase"
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
+import { Store } from "@/lib/store-data"
 
 // プルダウンの選択肢
 const bodyTypes = [
@@ -150,16 +151,42 @@ export default function VehicleEditPage() {
     price: "",
     wholesalePrice: "",
     totalPayment: "",
+    // 店舗関連フィールド
+    storeName: "",
+    storeId: undefined,
   })
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [stores, setStores] = useState<Store[]>([])
+  const [loadingStores, setLoadingStores] = useState(true)
   
   // ファイルアップロード用のref
   const inspectionFileRef = useRef<HTMLInputElement>(null)
   const conditionFileRef = useRef<HTMLInputElement>(null)
   const [uploadingInspection, setUploadingInspection] = useState(false)
   const [uploadingCondition, setUploadingCondition] = useState(false)
+
+  // 店舗データを取得
+  useEffect(() => {
+    const fetchStores = async () => {
+      try {
+        setLoadingStores(true)
+        const response = await fetch('/api/stores')
+        if (!response.ok) {
+          throw new Error('店舗データの取得に失敗しました')
+        }
+        const data = await response.json()
+        setStores(data)
+      } catch (error) {
+        console.error('店舗データ取得エラー:', error)
+      } finally {
+        setLoadingStores(false)
+      }
+    }
+
+    fetchStores()
+  }, [])
 
   useEffect(() => {
     const fetchVehicle = async () => {
@@ -193,6 +220,9 @@ export default function VehicleEditPage() {
             innerHeight: formatNumberWithCommas(fetchedVehicle.innerHeight) || "",
             mission: fetchedVehicle.mission || "",
             turbo: fetchedVehicle.turbo || "",
+            // 店舗関連フィールド
+            storeName: fetchedVehicle.storeName || "",
+            storeId: fetchedVehicle.storeId || undefined,
           })
         } else {
           setError("車両が見つかりませんでした")
@@ -214,6 +244,17 @@ export default function VehicleEditPage() {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target
+    
+    // 店舗選択の場合の特別処理
+    if (name === 'storeId') {
+      const selectedStore = stores.find(store => store.id === parseInt(value))
+      setFormData((prev) => ({
+        ...prev,
+        storeId: parseInt(value) || undefined,
+        storeName: selectedStore?.name || ""
+      }))
+      return
+    }
     
     // カンマ区切りが必要な項目
     const commaFields = ['price', 'wholesalePrice', 'totalPayment', 'mileage', 'loadingCapacity', 'outerLength', 'outerWidth', 'outerHeight', 'totalWeight', 'horsepower', 'displacement', 'innerLength', 'innerWidth', 'innerHeight'];
@@ -490,7 +531,7 @@ export default function VehicleEditPage() {
           </div>
 
           {/* 基本情報 */}
-          <div className="grid grid-cols-5 gap-6">
+          <div className="grid grid-cols-6 gap-6">
             <div className="space-y-2">
               <label className="block text-sm font-medium">問い合わせ番号</label>
               <input
@@ -512,6 +553,23 @@ export default function VehicleEditPage() {
                 className="w-full border rounded px-2 py-1"
                 placeholder="日野 レンジャー"
               />
+            </div>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium">在庫店舗名</label>
+              <select
+                name="storeId"
+                value={formData.storeId || ""}
+                onChange={handleChange}
+                className="w-full border rounded px-2 py-1"
+                disabled={loadingStores}
+              >
+                <option value="">店舗を選択してください</option>
+                {stores.map((store) => (
+                  <option key={store.id} value={store.id}>
+                    {store.name}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="space-y-2">
               <label className="block text-sm font-medium">車両価格（税抜）</label>

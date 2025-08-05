@@ -214,6 +214,7 @@ export default function AdminVehiclesPage() {
               <TableHead>車体番号</TableHead>
               <TableHead>メーカー</TableHead>
               <TableHead>車種</TableHead>
+              <TableHead>在庫店舗名</TableHead>
               <TableHead>型式（modelCode）</TableHead>
               <TableHead>年式</TableHead>
               <TableHead>シフト</TableHead>
@@ -254,6 +255,7 @@ export default function AdminVehiclesPage() {
                 <TableCell>{vehicle.chassisNumber || "---"}</TableCell>
                 <TableCell>{vehicle.maker}</TableCell>
                 <TableCell>{vehicle.vehicleType || "---"}</TableCell>
+                <TableCell>{vehicle.storeName || "---"}</TableCell>
                 <TableCell>{vehicle.modelCode || "---"}</TableCell>
                 <TableCell>{vehicle.year || "---"}</TableCell>
                 <TableCell>{vehicle.shift || "---"}</TableCell>

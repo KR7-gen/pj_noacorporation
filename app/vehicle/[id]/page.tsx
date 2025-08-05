@@ -545,186 +545,299 @@ export default function VehicleDetailPage() {
         </div>
       </section>
 
-      {/* 5. 装備情報 */}
-      <section className="w-[70%] h-[161px] mx-auto pb-10 opacity-100 mb-5">
-        <Card>
-          <CardContent className="p-6">
-            <h2 className="text-2xl font-bold mb-6">装備品</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-              {vehicle.etc && (
-                <Badge variant="secondary" className="justify-center">ETC</Badge>
-              )}
-              {vehicle.backCamera && (
-                <Badge variant="secondary" className="justify-center">バックカメラ</Badge>
-              )}
-              {vehicle.recordBook && (
-                <Badge variant="secondary" className="justify-center">記録簿</Badge>
-              )}
-              {vehicle.powerWindow && (
-                <Badge variant="secondary" className="justify-center">パワーウィンドウ</Badge>
-              )}
-              {vehicle.driveRecorder && (
-                <Badge variant="secondary" className="justify-center">ドラレコ</Badge>
-              )}
-              {vehicle.airConditioner && (
-                <Badge variant="secondary" className="justify-center">エアコン</Badge>
-              )}
-              {vehicle.electricMirror && (
-                <Badge variant="secondary" className="justify-center">電動ミラー</Badge>
-              )}
-              {vehicle.abs && (
-                <Badge variant="secondary" className="justify-center">ABS</Badge>
-              )}
-              {vehicle.aluminumWheel && (
-                <Badge variant="secondary" className="justify-center">アルミホイール</Badge>
-              )}
-              {vehicle.airSuspensionSeat && (
-                <Badge variant="secondary" className="justify-center">エアサスシート</Badge>
-              )}
-              {vehicle.carNavigation && (
-                <Badge variant="secondary" className="justify-center">カーナビ</Badge>
-              )}
-              {vehicle.dpf && (
-                <Badge variant="secondary" className="justify-center">DPF</Badge>
-              )}
-              {vehicle.pmMuffler && (
-                <Badge variant="secondary" className="justify-center">PMマフラー</Badge>
-              )}
-              {vehicle.centralDoorLock && (
-                <Badge variant="secondary" className="justify-center">集中ドアロック</Badge>
-              )}
-              {vehicle.equipment && (
-                <div className="col-span-full">
-                  <p className="text-sm text-gray-600 mt-2">その他装備: {vehicle.equipment}</p>
+            {/* 5. 装備情報 */}
+      <section className="w-[70%] mx-auto pb-10 bg-white opacity-100">
+        <div className="w-full max-w-[1000px] mx-auto gap-3 opacity-100 mb-6">
+          <h2 className="text-2xl font-bold mb-6">装備品</h2>
+          <div style={{
+            width: '100%',
+            maxWidth: '1000px',
+            height: 'calc(2.143rem * 2 + 0.643rem * 1)',
+            margin: '0 auto'
+          }}>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(7, 1fr)',
+              gridTemplateRows: 'repeat(2, 2.143rem)',
+              gap: '0.643rem'
+            }}>
+              {/* 装備品リスト */}
+              {[
+                { key: 'etc', label: 'ETC', value: vehicle.etc },
+                { key: 'backCamera', label: 'バックカメラ', value: vehicle.backCamera },
+                { key: 'recordBook', label: '記録簿', value: vehicle.recordBook },
+                { key: 'powerWindow', label: 'パワーウィンドウ', value: vehicle.powerWindow },
+                { key: 'driveRecorder', label: 'ドラレコ', value: vehicle.driveRecorder },
+                { key: 'airConditioner', label: 'エアコン', value: vehicle.airConditioner },
+                { key: 'electricMirror', label: '電動ミラー', value: vehicle.electricMirror },
+                { key: 'abs', label: 'ABS', value: vehicle.abs },
+                { key: 'aluminumWheel', label: 'アルミホイール', value: vehicle.aluminumWheel },
+                { key: 'airSuspensionSeat', label: 'エアサスシート', value: vehicle.airSuspensionSeat },
+                { key: 'carNavigation', label: 'カーナビ', value: vehicle.carNavigation },
+                { key: 'dpf', label: 'DPF', value: vehicle.dpf },
+                { key: 'pmMuffler', label: 'PMマフラー', value: vehicle.pmMuffler },
+                { key: 'centralDoorLock', label: '集中ドアロック', value: vehicle.centralDoorLock }
+              ].map((item) => (
+                <div 
+                  key={item.key}
+                  className="flex items-center justify-center border"
+                  style={{
+                    background: item.value ? '#E3F2FD' : '#F5F5F5',
+                    borderColor: item.value ? '#1976D2' : '#CCCCCC',
+                    borderRadius: '7.143rem',
+                    fontFamily: 'Noto Sans JP',
+                    fontWeight: 400,
+                    fontStyle: 'Regular',
+                    fontSize: '0.857rem',
+                    lineHeight: '100%',
+                    letterSpacing: '0%',
+                    color: '#1a1a1a',
+                    width: '100%',
+                    height: '2.143rem'
+                  }}
+                >
+                  {item.label}
                 </div>
-              )}
-              {!vehicle.etc && !vehicle.backCamera && !vehicle.recordBook && !vehicle.powerWindow && 
-               !vehicle.driveRecorder && !vehicle.airConditioner && !vehicle.electricMirror && 
-               !vehicle.abs && !vehicle.aluminumWheel && !vehicle.airSuspensionSeat && 
-               !vehicle.carNavigation && !vehicle.dpf && !vehicle.pmMuffler && 
-               !vehicle.centralDoorLock && !vehicle.equipment && (
-                <p className="text-gray-600 col-span-full">装備品情報はありません</p>
-              )}
+              ))}
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </section>
 
       {/* 6. 問い合わせフォーム */}
-      <section className="w-[70%] h-[312px] mx-auto opacity-100 mb-5">
-        <Card>
-          <CardContent className="p-6">
-            <h2 className="text-2xl font-bold mb-6">お問い合わせ</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">お名前</label>
-                  <input
-                    type="text"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="お名前を入力してください"
-                  />
+      <section className="w-full max-w-[1000px] mx-auto pb-10 opacity-100" style={{background: '#BCBCBC'}}>
+        <div className="w-full max-w-[1000px] mx-auto" style={{paddingTop: '1.429rem'}}>
+          {/* 見出しテキスト */}
+          <h2 
+            className="text-center"
+            style={{
+              fontFamily: 'Noto Sans JP',
+              fontWeight: 700,
+              fontStyle: 'Bold',
+              fontSize: '1.143rem', // 16px ÷ 14px = 1.143rem
+              lineHeight: '100%',
+              letterSpacing: '0%',
+              color: '#FFFFFF',
+              textShadow: '2px 2px 2px rgba(0, 0, 0, 0.25)',
+              marginBottom: '1.43rem',
+              marginTop: '1.429rem', // 20px ÷ 14px = 1.429rem
+            }}
+          >
+            今ご覧の車両が気になったらお気軽にご相談ください！<br />
+            販売価格のご相談も承っております。
+          </h2>
+          
+          {/* 電話問い合わせとメール問い合わせのコンテナ */}
+          <div 
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '2.286rem', // 32px ÷ 14px = 2.286rem
+              marginTop: '1.429rem', // 20px ÷ 14px = 1.429rem
+            }}
+          >
+            {/* 電話問い合わせ */}
+            <div 
+              style={{
+                width: '38.4%',
+                height: '8.429rem', // 118px ÷ 14px = 8.429rem
+                backgroundColor: '#FFFFFF',
+                borderRadius: '0',
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '1.5rem',
+                position: 'relative',
+              }}
+            >
+              {/* ①問い合わせ番号 */}
+              <div style={{width: '28%', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative', top: '5rem'}}>
+                <p style={{
+                  fontFamily: 'Noto Sans JP',
+                  fontWeight: '400',
+                  fontStyle: 'normal',
+                  fontSize: '0.857rem', // 12px ÷ 14px = 0.857rem
+                  lineHeight: '100%',
+                  letterSpacing: '0%',
+                  textAlign: 'center',
+                  color: '#1A1A1A',
+                  margin: '0 0 0.5rem 0'
+                }}>
+                  問合せ番号
+                </p>
+                <p style={{
+                  fontFamily: 'Noto Sans JP',
+                  fontWeight: '700',
+                  fontStyle: 'normal',
+                  fontSize: '1.143rem', // 16px ÷ 14px = 1.143rem
+                  lineHeight: '100%',
+                  letterSpacing: '0%',
+                  textAlign: 'center',
+                  color: '#1A1A1A',
+                  margin: '0'
+                }}>
+                  {vehicle.inquiryNumber || vehicle.id}
+                </p>
+              </div>
+              
+              {/* 吹き出し（問い合わせ番号の中央に位置） */}
+              <div style={{width: '28%', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'absolute', top: '0.3rem', left: '0', zIndex: 1001}}>
+                {/* 吹き出しの長方形 */}
+                <div style={{
+                  width: '78.21%', // 21.9% ÷ 28% = 78.21%
+                  height: '3.429rem', // 48px ÷ 14px = 3.429rem
+                  backgroundColor: '#2B5EC5',
+                  border: '1px solid #2B5EC5',
+                  borderRadius: '0',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  position: 'relative',
+                }}>
+                  <p style={{
+                    fontFamily: 'Noto Sans JP',
+                    fontWeight: '700',
+                    fontStyle: 'normal',
+                    fontSize: '0.714rem', // 10px ÷ 14px = 0.714rem
+                    lineHeight: '100%',
+                    letterSpacing: '0%',
+                    textAlign: 'center',
+                    color: '#FFFFFF',
+                    margin: '0',
+                    zIndex: 10000,
+                    position: 'relative'
+                  }}>
+                    こちらの番号を<br />お伝えください
+                  </p>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">電話番号</label>
-                  <input
-                    type="tel"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="電話番号を入力してください"
-                  />
+                
+                {/* 吹き出しの三角形 */}
+                <div style={{
+                  width: '0',
+                  height: '0',
+                  borderLeft: '1rem solid transparent',
+                  borderRight: '0.4rem solid transparent',
+                  borderTop: '2rem solid #2B5EC5',
+                  position: 'absolute',
+                  top: '2.5rem',
+                  left: '60%',
+                  transform: 'translateX(-50%) rotate(45deg)',
+                  zIndex: 9999
+                }}></div>
+              </div>
+              
+              {/* ②小見出しと電話番号 */}
+              <div style={{display: 'flex', flexDirection: 'column', gap: '0.5rem', width: '72%', alignItems: 'flex-start', position: 'relative'}}>
+                {/* 小見出し */}
+                <div style={{position: 'absolute', top: '0rem', backgroundColor: '#F2F2F2', height: '2.571rem', width: '106.5%', left: '-6.5%', zIndex: 999, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                  <h3 className="text-lg font-semibold" style={{writingMode: 'horizontal-tb'}}>お電話でのお問い合わせ</h3>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">メールアドレス</label>
-                  <input
-                    type="email"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="メールアドレスを入力してください"
-                  />
+                
+                {/* 電話番号 */}
+                <div className="flex items-center gap-4" style={{position: 'absolute', top: '5rem'}}>
+                  <Phone className="w-6 h-6 text-blue-600" />
+                  <div>
+                    <p className="font-medium">028-612-1472</p>
+                    <p className="text-sm text-gray-600">年中無休 9:00-17:00</p>
+                  </div>
                 </div>
               </div>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">お問い合わせ内容</label>
-                  <textarea
-                    className="w-full h-32 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                    placeholder="お問い合わせ内容を入力してください"
-                  />
-                </div>
-                <div className="flex gap-3">
-                  <Button className="flex-1">
-                    <Phone className="w-4 h-4 mr-2" />
-                    お問い合わせ
-                  </Button>
-                  <Button variant="outline" className="flex-1">
-                    <FileText className="w-4 h-4 mr-2" />
-                    査定依頼
-                  </Button>
-                </div>
-              </div>
+              
+              {/* 縦の境界線 */}
+              <div style={{position: 'absolute', top: '0', left: '28%', width: '1px', height: '100%', backgroundColor: '#CCCCCC', zIndex: 1000}}></div>
             </div>
-          </CardContent>
-        </Card>
+            
+            {/* メール問い合わせ */}
+            <div 
+              style={{
+                width: '38.4%',
+                height: '8.429rem', // 118px ÷ 14px = 8.429rem
+                backgroundColor: '#FFFFFF',
+                padding: '1.5rem',
+                borderRadius: '0',
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+              }}
+            >
+              {/* ①小見出し */}
+              <h3 className="text-lg font-semibold mb-3">メールでの問い合わせ</h3>
+              
+              {/* ②問い合わせボタン */}
+              <Button 
+                className="bg-green-600 hover:bg-green-700"
+                onClick={() => window.location.href = '/contact'}
+              >
+                <FileText className="w-4 h-4 mr-2" />
+                お問合せ問い合わせフォーム
+              </Button>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* 7. 関連車両 */}
-      <section className="w-[70%] h-[312px] mx-auto opacity-100 mb-5">
-        {relatedVehicles.length > 0 && (
+      <section className="w-[70%] mx-auto pb-10 bg-white opacity-100">
+        <div className="w-full max-w-[1000px] mx-auto">
+          {relatedVehicles.length > 0 && (
+            <Card>
+              <CardContent className="p-6">
+                <h2 className="text-2xl font-bold mb-6">関連車両</h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {relatedVehicles.map((relatedVehicle) => (
+                    <Link
+                      key={relatedVehicle.id}
+                      href={`/vehicle/${relatedVehicle.id}`}
+                      className="block hover:bg-gray-50 p-4 rounded-lg transition-colors border"
+                    >
+                      <div className="space-y-3">
+                        <img
+                          src={relatedVehicle.imageUrls?.[0] || relatedVehicle.imageUrl || "/placeholder.jpg"}
+                          alt={relatedVehicle.name}
+                          className="w-full h-32 object-cover rounded"
+                        />
+                        <div>
+                          <h4 className="font-semibold text-sm mb-1">{relatedVehicle.name}</h4>
+                          <p className="text-xs text-gray-600 mb-1">{relatedVehicle.maker}</p>
+                          <p className="text-xs text-gray-600 mb-2">{String(relatedVehicle.year || "")}</p>
+                          <p className="text-sm font-bold text-blue-600">
+                            ¥{(relatedVehicle.price || 0).toLocaleString()}
+                          </p>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+      </section>
+
+      {/* 8. 検索ボタン */}
+      <section className="w-[70%] mx-auto pb-10 bg-white opacity-100">
+        <div className="w-full max-w-[1000px] mx-auto">
           <Card>
             <CardContent className="p-6">
-              <h2 className="text-2xl font-bold mb-6">関連車両</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {relatedVehicles.map((relatedVehicle) => (
-                  <Link
-                    key={relatedVehicle.id}
-                    href={`/vehicle/${relatedVehicle.id}`}
-                    className="block hover:bg-gray-50 p-4 rounded-lg transition-colors border"
-                  >
-                    <div className="space-y-3">
-                      <img
-                        src={relatedVehicle.imageUrls?.[0] || relatedVehicle.imageUrl || "/placeholder.jpg"}
-                        alt={relatedVehicle.name}
-                        className="w-full h-32 object-cover rounded"
-                      />
-                      <div>
-                        <h4 className="font-semibold text-sm mb-1">{relatedVehicle.name}</h4>
-                        <p className="text-xs text-gray-600 mb-1">{relatedVehicle.maker}</p>
-                        <p className="text-xs text-gray-600 mb-2">{String(relatedVehicle.year || "")}</p>
-                        <p className="text-sm font-bold text-blue-600">
-                          ¥{(relatedVehicle.price || 0).toLocaleString()}
-                        </p>
-                      </div>
-                    </div>
-                  </Link>
+              <h2 className="text-2xl font-bold mb-6">他の車両</h2>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                {/* 他の車両のサンプル表示 */}
+                {Array.from({ length: 8 }, (_, i) => (
+                  <div key={i} className="border rounded-lg p-3 hover:shadow-md transition-shadow">
+                    <img
+                      src="/placeholder.jpg"
+                      alt={`車両${i + 1}`}
+                      className="w-full h-24 object-cover rounded mb-2"
+                    />
+                    <h4 className="font-semibold text-sm mb-1">サンプル車両 {i + 1}</h4>
+                    <p className="text-xs text-gray-600 mb-1">メーカー名</p>
+                    <p className="text-xs text-gray-600 mb-2">2023年</p>
+                    <p className="text-sm font-bold text-blue-600">¥1,500,000</p>
+                  </div>
                 ))}
               </div>
             </CardContent>
           </Card>
-        )}
-      </section>
-
-      {/* 8. 検索ボタン */}
-      <section className="w-[70%] h-[453px] mx-auto opacity-100">
-        <Card>
-          <CardContent className="p-6">
-            <h2 className="text-2xl font-bold mb-6">他の車両</h2>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              {/* 他の車両のサンプル表示 */}
-              {Array.from({ length: 8 }, (_, i) => (
-                <div key={i} className="border rounded-lg p-3 hover:shadow-md transition-shadow">
-                  <img
-                    src="/placeholder.jpg"
-                    alt={`車両${i + 1}`}
-                    className="w-full h-24 object-cover rounded mb-2"
-                  />
-                  <h4 className="font-semibold text-sm mb-1">サンプル車両 {i + 1}</h4>
-                  <p className="text-xs text-gray-600 mb-1">メーカー名</p>
-                  <p className="text-xs text-gray-600 mb-2">2023年</p>
-                  <p className="text-sm font-bold text-blue-600">¥1,500,000</p>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+        </div>
       </section>
     </div>
   )

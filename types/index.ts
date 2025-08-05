@@ -71,6 +71,9 @@ export interface Vehicle {
   simulation3Year?: string;
   simulation4Year?: string;
   simulation5Year?: string;
+  // 店舗関連フィールド
+  storeName?: string; // 在庫店舗名
+  storeId?: number; // 店舗ID
   createdAt: Date;
   updatedAt: Date;
 }
