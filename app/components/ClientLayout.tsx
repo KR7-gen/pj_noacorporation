@@ -13,7 +13,7 @@ export default function ClientLayout({
   const isAdminPage = pathname?.startsWith('/admin')
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="bg-white">
       {!isAdminPage && <Header />}
       {children}
       {!isAdminPage && <Footer />}

@@ -6,7 +6,7 @@ import { useParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { FileText, Camera, Phone, ChevronLeft, ChevronRight } from "lucide-react"
+import { FileText, Camera, Phone, ChevronLeft, ChevronRight, Mail } from "lucide-react"
 import { getVehicle, getVehicles } from "@/lib/firebase-utils"
 import { formatNumberWithCommas } from "@/lib/utils"
 import type { Vehicle } from "@/types"
@@ -160,7 +160,7 @@ export default function VehicleDetailPage() {
   }
 
   return (
-    <div className="bg-white" style={{ minHeight: '2800px', paddingBottom: '100px' }}>
+    <div className="bg-white" style={{ minHeight: '2800px' }}>
       
       {/* 1. 車両タイトル */}
       <section className="w-[70%] mx-auto pt-15 pb-10 bg-white opacity-100">
@@ -333,61 +333,204 @@ export default function VehicleDetailPage() {
             </div>
 
             {/* 3-2. 車両価格 */}
-            <div className="space-y-4 w-[488px] h-[273px] relative -left-[176px]">
-              {/* Price Card */}
-              <Card>
-                <CardContent className="p-4">
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <span>車両価格</span>
-                      <span className="font-bold text-blue-600">
-                        ¥{(vehicle.price || 0).toLocaleString()}
-                      </span>
-                    </div>
-                    {vehicle.totalPayment && (
-                      <div className="flex justify-between items-center">
-                        <span>車両価格（税込）</span>
-                        <span className="font-semibold">
-                          ¥{(vehicle.totalPayment || 0).toLocaleString()}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
+            <div className="w-[488px] h-[273px] relative -left-[176px]">
+              {/* Price Table */}
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: '28.7% 71.3%',
+                gridTemplateRows: '4rem 3.714rem',
+                border: '1px solid #CCCCCC',
+                borderRadius: '0.286rem'
+              }}>
+                {/* 左上：車両価格（ラベル） */}
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: '4rem', // 56px ÷ 14px
+                  borderRight: '1px solid #CCCCCC',
+                  borderBottom: '1px solid #CCCCCC',
+                  background: '#F2F2F2'
+                }}>
+                  <span style={{
+                    fontSize: '1rem',
+                    fontWeight: 'bold',
+                    color: '#1A1A1A'
+                  }}>車両価格</span>
+                </div>
+                
+                {/* 右上：車両価格（金額） */}
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: '4rem', // 56px ÷ 14px
+                  borderBottom: '1px solid #CCCCCC',
+                  background: '#FFFFFF'
+                }}>
+                  <span style={{
+                    fontSize: '1.143rem',
+                    fontWeight: 'bold',
+                    color: '#1154AF'
+                  }}>
+                    {Math.round((vehicle.price || 0) / 10000)}万円（税別）
+                  </span>
+                </div>
+                
+                {/* 左下：税込み価格（ラベル） */}
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: '3.714rem', // 52px ÷ 14px
+                  borderRight: '1px solid #CCCCCC',
+                  background: '#F2F2F2'
+                }}>
+                  <span style={{
+                    fontSize: '1rem',
+                    fontWeight: 'bold',
+                    color: '#1A1A1A'
+                  }}>税込価格</span>
+                </div>
+                
+                {/* 右下：支払い総額（金額） */}
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: '3.714rem', // 52px ÷ 14px
+                  background: '#FFFFFF'
+                }}>
+                  <span style={{
+                    fontSize: '1.143rem',
+                    fontWeight: 'bold',
+                    color: '#1154AF'
+                  }}>
+                    {Math.round(((vehicle.totalPayment || vehicle.price || 0)) / 10000)}万円（税別）
+                  </span>
+                </div>
+              </div>
 
               {/* 3-3. 価格シュミレーション */}
               {shouldShowSimulation && (
-                <Card>
-                  <CardContent className="p-4">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="font-medium">毎月の支払額</span>
-                      <span className="font-bold text-blue-600">
+                <div style={{ marginTop: '1.429rem' }}>
+                  {/* タイトル */}
+                  <div style={{
+                    textAlign: 'center',
+                    marginBottom: '1rem'
+                  }}>
+                    <span style={{
+                      fontSize: '1rem',
+                      fontWeight: 'bold',
+                      color: '#1A1A1A'
+                    }}>毎月返済額シュミレーション</span>
+                  </div>
+                  
+                  {/* Simulation Table */}
+                  <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: '28.7% 71.3%',
+                    gridTemplateRows: '4rem 3.714rem',
+                    border: '1px solid #CCCCCC',
+                    borderRadius: '0.286rem'
+                  }}>
+                    {/* 左上：毎月の支払額（ラベル） */}
+                    <div style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: '4rem', // 56px ÷ 14px
+                      borderRight: '1px solid #CCCCCC',
+                      borderBottom: '1px solid #CCCCCC',
+                      background: '#F2F2F2'
+                    }}>
+                      <span style={{
+                        fontSize: '1rem',
+                        fontWeight: 'bold',
+                        color: '#1A1A1A'
+                      }}>毎月の支払額</span>
+                    </div>
+                    
+                    {/* 右上：毎月の支払額（金額） */}
+                    <div style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: '4rem', // 56px ÷ 14px
+                      borderBottom: '1px solid #CCCCCC',
+                      background: '#FFFFFF'
+                    }}>
+                      <span style={{
+                        fontSize: '1.143rem',
+                        fontWeight: 'bold',
+                        color: '#1154AF'
+                      }}>
                         {vehicle[`simulation${selectedPaymentPeriod}Year` as keyof Vehicle] 
                           ? formatNumberWithCommas(Number(vehicle[`simulation${selectedPaymentPeriod}Year` as keyof Vehicle])) 
                           : "---"}円
                       </span>
                     </div>
-                    <div>
-                      <span className="font-medium block mb-2">返済期間</span>
-                      <div className="flex gap-1">
+                    
+                    {/* 左下：返済期間（ラベル） */}
+                    <div style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: '3.714rem', // 52px ÷ 14px
+                      borderRight: '1px solid #CCCCCC',
+                      background: '#F2F2F2'
+                    }}>
+                      <span style={{
+                        fontSize: '1rem',
+                        fontWeight: 'bold',
+                        color: '#1A1A1A'
+                      }}>返済期間</span>
+                    </div>
+                    
+                    {/* 右下：返済期間（選択ボタン） */}
+                    <div style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: '3.714rem', // 52px ÷ 14px
+                      background: '#FFFFFF',
+                      padding: '0 1rem'
+                    }}>
+                      <div style={{ display: 'flex', gap: '0.25rem' }}>
                         {[2, 3, 4, 5].map((year) => (
                           <button
                             key={year}
                             onClick={() => setSelectedPaymentPeriod(year)}
-                            className={`px-2 py-1 rounded border transition-colors ${
-                              selectedPaymentPeriod === year
-                                ? 'bg-blue-500 text-white border-blue-500'
-                                : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
-                            }`}
+                            style={{
+                              padding: '0.25rem 0.5rem',
+                              borderRadius: '0.25rem',
+                              border: '1px solid',
+                              fontSize: '0.875rem',
+                              fontWeight: '500',
+                              cursor: 'pointer',
+                              transition: 'all 0.2s',
+                              backgroundColor: selectedPaymentPeriod === year ? '#3B82F6' : '#FFFFFF',
+                              color: selectedPaymentPeriod === year ? '#FFFFFF' : '#374151',
+                              borderColor: selectedPaymentPeriod === year ? '#3B82F6' : '#D1D5DB'
+                            }}
+                            onMouseEnter={(e) => {
+                              if (selectedPaymentPeriod !== year) {
+                                e.currentTarget.style.backgroundColor = '#F9FAFB';
+                              }
+                            }}
+                            onMouseLeave={(e) => {
+                              if (selectedPaymentPeriod !== year) {
+                                e.currentTarget.style.backgroundColor = '#FFFFFF';
+                              }
+                            }}
                           >
                             {year}年
                           </button>
                         ))}
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               )}
             </div>
           </div>
@@ -605,7 +748,7 @@ export default function VehicleDetailPage() {
       </section>
 
       {/* 6. 問い合わせフォーム */}
-      <section className="w-full max-w-[1000px] mx-auto pb-10 opacity-100" style={{background: '#BCBCBC'}}>
+      <section className="w-full max-w-[1000px] mx-auto pb-10 opacity-100" style={{background: '#BCBCBC', position: 'relative', zIndex: 1}}>
         <div className="w-full max-w-[1000px] mx-auto" style={{paddingTop: '1.429rem'}}>
           {/* 見出しテキスト */}
           <h2 
@@ -734,13 +877,55 @@ export default function VehicleDetailPage() {
                   <h3 className="text-lg font-semibold" style={{writingMode: 'horizontal-tb'}}>お電話でのお問い合わせ</h3>
                 </div>
                 
-                {/* 電話番号 */}
-                <div className="flex items-center gap-4" style={{position: 'absolute', top: '5rem'}}>
-                  <Phone className="w-6 h-6 text-blue-600" />
-                  <div>
-                    <p className="font-medium">028-612-1472</p>
-                    <p className="text-sm text-gray-600">年中無休 9:00-17:00</p>
+                {/* 在庫店舗名 */}
+                {vehicle?.storeName && (
+                  <div style={{position: 'absolute', top: '3.3rem', width: '106.5%', left: '-6.5%', display: 'flex', justifyContent: 'center'}}>
+                    <p style={{
+                      fontFamily: 'Noto Sans JP',
+                      fontWeight: 700,
+                      fontStyle: 'normal',
+                      fontSize: '1rem', // 14px ÷ 14px = 1rem
+                      lineHeight: '100%',
+                      letterSpacing: '0%',
+                      color: '#1f2937' // text-gray-800相当
+                    }}>{vehicle.storeName}</p>
                   </div>
+                )}
+                
+                {/* 電話番号 */}
+                <div style={{position: 'absolute', top: '5rem', width: '106.5%', left: '-6.5%', display: 'flex', justifyContent: 'center'}}>
+                  <div style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}>
+                    <Phone style={{
+                      width: '1.286rem', // 18px ÷ 14px = 1.286rem
+                      height: '1.286rem', // 18px ÷ 14px = 1.286rem
+                      transform: 'rotate(0deg)',
+                      opacity: 1,
+                      color: '#1a1a1a'
+                    }} />
+                    <p style={{
+                      fontFamily: 'Noto Sans JP',
+                      fontWeight: 700,
+                      fontStyle: 'normal',
+                      fontSize: '1.429rem', // 20px ÷ 14px = 1.429rem
+                      lineHeight: '100%',
+                      letterSpacing: '0%',
+                      color: '#1f2937' // text-gray-800相当
+                    }}>028-612-1472</p>
+                  </div>
+                </div>
+                
+                {/* 営業時間 */}
+                <div style={{position: 'absolute', top: '7rem', width: '106.5%', left: '-6.5%', display: 'flex', justifyContent: 'center'}}>
+                  <p style={{
+                    fontFamily: 'Noto Sans JP',
+                    fontWeight: 400,
+                    fontStyle: 'normal',
+                    fontSize: '0.857rem', // 12px ÷ 14px = 0.857rem
+                    lineHeight: '100%',
+                    letterSpacing: '0%',
+                    textAlign: 'center',
+                    color: '#1a1a1a'
+                  }}>年中無休 9:00-17:00</p>
                 </div>
               </div>
               
@@ -757,86 +942,836 @@ export default function VehicleDetailPage() {
                 padding: '1.5rem',
                 borderRadius: '0',
                 boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
               {/* ①小見出し */}
               <h3 className="text-lg font-semibold mb-3">メールでの問い合わせ</h3>
               
               {/* ②問い合わせボタン */}
-              <Button 
-                className="bg-green-600 hover:bg-green-700"
-                onClick={() => window.location.href = '/contact'}
-              >
-                <FileText className="w-4 h-4 mr-2" />
-                お問合せ問い合わせフォーム
-              </Button>
+                              <Button 
+                  style={{
+                    width: '60%',
+                    height: '4rem', // 56px ÷ 14px = 4rem
+                    background: 'linear-gradient(180deg, #1154AF 0%, #053B65 100%)',
+                    boxShadow: '2px 2px 2px 0px #0000000D',
+                    border: 'none',
+                    borderRadius: '0',
+                    color: '#FFFFFF',
+                    fontFamily: 'Noto Sans JP',
+                    fontWeight: 700,
+                    fontStyle: 'normal',
+                    fontSize: '1rem', // 14px ÷ 14px = 1rem
+                    lineHeight: '100%',
+                    letterSpacing: '0%',
+                    textAlign: 'center',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.5rem',
+                    cursor: 'pointer',
+                    transition: 'opacity 0.2s'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
+                  onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+                  onClick={() => window.location.href = '/contact'}
+                >
+                  <Mail style={{
+                    width: '1.429rem', // 20px ÷ 14px = 1.429rem
+                    height: '1.143rem', // 16px ÷ 14px = 1.143rem
+                    transform: 'rotate(0deg)',
+                    opacity: 1
+                  }} />
+                  お問い合せ<br />フォーム
+                </Button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 7. 関連車両 */}
-      <section className="w-[70%] mx-auto pb-10 bg-white opacity-100">
+      {/* 7. 関連する車両 */}
+      <section className="w-[70%] mx-auto pb-10 bg-white opacity-100" style={{marginTop: '1.429rem'}}>
         <div className="w-full max-w-[1000px] mx-auto">
+          <div style={{
+            height: '3.786rem', // 53px ÷ 14px = 3.786rem
+            width: '100%',
+            background: '#2B5EC5',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            paddingLeft: '1.5rem',
+            marginBottom: '1.5rem'
+          }}>
+            <h2 style={{
+              fontFamily: 'Noto Sans JP',
+              fontWeight: 700,
+              fontStyle: 'normal',
+              fontSize: '1.429rem', // 20px ÷ 14px = 1.429rem
+              lineHeight: '100%',
+              letterSpacing: '0%',
+              color: '#FFFFFF',
+              margin: 0
+            }}>関連する車両</h2>
+          </div>
+          
+          {/* 実際の関連車両 */}
           {relatedVehicles.length > 0 && (
-            <Card>
-              <CardContent className="p-6">
-                <h2 className="text-2xl font-bold mb-6">関連車両</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {relatedVehicles.map((relatedVehicle) => (
-                    <Link
-                      key={relatedVehicle.id}
-                      href={`/vehicle/${relatedVehicle.id}`}
-                      className="block hover:bg-gray-50 p-4 rounded-lg transition-colors border"
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              {relatedVehicles.map((relatedVehicle) => (
+                <Link
+                  key={relatedVehicle.id}
+                  href={`/vehicle/${relatedVehicle.id}`}
+                  className="block hover:bg-gray-50 p-4 rounded-lg transition-colors border"
+                >
+                  <div className="space-y-3">
+                    <img
+                      src={relatedVehicle.imageUrls?.[0] || relatedVehicle.imageUrl || "/placeholder.jpg"}
+                      alt={relatedVehicle.name}
+                      className="w-full h-32 object-cover rounded"
+                    />
+                    <div>
+                      <h4 className="font-semibold text-sm mb-1">{relatedVehicle.name}</h4>
+                      <p className="text-xs text-gray-600 mb-1">{relatedVehicle.maker}</p>
+                      <p className="text-xs text-gray-600 mb-2">{String(relatedVehicle.year || "")}</p>
+                      <p className="text-sm font-bold text-blue-600">
+                        ¥{(relatedVehicle.price || 0).toLocaleString()}
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+          
+          {/* サンプルカード */}
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(4, 1fr)",
+            gap: "1.714rem", // 24px ÷ 14px = 1.714rem
+            width: "100%"
+          }}>
+            {/* 他の車両のサンプル表示 */}
+            {Array.from({ length: 3 }, (_, i) => (
+              <Card 
+                key={i}
+                style={{
+                  width: "18.571rem", // 260px ÷ 14px = 18.571rem
+                  height: "41.929rem", // 587px ÷ 14px = 41.929rem
+                  gap: "0.857rem", // 12px ÷ 14px = 0.857rem
+                  opacity: 1,
+                  paddingBottom: "1.143rem", // 16px ÷ 14px = 1.143rem
+                  borderWidth: "1px",
+                  background: "#FFFFFF",
+                  border: "1px solid #F2F2F2",
+                  overflow: "hidden",
+                  position: "relative"
+                }}
+              >
+                <CardContent style={{ padding: "0" }}>
+                  {/* ヘッダーバー */}
+                  <div 
+                    style={{
+                      height: "2.786rem", // 39px ÷ 14px = 2.786rem
+                      background: "#1A1A1A",
+                      padding: "0.571rem 0.857rem", // 8px 12px ÷ 14px
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center"
+                    }}
+                  >
+                    <span style={{ 
+                      width: "10rem", // 140px ÷ 14px = 10rem
+                      height: "1.643rem", // 23px ÷ 14px = 1.643rem
+                      opacity: 1,
+                      fontFamily: "Noto Sans JP",
+                      fontWeight: "700",
+                      fontStyle: "Bold",
+                      fontSize: "1.143rem", // 16px ÷ 14px = 1.143rem
+                      lineHeight: "100%",
+                      letterSpacing: "0%",
+                      color: "#FFFFFF",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap"
+                    }}>
+                      三菱 トラック
+                    </span>
+                    <span style={{ 
+                      width: "6.357rem", // 89px ÷ 14px = 6.357rem
+                      height: "1.214rem", // 17px ÷ 14px = 1.214rem
+                      opacity: 1,
+                      fontFamily: "Noto Sans JP",
+                      fontWeight: "400",
+                      fontStyle: "Regular",
+                      fontSize: "1rem", // 14px ÷ 14px = 1rem
+                      lineHeight: "100%",
+                      letterSpacing: "0%",
+                      color: "#FFFFFF"
+                    }}>
+                      FK4J23A
+                    </span>
+                  </div>
+                  
+                  {/* 問い合わせ番号 */}
+                  <div 
+                    style={{
+                      height: "2.5rem", // 35px ÷ 14px = 2.5rem
+                      background: "#FFFFFF",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center"
+                    }}
+                  >
+                    <span style={{
+                      width: "11.214rem", // 157px ÷ 14px = 11.214rem
+                      height: "1.357rem", // 19px ÷ 14px = 1.357rem
+                      opacity: 1,
+                      fontFamily: "Noto Sans JP",
+                      fontWeight: "400",
+                      fontStyle: "Regular",
+                      fontSize: "1.143rem", // 16px ÷ 14px = 1.143rem
+                      lineHeight: "100%",
+                      letterSpacing: "0%",
+                      color: "#1A1A1A",
+                      textAlign: "center"
+                    }}>
+                      問合せ番号: N00000
+                    </span>
+                  </div>
+
+                  {/* 車両画像 */}
+                  <div 
+                    style={{
+                      position: "relative",
+                      width: "100%",
+                      height: "12.857rem", // 180px ÷ 14px = 12.857rem
+                      overflow: "hidden"
+                    }}
+                  >
+                    <img
+                      src="/placeholder.jpg"
+                      alt="サンプル車両"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover"
+                      }}
+                    />
+                  </div>
+
+                  {/* ボディタイプ + 詳細テーブル */}
+                  <div 
+                    style={{
+                      height: "19.5rem", // 273px ÷ 14px = 19.5rem
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "space-between"
+                    }}
+                  >
+                    {/* ボディタイプ */}
+                    <div 
+                      style={{
+                        height: "calc(19.5rem / 6)", // 273px ÷ 6 ÷ 14px
+                        display: "flex",
+                        alignItems: "center",
+                        background: "#FFFFFF",
+                        borderBottom: "1px solid #F2F2F2"
+                      }}
                     >
-                      <div className="space-y-3">
-                        <img
-                          src={relatedVehicle.imageUrls?.[0] || relatedVehicle.imageUrl || "/placeholder.jpg"}
-                          alt={relatedVehicle.name}
-                          className="w-full h-32 object-cover rounded"
-                        />
+                      <div style={{
+                        width: "18.571rem", // 260px ÷ 14px = 18.571rem
+                        height: "100%",
+                        background: "#FFFFFF",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center"
+                      }}>
+                        <span style={{
+                          width: "16.571rem", // 232px ÷ 14px = 16.571rem
+                          height: "1.214rem", // 17px ÷ 14px = 1.214rem
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "400",
+                          fontStyle: "Regular",
+                          fontSize: "1rem", // 14px ÷ 14px = 1rem
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#1A1A1A"
+                        }}>
+                          トラック
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* 本体価格 */}
+                    <div 
+                      style={{
+                        height: "calc(19.5rem / 6)",
+                        display: "flex",
+                        alignItems: "center",
+                        fontSize: "0.786rem", // 11px ÷ 14px = 0.786rem
+                        color: "#374151",
+                        borderBottom: "1px solid #F2F2F2"
+                      }}
+                    >
+                      <div style={{
+                        width: "5.714rem", // 80px ÷ 14px = 5.714rem
+                        height: "100%",
+                        background: "#E6E6E6",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center"
+                      }}>
+                        <span style={{
+                          width: "4rem", // 56px ÷ 14px = 4rem
+                          height: "1.429rem", // 20px ÷ 14px = 1.429rem
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "700",
+                          fontStyle: "Bold",
+                          fontSize: "1rem", // 14px ÷ 14px = 1rem
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#1A1A1A"
+                        }}>本体価格</span>
+                      </div>
+                      <div style={{ 
+                        width: "12.857rem", // 180px ÷ 14px = 12.857rem
+                        height: "100%",
+                        background: "#FFFFFF",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                        paddingLeft: "0.857rem" // 12px ÷ 14px = 0.857rem
+                      }}>
                         <div>
-                          <h4 className="font-semibold text-sm mb-1">{relatedVehicle.name}</h4>
-                          <p className="text-xs text-gray-600 mb-1">{relatedVehicle.maker}</p>
-                          <p className="text-xs text-gray-600 mb-2">{String(relatedVehicle.year || "")}</p>
-                          <p className="text-sm font-bold text-blue-600">
-                            ¥{(relatedVehicle.price || 0).toLocaleString()}
-                          </p>
+                          <span style={{
+                            width: "4.071rem", // 57px ÷ 14px = 4.071rem
+                            height: "1.643rem", // 23px ÷ 14px = 1.643rem
+                            opacity: 1,
+                            fontFamily: "Noto Sans JP",
+                            fontWeight: "700",
+                            fontStyle: "Bold",
+                            fontSize: "2.286rem", // 32px ÷ 14px = 2.286rem
+                            lineHeight: "100%",
+                            letterSpacing: "0%",
+                            color: "#2B5EC5"
+                          }}>
+                            150
+                          </span>
+                          <span style={{
+                            width: "4.071rem", // 57px ÷ 14px = 4.071rem
+                            height: "1rem", // 14px ÷ 14px = 1rem
+                            opacity: 1,
+                            fontFamily: "Noto Sans JP",
+                            fontWeight: "400",
+                            fontStyle: "Regular",
+                            fontSize: "0.857rem", // 12px ÷ 14px = 0.857rem
+                            lineHeight: "100%",
+                            letterSpacing: "0%",
+                            color: "#2B5EC5"
+                          }}>万円(税別)</span>
                         </div>
                       </div>
-                    </Link>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          )}
+                    </div>
+
+                    {/* 年式 */}
+                    <div 
+                      style={{
+                        height: "calc(19.5rem / 6)",
+                        display: "flex",
+                        alignItems: "center",
+                        fontSize: "0.786rem",
+                        color: "#374151",
+                        borderBottom: "1px solid #F2F2F2"
+                      }}
+                    >
+                      <div style={{
+                        width: "5.714rem",
+                        height: "100%",
+                        background: "#E6E6E6",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center"
+                      }}>
+                        <span style={{
+                          width: "4rem",
+                          height: "1.429rem",
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "700",
+                          fontStyle: "Bold",
+                          fontSize: "1rem",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#1A1A1A"
+                        }}>年式</span>
+                      </div>
+                      <div style={{ 
+                        width: "12.857rem",
+                        height: "100%",
+                        background: "#FFFFFF",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                        paddingLeft: "0.857rem"
+                      }}>
+                        <span style={{
+                          width: "6.286rem", // 88px ÷ 14px = 6.286rem
+                          height: "1.214rem", // 17px ÷ 14px = 1.214rem
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "400",
+                          fontStyle: "Regular",
+                          fontSize: "1rem",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#1A1A1A"
+                        }}>
+                          R6年9月
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* 走行距離 */}
+                    <div 
+                      style={{
+                        height: "calc(19.5rem / 6)",
+                        display: "flex",
+                        alignItems: "center",
+                        fontSize: "0.786rem",
+                        color: "#374151",
+                        borderBottom: "1px solid #F2F2F2"
+                      }}
+                    >
+                      <div style={{
+                        width: "5.714rem",
+                        height: "100%",
+                        background: "#E6E6E6",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center"
+                      }}>
+                        <span style={{
+                          width: "4rem",
+                          height: "1.429rem",
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "700",
+                          fontStyle: "Bold",
+                          fontSize: "1rem",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#1A1A1A"
+                        }}>走行距離</span>
+                      </div>
+                      <div style={{ 
+                        width: "12.857rem",
+                        height: "100%",
+                        background: "#FFFFFF",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                        paddingLeft: "0.857rem"
+                      }}>
+                        <span style={{
+                          width: "6.286rem",
+                          height: "1.214rem",
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "400",
+                          fontStyle: "Regular",
+                          fontSize: "1rem",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#1A1A1A"
+                        }}>
+                          00,000km
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* 積載量 */}
+                    <div 
+                      style={{
+                        height: "calc(19.5rem / 6)",
+                        display: "flex",
+                        alignItems: "center",
+                        fontSize: "0.786rem",
+                        color: "#374151",
+                        borderBottom: "1px solid #F2F2F2"
+                      }}
+                    >
+                      <div style={{
+                        width: "5.714rem",
+                        height: "100%",
+                        background: "#E6E6E6",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center"
+                      }}>
+                        <span style={{
+                          width: "4rem",
+                          height: "1.429rem",
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "700",
+                          fontStyle: "Bold",
+                          fontSize: "1rem",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#1A1A1A"
+                        }}>積載量</span>
+                      </div>
+                      <div style={{ 
+                        width: "12.857rem",
+                        height: "100%",
+                        background: "#FFFFFF",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                        paddingLeft: "0.857rem"
+                      }}>
+                        <span style={{
+                          width: "6.286rem",
+                          height: "1.214rem",
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "400",
+                          fontStyle: "Regular",
+                          fontSize: "1rem",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#1A1A1A"
+                        }}>
+                          4.0t
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* 車検期限 */}
+                    <div 
+                      style={{
+                        height: "calc(19.5rem / 6)",
+                        display: "flex",
+                        alignItems: "center",
+                        fontSize: "0.786rem",
+                        color: "#374151",
+                        borderBottom: "1px solid #F2F2F2"
+                      }}
+                    >
+                      <div style={{
+                        width: "5.714rem",
+                        height: "100%",
+                        background: "#E6E6E6",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center"
+                      }}>
+                        <span style={{
+                          width: "4rem",
+                          height: "1.429rem",
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "700",
+                          fontStyle: "Bold",
+                          fontSize: "1rem",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#1A1A1A"
+                        }}>車検期限</span>
+                      </div>
+                      <div style={{ 
+                        width: "12.857rem",
+                        height: "100%",
+                        background: "#FFFFFF",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                        paddingLeft: "0.857rem"
+                      }}>
+                        <span style={{
+                          width: "6.286rem",
+                          height: "1.214rem",
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "400",
+                          fontStyle: "Regular",
+                          fontSize: "1rem",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#1A1A1A"
+                        }}>
+                          抹消
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 詳細ボタン */}
+                  <div style={{ 
+                    height: "4.286rem", // 60px ÷ 14px = 4.286rem
+                    display: "flex", 
+                    alignItems: "center", 
+                    justifyContent: "center",
+                    background: "#FFFFFF"
+                  }}>
+                    <Button 
+                      style={{
+                        width: "11.429rem", // 160px ÷ 14px = 11.429rem
+                        height: "2.286rem", // 32px ÷ 14px = 2.286rem
+                        gap: "0.571rem", // 8px ÷ 14px = 0.571rem
+                        opacity: 1,
+                        paddingTop: "0.286rem", // 4px ÷ 14px = 0.286rem
+                        paddingRight: "0.571rem", // 8px ÷ 14px = 0.571rem
+                        paddingBottom: "0.286rem", // 4px ÷ 14px = 0.286rem
+                        paddingLeft: "0.571rem", // 8px ÷ 14px = 0.571rem
+                        borderRadius: "0.286rem", // 4px ÷ 14px = 0.286rem
+                        border: "1px solid #333333",
+                        background: "#FFFFFF",
+                        boxShadow: "2px 2px 2px 0px #00000040",
+                        cursor: "pointer",
+                        transition: "all 0.3s ease",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center"
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.opacity = "0.9";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.opacity = "1";
+                      }}
+                    >
+                      <span style={{
+                        width: "6rem", // 84px ÷ 14px = 6rem
+                        height: "1.429rem", // 20px ÷ 14px = 1.429rem
+                        opacity: 1,
+                        fontFamily: "Noto Sans JP",
+                        fontWeight: "700",
+                        fontStyle: "Bold",
+                        fontSize: "1rem",
+                        lineHeight: "1.429rem", // 20px ÷ 14px = 1.429rem
+                        letterSpacing: "0%",
+                        color: "#333333",
+                        display: "flex",
+                        alignItems: "center",
+                        transform: "translateY(-0.071rem)" // -1px ÷ 14px = -0.071rem
+                      }}>
+                        詳細はこちら
+                      </span>
+                      <svg
+                        width="0.529rem" // 7.4px ÷ 14px = 0.529rem
+                        height="0.857rem" // 12px ÷ 14px = 0.857rem
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        style={{
+                          color: "#333333",
+                          height: "1.429rem", // 20px ÷ 14px = 1.429rem
+                          display: "flex",
+                          alignItems: "center"
+                        }}
+                      >
+                        <path
+                          d="M9 18L15 12L9 6"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* 8. 検索ボタン */}
-      <section className="w-[70%] mx-auto pb-10 bg-white opacity-100">
+      {/* 8. 他の車両 */}
+      <section className="w-full opacity-100" style={{marginTop: '1.429rem', background: '#F2F2F2', paddingTop: '1.429rem', paddingBottom: '1.429rem'}}>
         <div className="w-full max-w-[1000px] mx-auto">
-          <Card>
-            <CardContent className="p-6">
-              <h2 className="text-2xl font-bold mb-6">他の車両</h2>
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                {/* 他の車両のサンプル表示 */}
-                {Array.from({ length: 8 }, (_, i) => (
-                  <div key={i} className="border rounded-lg p-3 hover:shadow-md transition-shadow">
-                    <img
-                      src="/placeholder.jpg"
-                      alt={`車両${i + 1}`}
-                      className="w-full h-24 object-cover rounded mb-2"
+          {/* 1. 小見出しテキスト */}
+          <div style={{
+            textAlign: 'center',
+            marginBottom: '2rem'
+          }}>
+            <p style={{
+              fontFamily: 'Noto Sans JP',
+              fontWeight: 700,
+              fontStyle: 'Bold',
+              fontSize: '1.429rem', // 20px ÷ 14px = 1.429rem
+              lineHeight: '100%',
+              letterSpacing: '0%',
+              color: '#1A1A1A',
+              margin: 0
+            }}>
+              他の車両をお探しの方はこちらから
+            </p>
+          </div>
+
+          {/* 3. ボディタイプカード */}
+          <div style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            marginBottom: '2rem'
+          }}>
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(6, 1fr)",
+              gap: "0.286rem", // 4px ÷ 14px = 0.286rem
+              width: "fit-content"
+            }}>
+            {[
+              { id: 1, type: "クレーン", icon: "crane" },
+              { id: 2, type: "ダンプ", icon: "dump" },
+              { id: 3, type: "平ボディ", icon: "flatbed" },
+              { id: 4, type: "車輌運搬車", icon: "carrier" },
+              { id: 5, type: "ミキサー車", icon: "mixer" },
+              { id: 6, type: "アルミバン", icon: "van" },
+              { id: 7, type: "高所作業車", icon: "aerial" },
+              { id: 8, type: "アルミウィング", icon: "wing" },
+              { id: 9, type: "キャリアカー", icon: "car_carrier" },
+              { id: 10, type: "塵芥車", icon: "garbage" },
+              { id: 11, type: "アームロール", icon: "arm-roll" },
+              { id: 12, type: "特装車・その他", icon: "special" }
+            ].map((icon) => (
+              <Link
+                key={icon.id}
+                href={`/inventory?type=${encodeURIComponent(icon.type)}`}
+                style={{
+                  width: "12.571rem", // 176px ÷ 14px = 12.571rem
+                  height: "6.857rem", // 96px ÷ 14px = 6.857rem
+                  borderRadius: "0.286rem", // 4px ÷ 14px = 0.286rem
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "white",
+                  textDecoration: "none",
+                  transition: "all 0.3s ease",
+                  boxShadow: "0 0.071rem 0.214rem rgba(0, 0, 0, 0.1)", // 1px 3px ÷ 14px
+                  opacity: 1
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-0.143rem)"; // -2px ÷ 14px
+                  e.currentTarget.style.boxShadow = "0 0.286rem 0.571rem rgba(0, 0, 0, 0.15)"; // 4px 8px ÷ 14px
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "0 0.071rem 0.214rem rgba(0, 0, 0, 0.1)"; // 1px 3px ÷ 14px
+                }}
+              >
+                <div 
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    position: "relative"
+                  }}
+                >
+                  <div 
+                    style={{
+                      width: "4.571rem", // 64px ÷ 14px = 4.571rem
+                      height: "4.571rem", // 64px ÷ 14px = 4.571rem
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginBottom: "0.571rem" // 8px ÷ 14px = 0.571rem
+                    }}
+                  >
+                    <img 
+                      src={`/${icon.icon}.${icon.type === "平ボディ" || icon.type === "アームロール" || icon.type === "キャリアカー" ? "png" : "jpg"}`}
+                      alt={icon.type}
+                      style={{
+                        maxWidth: "100%",
+                        maxHeight: "100%",
+                        objectFit: "contain"
+                      }}
+                      onError={(e) => {
+                        console.error(`画像読み込みエラー: ${icon.type}`, (e.target as HTMLImageElement).src);
+                      }}
                     />
-                    <h4 className="font-semibold text-sm mb-1">サンプル車両 {i + 1}</h4>
-                    <p className="text-xs text-gray-600 mb-1">メーカー名</p>
-                    <p className="text-xs text-gray-600 mb-2">2023年</p>
-                    <p className="text-sm font-bold text-blue-600">¥1,500,000</p>
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+                  <span 
+                    style={{
+                      fontFamily: "'Noto Sans JP', sans-serif",
+                      fontWeight: 700,
+                      fontStyle: "bold",
+                      fontSize: "1.143rem", // 16px ÷ 14px = 1.143rem
+                      lineHeight: "100%",
+                      letterSpacing: "0%",
+                      textAlign: "center",
+                      color: "#1A1A1A",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      maxWidth: "11.429rem" // 160px ÷ 14px = 11.429rem
+                    }}
+                  >
+                    {icon.type}
+                  </span>
+                </div>
+              </Link>
+            ))}
+            </div>
+          </div>
+
+          {/* 4. 在庫一覧へ */}
+          <div style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: '2rem',
+            width: "100%"
+          }}>
+            <Link href="/inventory" style={{width: "15.28vw"}}>
+              <Button 
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "1.429rem", // 20px ÷ 14px = 1.429rem
+                  width: "100%",
+                  height: "2.857rem", // 40px ÷ 14px = 2.857rem
+                  borderRadius: "0.286rem", // 4px ÷ 14px = 0.286rem
+                  border: "none",
+                  background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
+                  color: "#FFFFFF",
+                  fontFamily: "Noto Sans JP",
+                  fontWeight: 700,
+                  fontStyle: "Bold",
+                  fontSize: "1.143rem", // 16px ÷ 14px = 1.143rem
+                  lineHeight: "100%",
+                  letterSpacing: "0%",
+                  cursor: "pointer",
+                  transition: "all 0.3s ease",
+                  textDecoration: "none"
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.opacity = "0.9";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.opacity = "1";
+                }}
+              >
+                <span>在庫一覧へ</span>
+                <ChevronRight 
+                  size={20} 
+                  color="#FFFFFF"
+                />
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
     </div>
