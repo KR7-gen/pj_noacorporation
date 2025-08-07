@@ -69,6 +69,22 @@ export default function VehicleDetailPage() {
       console.log('- engineModel:', vehicle.engineModel);
       console.log('- turbo:', vehicle.turbo);
       
+      console.log('装備品フィールド値:');
+      console.log('- etc:', vehicle.etc);
+      console.log('- backCamera:', vehicle.backCamera);
+      console.log('- recordBook:', vehicle.recordBook);
+      console.log('- powerWindow:', vehicle.powerWindow);
+      console.log('- driveRecorder:', vehicle.driveRecorder);
+      console.log('- airConditioner:', vehicle.airConditioner);
+      console.log('- electricMirror:', vehicle.electricMirror);
+      console.log('- abs:', vehicle.abs);
+      console.log('- aluminumWheel:', vehicle.aluminumWheel);
+      console.log('- airSuspensionSeat:', vehicle.airSuspensionSeat);
+      console.log('- carNavigation:', vehicle.carNavigation);
+      console.log('- dpf:', vehicle.dpf);
+      console.log('- pmMuffler:', vehicle.pmMuffler);
+      console.log('- centralDoorLock:', vehicle.centralDoorLock);
+      
       console.log('データベースの全フィールド名:');
       Object.keys(vehicle).forEach(key => {
         console.log(`- ${key}:`, vehicle[key as keyof Vehicle]);
@@ -345,12 +361,13 @@ export default function VehicleDetailPage() {
                 {/* 左上：車両価格（ラベル） */}
                 <div style={{
                   display: 'flex',
-                  justifyContent: 'center',
+                  justifyContent: 'flex-start',
                   alignItems: 'center',
                   height: '4rem', // 56px ÷ 14px
                   borderRight: '1px solid #CCCCCC',
                   borderBottom: '1px solid #CCCCCC',
-                  background: '#F2F2F2'
+                  background: '#F2F2F2',
+                  paddingLeft: '1rem'
                 }}>
                   <span style={{
                     fontSize: '1rem',
@@ -362,29 +379,43 @@ export default function VehicleDetailPage() {
                 {/* 右上：車両価格（金額） */}
                 <div style={{
                   display: 'flex',
-                  justifyContent: 'center',
+                  justifyContent: 'flex-start',
                   alignItems: 'center',
                   height: '4rem', // 56px ÷ 14px
                   borderBottom: '1px solid #CCCCCC',
-                  background: '#FFFFFF'
+                  background: '#FFFFFF',
+                  paddingLeft: '1rem'
                 }}>
                   <span style={{
-                    fontSize: '1.143rem',
-                    fontWeight: 'bold',
-                    color: '#1154AF'
+                    color: '#1A1A1A'
                   }}>
-                    {Math.round((vehicle.price || 0) / 10000)}万円（税別）
+                    <span style={{
+                      fontSize: '2.571rem', // 36px ÷ 14px
+                      fontWeight: 'bold',
+                      color: '#2B5EC5'
+                    }}>
+                      {Math.round((vehicle.price || 0) / 10000)}
+                    </span>
+                    <span style={{
+                      fontFamily: 'Noto Sans JP',
+                      fontWeight: '400',
+                      fontStyle: 'normal',
+                      fontSize: '1rem', // 14px ÷ 14px
+                      lineHeight: '100%',
+                      letterSpacing: '0%'
+                    }}>万円（税別）</span>
                   </span>
                 </div>
                 
                 {/* 左下：税込み価格（ラベル） */}
                 <div style={{
                   display: 'flex',
-                  justifyContent: 'center',
+                  justifyContent: 'flex-start',
                   alignItems: 'center',
                   height: '3.714rem', // 52px ÷ 14px
                   borderRight: '1px solid #CCCCCC',
-                  background: '#F2F2F2'
+                  background: '#F2F2F2',
+                  paddingLeft: '1rem'
                 }}>
                   <span style={{
                     fontSize: '1rem',
@@ -396,17 +427,31 @@ export default function VehicleDetailPage() {
                 {/* 右下：支払い総額（金額） */}
                 <div style={{
                   display: 'flex',
-                  justifyContent: 'center',
+                  justifyContent: 'flex-start',
                   alignItems: 'center',
                   height: '3.714rem', // 52px ÷ 14px
-                  background: '#FFFFFF'
+                  background: '#FFFFFF',
+                  paddingLeft: '1rem'
                 }}>
                   <span style={{
-                    fontSize: '1.143rem',
-                    fontWeight: 'bold',
-                    color: '#1154AF'
+                    color: '#1A1A1A'
                   }}>
-                    {Math.round(((vehicle.totalPayment || vehicle.price || 0)) / 10000)}万円（税別）
+                    <span style={{
+                      fontSize: '1.714rem', // 24px ÷ 14px
+                      fontWeight: 'bold',
+                      color: '#1A1A1A',
+                      marginRight: '0.5rem'
+                    }}>
+                      {Math.round(((vehicle.totalPayment || vehicle.price || 0)) / 10000)}
+                    </span>
+                    <span style={{
+                      fontFamily: 'Noto Sans JP',
+                      fontWeight: '400',
+                      fontStyle: 'normal',
+                      fontSize: '1rem', // 14px ÷ 14px
+                      lineHeight: '100%',
+                      letterSpacing: '0%'
+                    }}>万円（税別）</span>
                   </span>
                 </div>
               </div>
@@ -416,12 +461,16 @@ export default function VehicleDetailPage() {
                 <div style={{ marginTop: '1.429rem' }}>
                   {/* タイトル */}
                   <div style={{
-                    textAlign: 'center',
+                    textAlign: 'left',
                     marginBottom: '1rem'
                   }}>
                     <span style={{
-                      fontSize: '1rem',
-                      fontWeight: 'bold',
+                      fontFamily: 'Noto Sans JP',
+                      fontWeight: '400',
+                      fontStyle: 'normal',
+                      fontSize: '1rem', // 14px ÷ 14px
+                      lineHeight: '100%',
+                      letterSpacing: '0%',
                       color: '#1A1A1A'
                     }}>毎月返済額シュミレーション</span>
                   </div>
@@ -437,12 +486,13 @@ export default function VehicleDetailPage() {
                     {/* 左上：毎月の支払額（ラベル） */}
                     <div style={{
                       display: 'flex',
-                      justifyContent: 'center',
+                      justifyContent: 'flex-start',
                       alignItems: 'center',
                       height: '4rem', // 56px ÷ 14px
                       borderRight: '1px solid #CCCCCC',
                       borderBottom: '1px solid #CCCCCC',
-                      background: '#F2F2F2'
+                      background: '#FFFFFF',
+                      paddingLeft: '1rem'
                     }}>
                       <span style={{
                         fontSize: '1rem',
@@ -454,31 +504,49 @@ export default function VehicleDetailPage() {
                     {/* 右上：毎月の支払額（金額） */}
                     <div style={{
                       display: 'flex',
-                      justifyContent: 'center',
+                      justifyContent: 'flex-start',
                       alignItems: 'center',
                       height: '4rem', // 56px ÷ 14px
                       borderBottom: '1px solid #CCCCCC',
-                      background: '#FFFFFF'
+                      background: '#FFFFFF',
+                      paddingLeft: '1rem'
                     }}>
                       <span style={{
-                        fontSize: '1.143rem',
-                        fontWeight: 'bold',
                         color: '#1154AF'
                       }}>
-                        {vehicle[`simulation${selectedPaymentPeriod}Year` as keyof Vehicle] 
-                          ? formatNumberWithCommas(Number(vehicle[`simulation${selectedPaymentPeriod}Year` as keyof Vehicle])) 
-                          : "---"}円
+                        <span style={{
+                          fontFamily: 'Noto Sans JP',
+                          fontWeight: '700',
+                          fontStyle: 'normal',
+                          fontSize: '2.571rem', // 36px ÷ 14px
+                          lineHeight: '100%',
+                          letterSpacing: '0%'
+                        }}>
+                          {vehicle[`simulation${selectedPaymentPeriod}Year` as keyof Vehicle] 
+                            ? `${(Number(vehicle[`simulation${selectedPaymentPeriod}Year` as keyof Vehicle]) / 10000).toFixed(1)}`
+                            : "---"}
+                        </span>
+                        <span style={{
+                          fontFamily: 'Noto Sans JP',
+                          fontWeight: '400',
+                          fontStyle: 'normal',
+                          fontSize: '1rem', // 14px ÷ 14px
+                          lineHeight: '100%',
+                          letterSpacing: '0%',
+                          color: '#1A1A1A'
+                        }}>万円</span>
                       </span>
                     </div>
                     
                     {/* 左下：返済期間（ラベル） */}
                     <div style={{
                       display: 'flex',
-                      justifyContent: 'center',
+                      justifyContent: 'flex-start',
                       alignItems: 'center',
                       height: '3.714rem', // 52px ÷ 14px
                       borderRight: '1px solid #CCCCCC',
-                      background: '#F2F2F2'
+                      background: '#FFFFFF',
+                      paddingLeft: '1rem'
                     }}>
                       <span style={{
                         fontSize: '1rem',
@@ -490,38 +558,37 @@ export default function VehicleDetailPage() {
                     {/* 右下：返済期間（選択ボタン） */}
                     <div style={{
                       display: 'flex',
-                      justifyContent: 'center',
+                      justifyContent: 'flex-start',
                       alignItems: 'center',
                       height: '3.714rem', // 52px ÷ 14px
                       background: '#FFFFFF',
-                      padding: '0 1rem'
+                      paddingLeft: '1rem'
                     }}>
-                      <div style={{ display: 'flex', gap: '0.25rem' }}>
-                        {[2, 3, 4, 5].map((year) => (
+                      <div style={{ 
+                        display: 'flex', 
+                        width: '45.1%',
+                        height: '2rem',
+                        border: '1px solid #CCCCCC',
+                        borderRadius: '0.25rem',
+                        overflow: 'hidden'
+                      }}>
+                        {[2, 3, 4, 5].map((year, index) => (
                           <button
                             key={year}
                             onClick={() => setSelectedPaymentPeriod(year)}
                             style={{
-                              padding: '0.25rem 0.5rem',
-                              borderRadius: '0.25rem',
-                              border: '1px solid',
+                              flex: 1,
+                              border: 'none',
+                              borderRight: index < 3 ? '1px solid #CCCCCC' : 'none',
                               fontSize: '0.875rem',
                               fontWeight: '500',
                               cursor: 'pointer',
                               transition: 'all 0.2s',
-                              backgroundColor: selectedPaymentPeriod === year ? '#3B82F6' : '#FFFFFF',
-                              color: selectedPaymentPeriod === year ? '#FFFFFF' : '#374151',
-                              borderColor: selectedPaymentPeriod === year ? '#3B82F6' : '#D1D5DB'
-                            }}
-                            onMouseEnter={(e) => {
-                              if (selectedPaymentPeriod !== year) {
-                                e.currentTarget.style.backgroundColor = '#F9FAFB';
-                              }
-                            }}
-                            onMouseLeave={(e) => {
-                              if (selectedPaymentPeriod !== year) {
-                                e.currentTarget.style.backgroundColor = '#FFFFFF';
-                              }
+                              backgroundColor: selectedPaymentPeriod === year ? '#999999' : '#E6E6E6',
+                              color: selectedPaymentPeriod === year ? '#FFFFFF' : '#1A1A1A',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center'
                             }}
                           >
                             {year}年
@@ -562,12 +629,12 @@ export default function VehicleDetailPage() {
               <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0'}}>{vehicle.engineModel || "---"}</span>
               {/* 4行目 */}
               <span className="font-medium px-4 flex items-center" style={{background: '#F2F2F2', height: '3.143rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>年式</span>
-              <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0'}}>{vehicle.year && vehicle.month ? `${vehicle.year}年${vehicle.month}月` : vehicle.year ? `${vehicle.year}年` : ""}</span>
+              <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0'}}>{vehicle.year && vehicle.month ? `${vehicle.year}年${vehicle.month.toString().replace('月', '')}月` : vehicle.year ? `${vehicle.year}年` : ""}</span>
               <span className="font-medium px-4 flex items-center" style={{background: '#F2F2F2', height: '3.143rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>馬力</span>
               <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0'}}>{formatNumberWithCommas(vehicle.horsepower)}ps</span>
               {/* 5行目 */}
               <span className="font-medium px-4 flex items-center" style={{background: '#F2F2F2', height: '3.143rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>走行距離</span>
-              <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0'}}>{formatNumberWithCommas(vehicle.mileage)}</span>
+              <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0'}}>{formatNumberWithCommas(vehicle.mileage)}km</span>
               <span className="font-medium px-4 flex items-center" style={{background: '#F2F2F2', height: '3.143rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>過給機</span>
               <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0'}}>{vehicle.turbo || "---"}</span>
               {/* 6行目 */}
@@ -582,7 +649,13 @@ export default function VehicleDetailPage() {
               <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0'}}>{vehicle.fuel || "---"}</span>
               {/* 8行目 */}
               <span className="font-medium px-4 flex items-center" style={{background: '#F2F2F2', height: '3.143rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 1px 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>車検有効期限</span>
-              <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 1px 0'}}>{vehicle.inspectionDate || "---"}</span>
+              <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 1px 0'}}>{vehicle.inspectionDate ? (() => {
+                const date = new Date(vehicle.inspectionDate);
+                if (isNaN(date.getTime())) {
+                  return vehicle.inspectionDate;
+                }
+                return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+              })() : "---"}</span>
               <span className="font-medium px-4 flex items-center" style={{background: '#F2F2F2', height: '3.143rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 1px 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>お問合せ番号</span>
               <span className="px-4 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 1px 0'}}>{vehicle.inquiryNumber || vehicle.id}</span>
             </div>
@@ -691,7 +764,29 @@ export default function VehicleDetailPage() {
             {/* 5. 装備情報 */}
       <section className="w-[70%] mx-auto pb-10 bg-white opacity-100">
         <div className="w-full max-w-[1000px] mx-auto gap-3 opacity-100 mb-6">
-          <h2 className="text-2xl font-bold mb-6">装備品</h2>
+          <div className="mb-6">
+            <div className="flex items-center gap-2 mb-2">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                style={{ color: '#1F36A9' }}
+              >
+                <path
+                  d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h4c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"
+                  fill="currentColor"
+                />
+              </svg>
+              <h2 className="text-2xl font-bold" style={{ color: '#1F36A9' }}>装備/仕様</h2>
+            </div>
+            <div style={{ 
+              width: '100%', 
+              height: '1px', 
+              backgroundColor: '#1F36A9' 
+            }}></div>
+          </div>
           <div style={{
             width: '100%',
             maxWidth: '1000px',
@@ -705,43 +800,67 @@ export default function VehicleDetailPage() {
               gap: '0.643rem'
             }}>
               {/* 装備品リスト */}
-              {[
-                { key: 'etc', label: 'ETC', value: vehicle.etc },
-                { key: 'backCamera', label: 'バックカメラ', value: vehicle.backCamera },
-                { key: 'recordBook', label: '記録簿', value: vehicle.recordBook },
-                { key: 'powerWindow', label: 'パワーウィンドウ', value: vehicle.powerWindow },
-                { key: 'driveRecorder', label: 'ドラレコ', value: vehicle.driveRecorder },
-                { key: 'airConditioner', label: 'エアコン', value: vehicle.airConditioner },
-                { key: 'electricMirror', label: '電動ミラー', value: vehicle.electricMirror },
-                { key: 'abs', label: 'ABS', value: vehicle.abs },
-                { key: 'aluminumWheel', label: 'アルミホイール', value: vehicle.aluminumWheel },
-                { key: 'airSuspensionSeat', label: 'エアサスシート', value: vehicle.airSuspensionSeat },
-                { key: 'carNavigation', label: 'カーナビ', value: vehicle.carNavigation },
-                { key: 'dpf', label: 'DPF', value: vehicle.dpf },
-                { key: 'pmMuffler', label: 'PMマフラー', value: vehicle.pmMuffler },
-                { key: 'centralDoorLock', label: '集中ドアロック', value: vehicle.centralDoorLock }
-              ].map((item) => (
-                <div 
-                  key={item.key}
-                  className="flex items-center justify-center border"
-                  style={{
-                    background: item.value ? '#E3F2FD' : '#F5F5F5',
-                    borderColor: item.value ? '#1976D2' : '#CCCCCC',
-                    borderRadius: '7.143rem',
-                    fontFamily: 'Noto Sans JP',
-                    fontWeight: 400,
-                    fontStyle: 'Regular',
-                    fontSize: '0.857rem',
-                    lineHeight: '100%',
-                    letterSpacing: '0%',
-                    color: '#1a1a1a',
-                    width: '100%',
-                    height: '2.143rem'
-                  }}
-                >
-                  {item.label}
-                </div>
-              ))}
+              {(() => {
+                const equipmentList = [
+                  { key: 'ETC', label: 'ETC' },
+                  { key: 'バックカメラ', label: 'バックカメラ' },
+                  { key: '記録簿', label: '記録簿' },
+                  { key: 'パワーウィンドウ', label: 'パワーウィンドウ' },
+                  { key: 'ドラレコ', label: 'ドラレコ' },
+                  { key: 'エアコン', label: 'エアコン' },
+                  { key: '電動ミラー', label: '電動ミラー' },
+                  { key: 'ABS', label: 'ABS' },
+                  { key: 'アルミホイール', label: 'アルミホイール' },
+                  { key: 'エアサスシート', label: 'エアサスシート' },
+                  { key: 'カーナビ', label: 'カーナビ' },
+                  { key: 'DPF', label: 'DPF' },
+                  { key: 'PMマフラー', label: 'PMマフラー' },
+                  { key: '集中ドアロック', label: '集中ドアロック' }
+                ];
+
+                // equipment配列から選択された装備品を判定
+                const isEquipmentSelected = (equipmentKey: string): boolean => {
+                  return !!(vehicle.equipment && vehicle.equipment.includes(equipmentKey));
+                };
+
+                // デバッグ用：装備品の値を詳しく確認
+                console.log('equipment配列:', vehicle.equipment);
+                console.log('装備品の詳細値:');
+                equipmentList.forEach(item => {
+                  console.log(`${item.label}:`, {
+                    isSelected: isEquipmentSelected(item.key),
+                    equipmentArray: vehicle.equipment
+                  });
+                });
+
+                // adminで選択された装備品のみをフィルタリング
+                const selectedEquipment = equipmentList.filter(item => isEquipmentSelected(item.key));
+
+                console.log('選択された装備品:', selectedEquipment.map(item => item.label));
+
+                // 選択された装備品のみを表示
+                return selectedEquipment.map((item) => (
+                  <div 
+                    key={item.key}
+                    className="flex items-center justify-center"
+                    style={{
+                      background: '#F2F2F2',
+                      borderRadius: '7.143rem',
+                      fontFamily: 'Noto Sans JP',
+                      fontWeight: 400,
+                      fontStyle: 'Regular',
+                      fontSize: '0.857rem',
+                      lineHeight: '100%',
+                      letterSpacing: '0%',
+                      color: '#1a1a1a',
+                      width: '100%',
+                      height: '2.143rem'
+                    }}
+                  >
+                    {item.label}
+                  </div>
+                ));
+              })()}
             </div>
           </div>
         </div>

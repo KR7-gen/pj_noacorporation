@@ -13,6 +13,10 @@ import { getSoldOutVehicles, convertYearToJapaneseEra } from "@/lib/firebase-uti
 import type { Vehicle } from "@/types"
 import Image from "next/image"
 
+// ============================================================================
+// データ定義
+// ============================================================================
+
 // デフォルトの買取実績（データがない場合のフォールバック）
 const defaultAchievements = [
   {
@@ -99,6 +103,478 @@ const faqs = [
   },
 ]
 
+// ============================================================================
+// 子コンポーネント定義
+// ============================================================================
+
+// 1. キャッチコピーセクション
+const HeroSection = () => (
+  <section className="relative w-full h-[51.357rem]">
+    {/* 背景要素 */}
+    <div className="absolute inset-0 flex">
+      {/* 1. 長方形 - 右から1番目 */}
+      <div 
+        className="w-1/4 h-full"
+        style={{
+          background: 'linear-gradient(90deg, #444444 0%, #959595 100%)'
+        }}
+      />
+      
+      {/* 2. 長方形 - 右から2番目 */}
+      <div 
+        className="w-[7%] h-full"
+        style={{
+          background: '#C3C3C3'
+        }}
+      />
+      
+      {/* 3. 背景画像 - 右から3番目（68%） */}
+      <div className="w-[68%] h-full relative">
+        {/* 背景画像 */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: 'url(/background_for_purchace.png)'
+          }}
+        />
+        {/* 半透明オーバーレイ */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            backgroundColor: '#00000033'
+          }}
+        />
+      </div>
+    </div>
+    
+    {/* コンテンツレイヤー */}
+    <div className="relative z-10 h-full flex">
+      {/* 左側エリア（見出しと強み） */}
+      <div className="w-1/4 h-full flex flex-col justify-between text-white">
+        {/* 1. 見出し */}
+        <div className="absolute" style={{ left: '8.571rem', top: '8.929rem' }}>
+          <h1 
+            className="font-bold"
+            style={{
+              fontFamily: 'Noto Sans JP',
+              fontWeight: 700,
+              fontStyle: 'Bold',
+              fontSize: '1.714rem',
+              lineHeight: '100%',
+              letterSpacing: '0%'
+            }}
+          >
+            (テキスト)トラック買取
+          </h1>
+          <div className="bg-white text-black p-4 relative">
+            <div className="absolute top-0 left-0 w-0 h-0 border-l-8 border-t-8 border-transparent border-t-white"></div>
+            <h2 
+              className="font-bold"
+              style={{
+                fontFamily: 'Noto Sans JP',
+                fontWeight: 700,
+                fontStyle: 'Bold',
+                fontSize: '1.714rem',
+                lineHeight: '100%',
+                letterSpacing: '0%'
+              }}
+            >
+              キャッチコピー!!
+            </h2>
+          </div>
+        </div>
+        
+        {/* 2. 買取における強み */}
+        <div className="space-y-3 absolute" style={{ left: '14.286rem', top: '28.429rem' }}>
+          <div className="bg-blue-600 text-white px-4 py-2 rounded">
+            <span 
+              className="font-medium"
+              style={{
+                fontFamily: 'Noto Sans JP',
+                fontWeight: 700,
+                fontStyle: 'Bold',
+                fontSize: '1.714rem',
+                lineHeight: '100%',
+                letterSpacing: '0%'
+              }}
+            >
+              高額査定
+            </span>
+          </div>
+          <div className="bg-blue-600 text-white px-4 py-2 rounded">
+            <span 
+              className="font-medium"
+              style={{
+                fontFamily: 'Noto Sans JP',
+                fontWeight: 700,
+                fontStyle: 'Bold',
+                fontSize: '1.714rem',
+                lineHeight: '100%',
+                letterSpacing: '0%'
+              }}
+            >
+              スピード査定
+            </span>
+          </div>
+          <div className="bg-blue-600 text-white px-4 py-2 rounded">
+            <span 
+              className="font-medium"
+              style={{
+                fontFamily: 'Noto Sans JP',
+                fontWeight: 700,
+                fontStyle: 'Bold',
+                fontSize: '1.714rem',
+                lineHeight: '100%',
+                letterSpacing: '0%'
+              }}
+            >
+              書類手続きはすべて代行
+            </span>
+          </div>
+        </div>
+      </div>
+      
+      {/* 右側エリア（問い合わせフォーム） */}
+      <div className="absolute" style={{ left: '49.643rem', bottom: '8.786rem' }}>
+        <div className="bg-white/90 backdrop-blur-sm p-6 rounded-lg max-w-md">
+          <p 
+            className="text-black font-medium"
+            style={{
+              fontFamily: 'Noto Sans JP',
+              fontWeight: 700,
+              fontStyle: 'Bold',
+              fontSize: '1.714rem',
+              lineHeight: '100%',
+              letterSpacing: '0%'
+            }}
+          >
+            \ 簡単5分!車両情報入力で査定額が分かります! /
+          </p>
+          <Link href="/contact">
+            <Button 
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+              style={{
+                fontFamily: 'Noto Sans JP',
+                fontWeight: 700,
+                fontStyle: 'Bold',
+                fontSize: '1.714rem',
+                lineHeight: '100%',
+                letterSpacing: '0%'
+              }}
+            >
+              買取査定フォーム &gt;
+            </Button>
+          </Link>
+        </div>
+      </div>
+    </div>
+  </section>
+)
+
+// 2. 買取実績セクション
+const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[], loading: boolean }) => {
+  // 買取価格を計算（車両価格（税込）から100万円を引く）
+  const calculatePurchasePrice = (totalPayment: number): number => {
+    return Math.max(0, totalPayment - 1000000)
+  }
+
+  return (
+    <section className="py-16">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold mb-4">ACHIEVEMENT</h2>
+          <p className="text-xl text-gray-600">当社買取実績</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+          {loading ? (
+            // ローディング中はデフォルトの表示
+            defaultAchievements.map((item, index) => (
+              <Card key={index} className="text-center">
+                <CardContent className="p-8">
+                  <div className="w-full h-48 bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
+                    <div className="text-gray-400">車両画像</div>
+                  </div>
+                  <h3 className="font-bold text-lg mb-2">{item.maker}</h3>
+                  <p className="text-gray-600 mb-4">年式: {item.year}</p>
+                  <div className="mb-4">
+                    <span className="text-2xl font-bold">当社買取額：{item.price}万円</span>
+                    <div className="bg-red-500 text-white px-3 py-1 rounded-full inline-block ml-2">{item.status}</div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))
+          ) : achievements.length > 0 ? (
+            // 実際のSOLD OUT車両データを表示
+            achievements.map((vehicle, index) => {
+              const purchasePrice = calculatePurchasePrice(vehicle.totalPayment || 0)
+              const japaneseYear = convertYearToJapaneseEra(vehicle.year)
+              const vehicleName = `${vehicle.maker || ""} ${vehicle.vehicleType || ""}`.trim()
+              
+              return (
+                <Card key={vehicle.id} className="text-center">
+                  <CardContent className="p-8">
+                    <div className="w-full h-48 bg-gray-200 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+                      {vehicle.imageUrls && vehicle.imageUrls.length > 0 ? (
+                        <Image
+                          src={vehicle.imageUrls[0]}
+                          alt={vehicleName}
+                          width={200}
+                          height={150}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.currentTarget.src = "/placeholder.jpg"
+                          }}
+                        />
+                      ) : (
+                        <div className="text-gray-400">車両画像</div>
+                      )}
+                    </div>
+                    <h3 className="font-bold text-lg mb-2">{vehicleName}</h3>
+                    <p className="text-gray-600 mb-4">年式: {japaneseYear}</p>
+                    <div className="mb-4">
+                      <span className="text-2xl font-bold">
+                        当社買取額：{Math.floor(purchasePrice / 10000)}万円
+                      </span>
+                      <div className="bg-red-500 text-white px-3 py-1 rounded-full inline-block ml-2">
+                        高価買取
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              )
+            })
+          ) : (
+            // データがない場合はデフォルト表示
+            defaultAchievements.map((item, index) => (
+              <Card key={index} className="text-center">
+                <CardContent className="p-8">
+                  <div className="w-full h-48 bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
+                    <div className="text-gray-400">車両画像</div>
+                  </div>
+                  <h3 className="font-bold text-lg mb-2">{item.maker}</h3>
+                  <p className="text-gray-600 mb-4">年式: {item.year}</p>
+                  <div className="mb-4">
+                    <span className="text-2xl font-bold">当社買取額：{item.price}万円</span>
+                    <div className="bg-red-500 text-white px-3 py-1 rounded-full inline-block ml-2">{item.status}</div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))
+          )}
+        </div>
+
+        <div className="text-center">
+          <p className="text-lg text-gray-700 mb-4">
+            当社買取実績の一部です。年式が古い・状態が悪い車両でも買取価格に自信があります。
+          </p>
+          <p className="text-lg font-bold">お気軽に是非一度ご相談ください。</p>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// 3. 査定依頼セクション
+const AssessmentRequestSection = () => (
+  <section className="py-16 bg-green-600 text-white">
+    <div className="container mx-auto px-4">
+      <div className="text-center mb-12">
+        <h2 className="text-3xl font-bold mb-4">CONTACT</h2>
+        <p className="text-xl">査定をご希望の方、ご売却を検討されている方は下記よりご連絡ください。</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <Card className="bg-white text-gray-900">
+          <CardContent className="p-8 text-center">
+            <div className="w-12 h-12 mx-auto mb-4 bg-green-600 rounded-lg flex items-center justify-center">
+              <div className="w-6 h-6 bg-white rounded"></div>
+            </div>
+            <h3 className="font-bold text-xl mb-4">査定依頼</h3>
+            <p className="text-sm mb-4">車輌情報入力で査定額が分かります！査定申込も受付！</p>
+            <Link href="/contact">
+              <Button className="bg-green-600 hover:bg-green-700">買取査定フォーム</Button>
+            </Link>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-white text-gray-900">
+          <CardContent className="p-8 text-center">
+            <Phone className="w-12 h-12 mx-auto mb-4 text-green-600" />
+            <h3 className="font-bold text-xl mb-4">お電話でのお問い合わせ</h3>
+            <p className="text-3xl font-bold mb-2">000-000-0000</p>
+            <p className="text-sm text-gray-600">受付時間：00:00~00:00(日・祝日定休)</p>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  </section>
+)
+
+// 4. 選ばれる理由セクション
+const ReasonSection = () => (
+  <section className="py-16">
+    <div className="container mx-auto px-4">
+      <div className="text-center mb-12">
+        <h2 className="text-3xl font-bold mb-4">REASON</h2>
+        <p className="text-xl text-gray-600 mb-4">トラック買取で当社が選ばれる理由</p>
+        <p className="text-lg font-bold">独自の査定基準！他社様と比べてみてください</p>
+      </div>
+
+      <div className="space-y-12">
+        {reasons.map((reason, index) => (
+          <Card key={index}>
+            <CardContent className="p-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                <div>
+                  <h3 className="text-2xl font-bold mb-4">{reason.title}</h3>
+                  <p className="text-gray-700 leading-relaxed">{reason.description}</p>
+                </div>
+                <div className="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center">
+                  <div className="text-gray-400">イメージ画像</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      <div className="text-center mt-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+          <div className="bg-blue-100 p-6 rounded-lg">
+            <h4 className="font-bold text-lg mb-2">車検切れ・不動車もOK！</h4>
+            <p className="text-sm">どんな車輛にも対応</p>
+          </div>
+          <div className="bg-green-100 p-6 rounded-lg">
+            <h4 className="font-bold text-lg mb-2">書類手続きは当社にお任せ！</h4>
+            <p className="text-sm">即時振り込み・現金支払いも可能</p>
+          </div>
+          <div className="bg-yellow-100 p-6 rounded-lg">
+            <h4 className="font-bold text-lg mb-2">お客様の面倒は一切なし。</h4>
+            <p className="text-sm">スムーズなお取引！</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+)
+
+// 5. お客様の声セクション
+const ReviewSection = () => (
+  <section className="py-16 bg-gray-50">
+    <div className="container mx-auto px-4">
+      <div className="text-center mb-12">
+        <h2 className="text-3xl font-bold mb-4">REVIEW</h2>
+        <p className="text-xl text-gray-600">お客様の声</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {reviews.map((review, index) => (
+          <Card key={index}>
+            <CardContent className="p-6">
+              <div className="text-center mb-4">
+                <div className="text-sm text-gray-500 mb-2">当社買取価格</div>
+                <div className="text-3xl font-bold text-green-600 mb-2">{review.price}万円</div>
+                <div className="text-lg font-bold mb-1">{review.truck}</div>
+                <div className="text-sm text-gray-600 mb-2">{review.location}</div>
+                <div className="text-sm font-medium">{review.customer}</div>
+              </div>
+
+              <div className="mb-4">
+                <h4 className="font-bold text-lg mb-2">{review.title}</h4>
+                <p className="text-sm text-gray-700 leading-relaxed">{review.comment}</p>
+              </div>
+
+              <div className="text-right">
+                <span className="text-sm text-gray-500">/ Review {review.reviewNumber}</span>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  </section>
+)
+
+// 6. 問い合わせフォームセクション
+const ContactFormSection = () => (
+  <section className="py-16 bg-gray-50">
+    <div className="container mx-auto px-4">
+      <div className="max-w-4xl mx-auto">
+        <ContactForm />
+      </div>
+    </div>
+  </section>
+)
+
+// 7. ドキュメントセクション
+const DocumentSection = () => (
+  <section className="py-16">
+    <div className="container mx-auto px-4">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold mb-4">DOCUMENT</h2>
+          <p className="text-xl text-gray-600">ご売却に必要な書類</p>
+        </div>
+
+        <Card>
+          <CardContent className="p-8">
+            <div className="text-center mb-6">
+              <p className="text-lg font-medium mb-4">ダウンロードはこちら</p>
+              <div className="flex justify-center gap-4">
+                <Button 
+                  variant="outline"
+                  onClick={() => {
+                    try {
+                      const link = document.createElement('a');
+                      link.href = '/transfer-certificate.pdf';
+                      link.download = '譲渡証明書.pdf';
+                      link.target = '_blank';
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                    } catch (error) {
+                      console.error('PDFダウンロードエラー:', error);
+                      alert('PDFのダウンロードに失敗しました。');
+                    }
+                  }}
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  譲渡証明書PDF
+                </Button>
+                <Button 
+                  variant="outline"
+                  onClick={() => {
+                    try {
+                      const link = document.createElement('a');
+                      link.href = '/power-of-attorney.pdf';
+                      link.download = '委任状.pdf';
+                      link.target = '_blank';
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                    } catch (error) {
+                      console.error('PDFダウンロードエラー:', error);
+                      alert('PDFのダウンロードに失敗しました。');
+                    }
+                  }}
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  委任状PDF
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  </section>
+)
+
+// ============================================================================
+// メインコンポーネント
+// ============================================================================
+
 export default function PurchasePage() {
   const [formData, setFormData] = useState({
     maker: "",
@@ -150,381 +626,28 @@ export default function PurchasePage() {
     fetchSoldOutVehicles()
   }, [])
 
-  // 買取価格を計算（車両価格（税込）から100万円を引く）
-  const calculatePurchasePrice = (totalPayment: number): number => {
-    return Math.max(0, totalPayment - 1000000)
-  }
-
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      <section className="bg-gradient-to-r from-green-600 to-green-800 text-white py-16">
-        <div className="container mx-auto px-4">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-4">(テキスト)トラック買取</h1>
-            <p className="text-2xl md:text-3xl mb-8">キャッチコピー！！</p>
-            <div className="flex justify-center gap-8 mb-8">
-              <div className="text-center">
-                <div className="text-xl font-bold">高額査定</div>
-              </div>
-              <div className="text-center">
-                <div className="text-xl font-bold">スピード査定</div>
-              </div>
-              <div className="text-center">
-                <div className="text-xl font-bold">書類手続きはすべて代行</div>
-              </div>
-            </div>
-            <p className="text-xl mb-8">簡単5分！車両情報入力で査定額が分かります！</p>
-            <Link href="/contact">
-              <Button size="lg" className="bg-white text-green-600 hover:bg-gray-100">
-                買取査定フォーム
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Achievement Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">ACHIEVEMENT</h2>
-            <p className="text-xl text-gray-600">当社買取実績</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-            {loading ? (
-              // ローディング中はデフォルトの表示
-              defaultAchievements.map((item, index) => (
-                <Card key={index} className="text-center">
-                  <CardContent className="p-8">
-                    <div className="w-full h-48 bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
-                      <div className="text-gray-400">車両画像</div>
-                    </div>
-                    <h3 className="font-bold text-lg mb-2">{item.maker}</h3>
-                    <p className="text-gray-600 mb-4">年式: {item.year}</p>
-                    <div className="mb-4">
-                      <span className="text-2xl font-bold">当社買取額：{item.price}万円</span>
-                      <div className="bg-red-500 text-white px-3 py-1 rounded-full inline-block ml-2">{item.status}</div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))
-            ) : achievements.length > 0 ? (
-              // 実際のSOLD OUT車両データを表示
-              achievements.map((vehicle, index) => {
-                const purchasePrice = calculatePurchasePrice(vehicle.totalPayment || 0)
-                const japaneseYear = convertYearToJapaneseEra(vehicle.year)
-                const vehicleName = `${vehicle.maker || ""} ${vehicle.vehicleType || ""}`.trim()
-                
-                return (
-                  <Card key={vehicle.id} className="text-center">
-                    <CardContent className="p-8">
-                      <div className="w-full h-48 bg-gray-200 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
-                        {vehicle.imageUrls && vehicle.imageUrls.length > 0 ? (
-                          <Image
-                            src={vehicle.imageUrls[0]}
-                            alt={vehicleName}
-                            width={200}
-                            height={150}
-                            className="w-full h-full object-cover"
-                            onError={(e) => {
-                              e.currentTarget.src = "/placeholder.jpg"
-                            }}
-                          />
-                        ) : (
-                          <div className="text-gray-400">車両画像</div>
-                        )}
-                      </div>
-                      <h3 className="font-bold text-lg mb-2">{vehicleName}</h3>
-                      <p className="text-gray-600 mb-4">年式: {japaneseYear}</p>
-                      <div className="mb-4">
-                        <span className="text-2xl font-bold">
-                          当社買取額：{Math.floor(purchasePrice / 10000)}万円
-                        </span>
-                        <div className="bg-red-500 text-white px-3 py-1 rounded-full inline-block ml-2">
-                          高価買取
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )
-              })
-            ) : (
-              // データがない場合はデフォルト表示
-              defaultAchievements.map((item, index) => (
-                <Card key={index} className="text-center">
-                  <CardContent className="p-8">
-                    <div className="w-full h-48 bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
-                      <div className="text-gray-400">車両画像</div>
-                    </div>
-                    <h3 className="font-bold text-lg mb-2">{item.maker}</h3>
-                    <p className="text-gray-600 mb-4">年式: {item.year}</p>
-                    <div className="mb-4">
-                      <span className="text-2xl font-bold">当社買取額：{item.price}万円</span>
-                      <div className="bg-red-500 text-white px-3 py-1 rounded-full inline-block ml-2">{item.status}</div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))
-            )}
-          </div>
-
-          <div className="text-center">
-            <p className="text-lg text-gray-700 mb-4">
-              当社買取実績の一部です。年式が古い・状態が悪い車両でも買取価格に自信があります。
-            </p>
-            <p className="text-lg font-bold">お気軽に是非一度ご相談ください。</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact CTA */}
-      <section className="py-16 bg-green-600 text-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">CONTACT</h2>
-            <p className="text-xl">査定をご希望の方、ご売却を検討されている方は下記よりご連絡ください。</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <Card className="bg-white text-gray-900">
-              <CardContent className="p-8 text-center">
-                <div className="w-12 h-12 mx-auto mb-4 bg-green-600 rounded-lg flex items-center justify-center">
-                  <div className="w-6 h-6 bg-white rounded"></div>
-                </div>
-                <h3 className="font-bold text-xl mb-4">査定依頼</h3>
-                <p className="text-sm mb-4">車輌情報入力で査定額が分かります！査定申込も受付！</p>
-                <Link href="/contact">
-                  <Button className="bg-green-600 hover:bg-green-700">買取査定フォーム</Button>
-                </Link>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white text-gray-900">
-              <CardContent className="p-8 text-center">
-                <Phone className="w-12 h-12 mx-auto mb-4 text-green-600" />
-                <h3 className="font-bold text-xl mb-4">お電話でのお問い合わせ</h3>
-                <p className="text-3xl font-bold mb-2">000-000-0000</p>
-                <p className="text-sm text-gray-600">受付時間：00:00~00:00(日・祝日定休)</p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Reason Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">REASON</h2>
-            <p className="text-xl text-gray-600 mb-4">トラック買取で当社が選ばれる理由</p>
-            <p className="text-lg font-bold">独自の査定基準！他社様と比べてみてください</p>
-          </div>
-
-          <div className="space-y-12">
-            {reasons.map((reason, index) => (
-              <Card key={index}>
-                <CardContent className="p-8">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                    <div>
-                      <h3 className="text-2xl font-bold mb-4">{reason.title}</h3>
-                      <p className="text-gray-700 leading-relaxed">{reason.description}</p>
-                    </div>
-                    <div className="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center">
-                      <div className="text-gray-400">イメージ画像</div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          <div className="text-center mt-12">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
-              <div className="bg-blue-100 p-6 rounded-lg">
-                <h4 className="font-bold text-lg mb-2">車検切れ・不動車もOK！</h4>
-                <p className="text-sm">どんな車輛にも対応</p>
-              </div>
-              <div className="bg-green-100 p-6 rounded-lg">
-                <h4 className="font-bold text-lg mb-2">書類手続きは当社にお任せ！</h4>
-                <p className="text-sm">即時振り込み・現金支払いも可能</p>
-              </div>
-              <div className="bg-yellow-100 p-6 rounded-lg">
-                <h4 className="font-bold text-lg mb-2">お客様の面倒は一切なし。</h4>
-                <p className="text-sm">スムーズなお取引！</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Review Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">REVIEW</h2>
-            <p className="text-xl text-gray-600">お客様の声</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {reviews.map((review, index) => (
-              <Card key={index}>
-                <CardContent className="p-6">
-                  <div className="text-center mb-4">
-                    <div className="text-sm text-gray-500 mb-2">当社買取価格</div>
-                    <div className="text-3xl font-bold text-green-600 mb-2">{review.price}万円</div>
-                    <div className="text-lg font-bold mb-1">{review.truck}</div>
-                    <div className="text-sm text-gray-600 mb-2">{review.location}</div>
-                    <div className="text-sm font-medium">{review.customer}</div>
-                  </div>
-
-                  <div className="mb-4">
-                    <h4 className="font-bold text-lg mb-2">{review.title}</h4>
-                    <p className="text-sm text-gray-700 leading-relaxed">{review.comment}</p>
-                  </div>
-
-                  <div className="text-right">
-                    <span className="text-sm text-gray-500">/ Review {review.reviewNumber}</span>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Contact CTA 2 */}
-      <section className="py-16 bg-green-600 text-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">CONTACT</h2>
-            <p className="text-xl">査定をご希望の方、ご売却を検討されている方は下記よりご連絡ください。</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <Card className="bg-white text-gray-900">
-              <CardContent className="p-8 text-center">
-                <div className="w-12 h-12 mx-auto mb-4 bg-green-600 rounded-lg flex items-center justify-center">
-                  <div className="w-6 h-6 bg-white rounded"></div>
-                </div>
-                <h3 className="font-bold text-xl mb-4">査定依頼</h3>
-                <p className="text-sm mb-4">車輌情報入力で査定額が分かります！査定申込も受付！</p>
-                <Link href="/contact">
-                  <Button className="bg-green-600 hover:bg-green-700">買取査定フォーム</Button>
-                </Link>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white text-gray-900">
-              <CardContent className="p-8 text-center">
-                <Phone className="w-12 h-12 mx-auto mb-4 text-green-600" />
-                <h3 className="font-bold text-xl mb-4">お電話でのお問い合わせ</h3>
-                <p className="text-3xl font-bold mb-2">000-000-0000</p>
-                <p className="text-sm text-gray-600">受付時間：00:00~00:00(日・祝日定休)</p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">QUESTION</h2>
-            <p className="text-xl text-gray-600">よくあるご質問</p>
-          </div>
-
-          <div className="max-w-4xl mx-auto space-y-6">
-            {faqs.map((faq, index) => (
-              <Card key={index}>
-                <CardContent className="p-6">
-                  <div className="mb-4">
-                    <span className="bg-green-600 text-white px-3 py-1 rounded font-bold mr-4">Q.</span>
-                    <span className="font-bold">{faq.question}</span>
-                  </div>
-                  <div>
-                    <span className="bg-gray-600 text-white px-3 py-1 rounded font-bold mr-4">A.</span>
-                    <span className="text-gray-700">{faq.answer}</span>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Assessment Form */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <ContactForm />
-          </div>
-        </div>
-      </section>
-
-      {/* Document Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">DOCUMENT</h2>
-              <p className="text-xl text-gray-600">ご売却に必要な書類</p>
-            </div>
-
-            <Card>
-              <CardContent className="p-8">
-                <div className="text-center mb-6">
-                  <p className="text-lg font-medium mb-4">ダウンロードはこちら</p>
-                  <div className="flex justify-center gap-4">
-                    <Button 
-                      variant="outline"
-                      onClick={() => {
-                        try {
-                          const link = document.createElement('a');
-                          link.href = '/transfer-certificate.pdf';
-                          link.download = '譲渡証明書.pdf';
-                          link.target = '_blank';
-                          document.body.appendChild(link);
-                          link.click();
-                          document.body.removeChild(link);
-                        } catch (error) {
-                          console.error('PDFダウンロードエラー:', error);
-                          alert('PDFのダウンロードに失敗しました。');
-                        }
-                      }}
-                    >
-                      <Download className="w-4 h-4 mr-2" />
-                      譲渡証明書PDF
-                    </Button>
-                    <Button 
-                      variant="outline"
-                      onClick={() => {
-                        try {
-                          const link = document.createElement('a');
-                          link.href = '/power-of-attorney.pdf';
-                          link.download = '委任状.pdf';
-                          link.target = '_blank';
-                          document.body.appendChild(link);
-                          link.click();
-                          document.body.removeChild(link);
-                        } catch (error) {
-                          console.error('PDFダウンロードエラー:', error);
-                          alert('PDFのダウンロードに失敗しました。');
-                        }
-                      }}
-                    >
-                      <Download className="w-4 h-4 mr-2" />
-                      委任状PDF
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
+      {/* 1. キャッチコピー */}
+      <HeroSection />
+      
+      {/* 2. 買取実績 */}
+      <AchievementSection achievements={achievements} loading={loading} />
+      
+      {/* 3. 査定依頼 */}
+      <AssessmentRequestSection />
+      
+      {/* 4. 選ばれる理由 */}
+      <ReasonSection />
+      
+      {/* 5. お客様の声 */}
+      <ReviewSection />
+      
+      {/* 6. 問い合わせフォーム */}
+      <ContactFormSection />
+      
+      {/* 7. ドキュメント */}
+      <DocumentSection />
     </div>
   )
 }
