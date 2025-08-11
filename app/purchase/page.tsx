@@ -751,7 +751,7 @@ const ReviewSection = () => {
   const [reviewMarginLeft, setReviewMarginLeft] = useState('-4rem');
 
   return (
-    <section className="py-16">
+    <section className="py-16" style={{background: '#F2F2F2'}}>
       <div className="container mx-auto px-4">
         <div className="mb-12 flex flex-col items-center">
           <div className="w-[69.4%] max-w-[1000px] relative">
@@ -824,7 +824,7 @@ const ReviewSection = () => {
 
 // 6. 問い合わせフォームセクション
 const ContactFormSection = () => (
-  <section className="py-16 bg-gray-50">
+  <section className="py-16 FFFFFF">
     <div className="container mx-auto px-4">
       <div className="max-w-4xl mx-auto">
         <ContactForm />
@@ -835,67 +835,75 @@ const ContactFormSection = () => (
 
 // 7. ドキュメントセクション
 const DocumentSection = () => (
-  <section className="py-16">
+  <section className="py-16" style={{background: '#E6E6E6'}}>
     <div className="container mx-auto px-4">
       <div className="mb-12 flex flex-col items-center">
         <div className="w-[69.4%] max-w-[1000px] relative">
           <div className="text-center pt-[2.5rem]">
-            <p className="text-[2.571rem] font-bold text-[#1a1a1a] mb-4">ご売却に必要な書類</p>
+            <p className="text-[1.714rem] font-bold text-[#1a1a1a] mb-4">ご売却に必要な書類</p>
           </div>
-          <h2 className="text-[1rem] font-normal text-[#2B5EC5] absolute top-0" style={{left: '50%', transform: 'translateX(-50%)', width: 'fit-content', marginLeft: '-18rem'}}>DOCUMENT</h2>
+          <h2 className="text-[1rem] font-normal text-[#2B5EC5] absolute top-0" style={{left: '50%', transform: 'translateX(-50%)', width: 'fit-content', marginLeft: '-4.7rem'}}>DOCUMENT</h2>
         </div>
       </div>
 
       <div className="w-[69.4%] max-w-[1000px] mx-auto">
-        <Card className="border-0 shadow-lg">
-          <CardContent className="p-8">
-            <div className="text-center mb-6">
-              <p className="text-lg font-medium mb-4">ダウンロードはこちら</p>
-              <div className="flex justify-center gap-4">
-                <Button 
-                  variant="outline"
-                  onClick={() => {
-                    try {
-                      const link = document.createElement('a');
-                      link.href = '/transfer-certificate.pdf';
-                      link.download = '譲渡証明書.pdf';
-                      link.target = '_blank';
-                      document.body.appendChild(link);
-                      link.click();
-                      document.body.removeChild(link);
-                    } catch (error) {
-                      console.error('PDFダウンロードエラー:', error);
-                      alert('PDFのダウンロードに失敗しました。');
-                    }
-                  }}
-                >
-                  <Download className="w-4 h-4 mr-2" />
-                  譲渡証明書PDF
-                </Button>
-                <Button 
-                  variant="outline"
-                  onClick={() => {
-                    try {
-                      const link = document.createElement('a');
-                      link.href = '/power-of-attorney.pdf';
-                      link.download = '委任状.pdf';
-                      link.target = '_blank';
-                      document.body.appendChild(link);
-                      link.click();
-                      document.body.removeChild(link);
-                    } catch (error) {
-                      console.error('PDFダウンロードエラー:', error);
-                      alert('PDFのダウンロードに失敗しました。');
-                    }
-                  }}
-                >
-                  <Download className="w-4 h-4 mr-2" />
-                  委任状PDF
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <div className="text-center mb-6">
+          <p className="text-[1.143rem] font-bold mb-4">ダウンロードはこちら</p>
+          <div className="flex justify-center gap-[2.286rem]">
+            <Button 
+              variant="outline"
+              className="text-[1.143rem] font-bold text-white"
+              style={{
+                background: '#666666',
+                width: '200px',
+                height: '40px'
+              }}
+              onClick={() => {
+                try {
+                  const link = document.createElement('a');
+                  link.href = '/transfer-certificate.pdf';
+                  link.download = '譲渡証明書.pdf';
+                  link.target = '_blank';
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                } catch (error) {
+                  console.error('PDFダウンロードエラー:', error);
+                  alert('PDFのダウンロードに失敗しました。');
+                }
+              }}
+            >
+              <Download className="w-4 h-4 mr-2" />
+              譲渡証明書PDF
+            </Button>
+            <Button 
+              variant="outline"
+              className="text-[1.143rem] font-bold text-white"
+              style={{
+                background: '#666666',
+                width: '200px',
+                height: '40px'
+              }}
+              onClick={() => {
+                try {
+                  const link = document.createElement('a');
+                  link.href = '/power-of-attorney.pdf';
+                  link.download = '委任状.pdf';
+                  link.target = '_blank';
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                } catch (error) {
+                  console.error('PDFダウンロードエラー:', error);
+                  alert('PDFのダウンロードに失敗しました。');
+                }
+              }}
+            >
+              <Download className="w-4 h-4 mr-2" />
+              委任状PDF
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   </section>

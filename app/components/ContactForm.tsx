@@ -32,6 +32,7 @@ interface ContactFormProps {
   inquiryType?: string;
   maker?: string;
   model?: string;
+  type?: string;
   year?: string;
   mileage?: string;
   name?: string;
@@ -44,6 +45,7 @@ export default function ContactForm({
   inquiryType,
   maker,
   model,
+  type,
   year,
   mileage,
   name,
@@ -64,6 +66,7 @@ export default function ContactForm({
     // 車両情報
     maker: maker || "",
     model: model || "",
+    type: type || "",
     year: year || "",
     mileage: mileage || ""
   })
@@ -113,6 +116,7 @@ export default function ContactForm({
         phone: formData.phone,
         email: formData.email,
         remarks: formData.remarks,
+        status: "未対応",
       });
 
       // 送信成功後の処理
@@ -143,21 +147,21 @@ export default function ContactForm({
 
   return (
     <div className="max-w-3xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">お問い合わせフォーム</h1>
-      <p className="text-gray-600 mb-8">必要事項をご記入の上、お問い合わせください。</p>
+      <h1 className="text-[2.571rem] font-bold mb-6 text-center" style={{color: '#2B5EC5'}}>お問い合わせフォーム</h1>
+      <p className="text-[1.143rem] mb-8 text-center">必要事項をご記入の上、お問い合わせください。</p>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* 会社名 */}
         <div>
-          <Label htmlFor="companyName" className="flex items-center">
-            会社名
-            <span className="ml-2 text-xs text-white bg-red-500 px-2 py-0.5 rounded">必須</span>
-          </Label>
+          <div className="flex items-center mb-2">
+            <span className="mr-2 text-[0.857rem] text-white bg-red-500 px-2 py-0.5 rounded">必須</span>
+            <Label htmlFor="companyName" className="text-[1.143rem] font-bold">会社名</Label>
+          </div>
           <Input
             id="companyName"
             value={formData.companyName}
             onChange={(e) => handleChange("companyName", e.target.value)}
-            placeholder="例）株式会社リトラス"
+            placeholder="例）株式会社ノアコーポレーション"
             className={errors.companyName ? "border-red-500" : ""}
           />
           {errors.companyName && (
@@ -167,15 +171,15 @@ export default function ContactForm({
 
         {/* お名前 */}
         <div>
-          <Label htmlFor="name" className="flex items-center">
-            お名前
-            <span className="ml-2 text-xs text-white bg-red-500 px-2 py-0.5 rounded">必須</span>
-          </Label>
+          <div className="flex items-center mb-2">
+            <span className="mr-2 text-[0.857rem] text-white bg-red-500 px-2 py-0.5 rounded">必須</span>
+            <Label htmlFor="name" className="text-[1.143rem] font-bold">お名前</Label>
+          </div>
           <Input
             id="name"
             value={formData.name}
             onChange={(e) => handleChange("name", e.target.value)}
-            placeholder="例）営業部 リトラス 太郎"
+            placeholder="例）ノア太郎"
             className={errors.name ? "border-red-500" : ""}
           />
           {errors.name && (
@@ -185,10 +189,10 @@ export default function ContactForm({
 
         {/* 都道府県 */}
         <div>
-          <Label htmlFor="prefecture" className="flex items-center">
-            都道府県
-            <span className="ml-2 text-xs text-white bg-red-500 px-2 py-0.5 rounded">必須</span>
-          </Label>
+          <div className="flex items-center mb-2">
+            <span className="mr-2 text-[0.857rem] text-white bg-red-500 px-2 py-0.5 rounded">必須</span>
+            <Label htmlFor="prefecture" className="text-[1.143rem] font-bold">都道府県</Label>
+          </div>
           <Select
             value={formData.prefecture}
             onValueChange={(value) => handleChange("prefecture", value)}
@@ -211,10 +215,10 @@ export default function ContactForm({
 
         {/* 電話番号 */}
         <div>
-          <Label htmlFor="phone" className="flex items-center">
-            電話番号
-            <span className="ml-2 text-xs text-white bg-red-500 px-2 py-0.5 rounded">必須</span>
-          </Label>
+          <div className="flex items-center mb-2">
+            <span className="mr-2 text-[0.857rem] text-white bg-red-500 px-2 py-0.5 rounded">必須</span>
+            <Label htmlFor="phone" className="text-[1.143rem] font-bold">電話番号</Label>
+          </div>
           <Input
             id="phone"
             type="tel"
@@ -230,10 +234,10 @@ export default function ContactForm({
 
         {/* メールアドレス */}
         <div>
-          <Label htmlFor="email" className="flex items-center">
-            メールアドレス
-            <span className="ml-2 text-xs text-white bg-red-500 px-2 py-0.5 rounded">必須</span>
-          </Label>
+          <div className="flex items-center mb-2">
+            <span className="mr-2 text-[0.857rem] text-white bg-red-500 px-2 py-0.5 rounded">必須</span>
+            <Label htmlFor="email" className="text-[1.143rem] font-bold">メールアドレス</Label>
+          </div>
           <Input
             id="email"
             type="email"
@@ -249,10 +253,10 @@ export default function ContactForm({
 
         {/* お問い合わせ内容 */}
         <div>
-          <Label className="flex items-center mb-2">
-            お問い合わせ内容
-            <span className="ml-2 text-xs text-white bg-red-500 px-2 py-0.5 rounded">必須</span>
-          </Label>
+          <div className="flex items-center mb-2">
+            <span className="mr-2 text-[0.857rem] text-white bg-red-500 px-2 py-0.5 rounded">必須</span>
+            <Label className="text-[1.143rem] font-bold">お問い合わせ内容</Label>
+          </div>
           <RadioGroup
             value={formData.inquiryType}
             onValueChange={(value) => handleChange("inquiryType", value)}
@@ -260,15 +264,15 @@ export default function ContactForm({
           >
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="search" id="inquiry-search" />
-              <Label htmlFor="inquiry-search">車両を探している</Label>
+              <Label htmlFor="inquiry-search" className="text-[1.143rem]">車両を探している</Label>
             </div>
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="sell" id="inquiry-sell" />
-              <Label htmlFor="inquiry-sell">車両を売りたい</Label>
+              <Label htmlFor="inquiry-sell" className="text-[1.143rem]">車両を売りたい</Label>
             </div>
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="other" id="inquiry-other" />
-              <Label htmlFor="inquiry-other">その他</Label>
+              <Label htmlFor="inquiry-other" className="text-[1.143rem]">その他</Label>
             </div>
           </RadioGroup>
           {errors.inquiryType && (
@@ -280,9 +284,12 @@ export default function ContactForm({
         {formData.inquiryType === "sell" && (
           <div className="space-y-6 border-t pt-6">
             <h2 className="text-xl font-bold mb-4">車両情報</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-6">
               <div>
-                <Label htmlFor="maker">メーカー</Label>
+                <div className="flex items-center mb-2">
+                  <span className="mr-2 text-[0.857rem] text-white px-2 py-0.5 rounded" style={{background: '#666666'}}>任意</span>
+                  <Label htmlFor="maker" className="text-[1.143rem] font-bold">メーカー</Label>
+                </div>
                 <Input
                   id="maker"
                   value={formData.maker}
@@ -291,7 +298,10 @@ export default function ContactForm({
                 />
               </div>
               <div>
-                <Label htmlFor="model">車種</Label>
+                <div className="flex items-center mb-2">
+                  <span className="mr-2 text-[0.857rem] text-white px-2 py-0.5 rounded" style={{background: '#666666'}}>任意</span>
+                  <Label htmlFor="model" className="text-[1.143rem] font-bold">車種</Label>
+                </div>
                 <Input
                   id="model"
                   value={formData.model}
@@ -300,7 +310,22 @@ export default function ContactForm({
                 />
               </div>
               <div>
-                <Label htmlFor="year">年式</Label>
+                <div className="flex items-center mb-2">
+                  <span className="mr-2 text-[0.857rem] text-white px-2 py-0.5 rounded" style={{background: '#666666'}}>任意</span>
+                  <Label htmlFor="type" className="text-[1.143rem] font-bold">型式</Label>
+                </div>
+                <Input
+                  id="type"
+                  value={formData.type}
+                  onChange={(e) => handleChange("type", e.target.value)}
+                  placeholder="例）NMR85H"
+                />
+              </div>
+              <div>
+                <div className="flex items-center mb-2">
+                  <span className="mr-2 text-[0.857rem] text-white px-2 py-0.5 rounded" style={{background: '#666666'}}>任意</span>
+                  <Label htmlFor="year" className="text-[1.143rem] font-bold">年式</Label>
+                </div>
                 <Input
                   id="year"
                   value={formData.year}
@@ -309,7 +334,10 @@ export default function ContactForm({
                 />
               </div>
               <div>
-                <Label htmlFor="mileage">走行距離</Label>
+                <div className="flex items-center mb-2">
+                  <span className="mr-2 text-[0.857rem] text-white px-2 py-0.5 rounded" style={{background: '#666666'}}>任意</span>
+                  <Label htmlFor="mileage" className="text-[1.143rem] font-bold">走行距離</Label>
+                </div>
                 <Input
                   id="mileage"
                   value={formData.mileage}
@@ -323,7 +351,10 @@ export default function ContactForm({
 
         {/* 問い合わせ番号 */}
         <div>
-          <Label htmlFor="inquiryNumber">問い合わせ番号</Label>
+          <div className="flex items-center mb-2">
+            <span className="mr-2 text-[0.857rem] text-white px-2 py-0.5 rounded" style={{background: '#666666'}}>任意</span>
+            <Label htmlFor="inquiryNumber" className="text-[1.143rem] font-bold">問い合わせ番号</Label>
+          </div>
           <Input
             id="inquiryNumber"
             value={formData.inquiryNumber}
@@ -335,7 +366,10 @@ export default function ContactForm({
 
         {/* フリー備考欄 */}
         <div>
-          <Label htmlFor="remarks">フリー備考欄</Label>
+          <div className="flex items-center mb-2">
+            <span className="mr-2 text-[0.857rem] text-white px-2 py-0.5 rounded" style={{background: '#666666'}}>任意</span>
+            <Label htmlFor="remarks" className="text-[1.143rem] font-bold">フリー備考欄</Label>
+          </div>
           <Textarea
             id="remarks"
             value={formData.remarks}
@@ -350,9 +384,15 @@ export default function ContactForm({
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="px-8 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-full disabled:opacity-50"
+            className="text-white rounded-lg disabled:opacity-50 text-[1.143rem] font-bold"
+            style={{
+              background: 'linear-gradient(180deg, #1154AF 0%, #053B65 100%)',
+              boxShadow: '2px 2px 2px 0px #00000040',
+              width: '220px',
+              height: '39px'
+            }}
           >
-            {isSubmitting ? "送信中..." : "この内容で問い合わせる"}
+            {isSubmitting ? "送信中..." : "送信する"}
           </Button>
         </div>
       </form>
