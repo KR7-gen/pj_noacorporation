@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Phone, MapPin } from "lucide-react"
+import { Phone, MapPin, PhoneCall, ChevronRight } from "lucide-react"
 import { useRouter } from "next/navigation"
 
 const companyInfo = {
@@ -52,11 +52,18 @@ const members = [
   },
 ]
 
+// メンバーを役職別にグループ化
+const memberGroups = {
+  representative: members.filter(member => member.role === "代表取締役"),
+  director: members.filter(member => member.role === "取締役"),
+  employees: members.filter(member => member.role !== "代表取締役" && member.role !== "取締役"),
+}
+
 export default function AboutPage() {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
       {/* About Us Hero Section */}
       <section 
         style={{
@@ -140,20 +147,24 @@ export default function AboutPage() {
         >
           <div style={{ textAlign: "center", marginBottom: "48px" }}>
             <div style={{
-              width: "161px",
-              height: "17px",
+              width: "auto",
+              height: "auto",
               opacity: 1,
               fontFamily: "'Noto Sans JP', sans-serif",
               fontWeight: 400,
               fontStyle: "normal",
-              fontSize: "14px",
+              fontSize: "1rem",
               lineHeight: "100%",
               letterSpacing: 0,
-              color: "#2B5EC5",
+              color: "white",
               textAlign: "center",
-              margin: "0 auto 8px auto"
+              margin: "0 auto 8px auto",
+              color: "#2B5EC5",
+              padding: "0.29rem 0.57rem",
+              borderRadius: "0.14rem",
+              display: "inline-block"
             }}>COMPANY INFORMATION</div>
-            <h2 style={{ fontSize: "30px", fontWeight: "bold", marginBottom: "16px" }}>企業情報</h2>
+            <h2 style={{ fontSize: "30px", fontWeight: "bold", marginBottom: "16px" }}>会社情報</h2>
           </div>
 
           {/* カードの枠を削除し、内容だけ表示 */}
@@ -1174,14 +1185,12 @@ export default function AboutPage() {
       {/* Member Section */}
       <section 
         style={{
-          width: "1440px",
+          width: "56.53%",
           height: "1563px",
           gap: "60px",
           opacity: 1,
           paddingTop: "80px",
-          paddingRight: "40px",
           paddingBottom: "80px",
-          paddingLeft: "40px",
           background: "#FFFFFF",
           margin: "0 auto"
         }}
@@ -1197,53 +1206,286 @@ export default function AboutPage() {
           }}
         >
           <div style={{ textAlign: "center", marginBottom: "48px" }}>
-            <h2 style={{ fontSize: "30px", fontWeight: "bold", marginBottom: "16px" }}>MEMBER</h2>
-            <p style={{ fontSize: "20px", color: "#6b7280" }}>メンバー紹介</p>
+            <div style={{
+              width: "auto",
+              height: "auto",
+              opacity: 1,
+              fontFamily: "'Noto Sans JP', sans-serif",
+              fontWeight: 400,
+              fontStyle: "normal",
+              fontSize: "1rem",
+              lineHeight: "100%",
+              letterSpacing: 0,
+              color: "white",
+              textAlign: "center",
+              margin: "0 auto 8px auto",
+              color: "#2B5EC5",
+              padding: "0.29rem 0.57rem",
+              borderRadius: "0.14rem",
+              display: "inline-block"
+            }}>MEMBER</div>
+            <h2 style={{ 
+              fontSize: "2.86rem", 
+              fontWeight: "bold", 
+              marginBottom: "16px",
+              color: "#1a1a1a"
+            }}>メンバー紹介</h2>
           </div>
 
           <div 
             style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: "32px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "48px",
               width: "100%",
               maxWidth: "1200px"
             }}
           >
-            {members.map((member, index) => (
-              <Card 
-                key={index} 
+            {/* 代表取締役セクション */}
+            <div style={{ width: "100%" }}>
+              <h3 style={{ 
+                fontSize: "24px", 
+                fontWeight: "bold", 
+                marginBottom: "24px",
+                textAlign: "center",
+                color: "#1a1a1a"
+              }}>
+              </h3>
+              <div 
                 style={{
-                  backgroundColor: "white",
-                  border: "1px solid #e5e7eb",
-                  borderRadius: "8px",
-                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-                  height: "100%"
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "flex-start",
+                  width: "100%"
                 }}
               >
-                <CardContent style={{ padding: "24px", textAlign: "center" }}>
-                  <div style={{ marginBottom: "16px" }}>
+                {memberGroups.representative.map((member, index) => (
+                  <div 
+                    key={index} 
+                    style={{
+                      width: "100%",
+                      height: "320px",
+                      margin: "0",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "flex-start"
+                    }}
+                  >
+                    {/* 名前と説明（左の70.5%） */}
+                    <div style={{
+                      width: "70.5%",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "flex-start",
+                      textAlign: "left",
+                      padding: "0"
+                    }}>
+                      <h3 style={{ 
+                        fontWeight: "bold", 
+                        fontSize: "1.14rem", 
+                        marginBottom: "0.57rem",
+                        color: "#1a1a1a",
+                        marginLeft: "0",
+                        marginRight: "0"
+                      }}>
+                        {member.name}
+                      </h3>
+                      <p style={{ 
+                        fontSize: "1.14rem", 
+                        color: "#1a1a1a", 
+                        lineHeight: "1.6",
+                        marginLeft: "0",
+                        marginRight: "0",
+                        fontWeight: "400"
+                      }}>
+                        {member.description}
+                      </p>
+                    </div>
+                    
+                    {/* 写真（右の29.5%） */}
                     <div 
                       style={{
-                        width: "96px",
-                        height: "96px",
-                        backgroundColor: "#f3f4f6",
-                        borderRadius: "50%",
-                        margin: "0 auto 16px auto",
+                        width: "29.5%",
+                        height: "22.86rem",
+                        backgroundColor: "#808080",
                         display: "flex",
                         alignItems: "center",
-                        justifyContent: "center"
+                        justifyContent: "center",
+                        color: "white",
+                        fontSize: "1rem",
+                        margin: "0"
                       }}
                     >
-                      <div style={{ color: "#9ca3af" }}>写真</div>
+                      ダミー画像
                     </div>
-                    <h3 style={{ fontWeight: "bold", fontSize: "18px", marginBottom: "8px" }}>{member.name}</h3>
-                    <p style={{ color: "#2563eb", fontWeight: "500" }}>{member.role}</p>
                   </div>
-                  <p style={{ fontSize: "14px", color: "#374151", lineHeight: "1.6" }}>{member.description}</p>
-                </CardContent>
-              </Card>
-            ))}
+                ))}
+              </div>
+            </div>
+
+            {/* 取締役セクション */}
+            <div style={{ width: "100%" }}>
+              <h3 style={{ 
+                fontSize: "24px", 
+                fontWeight: "bold", 
+                marginBottom: "24px",
+                textAlign: "center",
+                color: "#1a1a1a"
+              }}>
+              </h3>
+              <div 
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "flex-start",
+                  width: "100%"
+                }}
+              >
+                {memberGroups.director.map((member, index) => (
+                  <div 
+                    key={index} 
+                    style={{
+                      width: "100%",
+                      height: "320px",
+                      margin: "0",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "flex-start"
+                    }}
+                  >
+                    {/* 名前と説明（左の70.5%） */}
+                    <div style={{
+                      width: "70.5%",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "flex-start",
+                      textAlign: "left",
+                      padding: "0"
+                    }}>
+                      <h3 style={{ 
+                        fontWeight: "bold", 
+                        fontSize: "1.14rem", 
+                        marginBottom: "0.57rem",
+                        color: "#1a1a1a",
+                        marginLeft: "0",
+                        marginRight: "0"
+                      }}>
+                        {member.name}
+                      </h3>
+                      <p style={{ 
+                        fontSize: "1.14rem", 
+                        color: "#1a1a1a", 
+                        lineHeight: "1.6",
+                        marginLeft: "0",
+                        marginRight: "0",
+                        fontWeight: "400"
+                      }}>
+                        {member.description}
+                      </p>
+                    </div>
+                    
+                    {/* 写真（右の29.5%） */}
+                    <div 
+                      style={{
+                        width: "29.5%",
+                        height: "22.86rem",
+                        backgroundColor: "#808080",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: "white",
+                        fontSize: "1rem",
+                        margin: "0"
+                      }}
+                    >
+                      ダミー画像
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 社員セクション */}
+            <div style={{ width: "100%" }}>
+              <h3 style={{ 
+                fontSize: "24px", 
+                fontWeight: "bold", 
+                marginBottom: "24px",
+                textAlign: "center",
+                color: "#1a1a1a"
+              }}>
+              </h3>
+              <div 
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "flex-start",
+                  width: "100%",
+                  position: "relative"
+                }}
+              >
+                {memberGroups.employees.map((member, index) => (
+                  <Card 
+                    key={index} 
+                    style={{
+                      backgroundColor: "white",
+                      border: "1px solid #e5e7eb",
+                      borderRadius: "8px",
+                      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                      height: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      width: "25.8%",
+                      position: index === 1 ? "absolute" : "relative",
+                      left: index === 1 ? "50%" : "auto",
+                      transform: index === 1 ? "translateX(-50%)" : "none"
+                    }}
+                  >
+                    <CardContent style={{ padding: "0", textAlign: "center", display: "flex", flexDirection: "column", height: "100%" }}>
+                      {/* 写真（最上部） */}
+                      <div 
+                        style={{
+                          width: "100%",
+                          height: "15rem",
+                          backgroundColor: "#808080",
+                          margin: "0",
+                          marginBottom: "1.14rem",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          color: "white",
+                          fontSize: "1rem"
+                        }}
+                      >
+                        ダミー画像
+                      </div>
+                      
+                      {/* 名前と説明文（写真の下） */}
+                      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "flex-start" }}>
+                        <h3 style={{ 
+                          fontWeight: "bold", 
+                          fontSize: "1.14rem", 
+                          marginBottom: "8px",
+                          color: "#1a1a1a"
+                        }}>{member.name}</h3>
+                        <p style={{ 
+                          color: "#1a1a1a", 
+                          fontWeight: "500", 
+                          marginBottom: "8px",
+                          fontSize: "1rem"
+                        }}>{member.role}</p>
+                        <p style={{ 
+                          fontSize: "1.14rem", 
+                          color: "#1a1a1a", 
+                          lineHeight: "1.6",
+                          fontWeight: "400"
+                        }}>{member.description}</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -1252,113 +1494,84 @@ export default function AboutPage() {
       <section 
         id="access" 
         style={{
-          width: "1440px",
-          height: "673px",
-          gap: "40px",
-          opacity: 1,
+          width: "100%",
           paddingTop: "60px",
-          paddingRight: "40px",
           paddingBottom: "60px",
-          paddingLeft: "40px",
-          background: "#FFFFFF",
-          margin: "0 auto"
+          background: "#FFFFFF"
         }}
       >
         <div 
           style={{
             width: "100%",
-            height: "100%",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center"
+            maxWidth: "1000px",
+            margin: "0 auto"
           }}
         >
           <div style={{ textAlign: "center", marginBottom: "48px" }}>
-            <h2 style={{ fontSize: "30px", fontWeight: "bold", marginBottom: "16px" }}>ACCESS</h2>
-            <p style={{ fontSize: "20px", color: "#6b7280" }}>アクセス</p>
+            <div style={{
+              width: "auto",
+              height: "auto",
+              opacity: 1,
+              fontFamily: "'Noto Sans JP', sans-serif",
+              fontWeight: 400,
+              fontStyle: "normal",
+              fontSize: "1rem",
+              lineHeight: "100%",
+              letterSpacing: 0,
+              color: "white",
+              textAlign: "center",
+              margin: "0 auto 8px auto",
+              color: "#2B5EC5",
+              padding: "0.29rem 0.57rem",
+              borderRadius: "0.14rem",
+              display: "inline-block"
+            }}>ACCESS</div>
+            <h2 style={{ 
+              fontSize: "2.86rem", 
+              fontWeight: "bold", 
+              marginBottom: "16px",
+              color: "#1a1a1a"
+            }}>アクセス</h2>
           </div>
 
           <div 
             style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(2, 1fr)",
-              gap: "32px",
               width: "100%",
-              maxWidth: "800px"
+              height: "22.36rem",
+              borderRadius: "8px",
+              overflow: "hidden",
+              marginBottom: "32px"
             }}
           >
-            <Card 
-              style={{
-                backgroundColor: "white",
-                border: "1px solid #e5e7eb",
-                borderRadius: "8px",
-                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)"
-              }}
-            >
-              <CardContent style={{ padding: "32px" }}>
-                <div 
-                  style={{
-                    width: "100%",
-                    height: "256px",
-                    backgroundColor: "#f3f4f6",
-                    borderRadius: "8px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginBottom: "24px"
-                  }}
-                >
-                  <div style={{ color: "#9ca3af" }}>Googleマップ</div>
-                </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                    <MapPin style={{ width: "20px", height: "20px", color: "#2563eb" }} />
-                    <span style={{ fontWeight: "500" }}>{companyInfo.address}</span>
-                  </div>
-                  <div style={{ marginLeft: "28px", fontSize: "14px", color: "#6b7280" }}>
-                    <p>・〇〇より0分</p>
-                    <p>・〇〇より0分</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3210.1234567890123!2d139.12345678901234!3d36.12345678901234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzbCsDA3JzM0LjQiTiAxMznCsDA3JzM0LjQiRQ!5e0!3m2!1sja!2sjp!4v1234567890123"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
 
-            <Card 
-              style={{
-                backgroundColor: "white",
-                border: "1px solid #e5e7eb",
-                borderRadius: "8px",
-                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)"
-              }}
-            >
-              <CardContent style={{ padding: "32px" }}>
-                <h3 style={{ fontSize: "20px", fontWeight: "bold", marginBottom: "24px" }}>店舗情報</h3>
-                <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <span style={{ fontWeight: "500" }}>所在地</span>
-                    <span>{companyInfo.address}</span>
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <span style={{ fontWeight: "500" }}>TEL</span>
-                    <span>{companyInfo.phone}</span>
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <span style={{ fontWeight: "500" }}>FAX</span>
-                    <span>{companyInfo.fax}</span>
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <span style={{ fontWeight: "500" }}>営業時間</span>
-                    <span>{companyInfo.hours}</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+          <div style={{ 
+            display: "flex", 
+            flexDirection: "column", 
+            gap: "16px",
+            width: "100%"
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <span style={{ fontWeight: "500" }}>{companyInfo.address}</span>
+            </div>
+            <div style={{ fontSize: "14px", color: "#1a1a1a" }}>
+              <p>・〇〇より0分</p>
+              <p>・〇〇より0分</p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Contact Section ここから置換 */}
+      {/* Contact Section */}
       <section 
         style={{
           width: "1440px",
@@ -1383,10 +1596,90 @@ export default function AboutPage() {
             padding: "0 20px"
           }}
         >
-          <div style={{ textAlign: "center", marginBottom: "48px" }}>
-            <h2 style={{ fontSize: "30px", fontWeight: "bold", marginBottom: "16px" }}>CONTACT</h2>
-            <p style={{ fontSize: "20px", marginBottom: "16px" }}>お問い合わせ</p>
-            <p style={{ marginBottom: "32px" }}>
+          {/* ①と②のコンテナ */}
+          <div 
+            style={{
+              width: "240px",
+              height: "75px",
+              margin: "0 auto 32px auto",
+              opacity: 1,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center"
+            }}
+          >
+            {/* ①CONTACT */}
+            <div 
+              style={{
+                width: "62px",
+                height: "17px",
+                margin: "0 auto 16px auto",
+                fontFamily: "Noto Sans JP",
+                fontWeight: "400",
+                fontStyle: "Regular",
+                fontSize: "14px",
+                lineHeight: "100%",
+                letterSpacing: "0%",
+                textAlign: "center",
+                color: "#FFFFFF",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+              CONTACT
+            </div>
+            {/* ②お問い合わせ */}
+            <div 
+              style={{
+                width: "240px",
+                height: "58px",
+                fontFamily: "Noto Sans JP",
+                fontWeight: "700",
+                fontStyle: "Bold",
+                fontSize: "40px",
+                lineHeight: "100%",
+                letterSpacing: "0%",
+                textAlign: "center",
+                color: "#FFFFFF",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+              お問い合わせ
+            </div>
+          </div>
+
+          {/* ③説明文 */}
+          <div 
+            style={{
+              width: "746px",
+              height: "104px",
+              margin: "0 auto 32px auto",
+              gap: "10px",
+              opacity: 1,
+              padding: "10px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
+            }}
+          >
+            <p 
+              style={{
+                width: "726px",
+                height: "84px",
+                fontFamily: "Noto Sans JP",
+                fontWeight: "700",
+                fontStyle: "Bold",
+                fontSize: "16px",
+                lineHeight: "28px",
+                letterSpacing: "0%",
+                textAlign: "center",
+                color: "#FFFFFF"
+              }}
+            >
               在庫車輛の詳細/その他お問い合わせ/業販価格のご確認など
               <br />
               お電話またはお問い合わせフォームよりお気軽にお問い合わせください。
@@ -1405,114 +1698,281 @@ export default function AboutPage() {
               marginBottom: "32px"
             }}
           >
+            {/* ①お電話でのお問い合わせ */}
             <Card 
               style={{
-                backgroundColor: "white",
-                color: "#374151",
+                width: "400px",
+                height: "172px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "8px",
                 borderRadius: "8px",
-                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
+                padding: "32px 40px",
+                border: "1px solid #1A1A1A",
+                background: "#FFFFFF",
+                color: "#1a1a1a",
+                boxShadow: "none"
               }}
             >
-              <CardContent style={{ padding: "32px", textAlign: "center" }}>
-                <Phone style={{ width: "48px", height: "48px", margin: "0 auto 16px auto", color: "#2563eb" }} />
-                <h3 style={{ fontWeight: "bold", fontSize: "20px", marginBottom: "16px" }}>お電話でのお問い合わせ</h3>
-                <p style={{ fontSize: "30px", fontWeight: "bold", marginBottom: "8px" }}>TEL. 000-000-0000</p>
-                <p style={{ fontSize: "14px", color: "#6b7280" }}>受付時間：月〜土 00:00~00:00</p>
+              <CardContent style={{ 
+                padding: 0, 
+                textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100%"
+              }}>
+                {/* ①電話記号＋お電話でのお問い合わせ */}
+                <div 
+                  style={{
+                    width: "204px",
+                    height: "24px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "4px",
+                    opacity: 1,
+                    margin: "0 auto 16px auto"
+                  }}
+                >
+                  <PhoneCall 
+                    style={{ 
+                      width: "18px", 
+                      height: "18px", 
+                      color: "#666666",
+                      marginTop: "2.98px",
+                      marginLeft: "3px"
+                    }} 
+                  />
+                  <h3 style={{ fontWeight: "bold", fontSize: "16px", margin: 0 }}>お電話でのお問い合わせ</h3>
+                </div>
+                {/* ②電話番号＋受付時間 */}
+                <div 
+                  style={{
+                    width: "320px",
+                    height: "69px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "4px",
+                    opacity: 1,
+                    margin: "0 auto"
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
+                    <span 
+                      style={{
+                        width: "43px",
+                        height: "29px",
+                        fontFamily: "Noto Sans JP",
+                        fontWeight: "700",
+                        fontStyle: "Bold",
+                        fontSize: "20px",
+                        lineHeight: "100%",
+                        letterSpacing: "0%",
+                        color: "#2B5EC5",
+                        opacity: 1
+                      }}
+                    >
+                      TEL.
+                    </span>
+                    <span 
+                      style={{
+                        width: "239px",
+                        height: "46px",
+                        fontFamily: "Noto Sans JP",
+                        fontWeight: "700",
+                        fontStyle: "Bold",
+                        fontSize: "36px",
+                        lineHeight: "100%",
+                        letterSpacing: "0%",
+                        color: "#2B5EC5",
+                        opacity: 1,
+                        whiteSpace: "nowrap"
+                      }}
+                    >
+                      028-612-1472
+                    </span>
+                  </div>
+                  <p style={{ fontSize: "14px", color: "#6b7280", margin: 0 }}>受付時間：年中無休 09:00~17:00</p>
+                </div>
               </CardContent>
             </Card>
 
+            {/* ②フォームでのお問い合わせ */}
             <Card 
               style={{
-                backgroundColor: "white",
-                color: "#374151",
+                width: "400px",
+                height: "172px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "24px",
                 borderRadius: "8px",
-                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
+                padding: "32px 40px",
+                border: "1px solid #1A1A1A",
+                background: "#FFFFFF",
+                color: "#374151",
+                boxShadow: "none"
               }}
             >
-              <CardContent style={{ padding: "32px", textAlign: "center" }}>
+              <CardContent style={{ 
+                padding: 0, 
+                textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100%"
+              }}>
+                {/* ③フォームでの問い合わせ */}
                 <div 
                   style={{
-                    width: "48px",
-                    height: "48px",
-                    margin: "0 auto 16px auto",
-                    backgroundColor: "#2563eb",
-                    borderRadius: "8px",
+                    width: "220px",
+                    height: "24px",
                     display: "flex",
                     alignItems: "center",
-                    justifyContent: "center"
+                    gap: "4px",
+                    opacity: 1,
+                    margin: "0 auto 16px auto"
                   }}
                 >
-                  <div 
+                  <img 
+                    src="/forum.png"
+                    alt="フォーラム"
                     style={{
-                      width: "24px",
-                      height: "24px",
-                      backgroundColor: "white",
-                      borderRadius: "4px"
+                      width: "20px",
+                      height: "20px"
                     }}
-                  ></div>
+                  />
+                  <h3 style={{ fontWeight: "bold", fontSize: "16px", margin: 0 }}>フォームでのお問い合わせ</h3>
                 </div>
-                <h3 style={{ fontWeight: "bold", fontSize: "20px", marginBottom: "16px" }}>フォームでのお問い合わせ</h3>
+                {/* ④お問合せフォームへボタン */}
                 <Link href="/contact">
                   <Button 
                     style={{
-                      marginBottom: "16px",
-                      backgroundColor: "#2563eb",
-                      color: "white",
+                      width: "280px",
+                      height: "40px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "16px",
+                      borderRadius: "4px",
+                      padding: "8px 12px",
+                      background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
+                      boxShadow: "2px 2px 2px 0px #00000040",
                       border: "none",
-                      borderRadius: "6px",
-                      padding: "8px 16px",
-                      fontSize: "14px",
-                      fontWeight: "500",
                       cursor: "pointer",
-                      transition: "background-color 0.3s ease"
+                      transition: "opacity 0.3s ease"
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = "#1d4ed8";
+                      e.currentTarget.style.opacity = "0.8";
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = "#2563eb";
+                      e.currentTarget.style.opacity = "1";
                     }}
                   >
                     お問い合わせフォームへ
                   </Button>
                 </Link>
-                <p style={{ fontSize: "14px", color: "#6b7280" }}>24時間受付中</p>
               </CardContent>
             </Card>
           </div>
 
-          <div style={{ textAlign: "center" }}>
-            <Link href="/purchase">
-              <Button 
-                variant="outline" 
-                size="lg" 
-                style={{
-                  backgroundColor: "white",
-                  color: "#2563eb",
-                  border: "2px solid white",
-                  borderRadius: "8px",
-                  padding: "12px 24px",
-                  fontSize: "16px",
-                  fontWeight: "500",
-                  cursor: "pointer",
-                  transition: "all 0.3s ease"
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "#f3f4f6";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "white";
-                }}
-              >
-                トラック買取をご希望の方はこちら
-                <br />
-                <span style={{ fontSize: "14px" }}>無料査定実施中！！</span>
-              </Button>
-            </Link>
+          {/* ③トラック買取の問い合わせ */}
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Card 
+              style={{
+                width: "472px",
+                height: "100px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "4px",
+                borderRadius: "8px",
+                padding: "24px 60px",
+                border: "1px solid #1A1A1A",
+                background: "#FFFFFF",
+                color: "#2563eb",
+                boxShadow: "none"
+              }}
+            >
+              <CardContent style={{ 
+                padding: 0, 
+                textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100%"
+              }}>
+                {/* ⑤トラック買取をご希望の方はこちら */}
+                <Link href="/contact" style={{ textDecoration: "none" }}>
+                  <div 
+                    style={{
+                      width: "360px",
+                      height: "29px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      opacity: 1,
+                      margin: "0 auto 8px auto",
+                      position: "relative",
+                      cursor: "pointer",
+                      transition: "opacity 0.3s ease"
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.opacity = "0.8";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.opacity = "1";
+                    }}
+                  >
+                    <div 
+                      style={{
+                        fontFamily: "Noto Sans JP",
+                        fontWeight: "700",
+                        fontStyle: "Bold",
+                        fontSize: "20px",
+                        lineHeight: "100%",
+                        letterSpacing: "0%",
+                        color: "#2B5EC5"
+                      }}
+                    >
+                      トラック買取をご希望の方はこちら
+                    </div>
+                    <ChevronRight 
+                      style={{
+                        width: "24px",
+                        height: "24px",
+                        color: "#2B5EC5",
+                        position: "absolute",
+                        top: "2.5px",
+                        right: "0px"
+                      }}
+                    />
+                  </div>
+                </Link>
+                {/* ⑥無料査定実施中 */}
+                <div 
+                  style={{
+                    width: "320px",
+                    height: "19px",
+                    fontFamily: "Noto Sans JP",
+                    fontWeight: "400",
+                    fontStyle: "Regular",
+                    fontSize: "16px",
+                    lineHeight: "100%",
+                    letterSpacing: "0%",
+                    color: "#1A1A1A",
+                    opacity: 1,
+                    textAlign: "center"
+                  }}
+                >
+                  無料査定実施中！！
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
-      {/* Contact Section ここまで置換 */}
     </div>
   )
 }
