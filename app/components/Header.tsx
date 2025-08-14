@@ -47,7 +47,9 @@ export function Header() {
           top: "50%",
           transform: "translateY(-50%)",
           width: "37%", 
-          height: "3.36rem" 
+          height: "3.36rem",
+          whiteSpace: "nowrap",
+          overflow: "hidden"
         }}>
           <a href="/" 
             style={{
@@ -66,7 +68,9 @@ export function Header() {
               alignItems: "center",
               justifyContent: "center",
               borderRadius: "0.29rem",
-              textDecoration: "none"
+              textDecoration: "none",
+              whiteSpace: "nowrap",
+              flexShrink: 0
             }}
           >
             HOME
@@ -89,7 +93,9 @@ export function Header() {
               justifyContent: "center",
               borderRadius: "0.29rem",
               textDecoration: "none",
-              gap: "0.29rem"
+              gap: "0.29rem",
+              whiteSpace: "nowrap",
+              flexShrink: 0
             }}
           >
             販売在庫一覧
@@ -114,7 +120,9 @@ export function Header() {
               alignItems: "center",
               justifyContent: "center",
               borderRadius: "0.29rem",
-              textDecoration: "none"
+              textDecoration: "none",
+              whiteSpace: "nowrap",
+              flexShrink: 0
             }}
           >
             レンタル車両
@@ -136,7 +144,9 @@ export function Header() {
               alignItems: "center",
               justifyContent: "center",
               borderRadius: "0.29rem",
-              textDecoration: "none"
+              textDecoration: "none",
+              whiteSpace: "nowrap",
+              flexShrink: 0
             }}
           >
             買取はこちら
@@ -158,7 +168,9 @@ export function Header() {
               alignItems: "center",
               justifyContent: "center",
               borderRadius: "0.29rem",
-              textDecoration: "none"
+              textDecoration: "none",
+              whiteSpace: "nowrap",
+              flexShrink: 0
             }}
           >
             私たちについて
