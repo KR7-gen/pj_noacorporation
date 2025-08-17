@@ -130,8 +130,14 @@ export const addVehicle = async (vehicle: Omit<Vehicle, 'id' | 'createdAt' | 'up
 export const updateVehicle = async (id: string, vehicle: Partial<Vehicle>) => {
   try {
     const docRef = doc(db, "vehicles", id);
+    
+    // undefinedのフィールドを除外
+    const cleanedVehicle = Object.fromEntries(
+      Object.entries(vehicle).filter(([_, value]) => value !== undefined)
+    );
+    
     await updateDoc(docRef, {
-      ...vehicle,
+      ...cleanedVehicle,
       updatedAt: new Date()
     });
   } catch (error) {
@@ -164,14 +170,15 @@ export const normalizeImageUrls = (vehicle: any): string[] => {
     urls.unshift(vehicle.imageUrl); // 最初に追加
   }
   
-  // 一時的なURLを除外
-  const filteredUrls = urls.filter(url => 
-    url && 
-    url.trim() !== "" && 
-    !url.includes("temp_") && 
-    !url.startsWith("blob:") &&
-    !url.startsWith("data:")
-  );
+  // 一時的なURLのみを除外（実際の車両写真は保持）
+  const filteredUrls = urls.filter(url =>
+  url &&
+  url.trim() !== "" &&
+  url !== "/placeholder.jpg" &&
+  !url.includes("temp_") &&
+  !url.startsWith("blob:") &&
+  !url.startsWith("data:")
+);
   
   console.log("正規化された画像URL:", {
     original: { imageUrls: vehicle.imageUrls, imageUrl: vehicle.imageUrl },

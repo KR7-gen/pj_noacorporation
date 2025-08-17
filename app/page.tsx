@@ -316,10 +316,10 @@ export default function HomePage() {
       {/* Hero, Truck Type Grid, Search Section Combined */}
       <section 
         style={{
-          width: "1440px",
-          height: "800px",
+          width: "100vw",
+          height: "57.14rem",
           opacity: 1,
-          top: "126px",
+          top: "9rem",
           left: "50%",
           transform: "translateX(-50%)",
           display: "flex",
@@ -336,31 +336,32 @@ export default function HomePage() {
         <div 
           style={{
             color: "white",
-            padding: "64px 20px",
+            padding: "4.57rem 1.43rem",
             flex: "1"
           }}
         >
           <div 
             style={{
-              maxWidth: "800px",
-              margin: "0",
+              width: "77.08%",
+              maxWidth: "1100px",
+              margin: "0 auto",
               textAlign: "left"
             }}
           >
             <h1 
               style={{
-                width: "632px",
-                height: "70px",
+                width: "45.14rem",
+                height: "5rem",
                 opacity: 1,
                 fontFamily: "Noto Sans JP",
                 fontWeight: 700,
                 fontStyle: "Bold",
-                fontSize: "48px",
+                fontSize: "3.43rem",
                 lineHeight: "100%",
                 letterSpacing: "0%",
                 color: "#FFFFFF",
-                textShadow: "4px 4px 4px 0px #0000004D",
-                margin: "0 0 24px 0",
+                textShadow: "0.29rem 0.29rem 0.29rem 0px #0000004D",
+                margin: "0 0 1.71rem 0",
                 textAlign: "left"
               }}
             >
@@ -368,17 +369,17 @@ export default function HomePage() {
             </h1>
             <div 
               style={{
-                width: "632px",
-                height: "120px",
+                width: "45.14rem",
+                height: "8.57rem",
                 opacity: 1,
                 fontFamily: "Noto Sans JP",
                 fontWeight: 700,
                 fontStyle: "Bold",
-                fontSize: "24px",
-                lineHeight: "40px",
+                fontSize: "1.71rem",
+                lineHeight: "2.86rem",
                 letterSpacing: "0%",
                 color: "#FFFFFF",
-                textShadow: "2px 2px 2px rgba(0, 0, 0, 0.3)",
+                textShadow: "0.14rem 0.14rem 0.14rem rgba(0, 0, 0, 0.3)",
                 margin: "0",
                 textAlign: "left"
               }}
@@ -395,7 +396,7 @@ export default function HomePage() {
         {/* Truck Type Grid */}
         <div 
           style={{
-            padding: "48px 20px",
+            padding: "3.43rem 1.43rem 0 1.43rem",
             flex: "1"
           }}
         >
@@ -403,8 +404,9 @@ export default function HomePage() {
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(6, 1fr)",
-              gap: "4px",
-              maxWidth: "1200px",
+              gap: "0.57rem",
+              width: "77.08%",
+              maxWidth: "78.57rem",
               margin: "0 auto"
             }}
           >
@@ -413,9 +415,8 @@ export default function HomePage() {
                 key={icon.id}
                 href={`/inventory?type=${encodeURIComponent(icon.type)}`}
                 style={{
-                  width: "176px",
-                  height: "96px",
-                  borderRadius: "4px",
+                  height: "6.86rem",
+                  borderRadius: "0.29rem",
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
@@ -423,16 +424,16 @@ export default function HomePage() {
                   backgroundColor: "white",
                   textDecoration: "none",
                   transition: "all 0.3s ease",
-                  boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+                  boxShadow: "0 0.07rem 0.21rem rgba(0, 0, 0, 0.1)",
                   opacity: 1
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-2px)";
-                  e.currentTarget.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.15)";
+                  e.currentTarget.style.transform = "translateY(-0.14rem)";
+                  e.currentTarget.style.boxShadow = "0 0.29rem 0.57rem rgba(0, 0, 0, 0.15)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "0 1px 3px rgba(0, 0, 0, 0.1)";
+                  e.currentTarget.style.boxShadow = "0 0.07rem 0.21rem rgba(0, 0, 0, 0.1)";
                 }}
               >
 
@@ -449,12 +450,12 @@ export default function HomePage() {
                 >
                   <div 
                     style={{
-                      width: "64px",
-                      height: "64px",
+                      width: "4.57rem",
+                      height: "4.57rem",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      marginBottom: "8px"
+                      marginBottom: "0.57rem"
                     }}
                   >
                     <img 
@@ -486,7 +487,7 @@ export default function HomePage() {
                       fontFamily: "'Noto Sans JP', sans-serif",
                       fontWeight: 700,
                       fontStyle: "bold",
-                      fontSize: "16px",
+                      fontSize: "1.14rem",
                       lineHeight: "100%",
                       letterSpacing: "0%",
                       textAlign: "center",
@@ -494,7 +495,7 @@ export default function HomePage() {
                       whiteSpace: "nowrap",
                       overflow: "hidden",
                       textOverflow: "ellipsis",
-                      maxWidth: "160px"
+                      maxWidth: "11.43rem"
                     }}
                   >
                     {icon.type}
@@ -508,7 +509,7 @@ export default function HomePage() {
         {/* Search Section */}
         <div 
           style={{
-            padding: "48px 20px",
+            padding: "0.857rem 1.43rem 10rem 1.43rem",
             flex: "1",
             display: "flex",
             justifyContent: "center",
@@ -518,35 +519,38 @@ export default function HomePage() {
           {/* 背景 */}
           <div 
             style={{
-              width: "1180px",
-              height: "55px",
+              width: "77.08%",
+              maxWidth: "1100px",
+              margin: "0 auto",
+              height: "3.93rem",
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
               opacity: 1,
-              borderRadius: "4px",
-              padding: "8px 12px",
+              borderRadius: "0.29rem",
+              padding: "0.57rem 0.35rem",
               background: "#CCCCCC"
             }}
           >
             {/* 左側の検索フィールド群 */}
             <div 
               style={{
+                width: "50.27%",
                 display: "flex",
-                gap: "8px",
                 alignItems: "center"
               }}
             >
               {/* 車両検索（ボディタイプ） */}
               <div 
                 style={{
-                  width: "202px",
-                  height: "32px",
+                  width: "39%",
+                  margin: "0.43rem",
+                  height: "2.29rem",
                   display: "flex",
                   alignItems: "center",
-                  gap: "4px",
-                  borderRadius: "4px",
-                  padding: "4px 8px",
+                  gap: "0.29rem",
+                  borderRadius: "0.29rem",
+                  padding: "0.29rem 0.57rem",
                   background: "#FFFFFF",
                   position: "relative"
                 }}
@@ -556,7 +560,7 @@ export default function HomePage() {
                       width: "100%",
                       border: "none",
                       background: "transparent",
-                      fontSize: "16px",
+                      fontSize: "1.14rem",
                       fontFamily: "Noto Sans JP",
                       fontWeight: "400",
                       color: "#1A1A1A",
@@ -579,8 +583,12 @@ export default function HomePage() {
                     style={{ 
                       color: "#1A1A1A",
                       position: "absolute",
-                      right: "8px",
-                      pointerEvents: "none"
+                      right: "0.57rem",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      pointerEvents: "none",
+                      margin: "0",
+                      padding: "0"
                     }} 
                   />
               </div>
@@ -588,13 +596,14 @@ export default function HomePage() {
               {/* 車両検索（メーカー） */}
               <div 
                 style={{
-                  width: "172px",
-                  height: "33px",
+                  width: "33%",
+                  margin: "0.43rem",
+                  height: "2.36rem",
                   display: "flex",
                   alignItems: "center",
-                  gap: "4px",
-                  borderRadius: "4px",
-                  padding: "4px 8px",
+                  gap: "0.29rem",
+                  borderRadius: "0.29rem",
+                  padding: "0.29rem 0.57rem",
                   background: "#FFFFFF",
                   position: "relative"
                 }}
@@ -604,7 +613,7 @@ export default function HomePage() {
                       width: "100%",
                       border: "none",
                       background: "transparent",
-                      fontSize: "16px",
+                      fontSize: "1.14rem",
                       fontFamily: "Noto Sans JP",
                       fontWeight: "400",
                       color: "#1A1A1A",
@@ -627,8 +636,12 @@ export default function HomePage() {
                     style={{ 
                       color: "#1A1A1A",
                       position: "absolute",
-                      right: "8px",
-                      pointerEvents: "none"
+                      right: "0.57rem",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      pointerEvents: "none",
+                      margin: "0",
+                      padding: "0"
                     }} 
                   />
               </div>
@@ -636,13 +649,14 @@ export default function HomePage() {
               {/* 車両検索（大きさ） */}
               <div 
                 style={{
-                  width: "155px",
-                  height: "32px",
+                  width: "30%",
+                  margin: "0.43rem",
+                  height: "2.29rem",
                   display: "flex",
                   alignItems: "center",
-                  gap: "4px",
-                  borderRadius: "4px",
-                  padding: "4px 8px",
+                  gap: "0.29rem",
+                  borderRadius: "0.29rem",
+                  padding: "0.29rem 0.57rem",
                   background: "#FFFFFF",
                   position: "relative"
                 }}
@@ -652,7 +666,7 @@ export default function HomePage() {
                       width: "100%",
                       border: "none",
                       background: "transparent",
-                      fontSize: "16px",
+                      fontSize: "1.14rem",
                       fontFamily: "Noto Sans JP",
                       fontWeight: "400",
                       color: "#1A1A1A",
@@ -675,8 +689,12 @@ export default function HomePage() {
                     style={{ 
                       color: "#1A1A1A",
                       position: "absolute",
-                      right: "8px",
-                      pointerEvents: "none"
+                      right: "0.57rem",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      pointerEvents: "none",
+                      margin: "0",
+                      padding: "0"
                     }} 
                   />
               </div>
@@ -685,9 +703,10 @@ export default function HomePage() {
             {/* 右側のフリーワードと検索ボタン */}
             <div 
               style={{
+                width: "50%",
                 display: "flex",
-                gap: "12px",
-                alignItems: "center"
+                alignItems: "center",
+                justifyContent: "space-between"
               }}
             >
               {/* 車両検索（フリーワード） */}
@@ -695,14 +714,15 @@ export default function HomePage() {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  gap: "8px"
+                  width: "85%",
+                  justifyContent: "flex-end"
                 }}
               >
                 <span 
                   style={{
                     fontFamily: "Noto Sans JP",
                     fontWeight: "400",
-                    fontSize: "16px",
+                    fontSize: "1.14rem",
                     lineHeight: "100%",
                     letterSpacing: "0%",
                     color: "#1A1A1A",
@@ -713,13 +733,14 @@ export default function HomePage() {
                 </span>
                 <div 
                   style={{
-                    width: "300px",
-                    height: "32px",
+                    width: "60%",
+                    margin: "0.43rem",
+                    height: "2.29rem",
                     display: "flex",
                     alignItems: "center",
-                    gap: "10px",
-                    borderRadius: "4px",
-                    padding: "4px 8px",
+                    gap: "0.71rem",
+                    borderRadius: "0.29rem",
+                    padding: "0.29rem 0.57rem",
                     background: "#FFFFFF"
                   }}
                 >
@@ -730,7 +751,7 @@ export default function HomePage() {
                       width: "100%",
                       border: "none",
                       background: "transparent",
-                      fontSize: "16px",
+                      fontSize: "1.14rem",
                       fontFamily: "Noto Sans JP",
                       fontWeight: "400",
                       color: "#1A1A1A",
@@ -744,14 +765,14 @@ export default function HomePage() {
               <button 
                 onClick={handleSearch}
                 style={{
-                  width: "120px",
-                  height: "39px",
+                  width: "30%",
+                  height: "2.79rem",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  gap: "10px",
-                  borderRadius: "4px",
-                  padding: "8px",
+                  gap: "0.71rem",
+                  borderRadius: "0.29rem",
+                  padding: "0.57rem",
                   background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
                   border: "none",
                   cursor: "pointer",
@@ -768,7 +789,7 @@ export default function HomePage() {
                   style={{
                     fontFamily: "Noto Sans JP",
                     fontWeight: "700",
-                    fontSize: "16px",
+                    fontSize: "1.14rem",
                     lineHeight: "100%",
                     letterSpacing: "0%",
                     textAlign: "center",
@@ -786,15 +807,16 @@ export default function HomePage() {
       {/* New Trucks Section */}
       <section 
         style={{
-          width: "1440px",
-          height: "1035px",
-          gap: "40px",
+          width: "77.08%",
+          maxWidth: "1100px",
+          height: "73.93rem",
+          gap: "2.86rem",
           opacity: 1,
-          paddingTop: "100px",
-          paddingBottom: "100px",
+          paddingTop: "2.857rem",
+          paddingBottom: "2.857rem",
           background: "#FFFFFF",
           margin: "0 auto",
-          marginTop: "926px"
+          marginTop: "66.14rem"
         }}
       >
         <div 
@@ -805,19 +827,19 @@ export default function HomePage() {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            padding: "0 20px"
+            padding: "0"
           }}
         >
-          <div style={{ textAlign: "center", marginBottom: "48px" }}>
+          <div style={{ textAlign: "center", marginBottom: "3.43rem" }}>
             <div 
               style={{
-                width: "80px",
-                height: "17px",
-                margin: "0 auto 16px auto",
+                width: "5.71rem",
+                height: "1.21rem",
+                margin: "0 auto 1.14rem auto",
                 fontFamily: "Noto Sans JP",
                 fontWeight: "400",
                 fontStyle: "Regular",
-                fontSize: "14px",
+                fontSize: "1rem",
                 lineHeight: "100%",
                 letterSpacing: "0%",
                 textAlign: "center",
@@ -825,33 +847,34 @@ export default function HomePage() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                borderRadius: "2px"
+                borderRadius: "0.14rem"
               }}
             >
               NEW TRUCK
             </div>
             <div 
               style={{
-                width: "160px",
-                height: "58px",
-                margin: "0 auto 8px auto",
+                width: "11.43rem",
+                height: "4.14rem",
+                margin: "0 auto 0.57rem auto",
                 fontFamily: "Noto Sans JP",
                 fontWeight: "700",
                 fontStyle: "Bold",
-                fontSize: "40px",
+                fontSize: "2.86rem",
                 lineHeight: "100%",
                 letterSpacing: "0%",
                 textAlign: "center",
                 color: "#1A1A1A",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center"
+                justifyContent: "center",
+                whiteSpace: "nowrap"
               }}
             >
               新着車両
             </div>
-            <p style={{ opacity: 1, fontFamily: "Noto Sans JP", fontWeight: "700", fontStyle: "Bold", fontSize: "16px", lineHeight: "100%", letterSpacing: "0%", color: "#1A1A1A" }}>
-              現在、<span style={{ opacity: 1, fontFamily: "Noto Sans JP", fontWeight: "700", fontStyle: "Bold", fontSize: "32px", lineHeight: "100%", letterSpacing: "0%", color: "#1CA0C8" }}>{latestVehicles.length}</span>台の在庫が閲覧可能です
+            <p style={{ opacity: 1, fontFamily: "Noto Sans JP", fontWeight: "400", fontStyle: "Regular", fontSize: "1.14rem", lineHeight: "100%", letterSpacing: "0%", color: "#1A1A1A" }}>
+              現在、<span style={{ opacity: 1, fontFamily: "Noto Sans JP", fontWeight: "700", fontStyle: "Bold", fontSize: "2.29rem", lineHeight: "100%", letterSpacing: "0%", color: "#EA1313", textDecoration: "underline" }}>{latestVehicles.length}</span>台の在庫が閲覧可能です
             </p>
           </div>
 
@@ -860,10 +883,10 @@ export default function HomePage() {
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(4, 1fr)",
-              gap: "24px",
+              gap: "0",
               width: "100%",
-              maxWidth: "1200px",
-              marginBottom: "48px"
+              maxWidth: "85.71rem",
+              marginBottom: "3.43rem"
             }}
           >
             {latestVehicles.map((vehicle, index) => (

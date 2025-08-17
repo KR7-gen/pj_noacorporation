@@ -807,18 +807,34 @@ export default function InventoryPage() {
                       overflow: "hidden"
                     }}
                   >
-                    <img
-                      src={vehicle.imageUrls && vehicle.imageUrls.length > 0 ? vehicle.imageUrls[0] : "/placeholder.jpg"}
-                      alt={`${vehicle.maker} ${vehicle.name}`}
-                      style={{
+                                                             {vehicle.imageUrls && vehicle.imageUrls.length > 0 && vehicle.imageUrls[0] ? (
+                      <img
+                        src={vehicle.imageUrls[0]}
+                        alt={`${vehicle.maker} ${vehicle.name}`}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover"
+                        }}
+                        onError={(e) => {
+                          // エラーが発生した場合は画像を非表示にする
+                          (e.target as HTMLImageElement).style.display = "none";
+                        }}
+                      />
+                    ) : (
+                      <div style={{
                         width: "100%",
                         height: "100%",
-                        objectFit: "cover"
-                      }}
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = "/placeholder.jpg";
-                      }}
-                    />
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        backgroundColor: "#f3f4f6",
+                        color: "#9ca3af",
+                        fontSize: "12px"
+                      }}>
+                        画像なし
+                      </div>
+                    )}
                     
                     {/* 商談中・SOLD OUTオーバーレイ */}
                     {(vehicle.isNegotiating || vehicle.isSoldOut) && (

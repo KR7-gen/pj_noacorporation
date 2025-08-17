@@ -140,6 +140,7 @@ export default function VehicleNewPage() {
     size: "",
     vehicleType: "",
     model: "",
+    modelCode: "",
     year: "",
     month: "",
     mileage: "",

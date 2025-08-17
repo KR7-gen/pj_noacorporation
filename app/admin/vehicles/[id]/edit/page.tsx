@@ -392,8 +392,24 @@ export default function VehicleEditPage() {
       // 問い合わせ番号を除外して更新データを作成
       const { inquiryNumber, ...updateData } = formData;
       
+      // undefinedのフィールドを除外して更新データを作成
+      const cleanedUpdateData = Object.fromEntries(
+        Object.entries(updateData).filter(([_, value]) => value !== undefined)
+      );
+      
+             // 画像URLからダミー写真と一時的なURLを除外
+       const filteredImageUrls = (formData.imageUrls || []).filter(url => 
+         url && 
+         url.trim() !== "" && 
+         url !== "/placeholder.jpg" &&
+         !url.includes("temp_") && 
+         !url.startsWith("blob:") &&
+         !url.startsWith("data:")
+       );
+
       const updatedVehicle: Partial<Vehicle> = {
-        ...updateData,
+        ...cleanedUpdateData,
+        imageUrls: filteredImageUrls,
         price: Number(formData.price?.toString().replace(/,/g, '')) || 0,
         wholesalePrice: Number(formData.wholesalePrice?.toString().replace(/,/g, '')) || 0,
         totalPayment: Number(formData.totalPayment?.toString().replace(/,/g, '')) || 0,
@@ -637,15 +653,21 @@ export default function VehicleEditPage() {
             </div>
           </div>
 
-          {/* 画像アップロード */}
-          <div>
-            <h3 className="text-lg font-medium mb-4">画像登録</h3>
-            <ImageUploader
-              images={formData.imageUrls || []}
-              onImagesChange={(images) => setFormData(prev => ({ ...prev, imageUrls: images }))}
-              vehicleId={vehicleId}
-            />
-          </div>
+                     {/* 画像アップロード */}
+           <div>
+             <h3 className="text-lg font-medium mb-4">画像登録</h3>
+                           <ImageUploader
+                images={(formData.imageUrls || []).filter(url => 
+                  url && 
+                  url.trim() !== "" && 
+                  !url.includes("temp_") && 
+                  !url.startsWith("blob:") &&
+                  !url.startsWith("data:")
+                )}
+                onImagesChange={(images) => setFormData(prev => ({ ...prev, imageUrls: images }))}
+                vehicleId={vehicleId}
+              />
+           </div>
 
           {/* 車両情報 */}
           <div>
@@ -1071,6 +1093,23 @@ export default function VehicleEditPage() {
                 </div>
               )}
             </div>
+          </div>
+
+          {/* 車両写真 */}
+          <div>
+            <h3 className="text-lg font-medium mb-4">車両写真</h3>
+            <ImageUploader
+              images={(formData.imageUrls || []).filter(url =>
+                url &&
+                url.trim() !== "" &&
+                url !== "/placeholder.jpg" &&
+                !url.includes("temp_") &&
+                !url.startsWith("blob:") &&
+                !url.startsWith("data:")
+              )}
+              onImagesChange={(images) => setFormData(prev => ({ ...prev, imageUrls: images }))}
+              vehicleId={vehicleId}
+            />
           </div>
 
           {/* 上物情報 */}

@@ -93,24 +93,25 @@ export default function VehicleDetailPage() {
   }, [vehicle]);
 
   const images = useMemo(() => {
-    if (!vehicle) return ["/placeholder.jpg"];
+    if (!vehicle) return [];
     
     if (vehicle.imageUrls && vehicle.imageUrls.length > 0) {
       const validImages = vehicle.imageUrls.filter(url => 
         url && 
         url.trim() !== "" && 
+        url !== "/placeholder.jpg" &&
         !url.includes("temp_") && 
         !url.startsWith("blob:") &&
         !url.startsWith("data:")
       );
-      return validImages.length > 0 ? validImages : ["/placeholder.jpg"];
+      return validImages;
     }
     
-    if (vehicle.imageUrl && vehicle.imageUrl.trim() !== "") {
+    if (vehicle.imageUrl && vehicle.imageUrl.trim() !== "" && vehicle.imageUrl !== "/placeholder.jpg") {
       return [vehicle.imageUrl];
     }
     
-    return ["/placeholder.jpg"];
+    return [];
   }, [vehicle?.imageUrls, vehicle?.imageUrl]);
 
   const shouldShowSimulation = vehicle ? (() => {
@@ -172,7 +173,8 @@ export default function VehicleDetailPage() {
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     console.log("画像読み込みエラー:", e.currentTarget.src);
-    e.currentTarget.src = "/placeholder.jpg";
+    // エラーが発生した画像を非表示にする
+    e.currentTarget.style.display = "none";
   }
 
   return (
@@ -267,12 +269,21 @@ export default function VehicleDetailPage() {
                     </button>
                   )}
                   {/* メイン画像 */}
-                  <img
-                    src={images[currentIndex]}
-                    alt={vehicle.name}
-                    className="w-full h-full object-cover select-none"
-                    onError={handleImageError}
-                  />
+                  {images.length > 0 ? (
+                    <img
+                      src={images[currentIndex]}
+                      alt={vehicle.name}
+                      className="w-full h-full object-cover select-none"
+                      onError={handleImageError}
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                      <div className="text-gray-500 text-center">
+                        <Camera className="w-16 h-16 mx-auto mb-2 opacity-50" />
+                        <p className="text-sm">画像がありません</p>
+                      </div>
+                    </div>
+                  )}
                   {/* 右矢印 */}
                   {images.length > 1 && (
                     <button

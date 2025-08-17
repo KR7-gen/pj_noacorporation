@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { getVehicles, deleteVehicle, updateVehicle } from "@/lib/firebase-utils"
+import { getVehicles, deleteVehicle, updateVehicle, testFirebaseConnection } from "@/lib/firebase-utils"
 import type { Vehicle } from "@/types"
 import { Button } from "@/components/ui/button"
 import {
@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/table"
 import Image from "next/image"
 import { formatNumberWithCommas, formatInputWithCommas } from "@/lib/utils"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export default function AdminVehiclesPage() {
   const router = useRouter()
@@ -42,18 +43,32 @@ export default function AdminVehiclesPage() {
   } | null>(null)
   const [editValue, setEditValue] = useState("")
   const [saving, setSaving] = useState(false)
+  
+  // 画像エラー状態を管理
+  const [imageErrors, setImageErrors] = useState<Set<string>>(new Set())
 
   useEffect(() => {
     const fetchVehicles = async () => {
       try {
         setLoading(true)
+        console.log("車両データ取得開始...")
+        
+        // Firebase接続テスト
+        const connectionTest = await testFirebaseConnection()
+        console.log("Firebase接続テスト結果:", connectionTest)
+        
+        if (!connectionTest) {
+          throw new Error("Firebase接続に失敗しました")
+        }
+        
         const fetchedVehicles = await getVehicles()
+        console.log("取得した車両数:", fetchedVehicles.length)
         setVehicles(fetchedVehicles)
         setFilteredVehicles(fetchedVehicles)
         setError(null)
       } catch (err) {
-        setError("車両の読み込みに失敗しました。")
-        console.error(err)
+        console.error("車両取得エラーの詳細:", err)
+        setError(`車両の読み込みに失敗しました: ${err instanceof Error ? err.message : '不明なエラー'}`)
       } finally {
         setLoading(false)
       }
@@ -152,11 +167,50 @@ export default function AdminVehiclesPage() {
   }
 
   if (loading) {
-    return <div>読み込み中...</div>
+    return (
+      <div className="container mx-auto py-10">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-4">
+          <Skeleton className="h-8 w-32" />
+          <div className="flex gap-2">
+            <Skeleton className="h-10 w-32" />
+            <Skeleton className="h-10 w-32" />
+          </div>
+        </div>
+        <Skeleton className="h-10 w-full mb-6" />
+        <div className="rounded-md border">
+          <div className="p-4">
+            <div className="space-y-4">
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="flex gap-4">
+                  <Skeleton className="h-20 w-32" />
+                  <Skeleton className="h-4 flex-1" />
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-4 w-20" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   if (error) {
-    return <div>エラー: {error}</div>
+    return (
+      <div className="container mx-auto py-10">
+        <div className="bg-red-50 border border-red-200 rounded-md p-4">
+          <h2 className="text-lg font-semibold text-red-800 mb-2">エラーが発生しました</h2>
+          <p className="text-red-700 mb-4">{error}</p>
+          <Button 
+            onClick={() => window.location.reload()} 
+            variant="outline"
+            className="text-red-700 border-red-300 hover:bg-red-100"
+          >
+            ページを再読み込み
+          </Button>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -231,25 +285,29 @@ export default function AdminVehiclesPage() {
               <TableHead className="text-right">操作</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
-            {filteredVehicles.map((vehicle) => (
-              <TableRow key={vehicle.id}>
+                     <TableBody>
+             {filteredVehicles.map((vehicle, index) => (
+               <TableRow key={vehicle.id}>
                 <TableCell>
-                  <Image
-                    src={
-                      vehicle.imageUrls?.[0] ||
-                      vehicle.imageUrl ||
-                      "/placeholder.jpg"
-                    }
-                    alt={`${vehicle.maker} ${vehicle.managementNumber || vehicle.id} の画像`}
-                    width={120}
-                    height={80}
-                    className="rounded-md object-cover"
-                    onError={(e) => {
-                      console.log("画像読み込みエラー:", e.currentTarget.src);
-                      e.currentTarget.src = "/placeholder.jpg";
-                    }}
-                  />
+                                                     <div className="w-[120px] h-[80px] bg-gray-200 rounded-md flex items-center justify-center">
+                  {vehicle.imageUrls?.[0] || vehicle.imageUrl ? (
+                    <Image
+                      src={vehicle.imageUrls?.[0] || vehicle.imageUrl!}
+                      alt={`${vehicle.maker} ${vehicle.managementNumber || vehicle.id} の画像`}
+                      width={120}
+                      height={80}
+                      className="rounded-md object-cover w-full h-full"
+                      loading={index === 0 ? "eager" : "lazy"}
+                      priority={index === 0}
+                      onError={() => {
+                        // エラー状態を記録
+                        setImageErrors(prev => new Set(prev).add(vehicle.id!))
+                      }}
+                    />
+                  ) : (
+                    <div className="text-gray-400 text-xs">画像なし</div>
+                  )}
+                </div>
                 </TableCell>
                 <TableCell>{vehicle.inquiryNumber || "---"}</TableCell>
                 <TableCell>{vehicle.chassisNumber || "---"}</TableCell>

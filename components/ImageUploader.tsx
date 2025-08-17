@@ -116,13 +116,14 @@ export default function ImageUploader({ images, onImagesChange, vehicleId }: Ima
     })
   )
 
-  // フィルタリングされた画像URL（一時的なURLを除外）
+  // フィルタリングされた画像URL（ダミー写真と一時的なURLを除外）
   const filteredImageUrls = useMemo(() => {
     if (!images || !Array.isArray(images)) return [];
     
     return images.filter(url => 
       url && 
       url.trim() !== "" && 
+      url !== "/placeholder.jpg" &&
       !url.includes("temp_") && 
       !url.startsWith("blob:") &&
       !url.startsWith("data:")
@@ -191,7 +192,9 @@ export default function ImageUploader({ images, onImagesChange, vehicleId }: Ima
   // 画像エラーハンドラー
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     console.log("ImageUploader - 画像読み込みエラー:", e.currentTarget.src);
-    e.currentTarget.src = "/placeholder.jpg";
+    // エラーが発生した画像を削除
+    const imageUrl = e.currentTarget.src;
+    handleDelete(imageUrl);
   };
 
   return (

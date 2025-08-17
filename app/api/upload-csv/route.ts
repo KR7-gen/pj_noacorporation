@@ -8,7 +8,7 @@ const fieldMapping: { [key: string]: string } = {
   'NO.': 'managementNumber',
   'トラック名': 'name',
   '車両価格': 'price',
-  '車両価格（税込）': 'totalPayment',
+  '車両価格(税込)': 'totalPayment',
   '業販金額': 'wholesalePrice',
   'ボディタイプ': 'bodyType',
   'メーカー': 'maker',
@@ -25,16 +25,13 @@ const fieldMapping: { [key: string]: string } = {
   '外寸長（㎜）': 'outerLength',
   '外寸幅（㎜）': 'outerWidth',
   '外寸高（㎜）': 'outerHeight',
-  '内寸長（㎜）': 'innerLength',
-  '内寸幅（㎜）': 'innerWidth',
-  '内寸高（㎜）': 'innerHeight',
   '車両総重量（kg）': 'totalWeight',
   '原動機型式': 'engineModel',
   '馬力（ps）': 'horsepower',
   'ターボ': 'turbo',
   '排気量（cc）': 'displacement',
   '燃料': 'fuel',
-  '問合せ番号': 'inquiryNumber',
+  '問い合わせ番号': 'inquiryNumber',
   '車体番号': 'chassisNumber',
   '上物メーカー': 'bodyMaker',
   '上物型式': 'bodyModel',
@@ -54,6 +51,10 @@ const fieldMapping: { [key: string]: string } = {
   'DPF': 'dpf',
   'PMマフラー': 'pmMuffler',
   '集中ドアロック': 'centralDoorLock',
+  '内寸長（㎜）': 'innerLength',
+  '内寸幅（㎜）': 'innerWidth',
+  '内寸高（㎜）': 'innerHeight',
+  '在庫店舗名': 'storeName',
 }
 
 export async function POST(request: NextRequest) {
@@ -116,7 +117,7 @@ export async function POST(request: NextRequest) {
     console.log('検出されたヘッダー:', headers)
     console.log('ヘッダー数:', headers.length)
     
-    const expectedHeaders = ['NO.', 'トラック名', '車両価格', '車両価格（税込）', '業販金額', 'ボディタイプ', 'メーカー', '大きさ', '車種', '型式', '年式', '走行距離（㎞）', '積載量（kg）', 'ミッション', 'シフト', '車検状態', '車検有効期限', '外寸長（㎜）', '外寸幅（㎜）', '外寸高（㎜）', '内寸長（㎜）', '内寸幅（㎜）', '内寸高（㎜）', '車両総重量（kg）', '原動機型式', '馬力（ps）', 'ターボ', '排気量（cc）', '燃料', '問合せ番号', '車体番号', '上物メーカー', '上物型式', '上物年式', '装備・仕様（右記以外の）', 'ETC', 'バックカメラ', '記録簿', 'パワーウィンドウ', 'ドラレコ', 'エアコン', '電動ミラー', 'ABS', 'アルミホイール', 'エアサスシート', 'カーナビ', 'DPF', 'PMマフラー', '集中ドアロック']
+    const expectedHeaders = ['NO.', 'トラック名', '車両価格', '車両価格(税込)', '業販金額', 'ボディタイプ', 'メーカー', '大きさ', '車種', '型式', '年式', '走行距離（㎞）', '積載量（kg）', 'ミッション', 'シフト', '車検状態', '車検有効期限', '外寸長（㎜）', '外寸幅（㎜）', '外寸高（㎜）', '車両総重量（kg）', '原動機型式', '馬力（ps）', 'ターボ', '排気量（cc）', '燃料', '問い合わせ番号', '車体番号', '上物メーカー', '上物型式', '上物年式', '装備・仕様（右記以外の）', 'ETC', 'バックカメラ', '記録簿', 'パワーウィンドウ', 'ドラレコ', 'エアコン', '電動ミラー', 'ABS', 'アルミホイール', 'エアサスシート', 'カーナビ', 'DPF', 'PMマフラー', '集中ドアロック', '内寸長（㎜）', '内寸幅（㎜）', '内寸高（㎜）', '在庫店舗名']
     console.log('期待されるヘッダー数:', expectedHeaders.length)
     
     const missingHeaders = expectedHeaders.filter(header => !headers.includes(header))
@@ -210,6 +211,42 @@ export async function POST(request: NextRequest) {
         }
         if (vehicleData['displacement']) {
           vehicleData['displacement'] = parseInt(vehicleData['displacement'].toString().replace(/[^\d]/g, '')) || 0
+        }
+
+        // 問い合わせ番号が空の場合のみ自動生成
+        if (!vehicleData['inquiryNumber'] || vehicleData['inquiryNumber'].toString().trim() === '') {
+          try {
+            // 既存の車両から最大の問い合わせ番号を取得
+            const vehiclesCollection = collection(db, "vehicles")
+            const querySnapshot = await getDocs(vehiclesCollection)
+            
+            let maxNumber = 10000 // 10001からスタートするため、初期値は10000
+            
+            querySnapshot.docs.forEach(doc => {
+              const data = doc.data()
+              if (data.inquiryNumber) {
+                // "N"プレフィックスを除去して数値部分のみを取得
+                const numberPart = data.inquiryNumber.replace(/^N/, '')
+                const number = parseInt(numberPart, 10)
+                if (!isNaN(number) && number > maxNumber) {
+                  maxNumber = number
+                }
+              }
+            })
+            
+            // 次の番号を生成（N + 5桁以上）
+            const nextNumber = maxNumber + 1
+            const generatedNumber = `N${nextNumber.toString()}`
+            vehicleData['inquiryNumber'] = generatedNumber
+            console.log(`行 ${i + 1}: 問い合わせ番号を自動生成: ${generatedNumber}`)
+          } catch (error) {
+            console.error(`行 ${i + 1}: 問い合わせ番号生成エラー:`, error)
+            // エラーの場合は現在のタイムスタンプベースで生成
+            const timestamp = Date.now()
+            const fallbackNumber = `N${timestamp}`
+            vehicleData['inquiryNumber'] = fallbackNumber
+            console.log(`行 ${i + 1}: フォールバック番号生成: ${fallbackNumber}`)
+          }
         }
 
         // 既存データとの重複チェック
