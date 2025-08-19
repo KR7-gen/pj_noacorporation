@@ -703,7 +703,7 @@ export default function InventoryPage() {
                 display: "grid",
                 gridTemplateColumns: "repeat(4, 1fr)",
                 gridTemplateRows: "repeat(5, 1fr)",
-                gap: "24px",
+                gap: "1.43rem",
                 width: "100%",
                 maxWidth: "1200px",
                 margin: "0 auto 0 auto",
@@ -718,6 +718,7 @@ export default function InventoryPage() {
                   height: "587px",
                   gap: "12px",
                   opacity: 1,
+                  borderRadius: "0px",
                   paddingBottom: "16px",
                   borderWidth: "1px",
                   background: "#FFFFFF",
@@ -765,7 +766,8 @@ export default function InventoryPage() {
                       fontSize: "14px",
                       lineHeight: "100%",
                       letterSpacing: "0%",
-                      color: "#FFFFFF"
+                      color: "#FFFFFF",
+                      whiteSpace: "nowrap"
                     }}>
                       {vehicle.modelCode || vehicle.model}
                     </span>

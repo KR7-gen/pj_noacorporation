@@ -85,18 +85,15 @@ const newTrucks = [
 const features = [
   {
     number: "01",
-    title: "中古トラックをどこよりも安く仕入れる買付力",
-    description: "独自の仕入れルートから直接仕入れることで、コストを削減し、お客様に最適な価格でご提供しています。",
+    title: "豊富な在庫車両数\n常時100台を超える在庫を保有し、\nすぐに引渡可能です",
   },
   {
     number: "02",
-    title: "見えない車輌状態を明らかにする入庫検査技術と評価基準",
-    description: "専門の検査技術により、車両の真の状態を徹底的に調査し、透明性の高い評価をお客様にお伝えします。",
+    title: "ダンプ / クレーン / 高所作業車\nその他多数の特装車をそろえて\n問い合わせをお待ちしております",
   },
   {
     number: "03",
-    title: "お客様が納得できるトラック選びをお手伝いする営業担当",
-    description: "業界経験豊富な営業担当が、お客様のニーズに合った最適なトラック選びをサポートいたします。",
+    title: "業界最安値に挑戦\nコストを抑えた仕入れ戦略により、\n業界内の最安値を目指して\n営業しております",
   },
 ]
 
@@ -105,7 +102,7 @@ const flowSteps = [
     number: "01",
     title: "お問い合わせ",
     description:
-      "毎週入庫している販売在庫一覧から、トラックをお探しください。整備中や買取交渉中で未掲載の車輌も多数あるため、もし要件を満たすトラックが見つからない場合も、まずは気軽にご相談ください。",
+      "販売在庫一覧 から、気になる車両をお探しください。もしお探しの条件を満たすトラックが見つからない場合にも、まずは気軽にご相談ください。仕入れてすぐの車両の為まだ写真の掲載ができていない車両などもございます。",
   },
   {
     number: "02",
@@ -803,22 +800,72 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      
+      {/* Spacer to account for absolute positioned Hero Section */}
+      <div style={{ height: "66.14rem" }}></div>
 
       {/* New Trucks Section */}
       <section 
         style={{
-          width: "77.08%",
+          width: "78.57vw",
           maxWidth: "1100px",
-          height: "73.93rem",
           gap: "2.86rem",
           opacity: 1,
-          paddingTop: "2.857rem",
           paddingBottom: "2.857rem",
           background: "#FFFFFF",
           margin: "0 auto",
-          marginTop: "66.14rem"
+          marginTop: "0",
+          marginBottom: "2.86rem"
         }}
       >
+        {/* NEW TRUCK and 新着車両 section */}
+        <div style={{ marginBottom: "2.857rem" }}>
+          <div 
+            style={{
+              width: "14.41%",
+              height: "1.21rem",
+              margin: "0 auto 2px auto",
+              fontFamily: "Noto Sans JP",
+              fontWeight: "400",
+              fontStyle: "Regular",
+              fontSize: "1rem",
+              lineHeight: "100%",
+              letterSpacing: "0%",
+              textAlign: "left",
+              color: "#2B5EC5",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-start",
+              borderRadius: "0.14rem",
+              whiteSpace: "nowrap",
+              paddingLeft: "0",
+            }}
+          >
+            NEW TRUCK
+          </div>
+          <div 
+            style={{
+              width: "14.41%",
+              height: "3rem",
+              margin: "0 auto 0.57rem auto",
+              fontFamily: "Noto Sans JP",
+              fontWeight: "700",
+              fontStyle: "Bold",
+              fontSize: "2.86rem",
+              lineHeight: "100%",
+              letterSpacing: "0%",
+              textAlign: "center",
+              color: "#1A1A1A",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              whiteSpace: "nowrap",
+            }}
+          >
+            新着車両
+          </div>
+        </div>
+
         <div 
           style={{
             width: "100%",
@@ -827,52 +874,10 @@ export default function HomePage() {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            padding: "0"
           }}
         >
-          <div style={{ textAlign: "center", marginBottom: "3.43rem" }}>
-            <div 
-              style={{
-                width: "5.71rem",
-                height: "1.21rem",
-                margin: "0 auto 1.14rem auto",
-                fontFamily: "Noto Sans JP",
-                fontWeight: "400",
-                fontStyle: "Regular",
-                fontSize: "1rem",
-                lineHeight: "100%",
-                letterSpacing: "0%",
-                textAlign: "center",
-                color: "#2B5EC5",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                borderRadius: "0.14rem"
-              }}
-            >
-              NEW TRUCK
-            </div>
-            <div 
-              style={{
-                width: "11.43rem",
-                height: "4.14rem",
-                margin: "0 auto 0.57rem auto",
-                fontFamily: "Noto Sans JP",
-                fontWeight: "700",
-                fontStyle: "Bold",
-                fontSize: "2.86rem",
-                lineHeight: "100%",
-                letterSpacing: "0%",
-                textAlign: "center",
-                color: "#1A1A1A",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                whiteSpace: "nowrap"
-              }}
-            >
-              新着車両
-            </div>
+          {/* 現在、X台の在庫が閲覧可能です section */}
+          <div style={{ marginBottom: "1rem" }}>
             <p style={{ opacity: 1, fontFamily: "Noto Sans JP", fontWeight: "400", fontStyle: "Regular", fontSize: "1.14rem", lineHeight: "100%", letterSpacing: "0%", color: "#1A1A1A" }}>
               現在、<span style={{ opacity: 1, fontFamily: "Noto Sans JP", fontWeight: "700", fontStyle: "Bold", fontSize: "2.29rem", lineHeight: "100%", letterSpacing: "0%", color: "#EA1313", textDecoration: "underline" }}>{latestVehicles.length}</span>台の在庫が閲覧可能です
             </p>
@@ -883,7 +888,7 @@ export default function HomePage() {
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(4, 1fr)",
-              gap: "0",
+              gap: "1.43rem",
               width: "100%",
               maxWidth: "85.71rem",
               marginBottom: "3.43rem"
@@ -893,14 +898,15 @@ export default function HomePage() {
               <Card 
                 key={vehicle.id}
                 style={{
-                  width: "260px",
-                  height: "587px",
-                  gap: "12px",
+                  width: "100%",
+                  height: "41.93rem",
+                  gap: "0.86rem",
                   opacity: 1,
-                  paddingBottom: "16px",
-                  borderWidth: "1px",
+                  borderRadius: "0",
+                  paddingBottom: "1.14rem",
+                  borderWidth: "0.07rem",
                   background: "#FFFFFF",
-                  border: "1px solid #F2F2F2",
+                  border: "0.07rem solid #F2F2F2",
                   overflow: "hidden",
                   position: "relative"
                 }}
@@ -909,22 +915,22 @@ export default function HomePage() {
                   {/* ヘッダーバー */}
                   <div 
                     style={{
-                      height: "39px",
+                      height: "2.79rem",
                       background: "#1A1A1A",
-                      padding: "8px 12px",
+                      padding: "0.57rem 0.86rem",
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center"
                     }}
                   >
                     <span style={{ 
-                      width: "140px",
-                      height: "23px",
+                      width: "10rem",
+                      height: "1.64rem",
                       opacity: 1,
                       fontFamily: "Noto Sans JP",
                       fontWeight: "700",
                       fontStyle: "Bold",
-                      fontSize: "16px",
+                      fontSize: "1.14rem",
                       lineHeight: "100%",
                       letterSpacing: "0%",
                       color: "#FFFFFF",
@@ -932,19 +938,20 @@ export default function HomePage() {
                       textOverflow: "ellipsis",
                       whiteSpace: "nowrap"
                     }}>
-                      {(vehicle.maker === "三菱ふそう" ? "三菱" : vehicle.maker)} {vehicle.vehicleType || vehicle.bodyType || vehicle.name}
+                      {(vehicle.maker === "三菱ふそう" ? "三菱" : vehicle.maker)}
                     </span>
                     <span style={{ 
-                      width: "89px",
-                      height: "17px",
+                      width: "6.36rem",
+                      height: "1.21rem",
                       opacity: 1,
                       fontFamily: "Noto Sans JP",
                       fontWeight: "400",
                       fontStyle: "Regular",
-                      fontSize: "14px",
+                      fontSize: "1rem",
                       lineHeight: "100%",
                       letterSpacing: "0%",
-                      color: "#FFFFFF"
+                      color: "#FFFFFF",
+                      whiteSpace: "nowrap"
                     }}>
                       {vehicle.modelCode || vehicle.model}
                     </span>
@@ -953,7 +960,7 @@ export default function HomePage() {
                   {/* 問い合わせ番号 */}
                   <div 
                     style={{
-                      height: "35px",
+                      height: "2.5rem",
                       background: "#FFFFFF",
                       display: "flex",
                       alignItems: "center",
@@ -961,13 +968,13 @@ export default function HomePage() {
                     }}
                   >
                     <span style={{
-                      width: "157px",
-                      height: "19px",
+                      width: "11.21rem",
+                      height: "1.36rem",
                       opacity: 1,
                       fontFamily: "Noto Sans JP",
                       fontWeight: "400",
                       fontStyle: "Regular",
-                      fontSize: "16px",
+                      fontSize: "1.14rem",
                       lineHeight: "100%",
                       letterSpacing: "0%",
                       color: "#1A1A1A",
@@ -982,7 +989,7 @@ export default function HomePage() {
                     style={{
                       position: "relative",
                       width: "100%",
-                      height: "180px",
+                      height: "12.86rem",
                       overflow: "hidden"
                     }}
                   >
@@ -1007,7 +1014,7 @@ export default function HomePage() {
                           top: "0",
                           left: "0",
                           width: "100%",
-                          height: "39px",
+                          height: "2.79rem",
                           backgroundColor: vehicle.isSoldOut ? "#EA1313" : "#666666",
                           display: "flex",
                           alignItems: "center",
@@ -1015,13 +1022,13 @@ export default function HomePage() {
                         }}
                       >
                         <span style={{
-                          width: "48px",
-                          height: "23px",
+                          width: "3.43rem",
+                          height: "1.64rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
-                          fontSize: "16px",
+                          fontSize: "1.14rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#FFFFFF"
@@ -1035,7 +1042,7 @@ export default function HomePage() {
                   {/* ボディタイプ + 詳細テーブル */}
                   <div 
                     style={{
-                      height: "273px",
+                      height: "19.5rem",
                       display: "flex",
                       flexDirection: "column",
                       justifyContent: "space-between"
@@ -1044,15 +1051,15 @@ export default function HomePage() {
                     {/* ボディタイプ */}
                     <div 
                       style={{
-                        height: "calc(273px / 6)",
+                        height: "calc(19.5rem / 6)",
                         display: "flex",
                         alignItems: "center",
                         background: "#FFFFFF",
-                        borderBottom: "1px solid #F2F2F2"
+                        borderBottom: "0.07rem solid #F2F2F2"
                       }}
                     >
                       <div style={{
-                        width: "260px",
+                        width: "100%",
                         height: "100%",
                         background: "#FFFFFF",
                         display: "flex",
@@ -1060,13 +1067,13 @@ export default function HomePage() {
                         justifyContent: "center"
                       }}>
                         <span style={{
-                          width: "232px",
-                          height: "17px",
+                          width: "16.57rem",
+                          height: "1.21rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "400",
                           fontStyle: "Regular",
-                          fontSize: "14px",
+                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
@@ -1079,16 +1086,16 @@ export default function HomePage() {
                     {/* 本体価格 */}
                     <div 
                       style={{
-                        height: "calc(273px / 6)",
+                        height: "calc(19.5rem / 6)",
                         display: "flex",
                         alignItems: "center",
-                        fontSize: "11px",
+                        fontSize: "0.79rem",
                         color: "#374151",
-                        borderBottom: "1px solid #F2F2F2"
+                        borderBottom: "0.07rem solid #F2F2F2"
                       }}
                     >
                       <div style={{
-                        width: "80px",
+                        width: "5.71rem",
                         height: "100%",
                         background: "#E6E6E6",
                         display: "flex",
@@ -1096,36 +1103,36 @@ export default function HomePage() {
                         justifyContent: "center"
                       }}>
                         <span style={{
-                          width: "56px",
-                          height: "20px",
+                          width: "4rem",
+                          height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
-                          fontSize: "14px",
+                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
                         }}>本体価格</span>
                       </div>
                       <div style={{ 
-                        width: "180px",
+                        width: "12.86rem",
                         height: "100%",
                         background: "#FFFFFF",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "flex-start",
-                        paddingLeft: "12px"
+                        paddingLeft: "0.86rem"
                       }}>
                         <div>
                           <span style={{
-                            width: "57px",
-                            height: "23px",
+                            width: "4.07rem",
+                            height: "1.64rem",
                             opacity: 1,
                             fontFamily: "Noto Sans JP",
                             fontWeight: "700",
                             fontStyle: "Bold",
-                            fontSize: "32px",
+                            fontSize: "2.29rem",
                             lineHeight: "100%",
                             letterSpacing: "0%",
                             color: "#2B5EC5"
@@ -1133,13 +1140,13 @@ export default function HomePage() {
                             {vehicle.price ? Math.floor(vehicle.price / 10000) : "000"}
                           </span>
                           <span style={{
-                            width: "57px",
-                            height: "14px",
+                            width: "4.07rem",
+                            height: "1rem",
                             opacity: 1,
                             fontFamily: "Noto Sans JP",
                             fontWeight: "400",
                             fontStyle: "Regular",
-                            fontSize: "12px",
+                            fontSize: "0.86rem",
                             lineHeight: "100%",
                             letterSpacing: "0%",
                             color: "#2B5EC5"
@@ -1151,16 +1158,16 @@ export default function HomePage() {
                     {/* 年式 */}
                     <div 
                       style={{
-                        height: "calc(273px / 6)",
+                        height: "calc(19.5rem / 6)",
                         display: "flex",
                         alignItems: "center",
-                        fontSize: "11px",
+                        fontSize: "0.79rem",
                         color: "#374151",
-                        borderBottom: "1px solid #F2F2F2"
+                        borderBottom: "0.07rem solid #F2F2F2"
                       }}
                     >
                       <div style={{
-                        width: "80px",
+                        width: "5.71rem",
                         height: "100%",
                         background: "#E6E6E6",
                         display: "flex",
@@ -1168,26 +1175,26 @@ export default function HomePage() {
                         justifyContent: "center"
                       }}>
                         <span style={{
-                          width: "56px",
-                          height: "20px",
+                          width: "4rem",
+                          height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
-                          fontSize: "14px",
+                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
                         }}>年式</span>
                       </div>
                       <div style={{ 
-                        width: "180px",
+                        width: "12.86rem",
                         height: "100%",
                         background: "#FFFFFF",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "flex-start",
-                        paddingLeft: "12px"
+                        paddingLeft: "0.86rem"
                       }}>
                         <span style={{
                           width: "88px",
@@ -1209,16 +1216,16 @@ export default function HomePage() {
                     {/* 走行距離 */}
                     <div 
                       style={{
-                        height: "calc(273px / 6)",
+                        height: "calc(19.5rem / 6)",
                         display: "flex",
                         alignItems: "center",
-                        fontSize: "11px",
+                        fontSize: "0.79rem",
                         color: "#374151",
-                        borderBottom: "1px solid #F2F2F2"
+                        borderBottom: "0.07rem solid #F2F2F2"
                       }}
                     >
                       <div style={{
-                        width: "80px",
+                        width: "5.71rem",
                         height: "100%",
                         background: "#E6E6E6",
                         display: "flex",
@@ -1226,35 +1233,35 @@ export default function HomePage() {
                         justifyContent: "center"
                       }}>
                         <span style={{
-                          width: "56px",
-                          height: "20px",
+                          width: "4rem",
+                          height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
-                          fontSize: "14px",
+                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
                         }}>走行距離</span>
                       </div>
                       <div style={{ 
-                        width: "180px",
+                        width: "12.86rem",
                         height: "100%",
                         background: "#FFFFFF",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "flex-start",
-                        paddingLeft: "12px"
+                        paddingLeft: "0.86rem"
                       }}>
                         <span style={{
-                          width: "88px",
-                          height: "17px",
+                          width: "6.29rem",
+                          height: "1.21rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "400",
                           fontStyle: "Regular",
-                          fontSize: "14px",
+                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
@@ -1267,16 +1274,16 @@ export default function HomePage() {
                     {/* 積載量 */}
                     <div 
                       style={{
-                        height: "calc(273px / 6)",
+                        height: "calc(19.5rem / 6)",
                         display: "flex",
                         alignItems: "center",
-                        fontSize: "11px",
+                        fontSize: "0.79rem",
                         color: "#374151",
-                        borderBottom: "1px solid #F2F2F2"
+                        borderBottom: "0.07rem solid #F2F2F2"
                       }}
                     >
                       <div style={{
-                        width: "80px",
+                        width: "5.71rem",
                         height: "100%",
                         background: "#E6E6E6",
                         display: "flex",
@@ -1284,35 +1291,35 @@ export default function HomePage() {
                         justifyContent: "center"
                       }}>
                         <span style={{
-                          width: "56px",
-                          height: "20px",
+                          width: "4rem",
+                          height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
-                          fontSize: "14px",
+                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
                         }}>積載量</span>
                       </div>
                       <div style={{ 
-                        width: "180px",
+                        width: "12.86rem",
                         height: "100%",
                         background: "#FFFFFF",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "flex-start",
-                        paddingLeft: "12px"
+                        paddingLeft: "0.86rem"
                       }}>
                         <span style={{
-                          width: "88px",
-                          height: "17px",
+                          width: "6.29rem",
+                          height: "1.21rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "400",
                           fontStyle: "Regular",
-                          fontSize: "14px",
+                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
@@ -1325,16 +1332,16 @@ export default function HomePage() {
                     {/* シフト */}
                     <div 
                       style={{
-                        height: "calc(273px / 6)",
+                        height: "calc(19.5rem / 6)",
                         display: "flex",
                         alignItems: "center",
-                        fontSize: "11px",
+                        fontSize: "0.79rem",
                         color: "#374151",
-                        borderBottom: "1px solid #F2F2F2"
+                        borderBottom: "0.07rem solid #F2F2F2"
                       }}
                     >
                       <div style={{
-                        width: "80px",
+                        width: "5.71rem",
                         height: "100%",
                         background: "#E6E6E6",
                         display: "flex",
@@ -1342,35 +1349,35 @@ export default function HomePage() {
                         justifyContent: "center"
                       }}>
                         <span style={{
-                          width: "56px",
-                          height: "20px",
+                          width: "4rem",
+                          height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
-                          fontSize: "14px",
+                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
                         }}>シフト</span>
                       </div>
                       <div style={{ 
-                        width: "180px",
+                        width: "12.86rem",
                         height: "100%",
                         background: "#FFFFFF",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "flex-start",
-                        paddingLeft: "12px"
+                        paddingLeft: "0.86rem"
                       }}>
                         <span style={{
-                          width: "88px",
-                          height: "17px",
+                          width: "6.29rem",
+                          height: "1.21rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "400",
                           fontStyle: "Regular",
-                          fontSize: "14px",
+                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
@@ -1383,16 +1390,16 @@ export default function HomePage() {
                     {/* 車検期限 */}
                     <div 
                       style={{
-                        height: "calc(273px / 6)",
+                        height: "calc(19.5rem / 6)",
                         display: "flex",
                         alignItems: "center",
-                        fontSize: "11px",
+                        fontSize: "0.79rem",
                         color: "#374151",
-                        borderBottom: "1px solid #F2F2F2"
+                        borderBottom: "0.07rem solid #F2F2F2"
                       }}
                     >
                       <div style={{
-                        width: "80px",
+                        width: "5.71rem",
                         height: "100%",
                         background: "#E6E6E6",
                         display: "flex",
@@ -1400,35 +1407,35 @@ export default function HomePage() {
                         justifyContent: "center"
                       }}>
                         <span style={{
-                          width: "56px",
-                          height: "20px",
+                          width: "4rem",
+                          height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
-                          fontSize: "14px",
+                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
                         }}>車検期限</span>
                       </div>
                       <div style={{ 
-                        width: "180px",
+                        width: "12.86rem",
                         height: "100%",
                         background: "#FFFFFF",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "flex-start",
-                        paddingLeft: "12px"
+                        paddingLeft: "0.86rem"
                       }}>
                         <span style={{
-                          width: "88px",
-                          height: "17px",
+                          width: "6.29rem",
+                          height: "1.21rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "400",
                           fontStyle: "Regular",
-                          fontSize: "14px",
+                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
@@ -1441,7 +1448,7 @@ export default function HomePage() {
 
                   {/* 詳細ボタン */}
                   <div style={{ 
-                    height: "60px", 
+                    height: "4.29rem", 
                     display: "flex", 
                     alignItems: "center", 
                     justifyContent: "center",
@@ -1450,18 +1457,18 @@ export default function HomePage() {
                     <Link href={`/vehicle/${vehicle.id}`}>
                       <Button 
                         style={{
-                          width: "160px",
-                          height: "32px",
-                          gap: "8px",
+                          width: "11.43rem",
+                          height: "2.29rem",
+                          gap: "0.57rem",
                           opacity: 1,
-                          paddingTop: "4px",
-                          paddingRight: "8px",
-                          paddingBottom: "4px",
-                          paddingLeft: "8px",
-                          borderRadius: "4px",
-                          border: "1px solid #333333",
+                          paddingTop: "0.29rem",
+                          paddingRight: "0.57rem",
+                          paddingBottom: "0.29rem",
+                          paddingLeft: "0.57rem",
+                          borderRadius: "0.29rem",
+                          border: "0.07rem solid #333333",
                           background: "#FFFFFF",
-                          boxShadow: "2px 2px 2px 0px #00000040",
+                          boxShadow: "0.14rem 0.14rem 0.14rem 0px #00000040",
                           cursor: "pointer",
                           transition: "all 0.3s ease",
                           display: "flex",
@@ -1476,19 +1483,19 @@ export default function HomePage() {
                         }}
                       >
                         <span style={{
-                          width: "84px",
-                          height: "20px",
+                          width: "6rem",
+                          height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
-                          fontSize: "14px",
-                          lineHeight: "20px",
+                          fontSize: "1rem",
+                          lineHeight: "1.43rem",
                           letterSpacing: "0%",
                           color: "#333333",
                           display: "flex",
                           alignItems: "center",
-                          transform: "translateY(-1px)"
+                          transform: "translateY(-0.07rem)"
                         }}>
                           詳細はこちら
                         </span>
@@ -1500,7 +1507,7 @@ export default function HomePage() {
                           xmlns="http://www.w3.org/2000/svg"
                           style={{
                             color: "#333333",
-                            height: "20px",
+                            height: "1.43rem",
                             display: "flex",
                             alignItems: "center"
                           }}
@@ -1527,45 +1534,51 @@ export default function HomePage() {
                 variant="outline" 
                 size="lg"
                 style={{
-                  width: "220px",
-                  height: "40px",
-                  gap: "12px",
+                  width: "15.71rem",
+                  height: "2.86rem",
+                  gap: 0,
                   opacity: 1,
-                  padding: "8px 12px",
-                  borderRadius: "4px",
+                  padding: "0",
+                  borderRadius: "0.29rem",
                   background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
-                  boxShadow: "2px 2px 2px 0px #00000040",
+                  boxShadow: "0.14rem 0.14rem 0.14rem 0px #00000040",
                   border: "none",
                   cursor: "pointer",
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "center"
+                  justifyContent: "center",
+                  lineHeight: 1
                 }}
               >
                 <span
                   style={{
-                    width: "128px",
-                    height: "23px",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.29rem",
                     opacity: 1,
                     fontFamily: "Noto Sans JP",
                     fontWeight: 700,
                     fontStyle: "Bold",
-                    fontSize: "16px",
+                    fontSize: "1.14rem",
                     lineHeight: "100%",
                     letterSpacing: "0%",
-                    color: "#FFFFFF"
+                    color: "#FFFFFF",
+                    margin: 0,
+                    padding: 0
                   }}
                 >
                   在庫をもっと見る
+                  <ChevronRight
+                    style={{
+                      width: "1.71rem",
+                      height: "1.71rem",
+                      opacity: 1,
+                      color: "#FFFFFF",
+                      margin: 0,
+                      padding: 0
+                    }}
+                  />
                 </span>
-                <ChevronRight
-                  style={{
-                    width: "24px",
-                    height: "24px",
-                    opacity: 1,
-                    color: "#FFFFFF"
-                  }}
-                />
               </Button>
             </Link>
           </div>
@@ -1575,14 +1588,12 @@ export default function HomePage() {
       {/* Features Section */}
       <section 
         style={{
-          width: "1440px",
-          height: "1334px",
-          gap: "40px",
+          width: "102.86rem",
+          gap: "2.86rem",
           opacity: 1,
-          paddingTop: "60px",
-          paddingBottom: "60px",
+          paddingBottom: "1.71rem",
           background: "#FFFFFF",
-          margin: "0 auto"
+          margin: "2.86rem auto"
         }}
       >
         <div 
@@ -1593,19 +1604,19 @@ export default function HomePage() {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            padding: "0 20px"
+            padding: "0 1.43rem"
           }}
         >
-          <div style={{ textAlign: "center", marginBottom: "48px" }}>
+          <div style={{ textAlign: "center", marginBottom: "2.29rem" }}>
             <div 
               style={{
-                width: "80px",
-                height: "17px",
-                margin: "0 auto 16px auto",
+                width: "5.71rem",
+                height: "1.21rem",
+                margin: "0 auto 0 auto",
                 fontFamily: "Noto Sans JP",
                 fontWeight: "400",
                 fontStyle: "Regular",
-                fontSize: "14px",
+                fontSize: "1rem",
                 lineHeight: "100%",
                 letterSpacing: "0%",
                 textAlign: "center",
@@ -1620,13 +1631,13 @@ export default function HomePage() {
             <div 
               style={{
                 width: "100%",
-                minWidth: "320px",
-                height: "58px",
-                margin: "0 auto 32px auto",
+                minWidth: "22.86rem",
+                height: "4.14rem",
+                margin: "0 auto 0 auto",
                 fontFamily: "Noto Sans JP",
                 fontWeight: "700",
                 fontStyle: "Bold",
-                fontSize: "40px",
+                fontSize: "2.86rem",
                 lineHeight: "100%",
                 letterSpacing: "0%",
                 textAlign: "center",
@@ -1637,43 +1648,7 @@ export default function HomePage() {
                 whiteSpace: "nowrap"
               }}
             >
-              当社の特徴
-            </div>
-            <div 
-              style={{
-                width: "1100px",
-                height: "224px",
-                margin: "0 auto",
-                marginBottom: "48px",
-                opacity: 1
-              }}
-            >
-              <p 
-                style={{
-                  fontFamily: "Noto Sans JP",
-                  fontWeight: "700",
-                  fontStyle: "Bold",
-                  fontSize: "16px",
-                  lineHeight: "32px",
-                  letterSpacing: "0%",
-                  textAlign: "center",
-                  color: "#1A1A1A"
-                }}
-              >
-                中古トラックを、価格とスペックだけで選んでいませんか？ 
-                <br></br>
-                事実、市場に流通する車両は玉石混交。
-                <br></br>
-                修復歴や車両の状態、載せ替えされたボディや上物など、
-                <br></br>
-                販売サイトに掲載されている情報だけではわからない事実によって、そのトラックの本当の価値は決まります。
-                <br></br>
-                グルーウェーブの自慢は、中古トラックをどこよりも安く仕入れる買い付け力と、
-                <br></br>
-                一見しただけでは分からない車輌の状態を徹底的に明らかにする入庫検査の技術。
-                <br></br>
-                透明な評価基準に基づいた、理由のある安さで、あなたが本当に納得できるトラック選びをお手伝いしています。
-              </p>
+              ノアコーポレーションの特徴3点
             </div>
           </div>
 
@@ -1681,10 +1656,10 @@ export default function HomePage() {
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: "32px",
+              gap: "2.29rem",
               width: "100%",
-              maxWidth: "1200px",
-              marginBottom: "48px",
+              maxWidth: "85.71rem",
+              marginBottom: "3.43rem",
               alignItems: "center"
             }}
           >
@@ -1692,8 +1667,8 @@ export default function HomePage() {
               <div 
                 key={index}
                 style={{
-                  width: index === 2 ? "809.81px" : "808px",
-                  height: "225px",
+                  width: index === 2 ? "57.84rem" : "57.71rem",
+                  height: "16.07rem",
                   opacity: 1,
                   display: "flex",
                   overflow: "hidden"
@@ -1704,7 +1679,7 @@ export default function HomePage() {
                   <>
                     <div 
                       style={{
-                        width: "337px",
+                        width: "24.07rem",
                         height: "100%",
                         backgroundImage: "url('/reason1.jpg')",
                         backgroundSize: "cover",
@@ -1713,7 +1688,7 @@ export default function HomePage() {
                     />
                     <div 
                       style={{
-                        width: "360px",
+                        width: "25.71rem",
                         height: "100%",
                         backgroundColor: "#E6E6E6",
                         position: "relative"
@@ -1721,16 +1696,17 @@ export default function HomePage() {
                     >
                       <h3 
                         style={{
-                          width: "240px",
-                          height: "58px",
+                          width: "24rem",
+                          height: "auto",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
-                          fontSize: "20px",
+                          fontSize: "1.43rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           textAlign: "center",
+                          whiteSpace: "pre-line",
                           color: "#2B5EC5",
                           margin: "0",
                           display: "flex",
@@ -1747,7 +1723,7 @@ export default function HomePage() {
                     </div>
                     <div 
                       style={{
-                        width: "111px",
+                        width: "7.93rem",
                         height: "100%",
                         backgroundColor: "white",
                         position: "relative"
@@ -1756,23 +1732,23 @@ export default function HomePage() {
                       <div 
                         style={{
                           position: "absolute",
-                          bottom: "0px",
-                          right: "20px",
+                          bottom: 0,
+                          right: 0,
                           display: "flex",
                           flexDirection: "row",
                           alignItems: "center",
-                          gap: "12px"
+                          gap: "0.86rem"
                         }}
                       >
                         <div 
                           style={{
-                            width: "64px",
-                            height: "24px",
+                            width: "4.57rem",
+                            height: "1.71rem",
                             opacity: 1,
                             fontFamily: "Noto Sans JP",
                             fontWeight: "400",
                             fontStyle: "Regular",
-                            fontSize: "20px",
+                            fontSize: "1.43rem",
                             lineHeight: "100%",
                             letterSpacing: "0%",
                             color: "#2B5EC5",
@@ -1785,20 +1761,20 @@ export default function HomePage() {
                         </div>
                         <div 
                           style={{
-                            width: "75px",
-                            height: "47px",
+                            width: "5.36rem",
+                            height: "3.36rem",
                             opacity: 1,
                             fontFamily: "Noto Sans JP",
                             fontWeight: "600",
                             fontStyle: "SemiBold",
-                            fontSize: "64px",
+                            fontSize: "4.57rem",
                             lineHeight: "100%",
                             letterSpacing: "0%",
                             color: "#2B5EC5",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
-                            transform: "translateY(-8px)"
+                            transform: "translateY(-0.57rem)"
                           }}
                         >
                           {feature.number}
@@ -1813,7 +1789,7 @@ export default function HomePage() {
                   <>
                     <div 
                       style={{
-                        width: "111px",
+                        width: "7.93rem",
                         height: "100%",
                         backgroundColor: "white",
                         position: "relative"
@@ -1822,24 +1798,24 @@ export default function HomePage() {
                       <div 
                         style={{
                           position: "absolute",
-                          bottom: "0px",
-                          left: "20px",
+                          bottom: 0,
+                          left: 0,
                           display: "flex",
                           flexDirection: "row",
                           alignItems: "center",
-                          gap: "12px",
+                          gap: "0.86rem",
                           zIndex: 10
                         }}
                       >
                         <div 
                           style={{
-                            width: "64px",
-                            height: "24px",
+                            width: "4.57rem",
+                            height: "1.71rem",
                             opacity: 1,
                             fontFamily: "Noto Sans JP",
                             fontWeight: "400",
                             fontStyle: "Regular",
-                            fontSize: "20px",
+                            fontSize: "1.43rem",
                             lineHeight: "100%",
                             letterSpacing: "0%",
                             color: "#2B5EC5",
@@ -1852,20 +1828,20 @@ export default function HomePage() {
                         </div>
                         <div 
                           style={{
-                            width: "75px",
-                            height: "47px",
+                            width: "5.36rem",
+                            height: "3.36rem",
                             opacity: 1,
                             fontFamily: "Noto Sans JP",
                             fontWeight: "600",
                             fontStyle: "SemiBold",
-                            fontSize: "64px",
+                            fontSize: "4.57rem",
                             lineHeight: "100%",
                             letterSpacing: "0%",
                             color: "#2B5EC5",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
-                            transform: "translateY(-8px)"
+                            transform: "translateY(-0.57rem)"
                           }}
                         >
                           {feature.number}
@@ -1874,7 +1850,7 @@ export default function HomePage() {
                     </div>
                     <div 
                       style={{
-                        width: "360px",
+                        width: "25.71rem",
                         height: "100%",
                         backgroundColor: "#E6E6E6",
                         position: "relative",
@@ -1886,16 +1862,17 @@ export default function HomePage() {
                     >
                       <h3 
                         style={{
-                          width: "301px",
-                          height: "58px",
+                          width: "22.86rem",
+                          height: "auto",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
-                          fontSize: "20px",
+                          fontSize: "1.43rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           textAlign: "center",
+                          whiteSpace: "pre-line",
                           color: "#2B5EC5",
                           margin: "0",
                           display: "flex",
@@ -1912,7 +1889,7 @@ export default function HomePage() {
                     </div>
                     <div 
                       style={{
-                        width: "337px",
+                        width: "24.07rem",
                         height: "100%",
                         backgroundImage: "url('/reason2.jpg')",
                         backgroundSize: "cover",
@@ -1927,7 +1904,7 @@ export default function HomePage() {
                   <>
                     <div 
                       style={{
-                        width: "337px",
+                        width: "24.07rem",
                         height: "100%",
                         backgroundImage: "url('/reason3.jpg')",
                         backgroundSize: "cover",
@@ -1936,7 +1913,7 @@ export default function HomePage() {
                     />
                     <div 
                       style={{
-                        width: "360px",
+                        width: "25.71rem",
                         height: "100%",
                         backgroundColor: "#E6E6E6",
                         position: "relative"
@@ -1944,16 +1921,17 @@ export default function HomePage() {
                     >
                       <h3 
                         style={{
-                          width: "320px",
-                          height: "58px",
+                          width: "22.86rem",
+                          height: "auto",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
-                          fontSize: "20px",
+                          fontSize: "1.43rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           textAlign: "center",
+                          whiteSpace: "pre-line",
                           color: "#2B5EC5",
                           margin: "0",
                           display: "flex",
@@ -1970,7 +1948,7 @@ export default function HomePage() {
                     </div>
                     <div 
                       style={{
-                        width: "112.81px",
+                        width: "8.06rem",
                         height: "100%",
                         backgroundColor: "white",
                         position: "relative"
@@ -1979,23 +1957,23 @@ export default function HomePage() {
                       <div 
                         style={{
                           position: "absolute",
-                          bottom: "0px",
-                          right: "20px",
+                          bottom: 0,
+                          right: 0,
                           display: "flex",
                           flexDirection: "row",
                           alignItems: "center",
-                          gap: "12px"
+                          gap: "0.86rem"
                         }}
                       >
                         <div 
                           style={{
-                            width: "64px",
-                            height: "24px",
+                            width: "4.57rem",
+                            height: "1.71rem",
                             opacity: 1,
                             fontFamily: "Noto Sans JP",
                             fontWeight: "400",
                             fontStyle: "Regular",
-                            fontSize: "20px",
+                            fontSize: "1.43rem",
                             lineHeight: "100%",
                             letterSpacing: "0%",
                             color: "#2B5EC5",
@@ -2008,20 +1986,20 @@ export default function HomePage() {
                         </div>
                         <div 
                           style={{
-                            width: "75px",
-                            height: "47px",
+                            width: "5.36rem",
+                            height: "3.36rem",
                             opacity: 1,
                             fontFamily: "Noto Sans JP",
                             fontWeight: "600",
                             fontStyle: "SemiBold",
-                            fontSize: "64px",
+                            fontSize: "4.57rem",
                             lineHeight: "100%",
                             letterSpacing: "0%",
                             color: "#2B5EC5",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
-                            transform: "translateY(-8px)"
+                            transform: "translateY(-0.57rem)"
                           }}
                         >
                           {feature.number}
@@ -2038,29 +2016,29 @@ export default function HomePage() {
             <Link href="/about">
               <Button 
                 style={{
-                  width: "220px",
-                  height: "40px",
-                  gap: "36px",
+                  width: "15.71rem",
+                  height: "2.86rem",
+                  gap: "2.57rem",
                   opacity: 1,
-                  paddingTop: "8px",
-                  paddingRight: "12px",
-                  paddingBottom: "8px",
-                  paddingLeft: "12px",
-                  borderRadius: "4px",
+                  paddingTop: "0.57rem",
+                  paddingRight: "0.86rem",
+                  paddingBottom: "0.57rem",
+                  paddingLeft: "0.86rem",
+                  borderRadius: "0.29rem",
                   background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
-                  boxShadow: "2px 2px 2px 0px #00000040",
+                  boxShadow: "0.14rem 0.14rem 0.14rem 0 #00000040",
                   color: "#FFFFFF",
                   fontFamily: "Noto Sans JP",
                   fontWeight: "700",
                   fontStyle: "Bold",
-                  fontSize: "16px",
+                  fontSize: "1.14rem",
                   lineHeight: "100%",
                   letterSpacing: "0%",
                   cursor: "pointer",
                   transition: "all 0.3s ease",
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "space-between",
+                  justifyContent: "center",
                   position: "relative"
                 }}
                 onMouseEnter={(e) => {
@@ -2070,7 +2048,13 @@ export default function HomePage() {
                   e.currentTarget.style.opacity = "1";
                 }}
               >
-                <span style={{ width: "80px", height: "23px" }}>詳しく見る</span>
+                <span style={{ 
+                  height: "1.64rem",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  textAlign: "center"
+                }}>詳しく見る</span>
                 <svg
                   width="7.4"
                   height="12"
@@ -2079,15 +2063,15 @@ export default function HomePage() {
                   xmlns="http://www.w3.org/2000/svg"
                   style={{
                     position: "absolute",
-                    top: "14px",
-                    left: "192px",
+                    top: "1rem",
+                    left: "13.71rem",
                     color: "#FFFFFF"
                   }}
                 >
                   <path
                     d="M9 18L15 12L9 6"
                     stroke="currentColor"
-                    strokeWidth="2"
+                    strokeWidth="4"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   />
@@ -2102,11 +2086,11 @@ export default function HomePage() {
       <section 
         style={{
           width: "100%",
-          maxWidth: "1440px",
-          minHeight: "800px",
+          maxWidth: "100vw",
+          minHeight: "auto",
           gap: "40px",
           opacity: 1,
-          paddingTop: "60px",
+          paddingTop: "1.71rem",
           paddingBottom: "60px",
           background: "#F2F2F2",
           margin: "0 auto"
@@ -2126,29 +2110,27 @@ export default function HomePage() {
           {/* FLOWセクション */}
           <div 
             style={{
-              width: "820px",
-              height: "960px",
+              width: "66.67vw",
+              maxWidth: "960px",
               backgroundColor: "white",
-              border: "2px dashed #87CEEB",
-              borderRadius: "12px",
-              padding: "16px 12px",
+              padding: "1.14rem 0.86rem",
               margin: "0 auto",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              gap: "12px"
+              gap: "0.86rem"
             }}
           >
-            <div style={{ textAlign: "center" }}>
+            <div style={{ textAlign: "center", marginBottom: "1.14rem" }}>
               <div 
                 style={{
-                  width: "80px",
-                  height: "17px",
-                  margin: "0 auto 16px auto",
+                  width: "5.71rem",
+                  height: "1.21rem",
+                  margin: "0 auto 0 auto",
                   fontFamily: "Noto Sans JP",
                   fontWeight: "400",
                   fontStyle: "Regular",
-                  fontSize: "14px",
+                  fontSize: "1rem",
                   lineHeight: "100%",
                   letterSpacing: "0%",
                   textAlign: "center",
@@ -2163,13 +2145,13 @@ export default function HomePage() {
               <div 
                 style={{
                   width: "100%",
-                  minWidth: "320px",
-                  height: "58px",
-                  margin: "0 auto 16px auto",
+                  minWidth: "22.86rem",
+                  height: "4.14rem",
+                  margin: "0 auto 0 auto",
                   fontFamily: "Noto Sans JP",
                   fontWeight: "700",
                   fontStyle: "Bold",
-                  fontSize: "40px",
+                  fontSize: "2.86rem",
                   lineHeight: "100%",
                   letterSpacing: "0%",
                   textAlign: "center",
@@ -2184,22 +2166,21 @@ export default function HomePage() {
               </div>
               <p 
                 style={{ 
-                  width: "776px",
-                  height: "56px",
+                  width: "55.43rem",
+                  height: "4rem",
                   opacity: 1,
                   fontFamily: "Noto Sans JP",
                   fontWeight: "400",
                   fontStyle: "Regular",
-                  fontSize: "16px",
-                  lineHeight: "28px",
+                  fontSize: "1.14rem",
+                  lineHeight: "2rem",
                   letterSpacing: "0%",
                   textAlign: "center",
                   color: "#1A1A1A",
                   margin: 0
                 }}
               >
-                初回お問い合わせからご納車まで、わかりやすくスムーズなお取引を心がけております。<br />
-                中古トラックの購入がはじめての方も、どうぞお気軽にお問い合わせください。
+                初めての中古トラック購入の方も、下記をご参考にお気軽にお問い合わせください。
               </p>
             </div>
             {flowSteps.map((step, index) => (
@@ -2208,33 +2189,33 @@ export default function HomePage() {
                   style={{
                     display: "flex",
                     alignItems: "flex-start",
-                    marginBottom: index < flowSteps.length - 1 ? "8px" : "0",
+                    marginBottom: index < flowSteps.length - 1 ? "0.57rem" : "0",
                     width: "100%"
                   }}
                 >
                   <div 
                     style={{
-                      width: "108px",
+                      width: "7.71rem",
                       height: "auto",
                       opacity: 1,
-                      borderRight: "1px solid #DEEBEF",
-                      padding: "16px 8px",
+                      borderRight: "0.07rem solid #DEEBEF",
+                      padding: "1.14rem 0.57rem",
                       display: "flex",
                       flexDirection: "column",
                       alignItems: "center",
                       justifyContent: "center",
-                      marginRight: "24px"
+                      marginRight: "1.71rem"
                     }}
                   >
                     <div 
                       style={{
-                        width: "40px",
-                        height: "20px",
+                        width: "2.86rem",
+                        height: "1.43rem",
                         opacity: 1,
                         fontFamily: "Noto Sans JP",
                         fontWeight: "700",
                         fontStyle: "Bold",
-                        fontSize: "14px",
+                        fontSize: "1rem",
                         lineHeight: "100%",
                         letterSpacing: "0%",
                         color: "#2B5EC5",
@@ -2247,13 +2228,13 @@ export default function HomePage() {
                     </div>
                     <div 
                       style={{
-                        width: "43px",
-                        height: "46px",
+                        width: "3.07rem",
+                        height: "3.29rem",
                         opacity: 1,
                         fontFamily: "Noto Sans JP",
                         fontWeight: "700",
                         fontStyle: "Bold",
-                        fontSize: "36px",
+                        fontSize: "2.57rem",
                         lineHeight: "100%",
                         letterSpacing: "0%",
                         color: "#2B5EC5",
@@ -2268,27 +2249,27 @@ export default function HomePage() {
                   <div style={{ flex: 1 }}>
                     <h3 
                       style={{
-                        width: "120px",
+                        width: "8.57rem",
                         opacity: 1,
                         fontFamily: "Noto Sans JP",
                         fontWeight: "700",
                         fontStyle: "Bold",
-                        fontSize: "20px",
+                        fontSize: "1.43rem",
                         lineHeight: "100%",
                         letterSpacing: "0%",
                         color: "#1A1A1A",
-                        marginBottom: "12px",
+                        marginBottom: "0.86rem",
                         whiteSpace: "nowrap",
                         display: "flex",
                         alignItems: "center",
-                        gap: "8px"
+                        gap: "0.57rem"
                       }}
                     >
                       {step.title}
                       <span 
                         style={{
-                          width: step.number === "01" ? "33.33px" : "40px",
-                          height: step.number === "01" ? "26.67px" : "40px",
+                          width: step.number === "01" ? "2.38rem" : "2.86rem",
+                          height: step.number === "01" ? "1.91rem" : "2.86rem",
                           opacity: 1,
                           display: "flex",
                           alignItems: "center",
@@ -2303,14 +2284,14 @@ export default function HomePage() {
                     </h3>
                     <p 
                       style={{
-                        width: "648px",
-                        height: "84px",
+                        width: "46.29rem",
+                        height: "6rem",
                         opacity: 1,
                         fontFamily: "Noto Sans JP",
                         fontWeight: "400",
                         fontStyle: "Regular",
-                        fontSize: "16px",
-                        lineHeight: "28px",
+                        fontSize: "1.14rem",
+                        lineHeight: "2rem",
                         letterSpacing: "0%",
                         color: "#1A1A1A"
                       }}
@@ -2324,19 +2305,19 @@ export default function HomePage() {
                     style={{
                       display: "flex",
                       justifyContent: "center",
-                      marginBottom: "8px"
+                      marginBottom: "0.57rem"
                     }}
                   >
                     <div 
                       style={{
-                        width: "62px",
-                        height: "20px",
+                        width: "4.43rem",
+                        height: "1.43rem",
                         opacity: 1,
                         display: "block",
                         background: "none",
-                        borderLeft: "31px solid transparent",
-                        borderRight: "31px solid transparent",
-                        borderTop: "20px solid #2563eb"
+                        borderLeft: "2.21rem solid transparent",
+                        borderRight: "2.21rem solid transparent",
+                        borderTop: "1.43rem solid #2563eb"
                       }}
                     />
                   </div>
