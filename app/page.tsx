@@ -108,19 +108,19 @@ const flowSteps = [
     number: "02",
     title: "現車確認・ご商談",
     description:
-      "気になった車輌は、千葉県佐倉市の展示場で実際に現車確認いただくことができます。もし現地までお越しいただくことが難しい場合も、当社独自の車輌状態表をもとに、お電話で車輌の詳細な状態までお伝えすることも可能です。",
+      "栃木県宇都宮市の展示場にて現車を確認いただく事ができます。上物の動作確認もお気軽にお試しください。展示場までお越しいただくことが難しい場合も、動画やお電話で車両の詳細な状態をお伝えすることも可能です。",
   },
   {
     number: "03",
     title: "お見積もり",
     description:
-      "お客様のご状況・ご要望をお伺いした上で、ナンバー登録や輸送料、車検整備やバッテリー・タイヤ交換といった各種オプションを含めた、最終的なお見積り金額をお伝えします。ローンやリースなどへの対応も可能ですので、ご相談ください。",
+      "ご納得いただきました車両に関しては、お客様毎の必要な条件を加味しました、最終お見積りをご用意いたします。ノアコーポレーションでは、車検整備、ナンバー登録、タイヤ交換、車両カラーの変更、またローンやリースなどへの対応も可能ですので、お気軽にご相談ください。",
   },
   {
     number: "04",
     title: "ご契約・ご納車",
     description:
-      "お見積もり内容に納得いただけましたら、FAX/郵送での契約書ご署名、ご入金を経て、お引き渡しとなります。当社では、お客様とのお取引履歴をすべて社内システムで管理しております。",
+      "お見積もり内容に納得いただけましたら、FAX/郵送での契約書ご署名、ご入金を経て、お引き渡しとなります。当社では、お客様とのお取引履歴をすべて社内システムで管理しております。下取りや新たなトラックの購入が必要になった際も、まずはご相談いただければ、スムーズにお話ができるかと思います。",
   },
 ]
 
@@ -1610,27 +1610,27 @@ export default function HomePage() {
           <div style={{ textAlign: "center", marginBottom: "2.29rem" }}>
             <div 
               style={{
-                width: "5.71rem",
+                width: "31vw",
                 height: "1.21rem",
-                margin: "0 auto 0 auto",
+                margin: "0 auto 0.143rem auto",
                 fontFamily: "Noto Sans JP",
                 fontWeight: "400",
                 fontStyle: "Regular",
                 fontSize: "1rem",
                 lineHeight: "100%",
                 letterSpacing: "0%",
-                textAlign: "center",
+                textAlign: "left",
                 color: "#2B5EC5",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center"
+                justifyContent: "flex-start",
               }}
             >
               FEATURE
             </div>
             <div 
               style={{
-                width: "100%",
+                width: "31vw",
                 minWidth: "22.86rem",
                 height: "4.14rem",
                 margin: "0 auto 0 auto",
@@ -1645,7 +1645,7 @@ export default function HomePage() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                whiteSpace: "nowrap"
+                whiteSpace: "nowrap",
               }}
             >
               ノアコーポレーションの特徴3点
@@ -2108,95 +2108,106 @@ export default function HomePage() {
           }}
         >
           {/* FLOWセクション */}
+          {/* 見出し（白枠の外） */}
           <div 
             style={{
               width: "66.67vw",
               maxWidth: "960px",
+              margin: "2.857rem auto 1.14rem auto",
+              textAlign: "center"
+            }}
+          >
+            <div 
+              style={{
+                width: "13vw",
+                height: "1.21rem",
+                margin: "0 auto 0.143rem auto",
+                fontFamily: "Noto Sans JP",
+                fontWeight: "400",
+                fontStyle: "Regular",
+                fontSize: "1rem",
+                lineHeight: "100%",
+                letterSpacing: "0%",
+                textAlign: "left",
+                color: "#2B5EC5",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-start",
+              }}
+            >
+              FLOW
+            </div>
+            <div 
+              style={{
+                width: "13vw",
+                height: "4.14rem",
+                margin: "0 auto 0 auto",
+                fontFamily: "Noto Sans JP",
+                fontWeight: "700",
+                fontStyle: "Bold",
+                fontSize: "2.86rem",
+                lineHeight: "100%",
+                letterSpacing: "0%",
+                textAlign: "center",
+                color: "#1A1A1A",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                whiteSpace: "nowrap",
+              }}
+            >
+              ご利用の流れ
+            </div>
+          </div>
+          
+                    {/* 白枠コンテンツ */}
+          <div
+            style={{
+              width: "66.67vw",
+              maxWidth: "960px",
               backgroundColor: "white",
-              padding: "1.14rem 0.86rem",
-              margin: "0 auto",
+              padding: "2.857rem 0.86rem",
+              margin: "2.857rem auto",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
               gap: "0.86rem"
             }}
           >
-            <div style={{ textAlign: "center", marginBottom: "1.14rem" }}>
-              <div 
-                style={{
-                  width: "5.71rem",
-                  height: "1.21rem",
-                  margin: "0 auto 0 auto",
-                  fontFamily: "Noto Sans JP",
-                  fontWeight: "400",
-                  fontStyle: "Regular",
-                  fontSize: "1rem",
-                  lineHeight: "100%",
-                  letterSpacing: "0%",
-                  textAlign: "center",
-                  color: "#2B5EC5",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center"
-                }}
-              >
-                FLOW
-              </div>
-              <div 
-                style={{
-                  width: "100%",
-                  minWidth: "22.86rem",
-                  height: "4.14rem",
-                  margin: "0 auto 0 auto",
-                  fontFamily: "Noto Sans JP",
-                  fontWeight: "700",
-                  fontStyle: "Bold",
-                  fontSize: "2.86rem",
-                  lineHeight: "100%",
-                  letterSpacing: "0%",
-                  textAlign: "center",
-                  color: "#1A1A1A",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  whiteSpace: "nowrap"
-                }}
-              >
-                ご利用の流れ
-              </div>
-              <p 
-                style={{ 
-                  width: "55.43rem",
-                  height: "4rem",
-                  opacity: 1,
-                  fontFamily: "Noto Sans JP",
-                  fontWeight: "400",
-                  fontStyle: "Regular",
-                  fontSize: "1.14rem",
-                  lineHeight: "2rem",
-                  letterSpacing: "0%",
-                  textAlign: "center",
-                  color: "#1A1A1A",
-                  margin: 0
-                }}
-              >
-                初めての中古トラック購入の方も、下記をご参考にお気軽にお問い合わせください。
-              </p>
-            </div>
+            <p 
+              style={{ 
+                width: "55.43rem",
+                height: "4rem",
+                opacity: 1,
+                fontFamily: "Noto Sans JP",
+                fontWeight: "400",
+                fontStyle: "Regular",
+                fontSize: "1.14rem",
+                lineHeight: "2rem",
+                letterSpacing: "0%",
+                textAlign: "center",
+                color: "#1A1A1A",
+                margin: 0
+              }}
+            >
+              初回お問い合わせからご納車まで、わかりやすくスムーズなお取引を心がけております。中古トラックの購入がはじめての方も、どうぞお気軽にお問い合わせください。
+            </p>
             {flowSteps.map((step, index) => (
               <div key={index}>
                 <div 
                   style={{
                     display: "flex",
-                    alignItems: "flex-start",
+                    alignItems: "stretch",
+                    marginTop: index === 0 ? "2.143rem" : "0",
                     marginBottom: index < flowSteps.length - 1 ? "0.57rem" : "0",
-                    width: "100%"
+                    width: "100%",
+                    height: "9.714rem"
                   }}
                 >
                   <div 
                     style={{
                       width: "7.71rem",
-                      height: "auto",
+                      height: "9.714rem",
                       opacity: 1,
                       borderRight: "0.07rem solid #DEEBEF",
                       padding: "1.14rem 0.57rem",
@@ -2246,7 +2257,7 @@ export default function HomePage() {
                       {step.number}
                     </div>
                   </div>
-                  <div style={{ flex: 1 }}>
+                  <div style={{ flex: 1, height: "9.714rem", display: "flex", flexDirection: "column", justifyContent: "center" }}>
                     <h3 
                       style={{
                         width: "8.57rem",
@@ -2266,26 +2277,22 @@ export default function HomePage() {
                       }}
                     >
                       {step.title}
-                      <span 
+                                            <img
+                        src={`/${step.number === "01" ? "mail.svg" : step.number === "02" ? "airport_shuttle.svg" : step.number === "03" ? "calculate.svg" : "handshake.svg"}`}
+                        alt={`FLOW ${step.number} icon`}
                         style={{
                           width: step.number === "01" ? "2.38rem" : "2.86rem",
                           height: step.number === "01" ? "1.91rem" : "2.86rem",
                           opacity: 1,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center"
+                          objectFit: "contain",
+                          filter: "brightness(0.4)"
                         }}
-                      >
-                        {step.number === "01" && "📧"}
-                        {step.number === "02" && "🚐"}
-                        {step.number === "03" && "🧮"}
-                        {step.number === "04" && "🤝"}
-                      </span>
+                      />
+                      {step.number === "01" && "☎"}
                     </h3>
                     <p 
                       style={{
-                        width: "46.29rem",
-                        height: "6rem",
+                        width: "98%",
                         opacity: 1,
                         fontFamily: "Noto Sans JP",
                         fontWeight: "400",
@@ -2334,7 +2341,6 @@ export default function HomePage() {
       <section 
         style={{
           width: "1440px",
-          height: "831px",
           gap: "40px",
           opacity: 1,
           paddingTop: "60px",
@@ -2346,7 +2352,6 @@ export default function HomePage() {
         <div 
           style={{
             width: "100%",
-            height: "100%",
             display: "flex",
             flexDirection: "column",
             justifyContent: "flex-start",
@@ -2357,10 +2362,9 @@ export default function HomePage() {
         >
           {/* QUESTIONセクション */}
           <div style={{ textAlign: "center", marginBottom: "48px" }}>
-            <div 
+                        <div
               style={{
-                width: "80px",
-                height: "17px",
+                width: "15vw",
                 margin: "0 auto 16px auto",
                 fontFamily: "Noto Sans JP",
                 fontWeight: "400",
@@ -2368,20 +2372,18 @@ export default function HomePage() {
                 fontSize: "14px",
                 lineHeight: "100%",
                 letterSpacing: "0%",
-                textAlign: "center",
+                textAlign: "left",
                 color: "#2B5EC5",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center"
+                justifyContent: "flex-start",
               }}
             >
               QUESTION
             </div>
             <div 
               style={{
-                width: "100%",
-                minWidth: "320px",
-                height: "58px",
+                width: "15vw",
                 margin: "0 auto 16px auto",
                 fontFamily: "Noto Sans JP",
                 fontWeight: "700",
@@ -2394,7 +2396,7 @@ export default function HomePage() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                whiteSpace: "nowrap"
+                whiteSpace: "nowrap",
               }}
             >
               よくあるご質問
@@ -2405,7 +2407,7 @@ export default function HomePage() {
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: "24px",
+              gap: "2px",
               width: "100%",
               maxWidth: "800px"
             }}
@@ -2413,6 +2415,7 @@ export default function HomePage() {
             {faqs.map((faq, index) => (
               <Card 
                 key={index}
+                className="!p-0 !m-0 !border-0 !shadow-none"
                 style={{
                   backgroundColor: "white",
                   border: "1px solid #e5e7eb",
@@ -2421,7 +2424,7 @@ export default function HomePage() {
                   margin: 0
                 }}
               >
-                <CardContent style={{ padding: 0 }}>
+                <CardContent className="!p-0" style={{ padding: 0 }}>
                   {/* Q部分デザイン */}
                   <div style={{
                     width: "820px",
@@ -2555,8 +2558,7 @@ export default function HomePage() {
           <div style={{ textAlign: "center", marginBottom: "24px" }}>
             <div 
               style={{
-                width: "80px",
-                height: "17px",
+                width: "9vw",
                 margin: "0 auto 16px auto",
                 fontFamily: "Noto Sans JP",
                 fontWeight: "400",
@@ -2564,20 +2566,18 @@ export default function HomePage() {
                 fontSize: "14px",
                 lineHeight: "100%",
                 letterSpacing: "0%",
-                textAlign: "center",
+                textAlign: "left",
                 color: "#2B5EC5",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center"
+                justifyContent: "flex-start",
               }}
             >
               SHOP INFO
             </div>
             <div 
               style={{
-                width: "100%",
-                minWidth: "320px",
-                height: "58px",
+                width: "9vw",
                 margin: "0 auto 16px auto",
                 fontFamily: "Noto Sans JP",
                 fontWeight: "700",
@@ -2590,7 +2590,7 @@ export default function HomePage() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                whiteSpace: "nowrap"
+                whiteSpace: "nowrap",
               }}
             >
               店舗情報
@@ -2601,7 +2601,7 @@ export default function HomePage() {
           <div 
             style={{
               display: "flex",
-              gap: "24px",
+              gap: "2px",
               width: "100%",
               maxWidth: "1200px",
               marginBottom: "16px",
@@ -3069,7 +3069,6 @@ export default function HomePage() {
       <section 
         style={{
           width: "1440px",
-          height: "443px",
           gap: "40px",
           opacity: 1,
           paddingTop: "60px",
@@ -3081,7 +3080,6 @@ export default function HomePage() {
         <div 
           style={{
             width: "820px",
-            height: "208px",
             gap: "40px",
             opacity: 1,
             display: "flex",
@@ -3095,8 +3093,7 @@ export default function HomePage() {
           <div style={{ textAlign: "center", marginBottom: "32px" }}>
             <div 
               style={{
-                width: "80px",
-                height: "17px",
+                width: "9vw",
                 margin: "0 auto 16px auto",
                 fontFamily: "Noto Sans JP",
                 fontWeight: "400",
@@ -3104,20 +3101,18 @@ export default function HomePage() {
                 fontSize: "14px",
                 lineHeight: "100%",
                 letterSpacing: "0%",
-                textAlign: "center",
+                textAlign: "left",
                 color: "#2B5EC5",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center"
+                justifyContent: "flex-start",
               }}
             >
               NEWS
             </div>
             <div 
               style={{
-                width: "100%",
-                minWidth: "320px",
-                height: "58px",
+                width: "9vw",
                 margin: "0 auto 16px auto",
                 fontFamily: "Noto Sans JP",
                 fontWeight: "700",
@@ -3130,7 +3125,7 @@ export default function HomePage() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                whiteSpace: "nowrap"
+                whiteSpace: "nowrap",
               }}
             >
               お知らせ
@@ -3145,7 +3140,7 @@ export default function HomePage() {
               opacity: 1,
               display: "flex",
               flexDirection: "column",
-              gap: "16px",
+              gap: "2px",
               marginBottom: "24px"
             }}
           >
