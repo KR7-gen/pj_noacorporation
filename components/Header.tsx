@@ -10,7 +10,7 @@ export function Header() {
         {/* デスクトップレイアウト */}
         <div className="hidden md:flex items-center justify-between">
           {/* ロゴ */}
-          <Link href="/" className="flex items-center space-x-3">
+          <Link href="/" className="flex items-center space-x-3 flex-shrink-0">
             <img
               src="/logo.png"
               alt="NOA CORPORATION"
@@ -24,22 +24,27 @@ export function Header() {
           </Link>
 
           {/* ナビゲーション */}
-          <nav className="flex items-center text-sm w-[27.25rem] h-6 gap-5 opacity-100">
-            <Link href="/" className="hover:text-blue-600 transition-colors h-6 flex items-center">HOME</Link>
-            <Link href="/inventory" className="hover:text-blue-600 transition-colors h-6 flex items-center">販売在庫一覧</Link>
-            <Link href="/rental" className="hover:text-blue-600 transition-colors h-6 flex items-center">レンタル車両</Link>
-            <Link href="/purchase" className="hover:text-blue-600 transition-colors h-6 flex items-center">買取はこちら</Link>
-            <Link href="/about" className="hover:text-blue-600 transition-colors h-6 flex items-center">私たちについて</Link>
+          <nav className="flex items-center text-sm gap-5 mx-4">
+            <Link href="/" className="hover:text-blue-600 transition-colors">HOME</Link>
+            <Link href="/inventory" className="hover:text-blue-600 transition-colors whitespace-nowrap">販売在庫一覧</Link>
+            <Link href="/rental" className="hover:text-blue-600 transition-colors whitespace-nowrap">レンタル車両</Link>
+            <Link href="/purchase" className="hover:text-blue-600 transition-colors whitespace-nowrap">買取はこちら</Link>
+            <Link href="/about" className="hover:text-blue-600 transition-colors whitespace-nowrap">私たちについて</Link>
           </nav>
 
           {/* 電話番号とボタン */}
-          <div className="flex items-center space-x-4 text-sm text-right">
-            <div>
-              <div className="font-bold text-lg">000-000-0000</div>
-              <div className="text-gray-600">(受付時間)月〜土 00:00~00:00</div>
+          <div className="flex items-center gap-4 flex-shrink-0">
+            <div className="flex items-center gap-2">
+              <svg className="w-5 h-5 text-gray-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              </svg>
+              <div className="flex flex-col">
+                <div className="font-bold text-xl whitespace-nowrap">028-612-1472</div>
+                <div className="text-gray-600 text-xs whitespace-nowrap">(受付時間) 年中無休 09:00-17:00</div>
+              </div>
             </div>
             <Link href="/contact">
-              <Button className="bg-blue-600 text-white hover:bg-blue-700">お問い合わせフォームへ</Button>
+              <Button className="bg-blue-600 text-white hover:bg-blue-700 whitespace-nowrap px-4">お問い合わせフォームへ</Button>
             </Link>
           </div>
         </div>
@@ -63,10 +68,10 @@ export function Header() {
           {/* 電話番号とボタン（モバイル用） */}
           <div className="flex items-center space-x-2">
             <div className="text-right">
-              <div className="font-bold text-sm">000-000-0000</div>
+              <div className="font-bold text-sm whitespace-nowrap">028-612-1472</div>
             </div>
             <Link href="/contact">
-              <Button className="bg-blue-600 text-white hover:bg-blue-700 text-xs px-2 py-1">
+              <Button className="bg-blue-600 text-white hover:bg-blue-700 text-xs px-2 py-1 whitespace-nowrap">
                 お問い合わせ
               </Button>
             </Link>

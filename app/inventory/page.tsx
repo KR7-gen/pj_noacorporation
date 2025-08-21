@@ -121,10 +121,11 @@ export default function InventoryPage() {
     if (formKeyword.trim()) {
       const keyword = formKeyword.toLowerCase();
       filtered = filtered.filter(vehicle => 
-        vehicle.name.toLowerCase().includes(keyword) ||
-        vehicle.maker.toLowerCase().includes(keyword) ||
-        vehicle.model.toLowerCase().includes(keyword) ||
-        vehicle.description.toLowerCase().includes(keyword)
+        (vehicle.name && vehicle.name.toLowerCase().includes(keyword)) ||
+        (vehicle.maker && vehicle.maker.toLowerCase().includes(keyword)) ||
+        (vehicle.model && vehicle.model.toLowerCase().includes(keyword)) ||
+        (vehicle.description && vehicle.description.toLowerCase().includes(keyword)) ||
+        (vehicle.inquiryNumber && vehicle.inquiryNumber.toLowerCase().includes(keyword))
       );
     }
 

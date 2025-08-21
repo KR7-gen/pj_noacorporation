@@ -62,7 +62,7 @@ export function Header() {
               fontSize: "1.14rem",
               lineHeight: "100%",
               letterSpacing: "0%",
-              background: "#fff",
+              background: "transparent",
               color: "#1a1a1a",
               display: "flex",
               alignItems: "center",
@@ -86,7 +86,7 @@ export function Header() {
               fontSize: "1.14rem",
               lineHeight: "100%",
               letterSpacing: "0%",
-              background: "#fff",
+              background: "transparent",
               color: "#1a1a1a",
               display: "flex",
               alignItems: "center",
@@ -99,9 +99,6 @@ export function Header() {
             }}
           >
             販売在庫一覧
-            <svg width="1.71rem" height="1.71rem" viewBox="0 0 24 24" fill="none" style={{ opacity: 1 }} xmlns="http://www.w3.org/2000/svg">
-              <path d="M7 10l5 5 5-5" stroke="#1a1a1a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
           </a>
           <a href="/rental"
             style={{
@@ -114,7 +111,7 @@ export function Header() {
               fontSize: "1.14rem",
               lineHeight: "100%",
               letterSpacing: "0%",
-              background: "#fff",
+              background: "transparent",
               color: "#1a1a1a",
               display: "flex",
               alignItems: "center",
@@ -138,7 +135,7 @@ export function Header() {
               fontSize: "1.14rem",
               lineHeight: "100%",
               letterSpacing: "0%",
-              background: "#fff",
+              background: "transparent",
               color: "#1a1a1a",
               display: "flex",
               alignItems: "center",
@@ -162,7 +159,7 @@ export function Header() {
               fontSize: "1.14rem",
               lineHeight: "100%",
               letterSpacing: "0%",
-              background: "#fff",
+              background: "transparent",
               color: "#1a1a1a",
               display: "flex",
               alignItems: "center",
@@ -184,19 +181,21 @@ export function Header() {
             left: "calc(20vw + 2.85rem + 37% + 1rem)",
             top: "50%",
             transform: "translateY(-50%)",
-            width: "11.46%",
+            width: "auto",
+            minWidth: "14rem",
             height: "3.36rem",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             background: "#fff",
             borderRadius: "4px",
-            padding: "0"
+            padding: "0 1rem"
           }}
         >
           <div
             style={{
-              width: "11.43rem",
+              width: "auto",
+              minWidth: "13rem",
               height: "2.07rem",
               opacity: 1,
               fontFamily: "Noto Sans JP, sans-serif",
@@ -205,13 +204,14 @@ export function Header() {
               fontSize: "1.43rem",
               lineHeight: "100%",
               letterSpacing: "0%",
-              background: "#fff",
+              background: "transparent",
               color: "#1a1a1a",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               borderRadius: "0.29rem",
-              position: "relative"
+              position: "relative",
+              whiteSpace: "nowrap"
             }}
           >
             <span style={{ display: "flex", alignItems: "center", marginRight: "0.57rem", position: "relative", top: "0.21rem", left: "0.21rem" }}>
@@ -232,7 +232,7 @@ export function Header() {
               fontSize: "0.86rem",
               lineHeight: "100%",
               letterSpacing: "0%",
-              background: "#fff",
+              background: "transparent",
               color: "#1a1a1a",
               textAlign: "center"
             }}

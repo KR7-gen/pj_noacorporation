@@ -178,7 +178,8 @@ export default function VehicleDetailPage() {
   }
 
   return (
-    <div className="bg-white min-h-[2800px]">
+    <div className="bg-white" style={{ minHeight: "2800px" }}>
+      
       {/* 1. 車両タイトル */}
       <section className="w-[70%] mx-auto pt-4 pb-10 bg-white opacity-100">
         <div className="w-full max-w-[1000px] h-[45px] mx-auto p-2 bg-[#1A1A1A] opacity-100 mb-2">
@@ -879,7 +880,7 @@ export default function VehicleDetailPage() {
                       fontFamily: 'Noto Sans JP',
                       fontWeight: 700,
                       fontStyle: 'normal',
-                      fontSize: '0.875rem', // = 1rem
+                      fontSize: '0.875rem', = 1rem
                       lineHeight: '100%',
                       letterSpacing: '0%',
                       color: '#1f2937' // text-gray-800相当

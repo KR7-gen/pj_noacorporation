@@ -711,7 +711,7 @@ export default function HomePage() {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  width: "85%",
+                  width: "80%",
                   justifyContent: "flex-end"
                 }}
               >
@@ -723,14 +723,15 @@ export default function HomePage() {
                     lineHeight: "100%",
                     letterSpacing: "0%",
                     color: "#1A1A1A",
-                    whiteSpace: "nowrap"
+                    whiteSpace: "nowrap",
+                    marginRight: "0.5rem"
                   }}
                 >
                   フリーワード
                 </span>
                 <div 
                   style={{
-                    width: "60%",
+                    width: "65%",
                     margin: "0.43rem",
                     height: "2.29rem",
                     display: "flex",
@@ -762,7 +763,8 @@ export default function HomePage() {
               <button 
                 onClick={handleSearch}
                 style={{
-                  width: "30%",
+                  minWidth: "120px",
+                  width: "15%",
                   height: "2.79rem",
                   display: "flex",
                   alignItems: "center",
@@ -773,7 +775,8 @@ export default function HomePage() {
                   background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
                   border: "none",
                   cursor: "pointer",
-                  transition: "opacity 0.3s ease"
+                  transition: "opacity 0.3s ease",
+                  marginRight: "0.5rem"
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.opacity = "0.8";
@@ -790,7 +793,8 @@ export default function HomePage() {
                     lineHeight: "100%",
                     letterSpacing: "0%",
                     textAlign: "center",
-                    color: "#FFFFFF"
+                    color: "#FFFFFF",
+                    whiteSpace: "nowrap"
                   }}
                 >
                   検索する
@@ -1667,7 +1671,7 @@ export default function HomePage() {
               <div 
                 key={index}
                 style={{
-                  width: index === 2 ? "57.84rem" : "57.71rem",
+                  width: index === 2 ? "60.64rem" : "60.64rem",
                   height: "16.07rem",
                   opacity: 1,
                   display: "flex",
@@ -1723,7 +1727,7 @@ export default function HomePage() {
                     </div>
                     <div 
                       style={{
-                        width: "7.93rem",
+                        width: "10.86rem",
                         height: "100%",
                         backgroundColor: "white",
                         position: "relative"
@@ -1761,20 +1765,21 @@ export default function HomePage() {
                         </div>
                         <div 
                           style={{
-                            width: "5.36rem",
+                            width: "4rem",
                             height: "3.36rem",
                             opacity: 1,
                             fontFamily: "Noto Sans JP",
                             fontWeight: "600",
                             fontStyle: "SemiBold",
-                            fontSize: "4.57rem",
+                            fontSize: "3.5rem",
                             lineHeight: "100%",
                             letterSpacing: "0%",
                             color: "#2B5EC5",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
-                            transform: "translateY(-0.57rem)"
+                            transform: "translateY(-0.57rem)",
+                            marginRight: "0.5rem"
                           }}
                         >
                           {feature.number}
@@ -1789,7 +1794,7 @@ export default function HomePage() {
                   <>
                     <div 
                       style={{
-                        width: "7.93rem",
+                        width: "10.86rem",
                         height: "100%",
                         backgroundColor: "white",
                         position: "relative"
@@ -1828,20 +1833,21 @@ export default function HomePage() {
                         </div>
                         <div 
                           style={{
-                            width: "5.36rem",
+                            width: "4rem",
                             height: "3.36rem",
                             opacity: 1,
                             fontFamily: "Noto Sans JP",
                             fontWeight: "600",
                             fontStyle: "SemiBold",
-                            fontSize: "4.57rem",
+                            fontSize: "3.5rem",
                             lineHeight: "100%",
                             letterSpacing: "0%",
                             color: "#2B5EC5",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
-                            transform: "translateY(-0.57rem)"
+                            transform: "translateY(-0.57rem)",
+                            marginRight: "0.5rem"
                           }}
                         >
                           {feature.number}
@@ -1948,7 +1954,7 @@ export default function HomePage() {
                     </div>
                     <div 
                       style={{
-                        width: "8.06rem",
+                        width: "10.86rem",
                         height: "100%",
                         backgroundColor: "white",
                         position: "relative"
@@ -1986,20 +1992,21 @@ export default function HomePage() {
                         </div>
                         <div 
                           style={{
-                            width: "5.36rem",
+                            width: "4rem",
                             height: "3.36rem",
                             opacity: 1,
                             fontFamily: "Noto Sans JP",
                             fontWeight: "600",
                             fontStyle: "SemiBold",
-                            fontSize: "4.57rem",
+                            fontSize: "3.5rem",
                             lineHeight: "100%",
                             letterSpacing: "0%",
                             color: "#2B5EC5",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
-                            transform: "translateY(-0.57rem)"
+                            transform: "translateY(-0.57rem)",
+                            marginRight: "0.5rem"
                           }}
                         >
                           {feature.number}
@@ -2637,8 +2644,8 @@ export default function HomePage() {
                     }}
                   >
                     <div style={{ 
-                      width: "300px",
-                      height: "55px",
+                      width: "100%",
+                      minHeight: "55px",
                       gap: "10px",
                       opacity: 1,
                       padding: "10px 12px",
@@ -2648,7 +2655,7 @@ export default function HomePage() {
                       alignItems: "flex-start"
                     }}>
                       <span style={{ 
-                        width: "48px",
+                        width: "auto",
                         height: "23px",
                         opacity: 1,
                         fontFamily: "Noto Sans JP",
@@ -2660,8 +2667,7 @@ export default function HomePage() {
                         color: "#1A1A1A"
                       }}>所在地</span>
                       <div style={{ 
-                        width: "200px",
-                        height: "23px",
+                        flex: "1",
                         opacity: 1,
                         display: "flex",
                         flexDirection: "column",
@@ -2702,16 +2708,16 @@ export default function HomePage() {
                       </div>
                     </div>
                     <div style={{ 
-                      width: "416px",
-                      height: "55px",
+                      width: "100%",
+                      minHeight: "55px",
                       opacity: 1,
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center"
                     }}>
                       <div style={{ 
-                        width: "116px",
-                        height: "55px",
+                        minWidth: "80px",
+                        minHeight: "55px",
                         gap: "10px",
                         opacity: 1,
                         padding: "12px 12px",
@@ -2720,7 +2726,7 @@ export default function HomePage() {
                         alignItems: "center"
                       }}>
                         <span style={{ 
-                          width: "48px",
+                          width: "auto",
                           height: "23px",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
@@ -2733,8 +2739,8 @@ export default function HomePage() {
                         }}>TEL</span>
                       </div>
                       <div style={{ 
-                        width: "300px",
-                        height: "55px",
+                        flex: "1",
+                        minHeight: "55px",
                         gap: "10px",
                         opacity: 1,
                         padding: "12px 12px",
@@ -2744,7 +2750,7 @@ export default function HomePage() {
                         justifyContent: "flex-end"
                       }}>
                         <span style={{ 
-                          width: "96px",
+                          width: "auto",
                           height: "23px",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
@@ -2760,16 +2766,16 @@ export default function HomePage() {
                       </div>
                     </div>
                     <div style={{ 
-                      width: "416px",
-                      height: "55px",
+                      width: "100%",
+                      minHeight: "55px",
                       opacity: 1,
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center"
                     }}>
                       <div style={{ 
-                        width: "116px",
-                        height: "55px",
+                        minWidth: "80px",
+                        minHeight: "55px",
                         gap: "10px",
                         opacity: 1,
                         padding: "12px 12px",
@@ -2778,7 +2784,7 @@ export default function HomePage() {
                         alignItems: "center"
                       }}>
                         <span style={{ 
-                          width: "48px",
+                          width: "auto",
                           height: "23px",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
@@ -2791,8 +2797,8 @@ export default function HomePage() {
                         }}>FAX</span>
                       </div>
                       <div style={{ 
-                        width: "300px",
-                        height: "55px",
+                        flex: "1",
+                        minHeight: "55px",
                         gap: "10px",
                         opacity: 1,
                         padding: "12px 12px",
@@ -2802,7 +2808,7 @@ export default function HomePage() {
                         justifyContent: "flex-end"
                       }}>
                         <span style={{ 
-                          width: "96px",
+                          width: "auto",
                           height: "23px",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
@@ -2818,16 +2824,16 @@ export default function HomePage() {
                       </div>
                     </div>
                     <div style={{ 
-                      width: "416px",
-                      height: "55px",
+                      width: "100%",
+                      minHeight: "55px",
                       opacity: 1,
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center"
                     }}>
                       <div style={{ 
-                        width: "116px",
-                        height: "55px",
+                        minWidth: "80px",
+                        minHeight: "55px",
                         gap: "10px",
                         opacity: 1,
                         padding: "12px 12px",
@@ -2836,7 +2842,7 @@ export default function HomePage() {
                         alignItems: "center"
                       }}>
                         <span style={{ 
-                          width: "48px",
+                          width: "auto",
                           height: "23px",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
@@ -2850,8 +2856,8 @@ export default function HomePage() {
                         }}>定休日</span>
                       </div>
                       <div style={{ 
-                        width: "300px",
-                        height: "55px",
+                        flex: "1",
+                        minHeight: "55px",
                         gap: "10px",
                         opacity: 1,
                         padding: "12px 12px",
@@ -2861,7 +2867,7 @@ export default function HomePage() {
                         justifyContent: "flex-end"
                       }}>
                         <span style={{ 
-                          width: "96px",
+                          width: "auto",
                           height: "23px",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
