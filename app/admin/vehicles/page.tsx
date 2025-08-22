@@ -46,6 +46,10 @@ export default function AdminVehiclesPage() {
   
   // 画像エラー状態を管理
   const [imageErrors, setImageErrors] = useState<Set<string>>(new Set())
+  
+  // ソート状態管理
+  const [sortField, setSortField] = useState<'inspectionDate' | 'negotiationDeadline' | null>(null)
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
 
   useEffect(() => {
     const fetchVehicles = async () => {
@@ -166,6 +170,40 @@ export default function AdminVehiclesPage() {
     setEditValue(formattedValue)
   }
 
+  // ソート処理
+  const handleSort = (field: 'inspectionDate' | 'negotiationDeadline') => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
+    } else {
+      setSortField(field)
+      setSortDirection('asc')
+    }
+  }
+
+  // ソートされた車両リストを取得
+  const getSortedVehicles = () => {
+    if (!sortField) return filteredVehicles
+
+    return [...filteredVehicles].sort((a, b) => {
+      let aValue: string = ''
+      let bValue: string = ''
+
+      if (sortField === 'inspectionDate') {
+        aValue = a.inspectionDate || ''
+        bValue = b.inspectionDate || ''
+      } else if (sortField === 'negotiationDeadline') {
+        aValue = a.negotiationDeadline || ''
+        bValue = b.negotiationDeadline || ''
+      }
+
+      if (sortDirection === 'asc') {
+        return aValue.localeCompare(bValue)
+      } else {
+        return bValue.localeCompare(aValue)
+      }
+    })
+  }
+
   if (loading) {
     return (
       <div className="container mx-auto py-10">
@@ -263,67 +301,76 @@ export default function AdminVehiclesPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>写真</TableHead>
               <TableHead>問い合わせ番号</TableHead>
-              <TableHead>車体番号</TableHead>
               <TableHead>メーカー</TableHead>
-              <TableHead>車種</TableHead>
-              <TableHead>在庫店舗名</TableHead>
-              <TableHead>型式（modelCode）</TableHead>
-              <TableHead>年式</TableHead>
-              <TableHead>シフト</TableHead>
-              <TableHead>原動機型式</TableHead>
-              <TableHead>過給機</TableHead>
               <TableHead>ボディタイプ</TableHead>
-              <TableHead>大きさ</TableHead>
-              <TableHead>積載量</TableHead>
-              <TableHead>車検状態</TableHead>
-              <TableHead>車検有効期限</TableHead>
-              <TableHead>車両価格</TableHead>
-              <TableHead>車両価格（税込）</TableHead>
+              <TableHead>サイズ</TableHead>
+              <TableHead>型式</TableHead>
               <TableHead>業販金額</TableHead>
+              <TableHead>車両価格</TableHead>
+                             <TableHead>
+                 <div className="flex items-center gap-1 cursor-pointer" onClick={() => handleSort('inspectionDate')}>
+                   <span>車検状態</span>
+                   <span className="text-xs">
+                     {sortField === 'inspectionDate' 
+                       ? (sortDirection === 'asc' ? '↑' : '↓')
+                       : '↕'
+                     }
+                   </span>
+                 </div>
+               </TableHead>
+               <TableHead>
+                 <div className="flex items-center gap-1 cursor-pointer" onClick={() => handleSort('negotiationDeadline')}>
+                   <span>商談期限</span>
+                   <span className="text-xs">
+                     {sortField === 'negotiationDeadline' 
+                       ? (sortDirection === 'asc' ? '↑' : '↓')
+                       : '↕'
+                     }
+                   </span>
+                 </div>
+               </TableHead>
               <TableHead className="text-right">操作</TableHead>
             </TableRow>
           </TableHeader>
                      <TableBody>
-             {filteredVehicles.map((vehicle, index) => (
-               <TableRow key={vehicle.id}>
-                <TableCell>
-                                                     <div className="w-[120px] h-[80px] bg-gray-200 rounded-md flex items-center justify-center">
-                  {vehicle.imageUrls?.[0] || vehicle.imageUrl ? (
-                    <Image
-                      src={vehicle.imageUrls?.[0] || vehicle.imageUrl!}
-                      alt={`${vehicle.maker} ${vehicle.managementNumber || vehicle.id} の画像`}
-                      width={120}
-                      height={80}
-                      className="rounded-md object-cover w-full h-full"
-                      loading={index === 0 ? "eager" : "lazy"}
-                      priority={index === 0}
-                      onError={() => {
-                        // エラー状態を記録
-                        setImageErrors(prev => new Set(prev).add(vehicle.id!))
-                      }}
-                    />
-                  ) : (
-                    <div className="text-gray-400 text-xs">画像なし</div>
-                  )}
-                </div>
-                </TableCell>
+             {getSortedVehicles().map((vehicle, index) => (
+              <TableRow key={vehicle.id}>
                 <TableCell>{vehicle.inquiryNumber || "---"}</TableCell>
-                <TableCell>{vehicle.chassisNumber || "---"}</TableCell>
                 <TableCell>{vehicle.maker}</TableCell>
-                <TableCell>{vehicle.vehicleType || "---"}</TableCell>
-                <TableCell>{vehicle.storeName || "---"}</TableCell>
-                <TableCell>{vehicle.modelCode || "---"}</TableCell>
-                <TableCell>{vehicle.year || "---"}</TableCell>
-                <TableCell>{vehicle.shift || "---"}</TableCell>
-                <TableCell>{vehicle.engineModel || "---"}</TableCell>
-                <TableCell>{vehicle.turbo || "---"}</TableCell>
                 <TableCell>{vehicle.bodyType || "---"}</TableCell>
                 <TableCell>{vehicle.size || "---"}</TableCell>
-                <TableCell>{vehicle.loadingCapacity ? `${vehicle.loadingCapacity}kg` : "---"}</TableCell>
-                <TableCell>{vehicle.inspectionStatus || "---"}</TableCell>
-                <TableCell>{vehicle.inspectionDate || "---"}</TableCell>
+                <TableCell>{vehicle.modelCode || "---"}</TableCell>
+                <TableCell>
+                  {editingField?.vehicleId === vehicle.id && editingField?.field === 'wholesalePrice' ? (
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        value={editValue}
+                        onChange={(e) => handleEditValueChange(e.target.value)}
+                        className="w-24 border rounded px-2 py-1 text-sm"
+                        placeholder="業販金額"
+                      />
+                      <Button size="sm" onClick={saveEditing} disabled={saving}>
+                        {saving ? "保存中..." : "保存"}
+                      </Button>
+                      <Button size="sm" variant="outline" onClick={cancelEditing} disabled={saving}>
+                        キャンセル
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <span>{vehicle.wholesalePrice ? `${vehicle.wholesalePrice.toLocaleString()}円` : "---"}</span>
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        onClick={() => startEditing(vehicle.id!, 'wholesalePrice', vehicle.wholesalePrice || 0)}
+                      >
+                        編集
+                      </Button>
+                    </div>
+                  )}
+                </TableCell>
                 <TableCell>
                   {editingField?.vehicleId === vehicle.id && editingField?.field === 'price' ? (
                     <div className="flex items-center gap-2">
@@ -355,64 +402,16 @@ export default function AdminVehiclesPage() {
                   )}
                 </TableCell>
                 <TableCell>
-                  {editingField?.vehicleId === vehicle.id && editingField?.field === 'totalPayment' ? (
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="text"
-                        value={editValue}
-                        onChange={(e) => handleEditValueChange(e.target.value)}
-                        className="w-24 border rounded px-2 py-1 text-sm"
-                        placeholder="車両価格（税込）"
-                      />
-                      <Button size="sm" onClick={saveEditing} disabled={saving}>
-                        {saving ? "保存中..." : "保存"}
-                      </Button>
-                      <Button size="sm" variant="outline" onClick={cancelEditing} disabled={saving}>
-                        キャンセル
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-2">
-                      <span>{vehicle.totalPayment ? `${vehicle.totalPayment.toLocaleString()}円` : "---"}</span>
-                      <Button 
-                        size="sm" 
-                        variant="outline" 
-                        onClick={() => startEditing(vehicle.id!, 'totalPayment', vehicle.totalPayment || 0)}
-                      >
-                        編集
-                      </Button>
-                    </div>
-                  )}
+                  {vehicle.inspectionStatus && vehicle.inspectionDate 
+                    ? `${vehicle.inspectionStatus} ${vehicle.inspectionDate}`
+                    : vehicle.inspectionStatus || vehicle.inspectionDate || "---"
+                  }
                 </TableCell>
                 <TableCell>
-                  {editingField?.vehicleId === vehicle.id && editingField?.field === 'wholesalePrice' ? (
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="text"
-                        value={editValue}
-                        onChange={(e) => handleEditValueChange(e.target.value)}
-                        className="w-24 border rounded px-2 py-1 text-sm"
-                        placeholder="業販金額"
-                      />
-                      <Button size="sm" onClick={saveEditing} disabled={saving}>
-                        {saving ? "保存中..." : "保存"}
-                      </Button>
-                      <Button size="sm" variant="outline" onClick={cancelEditing} disabled={saving}>
-                        キャンセル
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-2">
-                      <span>{vehicle.wholesalePrice ? `${vehicle.wholesalePrice.toLocaleString()}円` : "---"}</span>
-                      <Button 
-                        size="sm" 
-                        variant="outline" 
-                        onClick={() => startEditing(vehicle.id!, 'wholesalePrice', vehicle.wholesalePrice || 0)}
-                      >
-                        編集
-                      </Button>
-                    </div>
-                  )}
+                  {vehicle.salesRepresentative && vehicle.negotiationDeadline
+                    ? `${vehicle.salesRepresentative} ${vehicle.negotiationDeadline}`
+                    : vehicle.salesRepresentative || vehicle.negotiationDeadline || "---"
+                  }
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex gap-2 justify-end">
