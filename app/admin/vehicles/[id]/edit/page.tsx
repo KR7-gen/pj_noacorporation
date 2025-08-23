@@ -154,6 +154,14 @@ export default function VehicleEditPage() {
     // 店舗関連フィールド
     storeName: "",
     storeId: undefined,
+    // 商談関連フィールド
+    isNegotiating: false,
+    isSoldOut: false,
+    isPrivate: false,
+    isTemporarySave: false,
+    negotiationDeadline: "",
+    salesRepresentative: "",
+    customerName: "",
   })
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -223,6 +231,14 @@ export default function VehicleEditPage() {
             // 店舗関連フィールド
             storeName: fetchedVehicle.storeName || "",
             storeId: fetchedVehicle.storeId || undefined,
+            // 商談関連フィールド
+            isNegotiating: fetchedVehicle.isNegotiating || false,
+            isSoldOut: fetchedVehicle.isSoldOut || false,
+            isPrivate: fetchedVehicle.isPrivate || false,
+            isTemporarySave: fetchedVehicle.isTemporarySave || false,
+            negotiationDeadline: fetchedVehicle.negotiationDeadline || "",
+            salesRepresentative: fetchedVehicle.salesRepresentative || "",
+            customerName: fetchedVehicle.customerName || "",
           })
         } else {
           setError("車両が見つかりませんでした")
@@ -375,6 +391,71 @@ export default function VehicleEditPage() {
     }))
   }
 
+  // 一時保存ハンドラー
+  const handleTemporarySave = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!vehicle) return
+
+    // 商談中の必須項目チェック
+    if (formData.isNegotiating) {
+      if (!formData.negotiationDeadline || !formData.salesRepresentative || !formData.customerName) {
+        setError("商談中の場合、商談期限・営業担当・顧客名は必須です")
+        return
+      }
+    }
+
+    try {
+      setSaving(true)
+      // 問い合わせ番号を除外して更新データを作成
+      const { inquiryNumber, ...updateData } = formData;
+      
+      // undefinedのフィールドを除外して更新データを作成
+      const cleanedUpdateData = Object.fromEntries(
+        Object.entries(updateData).filter(([_, value]) => value !== undefined)
+      );
+      
+      // 画像URLからダミー写真と一時的なURLを除外
+      const filteredImageUrls = (formData.imageUrls || []).filter(url => 
+        url && 
+        url.trim() !== "" && 
+        url !== "/placeholder.jpg" &&
+        !url.includes("temp_") && 
+        !url.startsWith("blob:") &&
+        !url.startsWith("data:")
+      );
+
+      const updatedVehicle: Partial<Vehicle> = {
+        ...cleanedUpdateData,
+        imageUrls: filteredImageUrls,
+        price: Number(formData.price?.toString().replace(/,/g, '')) || 0,
+        wholesalePrice: Number(formData.wholesalePrice?.toString().replace(/,/g, '')) || 0,
+        totalPayment: Number(formData.totalPayment?.toString().replace(/,/g, '')) || 0,
+        mileage: Number(formData.mileage?.toString().replace(/,/g, '')) || 0,
+        loadingCapacity: Number(formData.loadingCapacity?.toString().replace(/,/g, '')) || 0,
+        outerLength: Number(formData.outerLength?.toString().replace(/,/g, '')) || 0,
+        outerWidth: Number(formData.outerWidth?.toString().replace(/,/g, '')) || 0,
+        outerHeight: Number(formData.outerHeight?.toString().replace(/,/g, '')) || 0,
+        totalWeight: Number(formData.totalWeight?.toString().replace(/,/g, '')) || 0,
+        horsepower: Number(formData.horsepower?.toString().replace(/,/g, '')) || 0,
+        displacement: Number(formData.displacement?.toString().replace(/,/g, '')) || 0,
+        vehicleType: formData.vehicleType,
+        chassisNumber: formData.chassisNumber,
+        month: formData.month,
+        isTemporarySave: true, // 一時保存としてマーク
+        updatedAt: new Date(),
+      }
+
+      await updateVehicle(vehicleId, updatedVehicle)
+      alert("車両が一時保存されました")
+      router.push('/admin/vehicles')
+    } catch (err) {
+      setError("車両の一時保存に失敗しました")
+      console.error(err)
+    } finally {
+      setSaving(false)
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!vehicle) return
@@ -424,6 +505,7 @@ export default function VehicleEditPage() {
         vehicleType: formData.vehicleType,
         chassisNumber: formData.chassisNumber,
         month: formData.month,
+        isTemporarySave: false, // 通常保存としてマーク
         updatedAt: new Date(),
       }
 
@@ -483,16 +565,27 @@ export default function VehicleEditPage() {
                 />
               </div>
               
-              {/* SOLD OUTスイッチ */}
-              <div className="flex items-center justify-between">
-                <Label htmlFor="isSoldOut" className="text-base">SOLD OUT</Label>
-                <Switch
-                  id="isSoldOut"
-                  checked={formData.isSoldOut || false}
-                  onCheckedChange={(checked) => handleNegotiationChange('isSoldOut', checked)}
-                  className="data-[state=checked]:bg-red-500"
-                />
-              </div>
+                             {/* SOLD OUTスイッチ */}
+               <div className="flex items-center justify-between">
+                 <Label htmlFor="isSoldOut" className="text-base">SOLD OUT</Label>
+                 <Switch
+                   id="isSoldOut"
+                   checked={formData.isSoldOut || false}
+                   onCheckedChange={(checked) => handleNegotiationChange('isSoldOut', checked)}
+                   className="data-[state=checked]:bg-red-500"
+                 />
+               </div>
+               
+               {/* 非公開スイッチ */}
+               <div className="flex items-center justify-between">
+                 <Label htmlFor="isPrivate" className="text-base">非公開</Label>
+                 <Switch
+                   id="isPrivate"
+                   checked={formData.isPrivate || false}
+                   onCheckedChange={(checked) => handleNegotiationChange('isPrivate', checked)}
+                   className="data-[state=checked]:bg-gray-500"
+                 />
+               </div>
               
               {/* 商談期限 */}
               <div>
@@ -610,7 +703,7 @@ export default function VehicleEditPage() {
               />
             </div>
             <div className="space-y-2">
-              <label className="block text-sm font-medium">車両価格（税込）</label>
+                              <label className="block text-sm font-medium">車両総額</label>
               <input
                 type="text"
                 name="totalPayment"
@@ -622,36 +715,7 @@ export default function VehicleEditPage() {
             </div>
           </div>
 
-          {/* 車両説明 */}
-          <div>
-            <h3 className="text-lg font-medium mb-4">車両説明</h3>
-            <textarea
-              name="description"
-              value={formData.description || ""}
-              onChange={handleChange}
-              className="w-full border rounded px-2 py-1 h-32"
-              placeholder="車両の詳細な説明を入力してください..."
-            />
-          </div>
 
-          {/* 毎月支払額シミュレーション */}
-          <div>
-            <h3 className="text-lg font-medium mb-4">毎月支払額シミュレーション</h3>
-            <div className="grid grid-cols-4 gap-6">
-              {[2, 3, 4, 5].map((year, index) => (
-                <div key={index} className="space-y-2">
-                  <label className="block text-sm font-medium">{year}年</label>
-                  <input
-                    type="text"
-                    className="w-full border rounded px-2 py-1"
-                    placeholder="100,000"
-                    value={formData[`simulation${year}Year` as keyof Vehicle] as string || ""}
-                    onChange={(e) => handleSimulationChange(index, e.target.value)}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
 
                      {/* 画像アップロード */}
            <div>
@@ -817,17 +881,7 @@ export default function VehicleEditPage() {
                     ))}
                   </select>
                 </div>
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium">ミッション</label>
-                  <input
-                    type="text"
-                    name="mission"
-                    value={formData.mission || ""}
-                    onChange={handleChange}
-                    className="w-full border rounded px-2 py-1"
-                    placeholder="ミッションを入力"
-                  />
-                </div>
+
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">車検状態</label>
                   <select
@@ -965,262 +1019,181 @@ export default function VehicleEditPage() {
             </div>
           </div>
 
-          {/* 車検証画像 */}
-          <div>
-            <h3 className="text-lg font-medium mb-4">車検証画像</h3>
-            <div className="space-y-4">
-              <input
-                type="file"
-                ref={inspectionFileRef}
-                onChange={handleFileSelect(inspectionFileRef, handleInspectionImageUpload)}
-                accept="image/*,.pdf"
-                className="hidden"
-              />
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => inspectionFileRef.current?.click()}
-                disabled={uploadingInspection}
-                className="w-full"
-              >
-                {uploadingInspection ? "アップロード中..." : "車検証を選択"}
-              </Button>
-              {formData.inspectionImageUrl && (
-                <div className="mt-4">
-                  <p className="text-sm text-gray-600 mb-2">アップロード済み:</p>
-                  <div className="border rounded-lg p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-red-500">📄</span>
-                      <a 
-                        href={formData.inspectionImageUrl} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:underline"
-                      >
-                        車検証を表示
-                      </a>
-                    </div>
-                    <div className="mt-2">
-                      <img 
-                        src={formData.inspectionImageUrl} 
-                        alt="車検証" 
-                        className="max-w-full h-auto max-h-64 rounded"
-                        onError={(e) => {
-                          // 画像読み込みエラー時はPDFとして扱う
-                          const target = e.target as HTMLImageElement;
-                          target.style.display = 'none';
-                          const parent = target.parentElement;
-                          if (parent) {
-                            parent.innerHTML = `
-                              <div class="flex items-center gap-2 p-4 bg-gray-50 rounded">
-                                <span class="text-red-500 text-2xl">📄</span>
-                                <span class="text-gray-700">PDFファイル</span>
-                                <a href="${formData.inspectionImageUrl}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline ml-2">
-                                  開く
-                                </a>
-                              </div>
-                            `;
-                          }
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
 
-          {/* 状態写真画像 */}
-          <div>
-            <h3 className="text-lg font-medium mb-4">状態写真画像</h3>
-            <div className="space-y-4">
-              <input
-                type="file"
-                ref={conditionFileRef}
-                onChange={handleFileSelect(conditionFileRef, handleConditionImageUpload)}
-                accept="image/*,.pdf"
-                className="hidden"
-              />
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => conditionFileRef.current?.click()}
-                disabled={uploadingCondition}
-                className="w-full"
-              >
-                {uploadingCondition ? "アップロード中..." : "状態表を選択"}
-              </Button>
-              {formData.conditionImageUrl && (
-                <div className="mt-4">
-                  <p className="text-sm text-gray-600 mb-2">アップロード済み:</p>
-                  <div className="border rounded-lg p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-red-500">📄</span>
-                      <a 
-                        href={formData.conditionImageUrl} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:underline"
-                      >
-                        状態表を表示
-                      </a>
-                    </div>
-                    <div className="mt-2">
-                      <img 
-                        src={formData.conditionImageUrl} 
-                        alt="状態表" 
-                        className="max-w-full h-auto max-h-64 rounded"
-                        onError={(e) => {
-                          // 画像読み込みエラー時はPDFとして扱う
-                          const target = e.target as HTMLImageElement;
-                          target.style.display = 'none';
-                          const parent = target.parentElement;
-                          if (parent) {
-                            parent.innerHTML = `
-                              <div class="flex items-center gap-2 p-4 bg-gray-50 rounded">
-                                <span class="text-red-500 text-2xl">📄</span>
-                                <span class="text-gray-700">PDFファイル</span>
-                                <a href="${formData.conditionImageUrl}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline ml-2">
-                                  開く
-                                </a>
-                              </div>
-                            `;
-                          }
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
 
-          {/* 車両写真 */}
-          <div>
-            <h3 className="text-lg font-medium mb-4">車両写真</h3>
-            <ImageUploader
-              images={(formData.imageUrls || []).filter(url =>
-                url &&
-                url.trim() !== "" &&
-                url !== "/placeholder.jpg" &&
-                !url.includes("temp_") &&
-                !url.startsWith("blob:") &&
-                !url.startsWith("data:")
-              )}
-              onImagesChange={(images) => setFormData(prev => ({ ...prev, imageUrls: images }))}
-              vehicleId={vehicleId}
-            />
-          </div>
+                     {/* 車検証画像 */}
+           <div>
+             <h3 className="text-lg font-medium mb-4">車検証画像</h3>
+             <div className="space-y-4">
+               <input
+                 type="file"
+                 ref={inspectionFileRef}
+                 onChange={handleFileSelect(inspectionFileRef, handleInspectionImageUpload)}
+                 accept="image/*,.pdf"
+                 className="hidden"
+               />
+               <Button
+                 type="button"
+                 variant="outline"
+                 onClick={() => inspectionFileRef.current?.click()}
+                 disabled={uploadingInspection}
+                 className="w-full"
+               >
+                 {uploadingInspection ? "アップロード中..." : "車検証を選択"}
+               </Button>
+               {formData.inspectionImageUrl && (
+                 <div className="mt-4">
+                   <p className="text-sm text-gray-600 mb-2">アップロード済み:</p>
+                   <div className="border rounded-lg p-4">
+                     <div className="flex items-center gap-2 mb-2">
+                       <span className="text-red-500">📄</span>
+                       <a 
+                         href={formData.inspectionImageUrl} 
+                         target="_blank" 
+                         rel="noopener noreferrer"
+                         className="text-blue-600 hover:underline"
+                       >
+                         車検証を表示
+                       </a>
+                     </div>
+                     <div className="mt-2">
+                       <img 
+                         src={formData.inspectionImageUrl} 
+                         alt="車検証" 
+                         className="max-w-full h-auto max-h-64 rounded"
+                         onError={(e) => {
+                           // 画像読み込みエラー時はPDFとして扱う
+                           const target = e.target as HTMLImageElement;
+                           target.style.display = 'none';
+                           const parent = target.parentElement;
+                           if (parent) {
+                             parent.innerHTML = `
+                               <div class="flex items-center gap-2 p-4 bg-gray-50 rounded">
+                                 <span class="text-red-500 text-2xl">📄</span>
+                                 <span class="text-gray-700">PDFファイル</span>
+                                 <a href="${formData.inspectionImageUrl}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline ml-2">
+                                   開く
+                                 </a>
+                               </div>
+                             `;
+                           }
+                         }}
+                       />
+                     </div>
+                   </div>
+                 </div>
+               )}
+             </div>
+           </div>
 
-          {/* 上物情報 */}
-          <div>
-            <h3 className="text-lg font-medium mb-4">上物情報</h3>
-            <div className="grid grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="block text-sm font-medium">上物メーカー</label>
-                <input
-                  type="text"
-                  name="bodyMaker"
-                  value={formData.bodyMaker || ""}
-                  onChange={handleChange}
-                  className="w-full border rounded px-2 py-1"
-                  placeholder="上物メーカーを入力"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="block text-sm font-medium">上物型式</label>
-                <input
-                  type="text"
-                  name="bodyModel"
-                  value={formData.bodyModel || ""}
-                  onChange={handleChange}
-                  className="w-full border rounded px-2 py-1"
-                  placeholder="上物型式を入力"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="block text-sm font-medium">上物年式</label>
-                <select
-                  name="bodyYear"
-                  value={formData.bodyYear || ""}
-                  onChange={handleChange}
-                  className="w-full border rounded px-2 py-1"
-                >
-                  <option value="">選択</option>
-                  {years.map((year) => (
-                    <option key={year} value={year}>{year}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="space-y-2">
-                <label className="block text-sm font-medium">内寸長</label>
-                <input
-                  type="text"
-                  name="innerLength"
-                  value={formData.innerLength || ""}
-                  onChange={handleChange}
-                  className="w-full border rounded px-2 py-1"
-                  placeholder="内寸長 (mm)"
-                  style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="block text-sm font-medium">内寸幅</label>
-                <input
-                  type="text"
-                  name="innerWidth"
-                  value={formData.innerWidth || ""}
-                  onChange={handleChange}
-                  className="w-full border rounded px-2 py-1"
-                  placeholder="内寸幅 (mm)"
-                  style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="block text-sm font-medium">内寸高</label>
-                <input
-                  type="text"
-                  name="innerHeight"
-                  value={formData.innerHeight || ""}
-                  onChange={handleChange}
-                  className="w-full border rounded px-2 py-1"
-                  placeholder="内寸高 (mm)"
-                  style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
-                />
-              </div>
-            </div>
-          </div>
+           {/* 上物情報 */}
+           <div>
+             <h3 className="text-lg font-medium mb-4">上物情報</h3>
+             <div className="grid grid-cols-2 gap-6">
+               <div className="space-y-2">
+                 <label className="block text-sm font-medium">上物メーカー</label>
+                 <input
+                   type="text"
+                   name="bodyMaker"
+                   value={formData.bodyMaker || ""}
+                   onChange={handleChange}
+                   className="w-full border rounded px-2 py-1"
+                   placeholder="上物メーカーを入力"
+                 />
+               </div>
+               <div className="space-y-2">
+                 <label className="block text-sm font-medium">上物型式</label>
+                 <input
+                   type="text"
+                   name="bodyModel"
+                   value={formData.bodyModel || ""}
+                   onChange={handleChange}
+                   className="w-full border rounded px-2 py-1"
+                   placeholder="上物型式を入力"
+                 />
+               </div>
+               <div className="space-y-2">
+                 <label className="block text-sm font-medium">上物年式</label>
+                 <select
+                   name="bodyYear"
+                   value={formData.bodyYear || ""}
+                   onChange={handleChange}
+                   className="w-full border rounded px-2 py-1"
+                 >
+                   <option value="">選択</option>
+                   {years.map((year) => (
+                     <option key={year} value={year}>{year}</option>
+                   ))}
+                 </select>
+               </div>
+               <div className="space-y-2">
+                 <label className="block text-sm font-medium">内寸長</label>
+                 <input
+                   type="text"
+                   name="innerLength"
+                   value={formData.innerLength || ""}
+                   onChange={handleChange}
+                   className="w-full border rounded px-2 py-1"
+                   placeholder="内寸長 (mm)"
+                   style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
+                 />
+               </div>
+               <div className="space-y-2">
+                 <label className="block text-sm font-medium">内寸幅</label>
+                 <input
+                   type="text"
+                   name="innerWidth"
+                   value={formData.innerWidth || ""}
+                   onChange={handleChange}
+                   className="w-full border rounded px-2 py-1"
+                   placeholder="内寸幅 (mm)"
+                   style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
+                 />
+               </div>
+               <div className="space-y-2">
+                 <label className="block text-sm font-medium">内寸高</label>
+                 <input
+                   type="text"
+                   name="innerHeight"
+                   value={formData.innerHeight || ""}
+                   onChange={handleChange}
+                   className="w-full border rounded px-2 py-1"
+                   placeholder="内寸高 (mm)"
+                   style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
+                 />
+               </div>
+             </div>
+           </div>
 
-          {/* 装備品セクション */}
-          <div>
-            <h3 className="text-lg font-medium mb-4">装備品</h3>
-            <div className="grid grid-cols-3 md:grid-cols-4 gap-3">
-              {equipmentList.map((item) => (
-                <button
-                  type="button"
-                  key={item}
-                  className={`rounded-full px-4 py-2 font-medium transition border-none focus:outline-none ${formData.equipment?.includes(item) ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-800'}`}
-                  onClick={() => handleEquipmentToggle(item)}
-                >
-                  {item}
-                </button>
-              ))}
-            </div>
-            <div className="mt-4">
-              <label className="block text-sm font-medium mb-2">装備/仕様</label>
-              <textarea
-                name="equipment"
-                value={formData.equipment || ""}
-                onChange={handleChange}
-                className="w-full border rounded px-2 py-1 h-20"
-                placeholder="その他の装備や仕様を入力してください..."
-              />
-            </div>
-          </div>
+           {/* 装備/仕様 */}
+           <div>
+             <h3 className="text-lg font-medium mb-4">装備/仕様</h3>
+             <div className="mt-4">
+               <label className="block text-sm font-medium mb-2">装備/仕様</label>
+               <textarea
+                 name="equipment"
+                 value={formData.equipment || ""}
+                 onChange={handleChange}
+                 className="w-full border rounded px-2 py-1 h-20"
+                 placeholder="その他の装備や仕様を入力してください..."
+               />
+             </div>
+           </div>
 
-          <div className="flex justify-center">
+
+
+          <div className="flex justify-center gap-4">
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={handleTemporarySave} 
+              disabled={saving}
+              className="px-8"
+            >
+              {saving ? '保存中...' : '一時保存する'}
+            </Button>
             <Button type="submit" className="px-8" disabled={saving}>
-              {saving ? '保存中...' : '変更を保存'}
+              {saving ? '保存中...' : '保存・出品する'}
             </Button>
           </div>
         </form>

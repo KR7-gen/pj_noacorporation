@@ -23,9 +23,37 @@ interface SortableImageProps {
   isSelected: boolean
   onToggleSelection: (imageUrl: string) => void
   onImageError: (e: React.SyntheticEvent<HTMLImageElement, Event>) => void
+  onImageClick: (imageUrl: string) => void
 }
 
-const SortableImage = ({ id, imageUrl, onDelete, isSelectionMode, isSelected, onToggleSelection, onImageError }: SortableImageProps) => {
+// モーダルコンポーネント
+const ImageModal = ({ imageUrl, isOpen, onClose }: { imageUrl: string; isOpen: boolean; onClose: () => void }) => {
+  if (!isOpen) return null
+
+  return (
+    <div 
+      className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
+      onClick={onClose}
+    >
+      <div className="relative max-w-4xl max-h-full p-4">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-white text-2xl font-bold hover:text-gray-300 z-10"
+        >
+          ×
+        </button>
+        <img
+          src={imageUrl}
+          alt="車両画像（拡大表示）"
+          className="max-w-full max-h-full object-contain"
+          onClick={(e) => e.stopPropagation()}
+        />
+      </div>
+    </div>
+  )
+}
+
+const SortableImage = ({ id, imageUrl, onDelete, isSelectionMode, isSelected, onToggleSelection, onImageError, onImageClick }: SortableImageProps) => {
   const {
     attributes,
     listeners,
@@ -44,50 +72,56 @@ const SortableImage = ({ id, imageUrl, onDelete, isSelectionMode, isSelected, on
   const handleClick = () => {
     if (isSelectionMode) {
       onToggleSelection(imageUrl)
+    } else {
+      onImageClick(imageUrl)
     }
   }
 
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      className={`relative group bg-gray-100 rounded-lg overflow-hidden cursor-pointer ${
-        isSelectionMode && isSelected ? 'ring-2 ring-blue-500' : ''
-      }`}
-      onClick={handleClick}
-    >
-      <img
-        src={imageUrl}
-        alt="車両画像"
-        className="w-full h-32 object-cover"
-        onError={onImageError}
-      />
+         <div
+       ref={setNodeRef}
+       style={{
+         ...style,
+         width: '5.714rem',
+         height: '4.286rem'
+       }}
+       className={`relative group bg-gray-100 overflow-hidden cursor-pointer ${
+         isSelectionMode && isSelected ? 'ring-2 ring-blue-500' : ''
+       }`}
+       onClick={handleClick}
+     >
+       <img
+         src={imageUrl}
+         alt="車両画像"
+         className="w-full h-full object-fill"
+         onError={onImageError}
+       />
       <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-200">
         {!isSelectionMode && (
           <>
-            <div className="absolute top-2 right-2">
+            <div className="absolute top-1 right-1">
               <button
                 type="button"
                 onClick={(e) => {
                   e.stopPropagation()
                   onDelete(imageUrl)
                 }}
-                className="h-6 w-6 p-0 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+                className="h-4 w-4 p-0 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
               >
-                <X className="h-3 w-3" />
+                <X className="h-2 w-2" />
               </button>
             </div>
             <div
               {...attributes}
               {...listeners}
-              className="absolute top-2 left-2 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity"
+              className="absolute top-1 left-1 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity"
             >
-              <GripVertical className="h-4 w-4 text-white" />
+              <GripVertical className="h-3 w-3 text-white" />
             </div>
           </>
         )}
         {isSelectionMode && (
-          <div className="absolute top-2 left-2">
+          <div className="absolute top-1 left-1">
             <input
               type="checkbox"
               checked={isSelected}
@@ -95,7 +129,7 @@ const SortableImage = ({ id, imageUrl, onDelete, isSelectionMode, isSelected, on
                 e.stopPropagation()
                 onToggleSelection(imageUrl)
               }}
-              className="h-4 w-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+              className="h-3 w-3 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
             />
           </div>
         )}
@@ -108,6 +142,8 @@ export default function ImageUploader({ images, onImagesChange, vehicleId }: Ima
   const [uploading, setUploading] = useState(false)
   const [isSelectionMode, setIsSelectionMode] = useState(false)
   const [selectedImages, setSelectedImages] = useState<string[]>([])
+  const [modalImage, setModalImage] = useState<string | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -187,6 +223,18 @@ export default function ImageUploader({ images, onImagesChange, vehicleId }: Ima
   const handleCancelSelection = useCallback(() => {
     setIsSelectionMode(false)
     setSelectedImages([])
+  }, [])
+
+  // 画像クリックハンドラー（モーダル表示）
+  const handleImageClick = useCallback((imageUrl: string) => {
+    setModalImage(imageUrl)
+    setIsModalOpen(true)
+  }, [])
+
+  // モーダルを閉じる
+  const handleCloseModal = useCallback(() => {
+    setIsModalOpen(false)
+    setModalImage(null)
   }, [])
 
   // 画像エラーハンドラー
@@ -277,7 +325,7 @@ export default function ImageUploader({ images, onImagesChange, vehicleId }: Ima
               items={filteredImageUrls}
               strategy={verticalListSortingStrategy}
             >
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2">
                 {filteredImageUrls.map((imageUrl) => (
                   <SortableImage
                     key={imageUrl}
@@ -288,6 +336,7 @@ export default function ImageUploader({ images, onImagesChange, vehicleId }: Ima
                     isSelected={selectedImages.includes(imageUrl)}
                     onToggleSelection={handleToggleSelection}
                     onImageError={handleImageError}
+                    onImageClick={handleImageClick}
                   />
                 ))}
               </div>
@@ -295,6 +344,13 @@ export default function ImageUploader({ images, onImagesChange, vehicleId }: Ima
           </DndContext>
         </div>
       )}
+
+      {/* モーダル */}
+      <ImageModal
+        imageUrl={modalImage || ""}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
     </div>
   )
 } 

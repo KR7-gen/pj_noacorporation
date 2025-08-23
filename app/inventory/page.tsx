@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Search, Phone, ChevronRight, ChevronDown } from "lucide-react"
+import { Search, Phone, ChevronRight, ChevronDown, ArrowUpDown } from "lucide-react"
 import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import type { Vehicle } from "@/types"
@@ -75,6 +75,10 @@ export default function InventoryPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const vehiclesPerPage = 20
 
+  // ソート機能の状態管理
+  const [sortField, setSortField] = useState<string>("")
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc")
+
   // Firestoreからデータを取得
   useEffect(() => {
     const fetchVehicles = async () => {
@@ -101,6 +105,9 @@ export default function InventoryPage() {
   // フィルタリング処理
   useEffect(() => {
     let filtered = vehicles;
+
+    // 非公開車両と一時保存車両を除外
+    filtered = filtered.filter(vehicle => !vehicle.isPrivate && !vehicle.isTemporarySave);
 
     // ボディタイプでフィルタリング
     if (selectedType !== "all") {
@@ -178,11 +185,73 @@ export default function InventoryPage() {
     setCurrentPage(1) // 検索時に1ページ目に戻る
   }
 
-  // ページネーション計算
-  const totalPages = Math.ceil(filteredVehicles.length / vehiclesPerPage)
+  // ソート機能
+  const handleSort = (field: string) => {
+    if (sortField === field) {
+      // 同じフィールドの場合は方向を切り替え
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc")
+    } else {
+      // 新しいフィールドの場合は昇順で開始
+      setSortField(field)
+      setSortDirection("asc")
+    }
+  }
+
+  // ソートされた車両リストを取得
+  const getSortedVehicles = () => {
+    if (!sortField) return filteredVehicles
+
+    return [...filteredVehicles].sort((a, b) => {
+      let aValue: any
+      let bValue: any
+
+      switch (sortField) {
+        case "price":
+          aValue = a.price || 0
+          bValue = b.price || 0
+          break
+        case "year":
+          // 年式の比較（R6年 → 2024年 のような変換）
+          const parseYear = (year: any) => {
+            if (!year) return 0
+            if (typeof year === 'string') {
+              // R6年 → 2024年 のような変換
+              if (year.startsWith('R')) {
+                return 2018 + parseInt(year.substring(1))
+              }
+              // 数字のみの場合はそのまま
+              const num = parseInt(year)
+              return isNaN(num) ? 0 : num
+            }
+            return parseInt(year) || 0
+          }
+          aValue = parseYear(a.year)
+          bValue = parseYear(b.year)
+          break
+        case "mileage":
+          aValue = a.mileage || 0
+          bValue = b.mileage || 0
+          break
+        default:
+          return 0
+      }
+
+      if (sortDirection === "asc") {
+        return aValue - bValue
+      } else {
+        return bValue - aValue
+      }
+    })
+  }
+
+  // ソートされた車両リスト
+  const sortedVehicles = getSortedVehicles()
+
+  // ページネーション計算（ソートされたリストを使用）
+  const totalPages = Math.ceil(sortedVehicles.length / vehiclesPerPage)
   const startIndex = (currentPage - 1) * vehiclesPerPage
   const endIndex = startIndex + vehiclesPerPage
-  const currentVehicles = filteredVehicles.slice(startIndex, endIndex)
+  const currentVehicles = sortedVehicles.slice(startIndex, endIndex)
 
   // ページ変更ハンドラー
   const handlePageChange = (page: number) => {
@@ -652,29 +721,116 @@ export default function InventoryPage() {
           </div>
         </div>
 
-        {/* 結果件数 */}
+        {/* 結果件数とソート */}
         <div 
           style={{
             marginBottom: "24px",
             padding: "0 20px"
           }}
         >
-          <p 
-            style={{
-              fontFamily: "Noto Sans JP",
-              fontWeight: "400",
-              fontSize: "16px",
-              color: "#666666",
-              margin: 0
-            }}
-          >
-            検索結果: <span style={{ fontWeight: "600" }}>{filteredVehicles.length}</span>件
-            {vehicles.length === 0 && (
-              <span style={{ marginLeft: "8px", color: "#FF6B35" }}>
-                （車両データが登録されていません。adminで車両を登録してください）
-              </span>
-            )}
-          </p>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <p 
+              style={{
+                fontFamily: "Noto Sans JP",
+                fontWeight: "400",
+                fontSize: "16px",
+                color: "#666666",
+                margin: 0
+              }}
+            >
+              検索結果: <span style={{ fontWeight: "600" }}>{filteredVehicles.length}</span>件
+              {vehicles.length === 0 && (
+                <span style={{ marginLeft: "8px", color: "#FF6B35" }}>
+                  （車両データが登録されていません。adminで車両を登録してください）
+                </span>
+              )}
+            </p>
+            
+            {/* ソートボタン */}
+            {filteredVehicles.length > 0 && (
+              <div style={{ display: "flex", gap: "8px" }}>
+              <button
+                onClick={() => handleSort("price")}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "4px",
+                  padding: "8px 12px",
+                  border: "1px solid #CCCCCC",
+                  borderRadius: "4px",
+                  background: sortField === "price" ? "#E3F2FD" : "#FFFFFF",
+                  color: sortField === "price" ? "#1976D2" : "#666666",
+                  fontFamily: "Noto Sans JP",
+                  fontSize: "14px",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease"
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = sortField === "price" ? "#BBDEFB" : "#F5F5F5"
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = sortField === "price" ? "#E3F2FD" : "#FFFFFF"
+                }}
+              >
+                <ArrowUpDown size={16} />
+                価格：{sortField === "price" ? (sortDirection === "asc" ? "安い" : "高い") : "安い/高い"}
+              </button>
+              
+              <button
+                onClick={() => handleSort("year")}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "4px",
+                  padding: "8px 12px",
+                  border: "1px solid #CCCCCC",
+                  borderRadius: "4px",
+                  background: sortField === "year" ? "#E3F2FD" : "#FFFFFF",
+                  color: sortField === "year" ? "#1976D2" : "#666666",
+                  fontFamily: "Noto Sans JP",
+                  fontSize: "14px",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease"
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = sortField === "year" ? "#BBDEFB" : "#F5F5F5"
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = sortField === "year" ? "#E3F2FD" : "#FFFFFF"
+                }}
+              >
+                <ArrowUpDown size={16} />
+                年式：{sortField === "year" ? (sortDirection === "asc" ? "古い" : "新しい") : "新しい/古い"}
+              </button>
+              
+              <button
+                onClick={() => handleSort("mileage")}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "4px",
+                  padding: "8px 12px",
+                  border: "1px solid #CCCCCC",
+                  borderRadius: "4px",
+                  background: sortField === "mileage" ? "#E3F2FD" : "#FFFFFF",
+                  color: sortField === "mileage" ? "#1976D2" : "#666666",
+                  fontFamily: "Noto Sans JP",
+                  fontSize: "14px",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease"
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = sortField === "mileage" ? "#BBDEFB" : "#F5F5F5"
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = sortField === "mileage" ? "#E3F2FD" : "#FFFFFF"
+                }}
+              >
+                <ArrowUpDown size={16} />
+                走行距離：{sortField === "mileage" ? (sortDirection === "asc" ? "少ない" : "多い") : "多い/少ない"}
+              </button>
+            </div>
+          )}
         </div>
 
         {/* 車両一覧 */}
@@ -1761,6 +1917,7 @@ export default function InventoryPage() {
           </div>
         </div>
       </section>
+      </div>
     </div>
   )
 }

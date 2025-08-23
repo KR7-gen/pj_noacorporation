@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { getVehicles, deleteVehicle, updateVehicle } from "@/lib/firebase-utils"
+import { getVehicles, deleteVehicle, updateVehicle, testFirebaseConnection } from "@/lib/firebase-utils"
 import type { Vehicle } from "@/types"
 import { Button } from "@/components/ui/button"
 import {
@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/table"
 import Image from "next/image"
 import { formatNumberWithCommas, formatInputWithCommas } from "@/lib/utils"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export default function AdminPage() {
   const router = useRouter()
@@ -36,24 +37,55 @@ export default function AdminPage() {
   const [searchQuery, setSearchQuery] = useState("")
   
   // インライン編集用の状態
-  const [editingField, setEditingField] = useState<{
-    vehicleId: string;
-    field: 'price' | 'totalPayment' | 'wholesalePrice';
-  } | null>(null)
-  const [editValue, setEditValue] = useState("")
+  const [editingValues, setEditingValues] = useState<{
+    [key: string]: { wholesalePrice: string; price: string; totalPayment: string }
+  }>({})
   const [saving, setSaving] = useState(false)
+  const [hasChanges, setHasChanges] = useState<{[key: string]: boolean}>({})
+  
+  // 画像エラー状態を管理
+  const [imageErrors, setImageErrors] = useState<Set<string>>(new Set())
+  
+  // ソート状態管理
+  const [sortField, setSortField] = useState<'inspectionDate' | 'negotiationDeadline' | null>(null)
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
 
   useEffect(() => {
     const fetchVehicles = async () => {
       try {
         setLoading(true)
+        console.log("車両データ取得開始...")
+        
+        // Firebase接続テスト
+        const connectionTest = await testFirebaseConnection()
+        console.log("Firebase接続テスト結果:", connectionTest)
+        
+        if (!connectionTest) {
+          throw new Error("Firebase接続に失敗しました")
+        }
+        
         const fetchedVehicles = await getVehicles()
+        console.log("取得した車両数:", fetchedVehicles.length)
         setVehicles(fetchedVehicles)
         setFilteredVehicles(fetchedVehicles)
+        
+        // 初期編集値を設定
+        const initialEditingValues: { [key: string]: { wholesalePrice: string; price: string; totalPayment: string } } = {}
+        fetchedVehicles.forEach(vehicle => {
+          if (vehicle.id) {
+            initialEditingValues[vehicle.id] = {
+              wholesalePrice: vehicle.wholesalePrice ? formatNumberWithCommas(vehicle.wholesalePrice) : '',
+              price: vehicle.price ? formatNumberWithCommas(vehicle.price) : '',
+              totalPayment: vehicle.totalPayment ? formatNumberWithCommas(vehicle.totalPayment) : ''
+            }
+          }
+        })
+        setEditingValues(initialEditingValues)
+        
         setError(null)
       } catch (err) {
-        setError("車両の読み込みに失敗しました。")
-        console.error(err)
+        console.error("車両取得エラーの詳細:", err)
+        setError(`車両の読み込みに失敗しました: ${err instanceof Error ? err.message : '不明なエラー'}`)
       } finally {
         setLoading(false)
       }
@@ -101,42 +133,80 @@ export default function AdminPage() {
     router.push(`/admin/vehicles/${id}/edit`)
   }
 
-  // インライン編集開始
-  const startEditing = (vehicleId: string, field: 'price' | 'totalPayment' | 'wholesalePrice', currentValue: number) => {
-    setEditingField({ vehicleId, field })
-    setEditValue(formatNumberWithCommas(currentValue))
+  // 編集値の変更を処理
+  const handleValueChange = (vehicleId: string, field: 'wholesalePrice' | 'price' | 'totalPayment', value: string) => {
+    setEditingValues(prev => ({
+      ...prev,
+      [vehicleId]: {
+        ...prev[vehicleId],
+        [field]: value
+      }
+    }))
+    setHasChanges(prev => ({
+      ...prev,
+      [vehicleId]: true
+    }))
   }
 
-  // インライン編集キャンセル
-  const cancelEditing = () => {
-    setEditingField(null)
-    setEditValue("")
-  }
-
-  // インライン編集保存
-  const saveEditing = async () => {
-    if (!editingField) return
-
+  // 個別保存処理
+  const handleSave = async (vehicleId: string) => {
     try {
       setSaving(true)
-      const numericValue = Number(editValue.replace(/,/g, ''))
       
-      const updatedVehicle = {
-        [editingField.field]: numericValue,
-        updatedAt: new Date(),
+      const vehicle = vehicles.find(v => v.id === vehicleId)
+      const editingValue = editingValues[vehicleId]
+      if (!vehicle || !editingValue) return
+
+      const updates: any = {}
+      let hasUpdates = false
+
+      // 業販金額の更新
+      const newWholesalePrice = Number(editingValue.wholesalePrice.replace(/,/g, '')) || 0
+      if (newWholesalePrice !== vehicle.wholesalePrice) {
+        updates.wholesalePrice = newWholesalePrice
+        hasUpdates = true
       }
 
-      await updateVehicle(editingField.vehicleId, updatedVehicle)
-      
-      // ローカル状態を更新
-      setVehicles(prev => prev.map(vehicle => 
-        vehicle.id === editingField.vehicleId 
-          ? { ...vehicle, [editingField.field]: numericValue }
-          : vehicle
-      ))
+      // 車両価格の更新
+      const newPrice = Number(editingValue.price.replace(/,/g, '')) || 0
+      if (newPrice !== vehicle.price) {
+        updates.price = newPrice
+        hasUpdates = true
+      }
 
-      setEditingField(null)
-      setEditValue("")
+      // 車両総額の更新
+      const newTotalPayment = Number(editingValue.totalPayment.replace(/,/g, '')) || 0
+      if (newTotalPayment !== vehicle.totalPayment) {
+        updates.totalPayment = newTotalPayment
+        hasUpdates = true
+      }
+
+      if (hasUpdates) {
+        updates.updatedAt = new Date()
+        await updateVehicle(vehicleId, updates)
+        
+        // ローカル状態を更新
+        setVehicles(prev => prev.map(v => 
+          v.id === vehicleId 
+            ? { ...v, ...updates }
+            : v
+        ))
+
+        // 編集値を更新
+        setEditingValues(prev => ({
+          ...prev,
+          [vehicleId]: {
+            wholesalePrice: formatNumberWithCommas(newWholesalePrice),
+            price: formatNumberWithCommas(newPrice),
+            totalPayment: formatNumberWithCommas(newTotalPayment)
+          }
+        }))
+
+        setHasChanges(prev => ({
+          ...prev,
+          [vehicleId]: false
+        }))
+      }
     } catch (err) {
       setError("価格の更新に失敗しました。")
       console.error(err)
@@ -146,17 +216,89 @@ export default function AdminPage() {
   }
 
   // 入力値のフォーマット処理
-  const handleEditValueChange = (value: string) => {
-    const formattedValue = formatInputWithCommas(value)
-    setEditValue(formattedValue)
+  const handleInputChange = (value: string) => {
+    return formatInputWithCommas(value)
+  }
+
+  // ソート処理
+  const handleSort = (field: 'inspectionDate' | 'negotiationDeadline') => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
+    } else {
+      setSortField(field)
+      setSortDirection('asc')
+    }
+  }
+
+  // ソートされた車両リストを取得
+  const getSortedVehicles = () => {
+    if (!sortField) return filteredVehicles
+
+    return [...filteredVehicles].sort((a, b) => {
+      let aValue: string = ''
+      let bValue: string = ''
+
+      if (sortField === 'inspectionDate') {
+        aValue = a.inspectionDate || ''
+        bValue = b.inspectionDate || ''
+      } else if (sortField === 'negotiationDeadline') {
+        aValue = a.negotiationDeadline || ''
+        bValue = b.negotiationDeadline || ''
+      }
+
+      if (sortDirection === 'asc') {
+        return aValue.localeCompare(bValue)
+      } else {
+        return bValue.localeCompare(aValue)
+      }
+    })
   }
 
   if (loading) {
-    return <div>読み込み中...</div>
+    return (
+      <div className="container mx-auto py-10">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-4">
+          <Skeleton className="h-8 w-32" />
+          <div className="flex gap-2">
+            <Skeleton className="h-10 w-32" />
+            <Skeleton className="h-10 w-32" />
+          </div>
+        </div>
+        <Skeleton className="h-10 w-full mb-6" />
+        <div className="rounded-md border">
+          <div className="p-4">
+            <div className="space-y-4">
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="flex gap-4">
+                  <Skeleton className="h-20 w-32" />
+                  <Skeleton className="h-4 flex-1" />
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-4 w-20" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   if (error) {
-    return <div>エラー: {error}</div>
+    return (
+      <div className="container mx-auto py-10">
+        <div className="bg-red-50 border border-red-200 rounded-md p-4">
+          <h2 className="text-lg font-semibold text-red-800 mb-2">エラーが発生しました</h2>
+          <p className="text-red-700 mb-4">{error}</p>
+          <Button 
+            onClick={() => window.location.reload()} 
+            variant="outline"
+            className="text-red-700 border-red-300 hover:bg-red-100"
+          >
+            ページを再読み込み
+          </Button>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -209,142 +351,124 @@ export default function AdminPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>写真</TableHead>
               <TableHead>問い合わせ番号</TableHead>
-              <TableHead>車体番号</TableHead>
               <TableHead>メーカー</TableHead>
-              <TableHead>車種</TableHead>
-              <TableHead>型式</TableHead>
-              <TableHead>年式</TableHead>
               <TableHead>ボディタイプ</TableHead>
-              <TableHead>大きさ</TableHead>
-              <TableHead>積載量</TableHead>
-              <TableHead>車検状態</TableHead>
-              <TableHead>車検有効期限</TableHead>
-              <TableHead>車両価格</TableHead>
-              <TableHead>車両価格（税込）</TableHead>
+              <TableHead>サイズ</TableHead>
+              <TableHead>車体番号</TableHead>
               <TableHead>業販金額</TableHead>
+              <TableHead>車両価格</TableHead>
+              <TableHead>車両総額</TableHead>
+              <TableHead>
+                <div className="flex items-center gap-1 cursor-pointer" onClick={() => handleSort('inspectionDate')}>
+                  <span>車検有効期限</span>
+                  <span className="text-xs">
+                    {sortField === 'inspectionDate' 
+                      ? (sortDirection === 'asc' ? '↑' : '↓')
+                      : '↕'
+                    }
+                  </span>
+                </div>
+              </TableHead>
+              <TableHead>
+                <div className="flex items-center gap-1 cursor-pointer" onClick={() => handleSort('negotiationDeadline')}>
+                  <span>商談期限</span>
+                  <span className="text-xs">
+                    {sortField === 'negotiationDeadline' 
+                      ? (sortDirection === 'asc' ? '↑' : '↓')
+                      : '↕'
+                    }
+                  </span>
+                </div>
+              </TableHead>
+              <TableHead>非公開</TableHead>
               <TableHead className="text-right">操作</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredVehicles.map((vehicle) => (
+            {getSortedVehicles().map((vehicle, index) => (
               <TableRow key={vehicle.id}>
-                <TableCell>
-                  <Image
-                    src={
-                      vehicle.imageUrls?.[0] ||
-                      vehicle.imageUrl ||
-                      "/placeholder.jpg"
-                    }
-                    alt={`${vehicle.maker} ${vehicle.managementNumber || vehicle.id} の画像`}
-                    width={120}
-                    height={80}
-                    className="rounded-md object-cover"
-                    onError={(e) => {
-                      console.log("画像読み込みエラー:", e.currentTarget.src);
-                      e.currentTarget.src = "/placeholder.jpg";
-                    }}
-                  />
-                </TableCell>
                 <TableCell>{vehicle.inquiryNumber || "---"}</TableCell>
-                <TableCell>{vehicle.chassisNumber || "---"}</TableCell>
-                <TableCell>{vehicle.maker || "---"}</TableCell>
-                <TableCell>{vehicle.model || "---"}</TableCell>
-                <TableCell>{vehicle.type || "---"}</TableCell>
-                <TableCell>{vehicle.year || "---"}</TableCell>
+                <TableCell>{vehicle.maker}</TableCell>
                 <TableCell>{vehicle.bodyType || "---"}</TableCell>
                 <TableCell>{vehicle.size || "---"}</TableCell>
-                <TableCell>{vehicle.loadCapacity || "---"}</TableCell>
-                <TableCell>{vehicle.inspectionStatus || "---"}</TableCell>
-                <TableCell>{vehicle.inspectionExpiry || "---"}</TableCell>
+                <TableCell>{vehicle.chassisNumber || "---"}</TableCell>
                 <TableCell>
-                  {editingField?.vehicleId === vehicle.id && editingField?.field === 'price' ? (
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="text"
-                        value={editValue}
-                        onChange={(e) => handleEditValueChange(e.target.value)}
-                        className="w-20 px-2 py-1 border rounded text-sm"
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') saveEditing();
-                          if (e.key === 'Escape') cancelEditing();
-                        }}
-                      />
-                      <Button size="sm" onClick={saveEditing} disabled={saving}>保存</Button>
-                      <Button size="sm" variant="outline" onClick={cancelEditing}>キャンセル</Button>
-                    </div>
-                  ) : (
-                    <div 
-                      className="cursor-pointer hover:bg-gray-100 p-1 rounded"
-                      onClick={() => startEditing(vehicle.id!, 'price', vehicle.price || 0)}
-                    >
-                      {vehicle.price ? `¥${formatNumberWithCommas(vehicle.price)}` : "---"}
-                    </div>
-                  )}
+                  <input
+                    type="text"
+                    value={editingValues[vehicle.id!]?.wholesalePrice || ''}
+                    onChange={(e) => handleValueChange(vehicle.id!, 'wholesalePrice', handleInputChange(e.target.value))}
+                    className="w-24 border rounded px-2 py-1 text-sm"
+                    placeholder="業販金額"
+                  />
                 </TableCell>
                 <TableCell>
-                  {editingField?.vehicleId === vehicle.id && editingField?.field === 'totalPayment' ? (
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="text"
-                        value={editValue}
-                        onChange={(e) => handleEditValueChange(e.target.value)}
-                        className="w-20 px-2 py-1 border rounded text-sm"
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') saveEditing();
-                          if (e.key === 'Escape') cancelEditing();
-                        }}
-                      />
-                      <Button size="sm" onClick={saveEditing} disabled={saving}>保存</Button>
-                      <Button size="sm" variant="outline" onClick={cancelEditing}>キャンセル</Button>
-                    </div>
-                  ) : (
-                    <div 
-                      className="cursor-pointer hover:bg-gray-100 p-1 rounded"
-                      onClick={() => startEditing(vehicle.id!, 'totalPayment', vehicle.totalPayment || 0)}
-                    >
-                      {vehicle.totalPayment ? `¥${formatNumberWithCommas(vehicle.totalPayment)}` : "---"}
-                    </div>
-                  )}
+                  <input
+                    type="text"
+                    value={editingValues[vehicle.id!]?.price || ''}
+                    onChange={(e) => handleValueChange(vehicle.id!, 'price', handleInputChange(e.target.value))}
+                    className="w-24 border rounded px-2 py-1 text-sm"
+                    placeholder="価格"
+                  />
                 </TableCell>
                 <TableCell>
-                  {editingField?.vehicleId === vehicle.id && editingField?.field === 'wholesalePrice' ? (
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="text"
-                        value={editValue}
-                        onChange={(e) => handleEditValueChange(e.target.value)}
-                        className="w-20 px-2 py-1 border rounded text-sm"
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') saveEditing();
-                          if (e.key === 'Escape') cancelEditing();
-                        }}
-                      />
-                      <Button size="sm" onClick={saveEditing} disabled={saving}>保存</Button>
-                      <Button size="sm" variant="outline" onClick={cancelEditing}>キャンセル</Button>
-                    </div>
+                  <input
+                    type="text"
+                    value={editingValues[vehicle.id!]?.totalPayment || ''}
+                    onChange={(e) => handleValueChange(vehicle.id!, 'totalPayment', handleInputChange(e.target.value))}
+                    className="w-24 border rounded px-2 py-1 text-sm"
+                    placeholder="総額"
+                  />
+                </TableCell>
+                <TableCell>
+                  {vehicle.inspectionStatus && vehicle.inspectionDate 
+                    ? `${vehicle.inspectionStatus} ${vehicle.inspectionDate}`
+                    : vehicle.inspectionStatus || vehicle.inspectionDate || "---"
+                  }
+                </TableCell>
+                <TableCell>
+                  {vehicle.salesRepresentative && vehicle.negotiationDeadline
+                    ? `${vehicle.salesRepresentative} ${vehicle.negotiationDeadline}`
+                    : vehicle.salesRepresentative || vehicle.negotiationDeadline || "---"
+                  }
+                </TableCell>
+                <TableCell>
+                  {vehicle.isTemporarySave ? (
+                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                      一時保存
+                    </span>
+                  ) : vehicle.isPrivate ? (
+                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                      非公開
+                    </span>
                   ) : (
-                    <div 
-                      className="cursor-pointer hover:bg-gray-100 p-1 rounded"
-                      onClick={() => startEditing(vehicle.id!, 'wholesalePrice', vehicle.wholesalePrice || 0)}
-                    >
-                      {vehicle.wholesalePrice ? `¥${formatNumberWithCommas(vehicle.wholesalePrice)}` : "---"}
-                    </div>
+                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      公開
+                    </span>
                   )}
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex gap-2 justify-end">
+                    {hasChanges[vehicle.id!] && (
+                      <Button
+                        onClick={() => handleSave(vehicle.id!)}
+                        disabled={saving}
+                        size="sm"
+                        className="bg-green-600 hover:bg-green-700"
+                      >
+                        {saving ? "保存中..." : "保存"}
+                      </Button>
+                    )}
                     <Button
-                      size="sm"
                       variant="outline"
+                      size="sm"
                       onClick={() => handleEdit(vehicle.id!)}
                     >
                       編集
                     </Button>
                     <Button
-                      size="sm"
                       variant="destructive"
+                      size="sm"
                       onClick={() => handleDelete(vehicle)}
                     >
                       削除
@@ -357,21 +481,25 @@ export default function AdminPage() {
         </Table>
       </div>
 
-      {/* 削除確認ダイアログ */}
-      <AlertDialog open={!!selectedVehicle} onOpenChange={() => setSelectedVehicle(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>車両を削除しますか？</AlertDialogTitle>
-            <AlertDialogDescription>
-              この操作は取り消すことができません。車両「{selectedVehicle?.maker} {selectedVehicle?.model}」を削除しますか？
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>キャンセル</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDelete}>削除</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      {selectedVehicle && (
+        <AlertDialog open onOpenChange={() => setSelectedVehicle(null)}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>本当に削除しますか？</AlertDialogTitle>
+              <AlertDialogDescription>
+                「{selectedVehicle.name}
+                」を削除すると、元に戻すことはできません。
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>キャンセル</AlertDialogCancel>
+              <AlertDialogAction onClick={confirmDelete}>
+                削除
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
     </div>
   )
 } 

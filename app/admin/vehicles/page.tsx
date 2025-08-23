@@ -37,12 +37,11 @@ export default function AdminVehiclesPage() {
   const [searchQuery, setSearchQuery] = useState("")
   
   // インライン編集用の状態
-  const [editingField, setEditingField] = useState<{
-    vehicleId: string;
-    field: 'price' | 'totalPayment' | 'wholesalePrice';
-  } | null>(null)
-  const [editValue, setEditValue] = useState("")
+  const [editingValues, setEditingValues] = useState<{
+    [key: string]: { wholesalePrice: string; price: string; totalPayment: string }
+  }>({})
   const [saving, setSaving] = useState(false)
+  const [hasChanges, setHasChanges] = useState<{[key: string]: boolean}>({})
   
   // 画像エラー状態を管理
   const [imageErrors, setImageErrors] = useState<Set<string>>(new Set())
@@ -69,6 +68,20 @@ export default function AdminVehiclesPage() {
         console.log("取得した車両数:", fetchedVehicles.length)
         setVehicles(fetchedVehicles)
         setFilteredVehicles(fetchedVehicles)
+        
+        // 初期編集値を設定
+        const initialEditingValues: { [key: string]: { wholesalePrice: string; price: string; totalPayment: string } } = {}
+        fetchedVehicles.forEach(vehicle => {
+          if (vehicle.id) {
+            initialEditingValues[vehicle.id] = {
+              wholesalePrice: vehicle.wholesalePrice ? formatNumberWithCommas(vehicle.wholesalePrice) : '',
+              price: vehicle.price ? formatNumberWithCommas(vehicle.price) : '',
+              totalPayment: vehicle.totalPayment ? formatNumberWithCommas(vehicle.totalPayment) : ''
+            }
+          }
+        })
+        setEditingValues(initialEditingValues)
+        
         setError(null)
       } catch (err) {
         console.error("車両取得エラーの詳細:", err)
@@ -120,42 +133,80 @@ export default function AdminVehiclesPage() {
     router.push(`/admin/vehicles/${id}/edit`)
   }
 
-  // インライン編集開始
-  const startEditing = (vehicleId: string, field: 'price' | 'totalPayment' | 'wholesalePrice', currentValue: number) => {
-    setEditingField({ vehicleId, field })
-    setEditValue(formatNumberWithCommas(currentValue))
+  // 編集値の変更を処理
+  const handleValueChange = (vehicleId: string, field: 'wholesalePrice' | 'price' | 'totalPayment', value: string) => {
+    setEditingValues(prev => ({
+      ...prev,
+      [vehicleId]: {
+        ...prev[vehicleId],
+        [field]: value
+      }
+    }))
+    setHasChanges(prev => ({
+      ...prev,
+      [vehicleId]: true
+    }))
   }
 
-  // インライン編集キャンセル
-  const cancelEditing = () => {
-    setEditingField(null)
-    setEditValue("")
-  }
-
-  // インライン編集保存
-  const saveEditing = async () => {
-    if (!editingField) return
-
+  // 個別保存処理
+  const handleSave = async (vehicleId: string) => {
     try {
       setSaving(true)
-      const numericValue = Number(editValue.replace(/,/g, ''))
       
-      const updatedVehicle = {
-        [editingField.field]: numericValue,
-        updatedAt: new Date(),
+      const vehicle = vehicles.find(v => v.id === vehicleId)
+      const editingValue = editingValues[vehicleId]
+      if (!vehicle || !editingValue) return
+
+      const updates: any = {}
+      let hasUpdates = false
+
+      // 業販金額の更新
+      const newWholesalePrice = Number(editingValue.wholesalePrice.replace(/,/g, '')) || 0
+      if (newWholesalePrice !== vehicle.wholesalePrice) {
+        updates.wholesalePrice = newWholesalePrice
+        hasUpdates = true
       }
 
-      await updateVehicle(editingField.vehicleId, updatedVehicle)
-      
-      // ローカル状態を更新
-      setVehicles(prev => prev.map(vehicle => 
-        vehicle.id === editingField.vehicleId 
-          ? { ...vehicle, [editingField.field]: numericValue }
-          : vehicle
-      ))
+      // 車両価格の更新
+      const newPrice = Number(editingValue.price.replace(/,/g, '')) || 0
+      if (newPrice !== vehicle.price) {
+        updates.price = newPrice
+        hasUpdates = true
+      }
 
-      setEditingField(null)
-      setEditValue("")
+      // 車両総額の更新
+      const newTotalPayment = Number(editingValue.totalPayment.replace(/,/g, '')) || 0
+      if (newTotalPayment !== vehicle.totalPayment) {
+        updates.totalPayment = newTotalPayment
+        hasUpdates = true
+      }
+
+      if (hasUpdates) {
+        updates.updatedAt = new Date()
+        await updateVehicle(vehicleId, updates)
+        
+        // ローカル状態を更新
+        setVehicles(prev => prev.map(v => 
+          v.id === vehicleId 
+            ? { ...v, ...updates }
+            : v
+        ))
+
+        // 編集値を更新
+        setEditingValues(prev => ({
+          ...prev,
+          [vehicleId]: {
+            wholesalePrice: formatNumberWithCommas(newWholesalePrice),
+            price: formatNumberWithCommas(newPrice),
+            totalPayment: formatNumberWithCommas(newTotalPayment)
+          }
+        }))
+
+        setHasChanges(prev => ({
+          ...prev,
+          [vehicleId]: false
+        }))
+      }
     } catch (err) {
       setError("価格の更新に失敗しました。")
       console.error(err)
@@ -165,9 +216,8 @@ export default function AdminVehiclesPage() {
   }
 
   // 入力値のフォーマット処理
-  const handleEditValueChange = (value: string) => {
-    const formattedValue = formatInputWithCommas(value)
-    setEditValue(formattedValue)
+  const handleInputChange = (value: string) => {
+    return formatInputWithCommas(value)
   }
 
   // ソート処理
@@ -305,101 +355,70 @@ export default function AdminVehiclesPage() {
               <TableHead>メーカー</TableHead>
               <TableHead>ボディタイプ</TableHead>
               <TableHead>サイズ</TableHead>
-              <TableHead>型式</TableHead>
+              <TableHead>車体番号</TableHead>
               <TableHead>業販金額</TableHead>
               <TableHead>車両価格</TableHead>
-                             <TableHead>
-                 <div className="flex items-center gap-1 cursor-pointer" onClick={() => handleSort('inspectionDate')}>
-                   <span>車検状態</span>
-                   <span className="text-xs">
-                     {sortField === 'inspectionDate' 
-                       ? (sortDirection === 'asc' ? '↑' : '↓')
-                       : '↕'
-                     }
-                   </span>
-                 </div>
-               </TableHead>
-               <TableHead>
-                 <div className="flex items-center gap-1 cursor-pointer" onClick={() => handleSort('negotiationDeadline')}>
-                   <span>商談期限</span>
-                   <span className="text-xs">
-                     {sortField === 'negotiationDeadline' 
-                       ? (sortDirection === 'asc' ? '↑' : '↓')
-                       : '↕'
-                     }
-                   </span>
-                 </div>
-               </TableHead>
+              <TableHead>車両総額</TableHead>
+              <TableHead>
+                <div className="flex items-center gap-1 cursor-pointer" onClick={() => handleSort('inspectionDate')}>
+                  <span>車検有効期限</span>
+                  <span className="text-xs">
+                    {sortField === 'inspectionDate' 
+                      ? (sortDirection === 'asc' ? '↑' : '↓')
+                      : '↕'
+                    }
+                  </span>
+                </div>
+              </TableHead>
+              <TableHead>
+                <div className="flex items-center gap-1 cursor-pointer" onClick={() => handleSort('negotiationDeadline')}>
+                  <span>商談期限</span>
+                  <span className="text-xs">
+                    {sortField === 'negotiationDeadline' 
+                      ? (sortDirection === 'asc' ? '↑' : '↓')
+                      : '↕'
+                    }
+                  </span>
+                </div>
+              </TableHead>
+              <TableHead>非公開</TableHead>
               <TableHead className="text-right">操作</TableHead>
             </TableRow>
           </TableHeader>
-                     <TableBody>
-             {getSortedVehicles().map((vehicle, index) => (
+          <TableBody>
+            {getSortedVehicles().map((vehicle, index) => (
               <TableRow key={vehicle.id}>
                 <TableCell>{vehicle.inquiryNumber || "---"}</TableCell>
                 <TableCell>{vehicle.maker}</TableCell>
                 <TableCell>{vehicle.bodyType || "---"}</TableCell>
                 <TableCell>{vehicle.size || "---"}</TableCell>
-                <TableCell>{vehicle.modelCode || "---"}</TableCell>
+                <TableCell>{vehicle.chassisNumber || "---"}</TableCell>
                 <TableCell>
-                  {editingField?.vehicleId === vehicle.id && editingField?.field === 'wholesalePrice' ? (
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="text"
-                        value={editValue}
-                        onChange={(e) => handleEditValueChange(e.target.value)}
-                        className="w-24 border rounded px-2 py-1 text-sm"
-                        placeholder="業販金額"
-                      />
-                      <Button size="sm" onClick={saveEditing} disabled={saving}>
-                        {saving ? "保存中..." : "保存"}
-                      </Button>
-                      <Button size="sm" variant="outline" onClick={cancelEditing} disabled={saving}>
-                        キャンセル
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-2">
-                      <span>{vehicle.wholesalePrice ? `${vehicle.wholesalePrice.toLocaleString()}円` : "---"}</span>
-                      <Button 
-                        size="sm" 
-                        variant="outline" 
-                        onClick={() => startEditing(vehicle.id!, 'wholesalePrice', vehicle.wholesalePrice || 0)}
-                      >
-                        編集
-                      </Button>
-                    </div>
-                  )}
+                  <input
+                    type="text"
+                    value={editingValues[vehicle.id!]?.wholesalePrice || ''}
+                    onChange={(e) => handleValueChange(vehicle.id!, 'wholesalePrice', handleInputChange(e.target.value))}
+                    className="w-24 border rounded px-2 py-1 text-sm"
+                    placeholder="業販金額"
+                  />
                 </TableCell>
                 <TableCell>
-                  {editingField?.vehicleId === vehicle.id && editingField?.field === 'price' ? (
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="text"
-                        value={editValue}
-                        onChange={(e) => handleEditValueChange(e.target.value)}
-                        className="w-24 border rounded px-2 py-1 text-sm"
-                        placeholder="価格"
-                      />
-                      <Button size="sm" onClick={saveEditing} disabled={saving}>
-                        {saving ? "保存中..." : "保存"}
-                      </Button>
-                      <Button size="sm" variant="outline" onClick={cancelEditing} disabled={saving}>
-                        キャンセル
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-2">
-                      <span>{vehicle.price ? `${vehicle.price.toLocaleString()}円` : "---"}</span>
-                      <Button 
-                        size="sm" 
-                        variant="outline" 
-                        onClick={() => startEditing(vehicle.id!, 'price', vehicle.price || 0)}
-                      >
-                        編集
-                      </Button>
-                    </div>
-                  )}
+                  <input
+                    type="text"
+                    value={editingValues[vehicle.id!]?.price || ''}
+                    onChange={(e) => handleValueChange(vehicle.id!, 'price', handleInputChange(e.target.value))}
+                    className="w-24 border rounded px-2 py-1 text-sm"
+                    placeholder="価格"
+                  />
+                </TableCell>
+                <TableCell>
+                  <input
+                    type="text"
+                    value={editingValues[vehicle.id!]?.totalPayment || ''}
+                    onChange={(e) => handleValueChange(vehicle.id!, 'totalPayment', handleInputChange(e.target.value))}
+                    className="w-24 border rounded px-2 py-1 text-sm"
+                    placeholder="総額"
+                  />
                 </TableCell>
                 <TableCell>
                   {vehicle.inspectionStatus && vehicle.inspectionDate 
@@ -413,8 +432,33 @@ export default function AdminVehiclesPage() {
                     : vehicle.salesRepresentative || vehicle.negotiationDeadline || "---"
                   }
                 </TableCell>
+                <TableCell>
+                  {vehicle.isTemporarySave ? (
+                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                      一時保存
+                    </span>
+                  ) : vehicle.isPrivate ? (
+                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                      非公開
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      公開
+                    </span>
+                  )}
+                </TableCell>
                 <TableCell className="text-right">
                   <div className="flex gap-2 justify-end">
+                    {hasChanges[vehicle.id!] && (
+                      <Button
+                        onClick={() => handleSave(vehicle.id!)}
+                        disabled={saving}
+                        size="sm"
+                        className="bg-green-600 hover:bg-green-700"
+                      >
+                        {saving ? "保存中..." : "保存"}
+                      </Button>
+                    )}
                     <Button
                       variant="outline"
                       size="sm"

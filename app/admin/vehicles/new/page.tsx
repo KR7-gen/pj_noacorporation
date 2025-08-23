@@ -3,6 +3,16 @@
 import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Switch } from "@/components/ui/switch"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { addVehicle } from "@/lib/firebase-utils"
 import ImageUploader from "@/components/ImageUploader"
 import { formatNumberWithCommas, formatInputWithCommas } from "@/lib/utils"
@@ -122,6 +132,9 @@ const vehicleStatuses = [
   "予備検査"
 ]
 
+// 営業担当の選択肢
+const salesRepresentatives = ["営業A", "営業B", "営業C"]
+
 // 装備品リスト
 const equipmentList = [
   "ETC", "バックカメラ", "記録簿", "パワーウィンドウ", "ドラレコ", "エアコン",
@@ -172,6 +185,14 @@ export default function VehicleNewPage() {
     // 店舗関連フィールド
     storeName: "",
     storeId: undefined,
+    // 商談関連フィールド
+    isNegotiating: false,
+    isSoldOut: false,
+    isPrivate: false,
+    isTemporarySave: false, // 一時保存状態
+    negotiationDeadline: "",
+    salesRepresentative: "",
+    customerName: "",
   })
   const [generatedInquiryNumber, setGeneratedInquiryNumber] = useState<string>("生成中...")
   const [stores, setStores] = useState<Store[]>([])
@@ -276,6 +297,36 @@ export default function VehicleNewPage() {
     }
   }
 
+  // 商談関連のハンドラー
+  const handleNegotiationChange = (field: string, value: any) => {
+    setFormData((prev) => {
+      // SOLD OUTと商談中の排他的制御
+      if (field === 'isSoldOut' && value === true) {
+        // SOLD OUTをONにしたら商談中をOFFにする
+        return {
+          ...prev,
+          isSoldOut: true,
+          isNegotiating: false,
+          [field]: value,
+        };
+      } else if (field === 'isNegotiating' && value === true) {
+        // 商談中をONにしたらSOLD OUTをOFFにする
+        return {
+          ...prev,
+          isNegotiating: true,
+          isSoldOut: false,
+          [field]: value,
+        };
+      } else {
+        // その他のフィールドは通常通り更新
+        return {
+          ...prev,
+          [field]: value,
+        };
+      }
+    });
+  }
+
   // 装備品の選択・解除
   const handleEquipmentToggle = (item: string) => {
     setFormData((prev) => {
@@ -348,6 +399,81 @@ export default function VehicleNewPage() {
     }
   }
 
+  // 一時保存ハンドラー
+  const handleTemporarySave = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+
+    try {
+      // 一時的な画像URLを除外して有効な画像URLのみを取得
+      const validImageUrls = formData.imageUrls?.filter(url => 
+        url && 
+        url.trim() !== "" && 
+        !url.includes("temp_") && 
+        !url.startsWith("blob:") &&
+        !url.startsWith("data:")
+      ) || [];
+
+      console.log("一時保存する画像URL:", validImageUrls);
+
+      const vehicleData = {
+        name: formData.name,
+        maker: formData.maker,
+        model: formData.model,
+        year: formData.year,
+        month: formData.month,
+        mileage: formData.mileage,
+        price: Number(formData.price?.toString().replace(/,/g, '')),
+        description: formData.description,
+        imageUrls: validImageUrls, // 有効な画像URLのみを保存
+        wholesalePrice: Number(formData.wholesalePrice?.toString().replace(/,/g, '')),
+        totalPayment: Number(formData.totalPayment?.toString().replace(/,/g, '')),
+        expiryDate: formData.inspectionDate,
+        // その他のフィールド
+        bodyType: formData.bodyType,
+        size: formData.size,
+        vehicleType: formData.vehicleType,
+        chassisNumber: formData.chassisNumber,
+        shift: formData.shift,
+        inspectionStatus: formData.inspectionStatus,
+        outerLength: formData.outerLength ? Number(formData.outerLength?.toString().replace(/,/g, '')) : undefined,
+        outerWidth: formData.outerWidth ? Number(formData.outerWidth?.toString().replace(/,/g, '')) : undefined,
+        outerHeight: formData.outerHeight ? Number(formData.outerHeight?.toString().replace(/,/g, '')) : undefined,
+        totalWeight: formData.totalWeight ? Number(formData.totalWeight?.toString().replace(/,/g, '')) : undefined,
+        horsepower: formData.horsepower ? Number(formData.horsepower?.toString().replace(/,/g, '')) : undefined,
+        displacement: formData.displacement ? Number(formData.displacement?.toString().replace(/,/g, '')) : undefined,
+        fuel: formData.fuel,
+        equipment: formData.equipment ? formData.equipment.join(',') : undefined,
+        inspectionImageUrl: formData.inspectionImageUrl,
+        conditionImageUrl: formData.conditionImageUrl,
+        // 商談関連フィールド
+        isNegotiating: formData.isNegotiating || false,
+        isSoldOut: formData.isSoldOut || false,
+        isPrivate: formData.isPrivate || false,
+        isTemporarySave: true, // 一時保存としてマーク
+        negotiationDeadline: formData.negotiationDeadline,
+        salesRepresentative: formData.salesRepresentative,
+        customerName: formData.customerName,
+      }
+
+      console.log("一時保存する車両データ:", vehicleData)
+
+      const vehicleId = await addVehicle(vehicleData)
+      console.log("車両一時保存成功:", vehicleId)
+
+      // 成功メッセージを表示
+      alert("車両が一時保存されました")
+      
+      // 管理画面の車両一覧にリダイレクト
+      router.push("/admin/vehicles")
+    } catch (error) {
+      console.error("車両一時保存エラー:", error)
+      alert("車両の一時保存に失敗しました")
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   // 車両保存時の画像URL処理を改善
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -395,6 +521,14 @@ export default function VehicleNewPage() {
         equipment: formData.equipment ? formData.equipment.join(',') : undefined,
         inspectionImageUrl: formData.inspectionImageUrl,
         conditionImageUrl: formData.conditionImageUrl,
+        // 商談関連フィールド
+        isNegotiating: formData.isNegotiating || false,
+        isSoldOut: formData.isSoldOut || false,
+        isPrivate: formData.isPrivate || false,
+        isTemporarySave: false, // 通常保存としてマーク
+        negotiationDeadline: formData.negotiationDeadline,
+        salesRepresentative: formData.salesRepresentative,
+        customerName: formData.customerName,
       }
 
       console.log("保存する車両データ:", vehicleData)
@@ -490,7 +624,7 @@ export default function VehicleNewPage() {
               />
             </div>
             <div className="space-y-2">
-              <label className="block text-sm font-medium">車両価格（税込）</label>
+                              <label className="block text-sm font-medium">車両総額</label>
               <input
                 type="text"
                 name="totalPayment"
@@ -502,34 +636,92 @@ export default function VehicleNewPage() {
             </div>
           </div>
 
-          {/* 車両説明 */}
-          <div>
-            <h3 className="text-lg font-medium mb-4">車両説明</h3>
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              className="w-full border rounded px-2 py-1 h-32"
-              placeholder="車両の詳細な説明を入力してください..."
-            />
-          </div>
-
-          {/* 毎月支払額シミュレーション */}
-          <div>
-            <h3 className="text-lg font-medium mb-4">毎月支払額シミュレーション</h3>
-            <div className="grid grid-cols-4 gap-6">
-              {[2, 3, 4, 5].map((year, index) => (
-                <div key={index} className="space-y-2">
-                  <label className="block text-sm font-medium">{year}年</label>
-                  <input
-                    type="text"
-                    className="w-full border rounded px-2 py-1"
-                    placeholder="100,000"
-                    value={formData[`simulation${year}Year` as keyof Vehicle] as string || ""}
-                    onChange={(e) => handleSimulationChange(index, e.target.value)}
-                  />
-                </div>
-              ))}
+          {/* 商談管理セクション */}
+          <div className="bg-gray-50 p-6 rounded-lg border">
+            <h3 className="text-lg font-medium mb-4">商談管理</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* 商談中スイッチ */}
+              <div className="flex items-center justify-between">
+                <Label htmlFor="isNegotiating" className="text-base">商談中</Label>
+                <Switch
+                  id="isNegotiating"
+                  checked={formData.isNegotiating || false}
+                  onCheckedChange={(checked) => handleNegotiationChange('isNegotiating', checked)}
+                  className="data-[state=checked]:bg-orange-500"
+                />
+              </div>
+              
+              {/* SOLD OUTスイッチ */}
+              <div className="flex items-center justify-between">
+                <Label htmlFor="isSoldOut" className="text-base">SOLD OUT</Label>
+                <Switch
+                  id="isSoldOut"
+                  checked={formData.isSoldOut || false}
+                  onCheckedChange={(checked) => handleNegotiationChange('isSoldOut', checked)}
+                  className="data-[state=checked]:bg-red-500"
+                />
+              </div>
+              
+              {/* 非公開スイッチ */}
+              <div className="flex items-center justify-between">
+                <Label htmlFor="isPrivate" className="text-base">非公開</Label>
+                <Switch
+                  id="isPrivate"
+                  checked={formData.isPrivate || false}
+                  onCheckedChange={(checked) => handleNegotiationChange('isPrivate', checked)}
+                  className="data-[state=checked]:bg-gray-500"
+                />
+              </div>
+              
+              {/* 商談期限 */}
+              <div>
+                <Label htmlFor="negotiationDeadline" className={formData.isNegotiating ? "text-red-600" : ""}>
+                  商談期限{formData.isNegotiating && <span className="text-red-500">*</span>}
+                </Label>
+                <Input 
+                  id="negotiationDeadline" 
+                  type="date" 
+                  value={formData.negotiationDeadline || ""}
+                  onChange={(e) => handleNegotiationChange('negotiationDeadline', e.target.value)}
+                  required={formData.isNegotiating}
+                  className={formData.isNegotiating && !formData.negotiationDeadline ? "border-red-500" : ""}
+                />
+              </div>
+              
+              {/* 営業担当 */}
+              <div>
+                <Label htmlFor="salesRepresentative" className={formData.isNegotiating ? "text-red-600" : ""}>
+                  営業担当{formData.isNegotiating && <span className="text-red-500">*</span>}
+                </Label>
+                <Select 
+                  value={formData.salesRepresentative || ""} 
+                  onValueChange={(value) => handleNegotiationChange('salesRepresentative', value)}
+                >
+                  <SelectTrigger className={formData.isNegotiating && !formData.salesRepresentative ? "border-red-500" : ""}>
+                    <SelectValue placeholder="選択" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {salesRepresentatives.map((rep) => (
+                      <SelectItem key={rep} value={rep}>{rep}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              {/* 顧客名 */}
+              <div className="md:col-span-2">
+                <Label htmlFor="customerName" className={formData.isNegotiating ? "text-red-600" : ""}>
+                  顧客名{formData.isNegotiating && <span className="text-red-500">*</span>}
+                </Label>
+                <Input 
+                  id="customerName" 
+                  placeholder="テキスト入力" 
+                  value={formData.customerName || ""}
+                  onChange={(e) => handleNegotiationChange('customerName', e.target.value)}
+                  required={formData.isNegotiating}
+                  className={formData.isNegotiating && !formData.customerName ? "border-red-500" : ""}
+                />
+              </div>
             </div>
           </div>
 
@@ -690,17 +882,7 @@ export default function VehicleNewPage() {
                     ))}
                   </select>
                 </div>
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium">ミッション</label>
-                  <input
-                    type="text"
-                    name="mission"
-                    value={formData.mission}
-                    onChange={handleChange}
-                    className="w-full border rounded px-2 py-1"
-                    placeholder="ミッションを入力"
-                  />
-                </div>
+
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">車検状態</label>
                   <select
@@ -838,135 +1020,7 @@ export default function VehicleNewPage() {
             </div>
           </div>
 
-          {/* 車検証画像 */}
-          <div>
-            <h3 className="text-lg font-medium mb-4">車検証画像</h3>
-            <div className="space-y-4">
-              <input
-                type="file"
-                ref={inspectionFileRef}
-                onChange={handleFileSelect(inspectionFileRef, handleInspectionImageUpload)}
-                accept="image/*,.pdf"
-                className="hidden"
-              />
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => inspectionFileRef.current?.click()}
-                disabled={uploadingInspection}
-                className="w-full"
-              >
-                {uploadingInspection ? "アップロード中..." : "車検証を選択"}
-              </Button>
-              {formData.inspectionImageUrl && (
-                <div className="mt-4">
-                  <p className="text-sm text-gray-600 mb-2">アップロード済み:</p>
-                  <div className="border rounded-lg p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-red-500">📄</span>
-                      <a 
-                        href={formData.inspectionImageUrl} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:underline"
-                      >
-                        車検証を表示
-                      </a>
-                    </div>
-                    <div className="mt-2">
-                      <img 
-                        src={formData.inspectionImageUrl} 
-                        alt="車検証" 
-                        className="max-w-full h-auto max-h-64 rounded"
-                        onError={(e) => {
-                          // 画像読み込みエラー時はPDFとして扱う
-                          const target = e.target as HTMLImageElement;
-                          target.style.display = 'none';
-                          const parent = target.parentElement;
-                          if (parent) {
-                            parent.innerHTML = `
-                              <div class="flex items-center gap-2 p-4 bg-gray-50 rounded">
-                                <span class="text-red-500 text-2xl">📄</span>
-                                <span class="text-gray-700">PDFファイル</span>
-                                <a href="${formData.inspectionImageUrl}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline ml-2">
-                                  開く
-                                </a>
-                              </div>
-                            `;
-                          }
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
 
-          {/* 状態写真画像 */}
-          <div>
-            <h3 className="text-lg font-medium mb-4">状態写真画像</h3>
-            <div className="space-y-4">
-              <input
-                type="file"
-                ref={conditionFileRef}
-                onChange={handleFileSelect(conditionFileRef, handleConditionImageUpload)}
-                accept="image/*,.pdf"
-                className="hidden"
-              />
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => conditionFileRef.current?.click()}
-                disabled={uploadingCondition}
-                className="w-full"
-              >
-                {uploadingCondition ? "アップロード中..." : "状態表を選択"}
-              </Button>
-              {formData.conditionImageUrl && (
-                <div className="mt-4">
-                  <p className="text-sm text-gray-600 mb-2">アップロード済み:</p>
-                  <div className="border rounded-lg p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-red-500">📄</span>
-                      <a 
-                        href={formData.conditionImageUrl} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:underline"
-                      >
-                        状態表を表示
-                      </a>
-                    </div>
-                    <div className="mt-2">
-                      <img 
-                        src={formData.conditionImageUrl} 
-                        alt="状態表" 
-                        className="max-w-full h-auto max-h-64 rounded"
-                        onError={(e) => {
-                          // 画像読み込みエラー時はPDFとして扱う
-                          const target = e.target as HTMLImageElement;
-                          target.style.display = 'none';
-                          const parent = target.parentElement;
-                          if (parent) {
-                            parent.innerHTML = `
-                              <div class="flex items-center gap-2 p-4 bg-gray-50 rounded">
-                                <span class="text-red-500 text-2xl">📄</span>
-                                <span class="text-gray-700">PDFファイル</span>
-                                <a href="${formData.conditionImageUrl}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline ml-2">
-                                  開く
-                                </a>
-                              </div>
-                            `;
-                          }
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
 
           {/* 上物情報 */}
           <div>
@@ -1047,21 +1101,9 @@ export default function VehicleNewPage() {
             </div>
           </div>
 
-          {/* 装備品セクション */}
+          {/* 装備/仕様 */}
           <div>
-            <h3 className="text-lg font-medium mb-4">装備品</h3>
-            <div className="grid grid-cols-3 md:grid-cols-4 gap-3">
-              {equipmentList.map((item) => (
-                <button
-                  type="button"
-                  key={item}
-                  className={`rounded-full px-4 py-2 font-medium transition border-none focus:outline-none ${formData.equipment?.includes(item) ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-800'}`}
-                  onClick={() => handleEquipmentToggle(item)}
-                >
-                  {item}
-                </button>
-              ))}
-            </div>
+            <h3 className="text-lg font-medium mb-4">装備/仕様</h3>
             <div className="mt-4">
               <label className="block text-sm font-medium mb-2">装備/仕様</label>
               <textarea
@@ -1074,9 +1116,20 @@ export default function VehicleNewPage() {
             </div>
           </div>
 
-          <div className="flex justify-center">
+
+
+          <div className="flex justify-center gap-4">
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={handleTemporarySave} 
+              disabled={isSubmitting}
+              className="px-8"
+            >
+              {isSubmitting ? "保存中..." : "一時保存する"}
+            </Button>
             <Button type="submit" className="px-8" disabled={isSubmitting}>
-              {isSubmitting ? "登録中..." : "登録完了"}
+              {isSubmitting ? "登録中..." : "変更を保存する"}
             </Button>
           </div>
         </form>

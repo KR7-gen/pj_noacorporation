@@ -27,10 +27,17 @@ export default function VehicleDetailPage() {
         setLoading(true)
         const fetchedVehicle = await getVehicle(vehicleId)
         if (fetchedVehicle) {
+          // 非公開車両または一時保存車両の場合はエラーを表示
+          if (fetchedVehicle.isPrivate || fetchedVehicle.isTemporarySave) {
+            setError("この車両は非公開です")
+            return
+          }
+          
           setVehicle(fetchedVehicle)
           const allVehicles = await getVehicles()
-          const related = allVehicles
-            .filter(v => v.id !== vehicleId)
+                  const related = allVehicles
+          .filter(v => v.id !== vehicleId)
+          .filter(v => !v.isPrivate && !v.isTemporarySave) // 非公開車両と一時保存車両を除外
             .filter(v => 
               v.maker === fetchedVehicle.maker || 
               v.bodyType === fetchedVehicle.bodyType
@@ -114,26 +121,7 @@ export default function VehicleDetailPage() {
     return [];
   }, [vehicle?.imageUrls, vehicle?.imageUrl]);
 
-  const shouldShowSimulation = vehicle ? (() => {
-    const currentYear = new Date().getFullYear();
-    
-    let isWithinYearLimit = false;
-    if (vehicle.year) {
-      const yearStr = String(vehicle.year);
-      if (yearStr.startsWith('R')) {
-        const reiwaYear = parseInt(yearStr.substring(1));
-        const gregorianYear = 2018 + reiwaYear;
-        isWithinYearLimit = gregorianYear >= 2022;
-      } else {
-        const vehicleYear = Number(vehicle.year);
-        isWithinYearLimit = vehicleYear >= 2022;
-      }
-    }
-    
-    const isWithin10kKm = Number(vehicle.mileage) <= 10000;
-    
-    return isWithinYearLimit && isWithin10kKm;
-  })() : false;
+  const shouldShowSimulation = true; // すべての車両にシミュレーションを表示
 
   if (loading) {
     return (
@@ -485,128 +473,77 @@ export default function VehicleDetailPage() {
                     }}>毎月返済額シュミレーション</span>
                   </div>
                   
-                  {/* Simulation Table */}
-                  <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: '28.7% 71.3%',
-                    gridTemplateRows: '4rem 3.714rem',
-                    border: '1px solid #CCCCCC',
-                    borderRadius: '0.286rem'
-                  }}>
-                    {/* 左上：毎月の支払額（ラベル） */}
-                    <div style={{
-                      display: 'flex',
-                      justifyContent: 'flex-start',
-                      alignItems: 'center',
-                      height: '4rem', // 56px ÷ 14px
-                      borderRight: '1px solid #CCCCCC',
-                      borderBottom: '1px solid #CCCCCC',
-                      background: '#FFFFFF',
-                      paddingLeft: '1rem'
-                    }}>
-                      <span style={{
-                        fontSize: '1rem',
-                        fontWeight: 'bold',
-                        color: '#1A1A1A'
-                      }}>毎月の支払額</span>
-                    </div>
-                    
-                    {/* 右上：毎月の支払額（金額） */}
-                    <div style={{
-                      display: 'flex',
-                      justifyContent: 'flex-start',
-                      alignItems: 'center',
-                      height: '4rem', // 56px ÷ 14px
-                      borderBottom: '1px solid #CCCCCC',
-                      background: '#FFFFFF',
-                      paddingLeft: '1rem'
-                    }}>
-                      <span style={{
-                        color: '#1154AF'
-                      }}>
-                        <span style={{
-                          fontFamily: 'Noto Sans JP',
-                          fontWeight: '700',
-                          fontStyle: 'normal',
-                          fontSize: '1.5rem',
-                          lineHeight: '100%',
-                          letterSpacing: '0%'
-                        }}>
-                          {vehicle[`simulation${selectedPaymentPeriod}Year` as keyof Vehicle] 
-                            ? `${(Number(vehicle[`simulation${selectedPaymentPeriod}Year` as keyof Vehicle]) / 10000).toFixed(1)}`
-                            : "---"}
-                        </span>
-                        <span style={{
-                          fontFamily: 'Noto Sans JP',
-                          fontWeight: '400',
-                          fontStyle: 'normal',
-                          fontSize: '0.875rem',
-                          lineHeight: '100%',
-                          letterSpacing: '0%',
-                          color: '#1A1A1A'
-                        }}>万円</span>
-                      </span>
-                    </div>
-                    
-                    {/* 左下：返済期間（ラベル） */}
-                    <div style={{
-                      display: 'flex',
-                      justifyContent: 'flex-start',
-                      alignItems: 'center',
-                      height: '3.714rem', // 52px ÷ 14px
-                      borderRight: '1px solid #CCCCCC',
-                      background: '#FFFFFF',
-                      paddingLeft: '1rem'
-                    }}>
-                      <span style={{
-                        fontSize: '1rem',
-                        fontWeight: 'bold',
-                        color: '#1A1A1A'
-                      }}>返済期間</span>
-                    </div>
-                    
-                    {/* 右下：返済期間（選択ボタン） */}
-                    <div style={{
-                      display: 'flex',
-                      justifyContent: 'flex-start',
-                      alignItems: 'center',
-                      height: '3.714rem', // 52px ÷ 14px
-                      background: '#FFFFFF',
-                      paddingLeft: '1rem'
-                    }}>
-                      <div style={{ 
-                        display: 'flex', 
-                        width: '45.1%',
-                        height: '2rem',
-                        border: '1px solid #CCCCCC',
-                        borderRadius: '0.25rem',
-                        overflow: 'hidden'
-                      }}>
-                        {[2, 3, 4, 5].map((year, index) => (
-                          <button
-                            key={year}
-                            onClick={() => setSelectedPaymentPeriod(year)}
-                            style={{
-                              flex: 1,
-                              border: 'none',
-                              borderRight: index < 3 ? '1px solid #CCCCCC' : 'none',
-                              fontSize: '0.875rem',
-                              fontWeight: '500',
-                              cursor: 'pointer',
-                              transition: 'all 0.2s',
-                              backgroundColor: selectedPaymentPeriod === year ? '#999999' : '#E6E6E6',
-                              color: selectedPaymentPeriod === year ? '#FFFFFF' : '#1A1A1A',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center'
-                            }}
-                          >
-                            {year}年
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
+                                     {/* Simulation Table */}
+                   <div style={{
+                     display: 'grid',
+                     gridTemplateColumns: '28.7% 71.3%',
+                     gridTemplateRows: '4rem',
+                     border: '1px solid #CCCCCC',
+                     borderRadius: '0.286rem'
+                   }}>
+                     {/* 左：毎月の支払額（ラベル） */}
+                     <div style={{
+                       display: 'flex',
+                       justifyContent: 'flex-start',
+                       alignItems: 'center',
+                       height: '4rem', // 56px ÷ 14px
+                       borderRight: '1px solid #CCCCCC',
+                       background: '#FFFFFF',
+                       paddingLeft: '1rem'
+                     }}>
+                       <span style={{
+                         fontSize: '1rem',
+                         fontWeight: 'bold',
+                         color: '#1A1A1A',
+                         whiteSpace: 'nowrap'
+                       }}>毎月の支払額</span>
+                     </div>
+                     
+                     {/* 右：毎月の支払額（金額） */}
+                     <div style={{
+                       display: 'flex',
+                       justifyContent: 'flex-start',
+                       alignItems: 'center',
+                       height: '4rem', // 56px ÷ 14px
+                       background: '#FFFFFF',
+                       paddingLeft: '1rem'
+                     }}>
+                       <span style={{
+                         color: '#1154AF'
+                       }}>
+                         <span style={{
+                           fontFamily: 'Noto Sans JP',
+                           fontWeight: '700',
+                           fontStyle: 'normal',
+                           fontSize: '1.5rem',
+                           lineHeight: '100%',
+                           letterSpacing: '0%'
+                         }}>
+                           {(() => {
+                             const totalAmount = vehicle.totalPayment || vehicle.price || 0;
+                             if (totalAmount > 0) {
+                               // 年利8.2%で84回支払いの計算
+                               const annualRate = 0.082;
+                               const monthlyRate = annualRate / 12;
+                               const numberOfPayments = 84; // 84回支払い
+                               const monthlyPayment = (totalAmount * monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) / (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
+                               return (monthlyPayment / 10000).toFixed(1);
+                             }
+                             return "---";
+                           })()}
+                         </span>
+                         <span style={{
+                           fontFamily: 'Noto Sans JP',
+                           fontWeight: '400',
+                           fontStyle: 'normal',
+                           fontSize: '0.875rem',
+                           lineHeight: '100%',
+                           letterSpacing: '0%',
+                           color: '#1A1A1A'
+                         }}>万円</span>
+                       </span>
+                     </div>
+                   </div>
                 </div>
               )}
             </div>

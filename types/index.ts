@@ -66,6 +66,8 @@ export interface Vehicle {
   customerName?: string;
   isNegotiating?: boolean;
   isSoldOut?: boolean;
+  isPrivate?: boolean;
+  isTemporarySave?: boolean; // 一時保存状態
   // 支払額シミュレーション
   simulation2Year?: string;
   simulation3Year?: string;
