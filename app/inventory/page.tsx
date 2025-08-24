@@ -278,7 +278,8 @@ export default function InventoryPage() {
     <div className="min-h-screen bg-gray-50">
       <div 
         style={{
-          width: "1440px",
+          width: "100%",
+          maxWidth: "100vw",
           height: "3282px",
           gap: "32px",
           opacity: 1,
@@ -1523,7 +1524,8 @@ export default function InventoryPage() {
       {/* Contact Section */}
       <section 
         style={{
-          width: "1440px",
+          width: "100%",
+          maxWidth: "100vw",
           height: "671px",
           gap: "40px",
           opacity: 1,

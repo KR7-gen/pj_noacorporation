@@ -880,7 +880,7 @@ export default function VehicleDetailPage() {
                       fontFamily: 'Noto Sans JP',
                       fontWeight: 700,
                       fontStyle: 'normal',
-                      fontSize: '0.875rem', = 1rem
+                      fontSize: '1rem',
                       lineHeight: '100%',
                       letterSpacing: '0%',
                       color: '#1f2937' // text-gray-800相当

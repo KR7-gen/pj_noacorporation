@@ -388,7 +388,7 @@ export const getSoldOutVehicles = async (limit: number = 3) => {
 };
 
 // 新規登録された車両を最新順で取得する関数
-export const getNewlyRegisteredVehicles = async (limit: number = 4): Promise<Vehicle[]> => {
+export const getNewlyRegisteredVehicles = async (limitCount: number = 4): Promise<Vehicle[]> => {
   try {
     console.log("新規登録車両データを取得中...");
     
@@ -400,7 +400,7 @@ export const getNewlyRegisteredVehicles = async (limit: number = 4): Promise<Veh
       const newVehiclesQuery = query(
         vehiclesCollection,
         orderBy("createdAt", "desc"),
-        limit(limit)
+        limit(limitCount)
       );
       
       const querySnapshot = await getDocs(newVehiclesQuery);
@@ -453,7 +453,7 @@ export const getNewlyRegisteredVehicles = async (limit: number = 4): Promise<Veh
           const dateB = b.createdAt instanceof Date ? b.createdAt : new Date(b.createdAt);
           return dateB.getTime() - dateA.getTime();
         })
-        .slice(0, limit);
+        .slice(0, limitCount);
       
       console.log("フォールバック処理で新規登録車両数:", sortedVehicles.length);
       return sortedVehicles;

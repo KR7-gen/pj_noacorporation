@@ -6,7 +6,7 @@ export interface Vehicle {
   model: string;
   year: string;
   month?: string; // 月を追加
-  mileage: string;
+  mileage: number;
   price: number;
   totalPrice?: number;
   description: string;
@@ -43,20 +43,20 @@ export interface Vehicle {
   bodyModel?: string;
   bodyYear?: string;
   equipment?: string[]; // ←ここをstring[]に修正
-  etc?: string;
-  backCamera?: string;
-  recordBook?: string;
-  powerWindow?: string;
-  driveRecorder?: string;
-  airConditioner?: string;
-  electricMirror?: string;
-  abs?: string;
-  aluminumWheel?: string;
-  airSuspensionSeat?: string;
-  carNavigation?: string;
-  dpf?: string;
-  pmMuffler?: string;
-  centralDoorLock?: string;
+  etc?: boolean;
+  backCamera?: boolean;
+  recordBook?: boolean;
+  powerWindow?: boolean;
+  driveRecorder?: boolean;
+  airConditioner?: boolean;
+  electricMirror?: boolean;
+  abs?: boolean;
+  aluminumWheel?: boolean;
+  airSuspensionSeat?: boolean;
+  carNavigation?: boolean;
+  dpf?: boolean;
+  pmMuffler?: boolean;
+  centralDoorLock?: boolean;
   // 車検証と状態表の画像
   inspectionImageUrl?: string;
   conditionImageUrl?: string;
@@ -102,6 +102,9 @@ export interface Inquiry {
   remarks: string;
   status: "未対応" | "対応中" | "完了";
   reply?: string;
+  exteriorImage?: string;
+  vehicleInspectionImage?: string;
+  address?: string;
   createdAt: Date;
   updatedAt: Date;
 }

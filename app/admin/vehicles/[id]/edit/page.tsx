@@ -147,7 +147,7 @@ export default function VehicleEditPage() {
   const router = useRouter()
   const vehicleId = params.id as string
   const [vehicle, setVehicle] = useState<Vehicle | null>(null)
-  const [formData, setFormData] = useState<Partial<Vehicle>>({
+  const [formData, setFormData] = useState<any>({
     price: "",
     wholesalePrice: "",
     totalPayment: "",
@@ -299,7 +299,6 @@ export default function VehicleEditPage() {
           ...prev,
           isSoldOut: true,
           isNegotiating: false,
-          [field]: value,
         };
       } else if (field === 'isNegotiating' && value === true) {
         // 商談中をONにしたらSOLD OUTをOFFにする
@@ -307,7 +306,6 @@ export default function VehicleEditPage() {
           ...prev,
           isNegotiating: true,
           isSoldOut: false,
-          [field]: value,
         };
       } else {
         // その他のフィールドは通常通り更新

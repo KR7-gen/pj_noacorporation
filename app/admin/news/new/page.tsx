@@ -23,8 +23,6 @@ export default function AdminNewsNewPage() {
         title,
         content: detail,
         isPublished: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
       });
       alert("お知らせを登録しました");
       router.push("/admin/news");

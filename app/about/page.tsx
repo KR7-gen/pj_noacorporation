@@ -125,7 +125,8 @@ export default function AboutPage() {
       {/* Company Info */}
       <section 
         style={{
-          width: "1440px",
+          width: "100%",
+          maxWidth: "100vw",
           height: "921px",
           gap: "40px",
           opacity: 1,
@@ -156,10 +157,9 @@ export default function AboutPage() {
               fontSize: "1rem",
               lineHeight: "100%",
               letterSpacing: 0,
-              color: "white",
+              color: "#2B5EC5",
               textAlign: "center",
               margin: "0 auto 8px auto",
-              color: "#2B5EC5",
               padding: "0.29rem 0.57rem",
               borderRadius: "0.14rem",
               display: "inline-block"
@@ -401,7 +401,8 @@ export default function AboutPage() {
       {/* Reason Section & Business Model Diagram */}
       <section 
         style={{
-          width: "1440px",
+          width: "100%",
+          maxWidth: "100vw",
           height: "1418px",
           gap: "40px",
           opacity: 1,
@@ -1216,10 +1217,9 @@ export default function AboutPage() {
               fontSize: "1rem",
               lineHeight: "100%",
               letterSpacing: 0,
-              color: "white",
+              color: "#2B5EC5",
               textAlign: "center",
               margin: "0 auto 8px auto",
-              color: "#2B5EC5",
               padding: "0.29rem 0.57rem",
               borderRadius: "0.14rem",
               display: "inline-block"
@@ -1518,10 +1518,9 @@ export default function AboutPage() {
               fontSize: "1rem",
               lineHeight: "100%",
               letterSpacing: 0,
-              color: "white",
+              color: "#2B5EC5",
               textAlign: "center",
               margin: "0 auto 8px auto",
-              color: "#2B5EC5",
               padding: "0.29rem 0.57rem",
               borderRadius: "0.14rem",
               display: "inline-block"
@@ -1574,7 +1573,8 @@ export default function AboutPage() {
       {/* Contact Section */}
       <section 
         style={{
-          width: "1440px",
+          width: "100%",
+          maxWidth: "100vw",
           height: "671px",
           gap: "40px",
           opacity: 1,

@@ -51,7 +51,7 @@ const vehicleSchema = z.object({
   bodyType: z.string().optional(),
   size: z.string().optional(),
   description: z.string().optional(),
-  imageUrls: z.array(z.string()).default([]),
+  imageUrls: z.array(z.object({ id: z.string(), url: z.string() })).default([]),
   inspectionStatus: z.string().optional(),
   inspectionDate: z.string().optional(),
 }).refine((data) => {
@@ -95,12 +95,20 @@ export default function VehicleForm({
   } = useForm<VehicleFormData>({
     resolver: zodResolver(vehicleSchema),
     defaultValues: {
-      ...initialData,
+      name: initialData?.name || "",
       price: initialData?.price?.toString() || "",
       totalPrice: initialData?.totalPrice?.toString() || "",
+      managementNumber: initialData?.managementNumber || "",
+      maker: initialData?.maker || "",
+      model: initialData?.model || "",
       year: initialData?.year?.toString() || "",
       mileage: initialData?.mileage?.toString() || "",
-      imageUrls: initialData?.imageUrls || [],
+      bodyType: initialData?.bodyType || "",
+      size: initialData?.size || "",
+      description: initialData?.description || "",
+      imageUrls: initialData?.imageUrls?.map((url, index) => ({ id: index.toString(), url })) || [],
+      inspectionStatus: initialData?.inspectionStatus || "",
+      inspectionDate: initialData?.inspectionDate || "",
     },
   });
 
@@ -116,16 +124,7 @@ export default function VehicleForm({
   });
 
   const handleFormSubmit = async (data: VehicleFormData) => {
-    // フォームのデータを `Vehicle` 型に合わせる
-    const vehicleData: Partial<Vehicle> = {
-      ...data,
-      // 必要に応じて型変換を行う
-      price: Number(data.price),
-      totalPrice: Number(data.totalPrice),
-      year: data.year ? Number(data.year) : undefined,
-      mileage: data.mileage ? Number(data.mileage) : undefined,
-    };
-    await onSubmit(vehicleData as VehicleFormData);
+    await onSubmit(data);
   };
 
   return (

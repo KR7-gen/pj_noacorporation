@@ -126,38 +126,33 @@ const flowSteps = [
 
 const faqs = [
   {
-    question: "展示場はいつでも見学可能ですか？",
+    question: "営業時間は何時ですか？",
     answer:
-      "日曜・祝日を除く毎日、9:00-18:00 までご見学いただけます。対応できる人員に限りがあるため、事前にお電話か問い合わせフォームにて見学ご希望とお知らせの上、お越しください。",
+      "365日、8:00-17:00となります。このお時間に合わないという方も時間外でも、柔軟に対応いたしますので、お気軽にお問い合わせください。※店舗不在時には折り返しさせて頂きます。",
   },
   {
-    question: "在庫にない車も、探してもらうことはできますか?",
+    question: "色替え可能ですか?",
     answer:
-      "喜んでお手伝いします！オークションや過去の取引事業者など、弊社の持てる限りのネットワークを駆使して、ご希望のトラックを探索します。",
+      "可能です。ノアコーポレションでは自社での塗装場を保有しておりますでのお客様の希望の色に車両の色を変更することが可能でございます。",
   },
   {
-    question: "展示場はいつでも見学可能ですか？",
+    question: "ローン / リースは可能ですか？",
     answer:
-      "日曜・祝日を除く毎日、9:00-18:00 までご見学いただけます。対応できる人員に限りがあるため、事前にお電話か問い合わせフォームにて見学ご希望とお知らせの上、お越しください。",
-  },
-  {
-    question: "在庫にない車も、探してもらうことはできますか?",
-    answer:
-      "喜んでお手伝いします！オークションや過去の取引事業者など、弊社の持てる限りのネットワークを駆使して、ご希望のトラックを探索します。",
+      "可能です。ローンの場合には提携ローン会社にて審査のうえ対応させていただきます。リース対応も可能です。",
   },
 ]
 
 // 車両タイプのアイコンデータ
 const vehicleTypeIcons = [
   { id: 1, type: "クレーン", icon: "/icons/crane.png" },
-  { id: 2, type: "ダンプ", icon: "/icons/dump.png" },
+  { id: 2, type: "ダンプローダーダンプ", icon: "/icons/dump.png" },
   { id: 3, type: "平ボディ", icon: "/icons/flatbed.png" },
-  { id: 4, type: "車輌運搬車", icon: "/icons/carrier.png" },
+  { id: 4, type: "重機回送車", icon: "/icons/carrier.png" },
   { id: 5, type: "ミキサー車", icon: "/icons/mixer.png" },
   { id: 6, type: "アルミバン", icon: "/icons/van.png" },
   { id: 7, type: "高所作業車", icon: "/icons/aerial.png" },
   { id: 8, type: "アルミウィング", icon: "/icons/wing.png" },
-  { id: 9, type: "キャリアカー", icon: "/icons/car-carrier.png" },
+  { id: 9, type: "車両運搬車", icon: "/icons/car-carrier.png" },
   { id: 10, type: "塵芥車", icon: "/icons/garbage.png" },
   { id: 11, type: "アームロール", icon: "/icons/arm-roll.png" },
   { id: 12, type: "特装車・その他", icon: "/icons/special.png" },
@@ -309,11 +304,12 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
       {/* Hero, Truck Type Grid, Search Section Combined */}
       <section 
         style={{
-          width: "100vw",
+          width: "100%",
+          maxWidth: "100vw",
           height: "57.14rem",
           opacity: 1,
           top: "9rem",
@@ -348,7 +344,6 @@ export default function HomePage() {
             <h1 
               style={{
                 width: "45.14rem",
-                height: "5rem",
                 opacity: 1,
                 fontFamily: "Noto Sans JP",
                 fontWeight: 700,
@@ -358,11 +353,11 @@ export default function HomePage() {
                 letterSpacing: "0%",
                 color: "#FFFFFF",
                 textShadow: "0.29rem 0.29rem 0.29rem 0px #0000004D",
-                margin: "0 0 1.71rem 0",
+                margin: "0 0 2.43rem 0",
                 textAlign: "left"
               }}
             >
-              キャッチコピー
+              豊富な在庫!!挑戦価格‼<br/>　　　ノアコーポレション
             </h1>
             <div 
               style={{
@@ -381,11 +376,11 @@ export default function HomePage() {
                 textAlign: "left"
               }}
             >
-              業界最安値を目指す、千葉の中古トラック販売店です。
+              豊富な在庫車両数から、お探しの1台に出会える
               <br />
-              中古トラック購入の、無駄なコストをカットしませんか？
+              栃木の中古トラック販売店です。
               <br />
-              限界ギリギリの安さ、ぜひ他店様と比べてみてください！
+              お気軽にお問合せ、現車確認にお越しください。
             </div>
           </div>
         </div>
@@ -441,8 +436,9 @@ export default function HomePage() {
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    justifyContent: "center",
-                    position: "relative"
+                    justifyContent: "flex-start",
+                    position: "relative",
+                    padding: "0.57rem"
                   }}
                 >
                   <div 
@@ -452,7 +448,7 @@ export default function HomePage() {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      marginBottom: "0.57rem"
+                      marginBottom: "0.29rem"
                     }}
                   >
                     <img 
@@ -485,17 +481,16 @@ export default function HomePage() {
                       fontWeight: 700,
                       fontStyle: "bold",
                       fontSize: "1.14rem",
-                      lineHeight: "100%",
+                      lineHeight: "120%",
                       letterSpacing: "0%",
                       textAlign: "center",
                       color: "#1A1A1A",
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      maxWidth: "11.43rem"
+                      maxWidth: "11.43rem",
+                      whiteSpace: "pre-line",
+                      padding: "0.17rem"
                     }}
                   >
-                    {icon.type}
+                    {icon.type === "ダンプローダーダンプ" ? "ダンプ\nローダーダンプ" : icon.type}
                   </span>
                 </div>
               </Link>
@@ -811,8 +806,8 @@ export default function HomePage() {
       {/* New Trucks Section */}
       <section 
         style={{
-          width: "78.57vw",
-          maxWidth: "1100px",
+          width: "100%",
+          maxWidth: "100vw",
           gap: "2.86rem",
           opacity: 1,
           paddingBottom: "2.857rem",
@@ -1592,7 +1587,8 @@ export default function HomePage() {
       {/* Features Section */}
       <section 
         style={{
-          width: "102.86rem",
+          width: "100%",
+          maxWidth: "100vw",
           gap: "2.86rem",
           opacity: 1,
           paddingBottom: "1.71rem",
@@ -2347,13 +2343,14 @@ export default function HomePage() {
       {/* FAQ Section */}
       <section 
         style={{
-          width: "1440px",
-          gap: "40px",
+          width: "100%",
+          gap: "2.857rem",
           opacity: 1,
-          paddingTop: "60px",
-          paddingBottom: "60px",
           background: "#FFFFFF",
-          margin: "0 auto"
+          margin: "0 auto",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
         <div 
@@ -2363,20 +2360,20 @@ export default function HomePage() {
             flexDirection: "column",
             justifyContent: "flex-start",
             alignItems: "center",
-            padding: "0 20px",
-            paddingTop: "40px"
+            padding: "0 1.429rem",
+            paddingTop: "2.857rem"
           }}
         >
           {/* QUESTIONセクション */}
-          <div style={{ textAlign: "center", marginBottom: "48px" }}>
+          <div style={{ textAlign: "center", marginBottom: "3.429rem" }}>
                         <div
               style={{
                 width: "15vw",
-                margin: "0 auto 16px auto",
+                margin: "0 auto 1.143rem auto",
                 fontFamily: "Noto Sans JP",
                 fontWeight: "400",
                 fontStyle: "Regular",
-                fontSize: "14px",
+                fontSize: "1rem",
                 lineHeight: "100%",
                 letterSpacing: "0%",
                 textAlign: "left",
@@ -2391,11 +2388,11 @@ export default function HomePage() {
             <div 
               style={{
                 width: "15vw",
-                margin: "0 auto 16px auto",
+                margin: "0 auto 1.143rem auto",
                 fontFamily: "Noto Sans JP",
                 fontWeight: "700",
                 fontStyle: "Bold",
-                fontSize: "40px",
+                fontSize: "2.857rem",
                 lineHeight: "100%",
                 letterSpacing: "0%",
                 textAlign: "center",
@@ -2414,9 +2411,9 @@ export default function HomePage() {
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: "2px",
+              gap: "0.143rem",
               width: "100%",
-              maxWidth: "800px"
+              maxWidth: "57.143rem"
             }}
           >
             {faqs.map((faq, index) => (
@@ -2426,49 +2423,49 @@ export default function HomePage() {
                 style={{
                   backgroundColor: "white",
                   border: "1px solid #e5e7eb",
-                  borderRadius: "8px",
-                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                  borderRadius: "0.571rem",
+                  boxShadow: "0 0.143rem 0.286rem rgba(0, 0, 0, 0.1)",
                   margin: 0
                 }}
               >
                 <CardContent className="!p-0" style={{ padding: 0 }}>
                   {/* Q部分デザイン */}
                   <div style={{
-                    width: "820px",
-                    height: "45px",
+                    width: "58.571rem",
+                    height: "3.214rem",
                     opacity: 1,
-                    padding: "4px 12px",
-                    borderRadius: "4px",
+                    padding: "0.286rem 0.857rem",
+                    borderRadius: "0.286rem",
                     background: "#F2F2F2",
                     display: "flex",
                     alignItems: "center",
-                    gap: "16px"
+                    gap: "1.143rem"
                   }}>
                     <span style={{
-                      width: "26px",
-                      height: "29px",
+                      width: "1.857rem",
+                      height: "2.071rem",
                       fontFamily: "Noto Sans JP, sans-serif",
                       fontWeight: 700,
                       fontStyle: "bold",
-                      fontSize: "20px",
+                      fontSize: "1.429rem",
                       lineHeight: "100%",
                       letterSpacing: "0%",
                       color: "#1CA0C8",
-                      borderRadius: "4px",
+                      borderRadius: "0.286rem",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      marginRight: "12px"
+                      marginRight: "0.857rem"
                     }}>
                       Q.
                     </span>
                     <span style={{
-                      width: "320px",
-                      height: "29px",
+                      width: "22.857rem",
+                      height: "2.071rem",
                       fontFamily: "Noto Sans JP, sans-serif",
                       fontWeight: 700,
                       fontStyle: "bold",
-                      fontSize: "20px",
+                      fontSize: "1.429rem",
                       lineHeight: "100%",
                       letterSpacing: "0%",
                       color: "#1A1A1A",
@@ -2483,41 +2480,41 @@ export default function HomePage() {
                   </div>
                   {/* A部分デザイン */}
                   <div style={{
-                    width: "820px",
-                    height: "80px",
+                    width: "58.571rem",
+                    height: "5.714rem",
                     opacity: 1,
-                    padding: "8px 12px",
+                    padding: "0.571rem 0.857rem",
                     display: "flex",
                     alignItems: "flex-start",
-                    gap: "12px"
+                    gap: "0.857rem"
                   }}>
                     <span 
                       style={{
-                        width: "26px",
-                        height: "29px",
+                        width: "1.857rem",
+                        height: "2.071rem",
                         fontFamily: "Noto Sans JP, sans-serif",
                         fontWeight: 700,
                         fontStyle: "bold",
-                        fontSize: "20px",
+                        fontSize: "1.429rem",
                         lineHeight: "100%",
                         letterSpacing: "0%",
                         color: "#EA1313",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        marginRight: "12px"
+                        marginRight: "0.857rem"
                       }}
                     >
                       A.
                     </span>
                     <span style={{
-                      width: "722px",
-                      height: "56px",
+                      width: "51.571rem",
+                      height: "4rem",
                       fontFamily: "Noto Sans JP, sans-serif",
                       fontWeight: 700,
                       fontStyle: "bold",
-                      fontSize: "16px",
-                      lineHeight: "28px",
+                      fontSize: "1.143rem",
+                      lineHeight: "2rem",
                       letterSpacing: "0%",
                       color: "#1A1A1A",
                       display: "flex",
@@ -2539,12 +2536,12 @@ export default function HomePage() {
       {/* Shop Info Section */}
       <section 
         style={{
-          width: "1440px",
-          height: "918.6600341796875px",
-          gap: "40px",
+          width: "100%",
+          maxWidth: "1200px",
+          gap: "2.857rem",
           opacity: 1,
-          paddingTop: "60px",
-          paddingBottom: "60px",
+          paddingTop: "4.286rem",
+          paddingBottom: "4.286rem",
           background: "#FFFFFF",
           margin: "0 auto"
         }}
@@ -2557,20 +2554,19 @@ export default function HomePage() {
             flexDirection: "column",
             justifyContent: "flex-start",
             alignItems: "center",
-            padding: "0 20px",
-            paddingTop: "40px"
+            paddingTop: "2.857rem",
+            padding: "2.857rem 0 0 0"
           }}
         >
           {/* SHOP INFOセクション */}
-          <div style={{ textAlign: "center", marginBottom: "24px" }}>
+          <div style={{ textAlign: "center", marginBottom: "1.714rem" }}>
             <div 
               style={{
                 width: "9vw",
-                margin: "0 auto 16px auto",
                 fontFamily: "Noto Sans JP",
                 fontWeight: "400",
                 fontStyle: "Regular",
-                fontSize: "14px",
+                fontSize: "1rem",
                 lineHeight: "100%",
                 letterSpacing: "0%",
                 textAlign: "left",
@@ -2585,11 +2581,10 @@ export default function HomePage() {
             <div 
               style={{
                 width: "9vw",
-                margin: "0 auto 16px auto",
                 fontFamily: "Noto Sans JP",
                 fontWeight: "700",
                 fontStyle: "Bold",
-                fontSize: "40px",
+                fontSize: "2.857rem",
                 lineHeight: "100%",
                 letterSpacing: "0%",
                 textAlign: "center",
@@ -2608,248 +2603,294 @@ export default function HomePage() {
           <div 
             style={{
               display: "flex",
-              gap: "2px",
               width: "100%",
-              maxWidth: "1200px",
-              marginBottom: "16px",
-              justifyContent: "center"
+              marginBottom: "1.143rem",
+              justifyContent: "space-between",
             }}
           >
             {/* 1. テキストフレーム */}
             <div 
               style={{
-                width: "416px",
-                height: "350px",
-                gap: "12px",
+                width: "50.73%",
                 opacity: 1,
                 display: "flex",
                 flexDirection: "column"
               }}
             >
-              <Card 
-                style={{
-                  backgroundColor: "white",
-                  border: "1px solid #e5e7eb",
-                  borderRadius: "8px",
-                  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                  flex: "1"
-                }}
-              >
-                <CardContent style={{ padding: "24px" }}>
+                              <div 
+                  style={{
+                    flex: "1"
+                  }}
+                >
+                  <div style={{ 
+                    display: "flex",
+                    flexDirection: "column",
+                    height: "100%",
+                    padding: "0"
+                  }}>
                   <div 
                     style={{
                       display: "flex",
                       flexDirection: "column",
-                      gap: "4px"
+                      gap: "4px",
+                      flex: "1",
+                      padding: "0"
                     }}
                   >
                     <div style={{ 
                       width: "100%",
-                      minHeight: "55px",
-                      gap: "10px",
                       opacity: 1,
-                      padding: "10px 12px",
-                      borderBottom: "1px solid #e5e7eb",
                       display: "flex",
                       justifyContent: "space-between",
-                      alignItems: "flex-start"
+                      alignItems: "center",
+                      borderBottom: "1px solid #e5e7eb"
                     }}>
-                      <span style={{ 
-                        width: "auto",
-                        height: "23px",
+                      <div style={{ 
+                        width: "27%",
                         opacity: 1,
-                        fontFamily: "Noto Sans JP",
-                        fontWeight: "700",
-                        fontStyle: "Bold",
-                        fontSize: "16px",
-                        lineHeight: "100%",
-                        letterSpacing: "0%",
-                        color: "#1A1A1A"
-                      }}>所在地</span>
+                        padding: "0.857rem 0.857rem",
+                        display: "flex",
+                        alignItems: "flex-start",
+                        minHeight: "2.5rem"
+                      }}>
+                        <span style={{ 
+                          width: "auto",
+                          height: "2.5rem",
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "700",
+                          fontStyle: "Bold",
+                          fontSize: "1.143rem",
+                          lineHeight: "2.5rem",
+                          letterSpacing: "0%",
+                          color: "#1A1A1A"
+                        }}>所在地</span>
+                      </div>
                       <div style={{ 
                         flex: "1",
                         opacity: 1,
+                        padding: "0 0.857rem",
                         display: "flex",
                         flexDirection: "column",
-                        alignItems: "flex-end",
-                        gap: "2px"
+                        alignItems: "flex-start",
+                        justifyContent: "center",
+                        minHeight: "2.5rem"
                       }}>
                         <span style={{ 
                           width: "100%",
-                          height: "23px",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "400",
                           fontStyle: "Regular",
-                          fontSize: "16px",
-                          lineHeight: "100%",
+                          fontSize: "1.143rem",
                           letterSpacing: "0%",
                           color: "#1A1A1A",
-                          textAlign: "right"
+                          textAlign: "left",
+                          whiteSpace: "pre-line"
                         }}>
-                          〒329-1326
-                        </span>
-                        <span style={{ 
-                          width: "100%",
-                          height: "23px",
-                          opacity: 1,
-                          fontFamily: "Noto Sans JP",
-                          fontWeight: "400",
-                          fontStyle: "Regular",
-                          fontSize: "16px",
-                          lineHeight: "100%",
-                          letterSpacing: "0%",
-                          color: "#1A1A1A",
-                          textAlign: "right",
-                          whiteSpace: "nowrap"
-                        }}>
-                          栃木県さくら市向河原3994-1
+                          〒329-1326{'\n'}栃木県さくら市向河原3994-1
                         </span>
                       </div>
                     </div>
                     <div style={{ 
                       width: "100%",
-                      minHeight: "55px",
+                      minHeight: "3.929rem",
                       opacity: 1,
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center"
                     }}>
                       <div style={{ 
-                        minWidth: "80px",
-                        minHeight: "55px",
-                        gap: "10px",
+                        width: "27%",
+                        gap: "0.714rem",
                         opacity: 1,
-                        padding: "12px 12px",
+                        padding: "0.857rem 0.857rem",
                         borderBottom: "1px solid #e5e7eb",
                         display: "flex",
-                        alignItems: "center"
+                        alignItems: "center",
+                        minHeight: "2.5rem"
                       }}>
                         <span style={{ 
                           width: "auto",
-                          height: "23px",
+                          height: "2.5rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
-                          fontSize: "16px",
-                          lineHeight: "100%",
+                          fontSize: "1.143rem",
+                          lineHeight: "2.5rem",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
                         }}>TEL</span>
                       </div>
                       <div style={{ 
                         flex: "1",
-                        minHeight: "55px",
-                        gap: "10px",
+                        gap: "0.714rem",
                         opacity: 1,
-                        padding: "12px 12px",
+                        padding: "0.857rem 0.857rem",
                         borderBottom: "1px solid #e5e7eb",
                         display: "flex",
                         alignItems: "center",
-                        justifyContent: "flex-end"
+                        justifyContent: "flex-start",
+                        minHeight: "2.5rem"
                       }}>
                         <span style={{ 
                           width: "auto",
-                          height: "23px",
+                          height: "2.5rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "400",
                           fontStyle: "Regular",
-                          fontSize: "16px",
-                          lineHeight: "100%",
+                          fontSize: "1.143rem",
+                          lineHeight: "2.5rem",
                           letterSpacing: "0%",
                           color: "#1A1A1A",
-                          textAlign: "right",
+                          textAlign: "left",
                           whiteSpace: "nowrap"
                         }}>028-612-1474</span>
                       </div>
                     </div>
                     <div style={{ 
                       width: "100%",
-                      minHeight: "55px",
                       opacity: 1,
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center"
                     }}>
                       <div style={{ 
-                        minWidth: "80px",
-                        minHeight: "55px",
-                        gap: "10px",
+                        width: "27%",
+                        gap: "0.714rem",
                         opacity: 1,
-                        padding: "12px 12px",
+                        padding: "0.857rem 0.857rem",
                         borderBottom: "1px solid #e5e7eb",
                         display: "flex",
-                        alignItems: "center"
+                        alignItems: "center",
+                        minHeight: "2.5rem"
                       }}>
                         <span style={{ 
                           width: "auto",
-                          height: "23px",
+                          height: "2.5rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
-                          fontSize: "16px",
-                          lineHeight: "100%",
+                          fontSize: "1.143rem",
+                          lineHeight: "2.5rem",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
                         }}>FAX</span>
                       </div>
                       <div style={{ 
                         flex: "1",
-                        minHeight: "55px",
-                        gap: "10px",
+                        gap: "0.714rem",
                         opacity: 1,
-                        padding: "12px 12px",
+                        padding: "0.857rem 0.857rem",
                         borderBottom: "1px solid #e5e7eb",
                         display: "flex",
                         alignItems: "center",
-                        justifyContent: "flex-end"
+                        justifyContent: "flex-start",
+                        minHeight: "2.5rem"
                       }}>
                         <span style={{ 
                           width: "auto",
-                          height: "23px",
+                          height: "2.5rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "400",
                           fontStyle: "Regular",
-                          fontSize: "16px",
-                          lineHeight: "100%",
+                          fontSize: "1.143rem",
+                          lineHeight: "2.5rem",
                           letterSpacing: "0%",
                           color: "#1A1A1A",
-                          textAlign: "right",
+                          textAlign: "left",
                           whiteSpace: "nowrap"
                         }}>028-612-1471</span>
                       </div>
                     </div>
                     <div style={{ 
                       width: "100%",
-                      minHeight: "55px",
                       opacity: 1,
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center"
                     }}>
                       <div style={{ 
-                        minWidth: "80px",
-                        minHeight: "55px",
-                        gap: "10px",
+                        width: "27%",
+                        gap: "0.714rem",
                         opacity: 1,
-                        padding: "12px 12px",
+                        padding: "0.857rem 0.857rem",
                         borderBottom: "1px solid #e5e7eb",
                         display: "flex",
-                        alignItems: "center"
+                        alignItems: "center",
+                        minHeight: "2.5rem"
                       }}>
                         <span style={{ 
                           width: "auto",
-                          height: "23px",
+                          height: "2.5rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
-                          fontSize: "16px",
-                          lineHeight: "100%",
+                          fontSize: "1.143rem",
+                          lineHeight: "2.5rem",
+                          letterSpacing: "0%",
+                          color: "#1A1A1A",
+                          whiteSpace: "nowrap"
+                        }}>営業時間</span>
+                      </div>
+                      <div style={{ 
+                        flex: "1",
+                        gap: "0.714rem",
+                        opacity: 1,
+                        padding: "0.857rem 0.857rem",
+                        borderBottom: "1px solid #e5e7eb",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                        minHeight: "2.5rem"
+                      }}>
+                        <span style={{ 
+                          width: "auto",
+                          height: "2.5rem",
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "400",
+                          fontStyle: "Regular",
+                          fontSize: "1.143rem",
+                          lineHeight: "2.5rem",
+                          letterSpacing: "0%",
+                          color: "#1A1A1A",
+                          textAlign: "left",
+                          whiteSpace: "nowrap"
+                        }}>8:00~17:00</span>
+                      </div>
+                    </div>
+                    <div style={{ 
+                      width: "100%",
+                      opacity: 1,
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center"
+                    }}>
+                      <div style={{ 
+                        width: "27%",
+                        gap: "0.714rem",
+                        opacity: 1,
+                        padding: "0.857rem 0.857rem",
+                        borderBottom: "1px solid #e5e7eb",
+                        display: "flex",
+                        alignItems: "center",
+                        minHeight: "2.5rem"
+                      }}>
+                        <span style={{ 
+                          width: "auto",
+                          height: "2.5rem",
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "700",
+                          fontStyle: "Bold",
+                          fontSize: "1.143rem",
+                          lineHeight: "2.5rem",
                           letterSpacing: "0%",
                           color: "#1A1A1A",
                           whiteSpace: "nowrap"
@@ -2857,121 +2898,118 @@ export default function HomePage() {
                       </div>
                       <div style={{ 
                         flex: "1",
-                        minHeight: "55px",
-                        gap: "10px",
+                        gap: "0.714rem",
                         opacity: 1,
-                        padding: "12px 12px",
+                        padding: "0.857rem 0.857rem",
                         borderBottom: "1px solid #e5e7eb",
                         display: "flex",
                         alignItems: "center",
-                        justifyContent: "flex-end"
+                        justifyContent: "flex-start",
+                        minHeight: "2.5rem"
                       }}>
                         <span style={{ 
                           width: "auto",
-                          height: "23px",
+                          height: "2.5rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "400",
                           fontStyle: "Regular",
-                          fontSize: "16px",
-                          lineHeight: "100%",
+                          fontSize: "1.143rem",
+                          lineHeight: "2.5rem",
                           letterSpacing: "0%",
                           color: "#1A1A1A",
-                          textAlign: "right",
+                          textAlign: "left",
                           whiteSpace: "nowrap"
                         }}>年中無休</span>
                       </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
-              
-              {/* アクセス方法へボタン */}
-              <div style={{ textAlign: "center", marginTop: "6px" }}>
-                <Link href="/about#access">
-                  <Button 
-                    variant="outline" 
-                    style={{
-                      width: "220px",
-                      height: "36px",
-                      gap: "20px",
+                    {/* アクセス方法へボタン */}
+                    <div style={{ 
+                      width: "100%",
                       opacity: 1,
-                      padding: "6px 12px",
-                      borderRadius: "4px",
-                      background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
-                      boxShadow: "2px 2px 2px 0px #00000040",
-                      border: "none",
-                      cursor: "pointer",
                       display: "flex",
+                      justifyContent: "center",
                       alignItems: "center",
-                      justifyContent: "center"
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = "translateY(-1px)";
-                      e.currentTarget.style.boxShadow = "3px 3px 3px 0px #00000040";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = "translateY(0)";
-                      e.currentTarget.style.boxShadow = "2px 2px 2px 0px #00000040";
-                    }}
-                  >
-                    {/* テキストとchevron_forwardを一つのフレームとして中央揃え */}
-                    <div 
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        gap: "20px"
-                      }}
-                    >
-                      {/* アクセス方法へ（テキスト） */}
-                      <span 
-                        style={{
-                          width: "112px",
-                          height: "23px",
-                          opacity: 1,
-                          fontFamily: "Noto Sans JP",
-                          fontWeight: "700",
-                          fontStyle: "Bold",
-                          fontSize: "16px",
-                          lineHeight: "100%",
-                          letterSpacing: "0%",
-                          color: "#FFFFFF",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center"
-                        }}
-                      >
-                        アクセス方法へ
-                      </span>
-                      {/* chevron_forward */}
-                      <div 
-                        style={{
-                          width: "24px",
-                          height: "24px",
-                          opacity: 1,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center"
-                        }}
-                      >
-                        <ChevronRight 
-                          size={24} 
-                          color="#FFFFFF"
-                        />
-                      </div>
+                      marginTop: "auto",
+                      marginBottom: "0",
+                      padding: "0"
+                    }}>
+                      <Link href="/about#access">
+                        <Button 
+                          style={{
+                            width: "15.71rem",
+                            height: "2.86rem",
+                            gap: "2.57rem",
+                            opacity: 1,
+                            paddingTop: "0.57rem",
+                            paddingRight: "0.86rem",
+                            paddingBottom: "0.57rem",
+                            paddingLeft: "0.86rem",
+                            borderRadius: "0.29rem",
+                            background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
+                            boxShadow: "0.14rem 0.14rem 0.14rem 0 #00000040",
+                            color: "#FFFFFF",
+                            fontFamily: "Noto Sans JP",
+                            fontWeight: "700",
+                            fontStyle: "Bold",
+                            fontSize: "1.14rem",
+                            lineHeight: "100%",
+                            letterSpacing: "0%",
+                            cursor: "pointer",
+                            transition: "all 0.3s ease",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            position: "relative"
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.opacity = "0.9";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.opacity = "1";
+                          }}
+                        >
+                          <span style={{ 
+                            height: "1.64rem",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            textAlign: "center"
+                          }}>アクセス方法へ</span>
+                          <svg
+                            width="7.4"
+                            height="12"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            style={{
+                              position: "absolute",
+                              top: "1rem",
+                              left: "13.71rem",
+                              color: "#FFFFFF"
+                            }}
+                          >
+                            <path
+                              d="M9 18L15 12L9 6"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </Button>
+                      </Link>
                     </div>
-                  </Button>
-                </Link>
+                  </div>
+                </div>
               </div>
             </div>
 
             {/* 2. 写真フレーム */}
             <div 
               style={{
-                width: "384px",
-                height: "386px",
-                gap: "4px",
+                width: "46.82%",
+                gap: "0.286rem",
                 opacity: 1,
                 display: "flex",
                 flexDirection: "column"
@@ -2981,7 +3019,7 @@ export default function HomePage() {
                 style={{
                   backgroundColor: "white",
                   border: "1px solid #e5e7eb",
-                  borderRadius: "8px",
+                  borderRadius: "0px",
                   boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
                   height: "100%",
                   overflow: "hidden"
@@ -2989,7 +3027,7 @@ export default function HomePage() {
               >
                 <CardContent style={{ padding: 0, width: "100%", height: "100%", position: "relative", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
                   {/* 1段目：大きい画像 */}
-                  <div style={{ width: "383.84px", height: "293.88px", marginBottom: "8px" }}>
+                  <div style={{ width: "100%", height: "20.991rem", marginBottom: "0.571rem" }}>
                     <img
                       src="/shopinfo_truck1.jpg"
                       alt="店舗写真1"
@@ -2997,43 +3035,47 @@ export default function HomePage() {
                         width: "100%",
                         height: "100%",
                         objectFit: "cover",
-                        borderRadius: "8px"
+                        objectPosition: "center bottom",
+                        borderRadius: "0rem"
                       }}
                     />
                   </div>
                   {/* 2段目：小さい画像3枚横並び */}
-                  <div style={{ display: "flex", gap: "8px", justifyContent: "center" }}>
+                  <div style={{ width: "100%", display: "flex", gap: "0.571rem", justifyContent: "space-between" }}>
                     <img
                       src="/shopinfo_truck2.jpg"
                       alt="店舗写真2"
                       style={{
-                        width: "121.27px",
-                        height: "92.85px",
+                        width: "31.25%",
+                        height: "6.42rem",
                         objectFit: "cover",
-                        borderRadius: "4px",
-                        boxShadow: "0 2px 8px rgba(0,0,0,0.10)"
+                        objectPosition: "center bottom",
+                        borderRadius: "0rem",
+                        boxShadow: "0 0.143rem 0.571rem rgba(0,0,0,0.10)"
                       }}
                     />
                     <img
                       src="/shopinfo_truck3.jpg"
                       alt="店舗写真3"
                       style={{
-                        width: "121.27px",
-                        height: "90.95px",
+                        width: "31.25%",
+                        height: "6.42rem",
                         objectFit: "cover",
-                        borderRadius: "4px",
-                        boxShadow: "0 2px 8px rgba(0,0,0,0.10)"
+                        objectPosition: "center bottom",
+                        borderRadius: "0rem",
+                        boxShadow: "0 0.143rem 0.571rem rgba(0,0,0,0.10)"
                       }}
                     />
                     <img
                       src="/shopinfo_truck4.jpg"
                       alt="店舗写真4"
                       style={{
-                        width: "133.53px",
-                        height: "89.09px",
+                        width: "31.25%",
+                        height: "6.42rem",
                         objectFit: "cover",
-                        borderRadius: "4px",
-                        boxShadow: "0 2px 8px rgba(0,0,0,0.10)"
+                        objectPosition: "center bottom",
+                        borderRadius: "0rem",
+                        boxShadow: "0 0.143rem 0.571rem rgba(0,0,0,0.10)"
                       }}
                     />
                   </div>
@@ -3048,20 +3090,21 @@ export default function HomePage() {
             target="_blank"
             rel="noopener noreferrer"
             style={{
-              width: "820px",
-              height: "256.66px",
+              width: "100%",
+              maxWidth: "1200px",
+              height: "18.333rem",
               display: "block",
-              borderRadius: "8px",
+              borderRadius: "0rem",
               overflow: "hidden",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.10)",
-              marginTop: "16px"
+              boxShadow: "0 0.143rem 0.571rem rgba(0,0,0,0.10)",
+              marginTop: "1.143rem"
             }}
           >
             <iframe
               title="Google Map"
               src="https://www.google.com/maps?q=%E6%A0%83%E6%9C%A8%E7%9C%8C%E3%81%95%E3%81%8F%E3%82%89%E5%B8%82%E5%90%91%E6%B2%B3%E5%8E%9F3994-1&output=embed"
               width="820"
-              height="256.66"
+              height="18.333rem"
               style={{ border: 0, width: "100%", height: "100%", pointerEvents: "none" }}
               allowFullScreen={false}
               loading="lazy"
@@ -3070,288 +3113,42 @@ export default function HomePage() {
           </a>
         </div>
       </section>
-
-      {/* News Section */}
-      <section 
-        style={{
-          width: "1440px",
-          gap: "40px",
-          opacity: 1,
-          paddingTop: "60px",
-          paddingBottom: "60px",
-          background: "#FFFFFF",
-          margin: "0 auto"
-        }}
-      >
-        <div 
-          style={{
-            width: "820px",
-            gap: "40px",
-            opacity: 1,
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            margin: "0 auto"
-          }}
-        >
-          {/* NEWSセクション */}
-          <div style={{ textAlign: "center", marginBottom: "32px" }}>
-            <div 
-              style={{
-                width: "9vw",
-                margin: "0 auto 16px auto",
-                fontFamily: "Noto Sans JP",
-                fontWeight: "400",
-                fontStyle: "Regular",
-                fontSize: "14px",
-                lineHeight: "100%",
-                letterSpacing: "0%",
-                textAlign: "left",
-                color: "#2B5EC5",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "flex-start",
-              }}
-            >
-              NEWS
-            </div>
-            <div 
-              style={{
-                width: "9vw",
-                margin: "0 auto 16px auto",
-                fontFamily: "Noto Sans JP",
-                fontWeight: "700",
-                fontStyle: "Bold",
-                fontSize: "40px",
-                lineHeight: "100%",
-                letterSpacing: "0%",
-                textAlign: "center",
-                color: "#1A1A1A",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                whiteSpace: "nowrap",
-              }}
-            >
-              お知らせ
-            </div>
-          </div>
-          
-          {/* Frame 123 - お知らせ2つのフレーム */}
-          <div 
+     
+     
+     
+       {/* Contact Section */}
+          <section 
             style={{
-              width: "820px",
-              height: "128px",
+              width: "100%",
+              maxWidth: "100vw",
               opacity: 1,
+              paddingTop: "4.286rem",
+              paddingBottom: "4.286rem",
+              background: "#666666",
+              color: "white",
+              margin: "0 auto",
               display: "flex",
-              flexDirection: "column",
-              gap: "2px",
-              marginBottom: "24px"
+              justifyContent: "center",
+              alignItems: "center"
             }}
           >
-            {newsList.slice(0, 2).map((item, index) => (
-              <Card 
-                key={index}
-                style={{
-                  backgroundColor: "white",
-                  border: "1px solid #e5e7eb",
-                  borderRadius: "8px",
-                  boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
-                  flex: "1"
-                }}
-              >
-                <CardContent style={{ padding: "24px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-                    <span style={{ 
-                      fontSize: "16px",
-                      lineHeight: "100%",
-                      letterSpacing: "0%",
-                      color: "#1A1A1A",
-                      fontWeight: "700",
-                      fontFamily: "Noto Sans JP"
-                    }}>
-                      {item.createdAt instanceof Date ? `${item.createdAt.getFullYear()}.${String(item.createdAt.getMonth()+1).padStart(2,"0")}.${String(item.createdAt.getDate()).padStart(2,"0")}` : ""}
-                    </span>
-                    <span 
-                      style={{
-                        width: "86px",
-                        height: "23px",
-                        opacity: 1,
-                        fontFamily: "Noto Sans JP",
-                        fontWeight: "700",
-                        fontStyle: "Bold",
-                        fontSize: "16px",
-                        lineHeight: "100%",
-                        letterSpacing: "0%",
-                        color: "#1A1A1A",
-                        padding: "4px 8px",
-                        borderRadius: "4px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center"
-                      }}
-                    >
-                      お知らせ
-                    </span>
-                    <Link 
-                      href={`/news/${item.id}`} 
-                      style={{
-                        fontWeight: "700",
-                        fontFamily: "Noto Sans JP",
-                        fontSize: "16px",
-                        lineHeight: "100%",
-                        letterSpacing: "0%",
-                        color: "#1A1A1A",
-                        textDecoration: "none",
-                        transition: "color 0.3s ease",
-                        flex: "1"
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.color = "#1e40af";
-                        e.currentTarget.style.textDecoration = "underline";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.color = "#1A1A1A";
-                        e.currentTarget.style.textDecoration = "none";
-                      }}
-                    >
-                      {item.title}
-                    </Link>
-                    {/* chevron_right */}
-                    <div 
-                      style={{
-                        width: "24px",
-                        height: "24px",
-                        opacity: 1,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center"
-                      }}
-                    >
-                      <ChevronRight 
-                        size={24} 
-                        color="#1154AF"
-                      />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-          
-          {/* お知らせ一覧へ（枠） */}
-          <div style={{ textAlign: "center" }}>
-            <Link href="/news">
-              <Button 
-                variant="outline" 
-                style={{
-                  width: "220px",
-                  height: "40px",
-                  gap: "20px",
-                  opacity: 1,
-                  padding: "8px 12px",
-                  borderRadius: "4px",
-                  background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
-                  boxShadow: "2px 2px 2px 0px #00000040",
-                  border: "none",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center"
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-1px)";
-                  e.currentTarget.style.boxShadow = "3px 3px 3px 0px #00000040";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "2px 2px 2px 0px #00000040";
-                }}
-              >
-                {/* テキストとchevron_forwardを一つのフレームとして中央揃え */}
-                <div 
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: "20px"
-                  }}
-                >
-                  {/* お知らせ一覧へ（テキスト） */}
-                  <span 
-                    style={{
-                      width: "112px",
-                      height: "23px",
-                      opacity: 1,
-                      fontFamily: "Noto Sans JP",
-                      fontWeight: "700",
-                      fontStyle: "Bold",
-                      fontSize: "16px",
-                      lineHeight: "100%",
-                      letterSpacing: "0%",
-                      color: "#FFFFFF",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center"
-                    }}
-                  >
-                    お知らせ一覧へ
-                  </span>
-                  {/* chevron_forward */}
-                  <div 
-                    style={{
-                      width: "24px",
-                      height: "24px",
-                      opacity: 1,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center"
-                    }}
-                  >
-                    <ChevronRight 
-                      size={24} 
-                      color="#FFFFFF"
-                    />
-                  </div>
-                </div>
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section 
-        style={{
-          width: "1440px",
-          height: "671px",
-          gap: "40px",
-          opacity: 1,
-          paddingTop: "60px",
-          paddingBottom: "60px",
-          background: "#666666",
-          color: "white",
-          margin: "0 auto"
-        }}
-      >
-        <div 
-          style={{
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: "0 20px"
-          }}
-        >
+            <div 
+              style={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: "0 1.429rem"
+              }}
+            >
           {/* ①と②のコンテナ */}
           <div 
             style={{
-              width: "240px",
-              height: "75px",
-              margin: "0 auto 32px auto",
+              width: "17.143rem",
+              height: "5.357rem",
+              margin: "0 auto 2.286rem auto",
               opacity: 1,
               display: "flex",
               flexDirection: "column",
@@ -3362,13 +3159,13 @@ export default function HomePage() {
             {/* ①CONTACT */}
             <div 
               style={{
-                width: "62px",
-                height: "17px",
-                margin: "0 auto 16px auto",
+                width: "4.429rem",
+                height: "1.214rem",
+                margin: "0 auto 0.5rem auto",
                 fontFamily: "Noto Sans JP",
                 fontWeight: "400",
                 fontStyle: "Regular",
-                fontSize: "14px",
+                fontSize: "1rem",
                 lineHeight: "100%",
                 letterSpacing: "0%",
                 textAlign: "center",
@@ -3383,12 +3180,11 @@ export default function HomePage() {
             {/* ②お問い合わせ */}
             <div 
               style={{
-                width: "240px",
-                height: "58px",
+                width: "17.143rem",
                 fontFamily: "Noto Sans JP",
                 fontWeight: "700",
                 fontStyle: "Bold",
-                fontSize: "40px",
+                fontSize: "2.857rem",
                 lineHeight: "100%",
                 letterSpacing: "0%",
                 textAlign: "center",
@@ -3405,12 +3201,12 @@ export default function HomePage() {
           {/* ③説明文 */}
           <div 
             style={{
-              width: "746px",
-              height: "104px",
-              margin: "0 auto 32px auto",
-              gap: "10px",
+              width: "53.286rem",
+              height: "7.429rem",
+              margin: "0 auto 2.286rem auto",
+              gap: "0.714rem",
               opacity: 1,
-              padding: "10px",
+              padding: "0.714rem",
               display: "flex",
               alignItems: "center",
               justifyContent: "center"
@@ -3418,23 +3214,21 @@ export default function HomePage() {
           >
             <p 
               style={{
-                width: "726px",
-                height: "84px",
+                width: "51.857rem",
+                height: "6rem",
                 fontFamily: "Noto Sans JP",
                 fontWeight: "700",
                 fontStyle: "Bold",
-                fontSize: "16px",
-                lineHeight: "28px",
+                fontSize: "1.143rem",
+                lineHeight: "2rem",
                 letterSpacing: "0%",
                 textAlign: "center",
                 color: "#FFFFFF"
               }}
             >
-              在庫車輛の詳細/その他お問い合わせ/業販価格のご確認など
+              車両の在庫確認 / 車両の状態、仕様確認 / 買取依頼
               <br />
-              お電話またはお問い合わせフォームよりお気軽にお問い合わせください。
-              <br />
-              在庫にないトラックのご紹介も可能です。
+              気になることがありましたら、お気軽にお問い合わせください。
             </p>
           </div>
 
@@ -3442,23 +3236,23 @@ export default function HomePage() {
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(2, 1fr)",
-              gap: "32px",
-              maxWidth: "800px",
+              gap: "2.286rem",
+              maxWidth: "57.143rem",
               width: "100%",
-              marginBottom: "32px"
+              marginBottom: "2.286rem"
             }}
           >
             {/* ①お電話でのお問い合わせ */}
             <Card 
               style={{
-                width: "400px",
-                height: "172px",
+                width: "28.571rem",
+                height: "12.286rem",
                 display: "flex",
                 flexDirection: "column",
-                gap: "8px",
-                borderRadius: "8px",
-                padding: "32px 40px",
-                border: "1px solid #1A1A1A",
+                gap: "0.571rem",
+                borderRadius: "0.571rem",
+                padding: "2.286rem 2.857rem",
+                border: "0.071rem solid #1A1A1A",
                 background: "#FFFFFF",
                 color: "#1a1a1a",
                 boxShadow: "none"
@@ -3476,47 +3270,47 @@ export default function HomePage() {
                 {/* ①電話記号＋お電話でのお問い合わせ */}
                 <div 
                   style={{
-                    width: "204px",
-                    height: "24px",
+                    width: "14.571rem",
+                    height: "1.714rem",
                     display: "flex",
                     alignItems: "center",
-                    gap: "4px",
+                    gap: "0.286rem",
                     opacity: 1,
-                    margin: "0 auto 16px auto"
+                    margin: "0 auto 1.143rem auto"
                   }}
                 >
                   <PhoneCall 
                     style={{ 
-                      width: "18px", 
-                      height: "18px", 
+                      width: "1.286rem", 
+                      height: "1.286rem", 
                       color: "#666666",
-                      marginTop: "2.98px",
-                      marginLeft: "3px"
+                      marginTop: "0.213rem",
+                      marginLeft: "0.214rem"
                     }} 
                   />
-                  <h3 style={{ fontWeight: "bold", fontSize: "16px", margin: 0 }}>お電話でのお問い合わせ</h3>
+                  <h3 style={{ fontWeight: "bold", fontSize: "1.143rem", margin: 0 }}>お電話でのお問い合わせ</h3>
                 </div>
                 {/* ②電話番号＋受付時間 */}
                 <div 
                   style={{
-                    width: "320px",
-                    height: "69px",
+                    width: "22.857rem",
+                    height: "4.929rem",
                     display: "flex",
                     flexDirection: "column",
-                    gap: "4px",
+                    gap: "0.286rem",
                     opacity: 1,
                     margin: "0 auto"
                   }}
                 >
-                  <div style={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: "0.571rem" }}>
                     <span 
                       style={{
-                        width: "43px",
-                        height: "29px",
+                        width: "3.071rem",
+                        height: "2.071rem",
                         fontFamily: "Noto Sans JP",
                         fontWeight: "700",
                         fontStyle: "Bold",
-                        fontSize: "20px",
+                        fontSize: "1.429rem",
                         lineHeight: "100%",
                         letterSpacing: "0%",
                         color: "#2B5EC5",
@@ -3527,12 +3321,12 @@ export default function HomePage() {
                     </span>
                     <span 
                       style={{
-                        width: "239px",
-                        height: "46px",
+                        width: "17.071rem",
+                        height: "3.286rem",
                         fontFamily: "Noto Sans JP",
                         fontWeight: "700",
                         fontStyle: "Bold",
-                        fontSize: "36px",
+                        fontSize: "2.571rem",
                         lineHeight: "100%",
                         letterSpacing: "0%",
                         color: "#2B5EC5",
@@ -3543,7 +3337,7 @@ export default function HomePage() {
                       028-612-1472
                     </span>
                   </div>
-                  <p style={{ fontSize: "14px", color: "#6b7280", margin: 0 }}>受付時間：年中無休 09:00~17:00</p>
+                  <p style={{ fontSize: "1rem", color: "#1a1a1a", margin: 0 }}>受付時間：月〜日 8:00~17:00 <br/>※店舗不在時には折り返しさせて頂きます。</p>
                 </div>
               </CardContent>
             </Card>
@@ -3551,14 +3345,14 @@ export default function HomePage() {
             {/* ②フォームでのお問い合わせ */}
             <Card 
               style={{
-                width: "400px",
-                height: "172px",
+                width: "28.571rem",
+                height: "12.286rem",
                 display: "flex",
                 flexDirection: "column",
-                gap: "24px",
-                borderRadius: "8px",
-                padding: "32px 40px",
-                border: "1px solid #1A1A1A",
+                gap: "1.714rem",
+                borderRadius: "0.571rem",
+                padding: "2.286rem 2.857rem",
+                border: "0.071rem solid #1A1A1A",
                 background: "#FFFFFF",
                 color: "#374151",
                 boxShadow: "none"
@@ -3576,51 +3370,89 @@ export default function HomePage() {
                 {/* ③フォームでの問い合わせ */}
                 <div 
                   style={{
-                    width: "220px",
-                    height: "24px",
+                    width: "15.714rem",
+                    height: "1.714rem",
                     display: "flex",
                     alignItems: "center",
-                    gap: "4px",
+                    gap: "0.286rem",
                     opacity: 1,
-                    margin: "0 auto 16px auto"
+                    margin: "0 auto 1.143rem auto"
                   }}
                 >
                   <img 
                     src="/forum.png"
                     alt="フォーラム"
                     style={{
-                      width: "20px",
-                      height: "20px"
+                      width: "1.429rem",
+                      height: "1.429rem"
                     }}
                   />
-                  <h3 style={{ fontWeight: "bold", fontSize: "16px", margin: 0 }}>フォームでのお問い合わせ</h3>
+                  <h3 style={{ fontWeight: "bold", fontSize: "1.143rem", margin: 0 }}>フォームでのお問い合わせ</h3>
                 </div>
                 {/* ④お問合せフォームへボタン */}
                 <Link href="/contact">
                   <Button 
                     style={{
-                      width: "280px",
-                      height: "40px",
+                      width: "20.71rem",
+                      height: "2.86rem",
+                      gap: "2.57rem",
+                      opacity: 1,
+                      paddingTop: "0.57rem",
+                      paddingRight: "0.86rem",
+                      paddingBottom: "0.57rem",
+                      paddingLeft: "0.86rem",
+                      borderRadius: "0.29rem",
+                      background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
+                      boxShadow: "0.14rem 0.14rem 0.14rem 0 #00000040",
+                      color: "#FFFFFF",
+                      fontFamily: "Noto Sans JP",
+                      fontWeight: "700",
+                      fontStyle: "Bold",
+                      fontSize: "1.14rem",
+                      lineHeight: "100%",
+                      letterSpacing: "0%",
+                      cursor: "pointer",
+                      transition: "all 0.3s ease",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      gap: "16px",
-                      borderRadius: "4px",
-                      padding: "8px 12px",
-                      background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
-                      boxShadow: "2px 2px 2px 0px #00000040",
-                      border: "none",
-                      cursor: "pointer",
-                      transition: "opacity 0.3s ease"
+                      position: "relative"
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.opacity = "0.8";
+                      e.currentTarget.style.opacity = "0.9";
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.opacity = "1";
                     }}
                   >
-                    お問い合わせフォームへ
+                    <span style={{ 
+                      height: "1.64rem",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      textAlign: "center"
+                    }}>お問い合わせフォームへ</span>
+                    <svg
+                      width="7.4"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      style={{
+                        position: "absolute",
+                        top: "1rem",
+                        right: "0.86rem",
+                        color: "#FFFFFF"
+                      }}
+                    >
+                      <path
+                        d="M9 18L15 12L9 6"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
                   </Button>
                 </Link>
               </CardContent>
@@ -3631,14 +3463,14 @@ export default function HomePage() {
           <div style={{ display: "flex", justifyContent: "center" }}>
             <Card 
               style={{
-                width: "472px",
-                height: "100px",
+                width: "33.714rem",
+                height: "7.143rem",
                 display: "flex",
                 flexDirection: "column",
-                gap: "4px",
-                borderRadius: "8px",
-                padding: "24px 60px",
-                border: "1px solid #1A1A1A",
+                gap: "0.286rem",
+                borderRadius: "0.571rem",
+                padding: "1.714rem 4.286rem",
+                border: "0.071rem solid #1A1A1A",
                 background: "#FFFFFF",
                 color: "#2563eb",
                 boxShadow: "none"
@@ -3657,13 +3489,13 @@ export default function HomePage() {
                 <Link href="/contact" style={{ textDecoration: "none" }}>
                   <div 
                     style={{
-                      width: "360px",
-                      height: "29px",
+                      width: "25.714rem",
+                      height: "2.071rem",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       opacity: 1,
-                      margin: "0 auto 8px auto",
+                      margin: "0 auto 0.571rem auto",
                       position: "relative",
                       cursor: "pointer",
                       transition: "opacity 0.3s ease"
@@ -3680,31 +3512,32 @@ export default function HomePage() {
                         fontFamily: "Noto Sans JP",
                         fontWeight: "700",
                         fontStyle: "Bold",
-                        fontSize: "20px",
+                        fontSize: "1.429rem",
                         lineHeight: "100%",
                         letterSpacing: "0%",
-                        color: "#2B5EC5"
+                        color: "#2B5EC5",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        whiteSpace: "nowrap"
                       }}
                     >
-                      トラック買取をご希望の方はこちら
+                      買取 / 下取り ご希望の方はこちらから
+                      <ChevronRight 
+                        style={{
+                          width: "1.714rem",
+                          height: "1.714rem",
+                          color: "#2B5EC5"
+                        }}
+                      />
                     </div>
-                    <ChevronRight 
-                      style={{
-                        width: "24px",
-                        height: "24px",
-                        color: "#2B5EC5",
-                        position: "absolute",
-                        top: "2.5px",
-                        right: "0px"
-                      }}
-                    />
                   </div>
                 </Link>
                 {/* ⑥無料査定実施中 */}
                 <div 
                   style={{
-                    width: "320px",
-                    height: "19px",
+                    width: "22.857rem",
+                    height: "1.357rem",
                     fontFamily: "Noto Sans JP",
                     fontWeight: "400",
                     fontStyle: "Regular",
@@ -3716,7 +3549,7 @@ export default function HomePage() {
                     textAlign: "center"
                   }}
                 >
-                  無料査定実施中！！
+                  LINEで査定実施中！！
                 </div>
               </CardContent>
             </Card>
