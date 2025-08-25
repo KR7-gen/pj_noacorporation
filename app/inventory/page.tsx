@@ -12,52 +12,55 @@ import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import type { Vehicle } from "@/types"
 
-const truckTypes = [
-  "クレーン",
-  "ダンプ",
-  "平ボディ",
-  "車両運搬車",
-  "ミキサー車",
-  "アルミバン",
-  "高所作業車",
-  "アルミウィング",
-  "キャリアカー",
-  "塵芥車",
-  "アームロール",
-  "特装車・その他",
-]
-
 // 車両タイプのアイコンデータ
 const vehicleTypeIcons = [
   { id: 1, type: "クレーン", icon: "/icons/crane.png" },
-  { id: 2, type: "ダンプ", icon: "/icons/dump.png" },
+  { id: 2, type: "ダンプローダーダンプ", icon: "/icons/dump.png" },
   { id: 3, type: "平ボディ", icon: "/icons/flatbed.png" },
-  { id: 4, type: "車両運搬車", icon: "/icons/carrier.png" },
+  { id: 4, type: "重機回送車", icon: "/icons/carrier.png" },
   { id: 5, type: "ミキサー車", icon: "/icons/mixer.png" },
   { id: 6, type: "アルミバン", icon: "/icons/van.png" },
   { id: 7, type: "高所作業車", icon: "/icons/aerial.png" },
   { id: 8, type: "アルミウィング", icon: "/icons/wing.png" },
-  { id: 9, type: "キャリアカー", icon: "/icons/car-carrier.png" },
+  { id: 9, type: "車両運搬車", icon: "/icons/car-carrier.png" },
   { id: 10, type: "塵芥車", icon: "/icons/garbage.png" },
   { id: 11, type: "アームロール", icon: "/icons/arm-roll.png" },
   { id: 12, type: "特装車・その他", icon: "/icons/special.png" },
 ]
 
-// メーカーとサイズの固定リスト
+// プルダウンの選択肢
+const bodyTypes = [
+  "クレーン",
+  "ダンプ",
+  "平ボディ",
+  "車輌運搬車",
+  "ミキサー車",
+  "高所作業車",
+  "アルミバン",
+  "アルミウィング",
+  "キャリアカー",
+  "塵芥車",
+  "アームロール",
+  "バス",
+  "冷蔵冷凍車",
+  "タンクローリー",
+  "特装車・その他"
+]
+
 const makers = [
   "日野",
   "いすゞ",
   "三菱ふそう",
-  "UDトラックス",
+  "UD",
   "その他"
-];
+]
 
 const sizes = [
   "大型",
   "増トン",
   "中型",
   "小型"
-];
+]
 
 export default function InventoryPage() {
   const router = useRouter()
@@ -68,7 +71,9 @@ export default function InventoryPage() {
   const [formType, setFormType] = useState(searchParams.get("type") || "all")
   const [formMaker, setFormMaker] = useState(searchParams.get("maker") || "all")
   const [formSize, setFormSize] = useState(searchParams.get("size") || "all")
-  const [formKeyword, setFormKeyword] = useState("")
+  const [formKeyword, setFormKeyword] = useState(searchParams.get("keyword") || "")
+  const [showSoldNegotiating, setShowSoldNegotiating] = useState(searchParams.get("hideSold") !== "true")
+  const [tempShowSoldNegotiating, setTempShowSoldNegotiating] = useState(searchParams.get("hideSold") !== "true")
   const [vehicles, setVehicles] = useState<Vehicle[]>([])
   const [filteredVehicles, setFilteredVehicles] = useState<Vehicle[]>([])
   const [loading, setLoading] = useState(true)
@@ -78,6 +83,20 @@ export default function InventoryPage() {
   // ソート機能の状態管理
   const [sortField, setSortField] = useState<string>("")
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc")
+
+  // URLパラメータが変更されたときに検索条件を更新
+  useEffect(() => {
+    const type = searchParams.get("type") || "all";
+    const maker = searchParams.get("maker") || "all";
+    const size = searchParams.get("size") || "all";
+    const keyword = searchParams.get("keyword") || "";
+    
+    setSelectedType(type);
+    setFormType(type);
+    setFormMaker(maker);
+    setFormSize(size);
+    setFormKeyword(keyword);
+  }, [searchParams]);
 
   // Firestoreからデータを取得
   useEffect(() => {
@@ -102,12 +121,52 @@ export default function InventoryPage() {
     fetchVehicles();
   }, []);
 
+  // 検索条件に基づいてフィルタリング
+  useEffect(() => {
+    let filtered = vehicles;
+
+    // ボディタイプでフィルタリング
+    if (formType && formType !== "all") {
+      filtered = filtered.filter(vehicle => vehicle.bodyType === formType);
+    }
+
+    // メーカーでフィルタリング
+    if (formMaker && formMaker !== "all") {
+      filtered = filtered.filter(vehicle => vehicle.maker === formMaker);
+    }
+
+    // サイズでフィルタリング
+    if (formSize && formSize !== "all") {
+      filtered = filtered.filter(vehicle => vehicle.size === formSize);
+    }
+
+    // キーワードでフィルタリング
+    if (formKeyword) {
+      const keyword = formKeyword.toLowerCase();
+      filtered = filtered.filter(vehicle => 
+        vehicle.inquiryNumber?.toLowerCase().includes(keyword) ||
+        vehicle.bodyNumber?.toLowerCase().includes(keyword) ||
+        vehicle.maker?.toLowerCase().includes(keyword) ||
+        vehicle.model?.toLowerCase().includes(keyword) ||
+        vehicle.bodyType?.toLowerCase().includes(keyword)
+      );
+    }
+
+    setFilteredVehicles(filtered);
+    setCurrentPage(1); // 検索時にページを1に戻す
+  }, [vehicles, formType, formMaker, formSize, formKeyword]);
+
   // フィルタリング処理
   useEffect(() => {
     let filtered = vehicles;
 
     // 非公開車両と一時保存車両を除外
     filtered = filtered.filter(vehicle => !vehicle.isPrivate && !vehicle.isTemporarySave);
+
+    // SOLD/商談中の車両を除外（チェックが外れている場合）
+    if (!showSoldNegotiating) {
+      filtered = filtered.filter(vehicle => !vehicle.isSoldOut && !vehicle.isNegotiating);
+    }
 
     // ボディタイプでフィルタリング
     if (selectedType !== "all") {
@@ -137,7 +196,7 @@ export default function InventoryPage() {
     }
 
     setFilteredVehicles(filtered);
-  }, [vehicles, selectedType, formMaker, formSize, formKeyword]);
+  }, [vehicles, selectedType, formMaker, formSize, formKeyword, showSoldNegotiating]);
 
   // URLパラメータに基づいて初期フィルタリングを行う
   useEffect(() => {
@@ -180,7 +239,9 @@ export default function InventoryPage() {
     if (formType !== "all") params.set("type", formType)
     if (formMaker !== "all") params.set("maker", formMaker)
     if (formSize !== "all") params.set("size", formSize)
+    if (!tempShowSoldNegotiating) params.set("hideSold", "true")
     
+    setShowSoldNegotiating(tempShowSoldNegotiating)
     router.push(`/inventory?${params.toString()}`)
     setCurrentPage(1) // 検索時に1ページ目に戻る
   }
@@ -284,9 +345,9 @@ export default function InventoryPage() {
           gap: "32px",
           opacity: 1,
           paddingTop: "0px",
-          paddingRight: "168px",
+          paddingRight: "0px",
           paddingBottom: "60px",
-          paddingLeft: "168px",
+          paddingLeft: "0px",
           margin: "0 auto",
           background: "#F5F5F5"
         }}
@@ -329,19 +390,17 @@ export default function InventoryPage() {
         {/* 車両タイプアイコン */}
         <div 
           style={{
-            padding: "48px 20px",
-            flex: "1",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center"
+            padding: "3.43rem 1.43rem 0 1.43rem",
+            flex: "1"
           }}
         >
           <div 
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(6, 1fr)",
-              gap: "4px",
-              maxWidth: "1200px",
+              gap: "0.57rem",
+              width: "77.08%",
+              maxWidth: "78.57rem",
               margin: "0 auto"
             }}
           >
@@ -350,9 +409,8 @@ export default function InventoryPage() {
                 key={icon.id}
                 onClick={() => handleIconClick(icon.type)}
                 style={{
-                  width: "176px",
-                  height: "96px",
-                  borderRadius: "4px",
+                  height: "6.86rem",
+                  borderRadius: "0.29rem",
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
@@ -360,18 +418,18 @@ export default function InventoryPage() {
                   backgroundColor: selectedType === icon.type ? "#E3F2FD" : "white",
                   textDecoration: "none",
                   transition: "all 0.3s ease",
-                  boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+                  boxShadow: "0 0.07rem 0.21rem rgba(0, 0, 0, 0.1)",
                   opacity: 1,
                   cursor: "pointer",
                   border: selectedType === icon.type ? "2px solid #2196F3" : "2px solid transparent"
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-2px)";
-                  e.currentTarget.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.15)";
+                  e.currentTarget.style.transform = "translateY(-0.14rem)";
+                  e.currentTarget.style.boxShadow = "0 0.29rem 0.57rem rgba(0, 0, 0, 0.15)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "0 1px 3px rgba(0, 0, 0, 0.1)";
+                  e.currentTarget.style.boxShadow = "0 0.07rem 0.21rem rgba(0, 0, 0, 0.1)";
                 }}
               >
                 <div 
@@ -381,33 +439,34 @@ export default function InventoryPage() {
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    justifyContent: "center",
-                    position: "relative"
+                    justifyContent: "flex-start",
+                    position: "relative",
+                    padding: "0.57rem"
                   }}
                 >
                   <div 
                     style={{
-                      width: "64px",
-                      height: "64px",
+                      width: icon.type === "ダンプローダーダンプ" ? "3rem" : "4.57rem",
+                      height: icon.type === "ダンプローダーダンプ" ? "3rem" : "4.57rem",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      marginBottom: "8px"
+                      marginBottom: icon.type === "ダンプローダーダンプ" ? "0.5rem" : "0.29rem"
                     }}
                   >
                     <img 
                       src={`/${icon.type === "クレーン" ? "crane" : 
-                           icon.type === "ダンプ" ? "dump" :
+                           icon.type === "ダンプローダーダンプ" ? "dump" :
                            icon.type === "平ボディ" ? "flatbed" :
-                           icon.type === "車両運搬車" ? "carrier" :
+                           icon.type === "重機回送車" ? "carrier" :
                            icon.type === "ミキサー車" ? "mixer" :
                            icon.type === "アルミバン" ? "van" :
                            icon.type === "高所作業車" ? "aerial" :
                            icon.type === "アルミウィング" ? "wing" :
-                           icon.type === "キャリアカー" ? "car_carrier" :
+                           icon.type === "車両運搬車" ? "car_carrier" :
                            icon.type === "塵芥車" ? "garbage" :
                            icon.type === "アームロール" ? "arm-roll" :
-                           "special"}.${icon.type === "平ボディ" || icon.type === "アームロール" || icon.type === "キャリアカー" ? "png" : "jpg"}`}
+                           "special"}.${icon.type === "平ボディ" || icon.type === "アームロール" || icon.type === "車両運搬車" ? "png" : "jpg"}`}
                       alt={icon.type}
                       style={{
                         maxWidth: "100%",
@@ -424,18 +483,18 @@ export default function InventoryPage() {
                       fontFamily: "'Noto Sans JP', sans-serif",
                       fontWeight: 700,
                       fontStyle: "bold",
-                      fontSize: "16px",
-                      lineHeight: "100%",
+                      fontSize: "1.14rem",
+                      lineHeight: "120%",
                       letterSpacing: "0%",
                       textAlign: "center",
                       color: "#1A1A1A",
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      maxWidth: "160px"
+                      maxWidth: "11.43rem",
+                      whiteSpace: "pre-line",
+                      padding: "0.17rem",
+                      marginTop: icon.type === "ダンプローダーダンプ" ? "0.2rem" : "0"
                     }}
                   >
-                    {icon.type}
+                    {icon.type === "ダンプローダーダンプ" ? "ダンプ\nローダーダンプ" : icon.type}
                   </span>
                 </div>
               </div>
@@ -446,7 +505,7 @@ export default function InventoryPage() {
         {/* Search Section */}
         <div 
           style={{
-            padding: "48px 20px",
+            padding: "0.857rem 1.43rem 10rem 1.43rem",
             flex: "1",
             display: "flex",
             justifyContent: "center",
@@ -456,35 +515,38 @@ export default function InventoryPage() {
           {/* 背景 */}
           <div 
             style={{
-              width: "1180px",
-              height: "55px",
+              width: "77.08%",
+              maxWidth: "1100px",
+              margin: "0 auto",
+              height: "3.93rem",
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
               opacity: 1,
-              borderRadius: "4px",
-              padding: "8px 12px",
+              borderRadius: "0.29rem",
+              padding: "0.57rem 0.35rem",
               background: "#CCCCCC"
             }}
           >
             {/* 左側の検索フィールド群 */}
             <div 
               style={{
+                width: "50.27%",
                 display: "flex",
-                gap: "8px",
                 alignItems: "center"
               }}
             >
-             {/* 左側の検索フィールド群 */}
+              {/* 車両検索（ボディタイプ） */}
               <div 
                 style={{
-                  width: "202px",
-                  height: "32px",
+                  width: "39%",
+                  margin: "0.43rem",
+                  height: "2.29rem",
                   display: "flex",
                   alignItems: "center",
-                  gap: "4px",
-                  borderRadius: "4px",
-                  padding: "4px 8px",
+                  gap: "0.29rem",
+                  borderRadius: "0.29rem",
+                  padding: "0.29rem 0.57rem",
                   background: "#FFFFFF",
                   position: "relative"
                 }}
@@ -494,7 +556,7 @@ export default function InventoryPage() {
                     width: "100%",
                     border: "none",
                     background: "transparent",
-                    fontSize: "16px",
+                    fontSize: "1.14rem",
                     fontFamily: "Noto Sans JP",
                     fontWeight: "400",
                     color: "#1A1A1A",
@@ -508,7 +570,7 @@ export default function InventoryPage() {
                   onChange={(e) => setFormType(e.target.value)}
                 >
                   <option value="all">ボディタイプ：すべて</option>
-                  {truckTypes.map((type) => (
+                  {bodyTypes.map((type) => (
                     <option key={type} value={type}>{type}</option>
                   ))}
                 </select>
@@ -517,8 +579,12 @@ export default function InventoryPage() {
                   style={{ 
                     color: "#1A1A1A",
                     position: "absolute",
-                    right: "8px",
-                    pointerEvents: "none"
+                    right: "0.57rem",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    pointerEvents: "none",
+                    margin: "0",
+                    padding: "0"
                   }} 
                 />
               </div>
@@ -526,13 +592,14 @@ export default function InventoryPage() {
               {/* 車両検索（メーカー） */}
               <div 
                 style={{
-                  width: "172px",
-                  height: "33px",
+                  width: "33%",
+                  margin: "0.43rem",
+                  height: "2.36rem",
                   display: "flex",
                   alignItems: "center",
-                  gap: "4px",
-                  borderRadius: "4px",
-                  padding: "4px 8px",
+                  gap: "0.29rem",
+                  borderRadius: "0.29rem",
+                  padding: "0.29rem 0.57rem",
                   background: "#FFFFFF",
                   position: "relative"
                 }}
@@ -542,7 +609,7 @@ export default function InventoryPage() {
                     width: "100%",
                     border: "none",
                     background: "transparent",
-                    fontSize: "16px",
+                    fontSize: "1.14rem",
                     fontFamily: "Noto Sans JP",
                     fontWeight: "400",
                     color: "#1A1A1A",
@@ -565,8 +632,12 @@ export default function InventoryPage() {
                   style={{ 
                     color: "#1A1A1A",
                     position: "absolute",
-                    right: "8px",
-                    pointerEvents: "none"
+                    right: "0.57rem",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    pointerEvents: "none",
+                    margin: "0",
+                    padding: "0"
                   }} 
                 />
               </div>
@@ -574,13 +645,14 @@ export default function InventoryPage() {
               {/* 車両検索（大きさ） */}
               <div 
                 style={{
-                  width: "155px",
-                  height: "32px",
+                  width: "30%",
+                  margin: "0.43rem",
+                  height: "2.29rem",
                   display: "flex",
                   alignItems: "center",
-                  gap: "4px",
-                  borderRadius: "4px",
-                  padding: "4px 8px",
+                  gap: "0.29rem",
+                  borderRadius: "0.29rem",
+                  padding: "0.29rem 0.57rem",
                   background: "#FFFFFF",
                   position: "relative"
                 }}
@@ -590,7 +662,7 @@ export default function InventoryPage() {
                     width: "100%",
                     border: "none",
                     background: "transparent",
-                    fontSize: "16px",
+                    fontSize: "1.14rem",
                     fontFamily: "Noto Sans JP",
                     fontWeight: "400",
                     color: "#1A1A1A",
@@ -613,19 +685,117 @@ export default function InventoryPage() {
                   style={{ 
                     color: "#1A1A1A",
                     position: "absolute",
-                    right: "8px",
-                    pointerEvents: "none"
+                    right: "0.57rem",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    pointerEvents: "none",
+                    margin: "0",
+                    padding: "0"
                   }} 
                 />
               </div>
             </div>
 
+                         {/* SOLD/商談中表示制御 */}
+             <div 
+               style={{
+                 width: "15%",
+                 display: "flex",
+                 flexDirection: "column",
+                 alignItems: "center",
+                 justifyContent: "center",
+                 padding: "0.29rem"
+               }}
+             >
+               <div 
+                 style={{
+                   display: "flex",
+                   alignItems: "center",
+                   gap: "0.29rem",
+                   cursor: "pointer",
+                   height: "2.5rem"
+                 }}
+                 onClick={() => setTempShowSoldNegotiating(!tempShowSoldNegotiating)}
+               >
+                 <div 
+                   style={{
+                     width: "2.285rem",
+                     height: "2.285rem",
+                     border: "1px solid #1A1A1A",
+                     backgroundColor: tempShowSoldNegotiating ? "#1A1A1A" : "transparent",
+                     display: "flex",
+                     alignItems: "center",
+                     justifyContent: "center",
+                     cursor: "pointer"
+                   }}
+                 >
+                                       {tempShowSoldNegotiating && (
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        style={{
+                          color: "white"
+                        }}
+                      >
+                        <path
+                          d="M20 6L9 17L4 12"
+                          stroke="currentColor"
+                          strokeWidth="3"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    )}
+                 </div>
+                 <div 
+                   style={{
+                     display: "flex",
+                     flexDirection: "column",
+                     gap: "0.1rem",
+                     justifyContent: "center",
+                     height: "2.5rem"
+                   }}
+                 >
+                   <span 
+                     style={{
+                       fontFamily: "Noto Sans JP",
+                       fontWeight: "400",
+                       fontSize: "0.86rem",
+                       lineHeight: "100%",
+                       letterSpacing: "0%",
+                       color: "#1A1A1A",
+                       whiteSpace: "nowrap"
+                     }}
+                   >
+                     SOLD OUT/商談中
+                   </span>
+                   <span 
+                     style={{
+                       fontFamily: "Noto Sans JP",
+                       fontWeight: "400",
+                       fontSize: "0.86rem",
+                       lineHeight: "100%",
+                       letterSpacing: "0%",
+                       color: "#1A1A1A",
+                       whiteSpace: "nowrap"
+                     }}
+                   >
+                     表示する
+                   </span>
+                 </div>
+               </div>
+             </div>
+
             {/* 右側のフリーワードと検索ボタン */}
             <div 
               style={{
+                width: "35%",
                 display: "flex",
-                gap: "12px",
-                alignItems: "center"
+                alignItems: "center",
+                justifyContent: "space-between"
               }}
             >
               {/* 車両検索（フリーワード） */}
@@ -633,44 +803,46 @@ export default function InventoryPage() {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  gap: "8px"
+                  width: "80%",
+                  justifyContent: "flex-end"
                 }}
               >
                 <span 
                   style={{
                     fontFamily: "Noto Sans JP",
                     fontWeight: "400",
-                    fontSize: "16px",
+                    fontSize: "1.14rem",
                     lineHeight: "100%",
                     letterSpacing: "0%",
                     color: "#1A1A1A",
-                    whiteSpace: "nowrap"
+                    whiteSpace: "nowrap",
+                    marginRight: "0.5rem"
                   }}
                 >
                   フリーワード
                 </span>
                 <div 
                   style={{
-                    width: "300px",
-                    height: "32px",
+                    width: "65%",
+                    margin: "0.43rem",
+                    height: "2.29rem",
                     display: "flex",
                     alignItems: "center",
-                    gap: "10px",
-                    borderRadius: "4px",
-                    padding: "4px 8px",
+                    gap: "0.71rem",
+                    borderRadius: "0.29rem",
+                    padding: "0.29rem 0.57rem",
                     background: "#FFFFFF"
                   }}
                 >
                   <input
                     type="text"
-                    placeholder="問い合わせ番号、車体番号など"
                     value={formKeyword}
                     onChange={(e) => setFormKeyword(e.target.value)}
                     style={{
                       width: "100%",
                       border: "none",
                       background: "transparent",
-                      fontSize: "16px",
+                      fontSize: "1.14rem",
                       fontFamily: "Noto Sans JP",
                       fontWeight: "400",
                       color: "#1A1A1A",
@@ -684,18 +856,20 @@ export default function InventoryPage() {
               <button 
                 onClick={handleSearch}
                 style={{
-                  width: "120px",
-                  height: "39px",
+                  minWidth: "120px",
+                  width: "15%",
+                  height: "2.79rem",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  gap: "10px",
-                  borderRadius: "4px",
-                  padding: "8px",
+                  gap: "0.71rem",
+                  borderRadius: "0.29rem",
+                  padding: "0.57rem",
                   background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
                   border: "none",
                   cursor: "pointer",
-                  transition: "opacity 0.3s ease"
+                  transition: "opacity 0.3s ease",
+                  marginRight: "0.5rem"
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.opacity = "0.8";
@@ -708,11 +882,12 @@ export default function InventoryPage() {
                   style={{
                     fontFamily: "Noto Sans JP",
                     fontWeight: "700",
-                    fontSize: "16px",
+                    fontSize: "1.14rem",
                     lineHeight: "100%",
                     letterSpacing: "0%",
                     textAlign: "center",
-                    color: "#FFFFFF"
+                    color: "#FFFFFF",
+                    whiteSpace: "nowrap"
                   }}
                 >
                   検索する

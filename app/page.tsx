@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -253,8 +254,13 @@ const mockVehicles = [
 ];
 
 export default function HomePage() {
+  const router = useRouter();
+  
   // 検索条件の状態管理
   const [selectedType, setSelectedType] = useState("");
+  const [selectedMaker, setSelectedMaker] = useState("");
+  const [selectedSize, setSelectedSize] = useState("");
+  const [searchKeyword, setSearchKeyword] = useState("");
   const [searchResults, setSearchResults] = useState(mockVehicles);
   const [newsList, setNewsList] = useState<Announcement[]>([]);
   const [latestVehicles, setLatestVehicles] = useState<Vehicle[]>([]);
@@ -274,33 +280,25 @@ export default function HomePage() {
       console.error("最新車両データ取得エラー:", error);
     });
 
-    // 総車両数を取得（在庫数表示用）
+    // 総車両数を取得（在庫数表示用）: SOLD OUTを除外
     getVehicles().then((allVehicles) => {
-      setTotalVehicles(allVehicles.length);
+      const availableCount = allVehicles.filter(v => !(v as any).isSoldOut).length;
+      setTotalVehicles(availableCount);
     }).catch((error) => {
       console.error("総車両数取得エラー:", error);
     });
   }, []);
 
-  // アイコンクリック時のハンドラー
-  const handleIconClick = (type: string) => {
-    setSelectedType(type);
-    filterVehicles(type);
-  };
-
   // 検索ボタンクリック時のハンドラー
   const handleSearch = () => {
-    filterVehicles(selectedType);
-  };
-
-  // フィルタリング関数
-  const filterVehicles = (type: string) => {
-    if (!type) {
-      setSearchResults(mockVehicles);
-    } else {
-      const filtered = mockVehicles.filter(vehicle => vehicle.bodyType === type);
-      setSearchResults(filtered);
-    }
+    const params = new URLSearchParams();
+    
+    if (selectedType) params.append("type", selectedType);
+    if (selectedMaker) params.append("maker", selectedMaker);
+    if (selectedSize) params.append("size", selectedSize);
+    if (searchKeyword) params.append("keyword", searchKeyword);
+    
+    router.push(`/inventory?${params.toString()}`);
   };
 
   return (
@@ -443,27 +441,27 @@ export default function HomePage() {
                 >
                   <div 
                     style={{
-                      width: "4.57rem",
-                      height: "4.57rem",
+                      width: icon.type === "ダンプローダーダンプ" ? "3rem" : "4.57rem",
+                      height: icon.type === "ダンプローダーダンプ" ? "3rem" : "4.57rem",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      marginBottom: "0.29rem"
+                      marginBottom: icon.type === "ダンプローダーダンプ" ? "0.5rem" : "0.29rem"
                     }}
                   >
                     <img 
                       src={`/${icon.type === "クレーン" ? "crane" : 
-                           icon.type === "ダンプ" ? "dump" :
+                           icon.type === "ダンプローダーダンプ" ? "dump" :
                            icon.type === "平ボディ" ? "flatbed" :
-                           icon.type === "車輌運搬車" ? "carrier" :
+                           icon.type === "重機回送車" ? "carrier" :
                            icon.type === "ミキサー車" ? "mixer" :
                            icon.type === "アルミバン" ? "van" :
                            icon.type === "高所作業車" ? "aerial" :
                            icon.type === "アルミウィング" ? "wing" :
-                           icon.type === "キャリアカー" ? "car_carrier" :
+                           icon.type === "車両運搬車" ? "car_carrier" :
                            icon.type === "塵芥車" ? "garbage" :
                            icon.type === "アームロール" ? "arm-roll" :
-                           "special"}.${icon.type === "平ボディ" || icon.type === "アームロール" || icon.type === "キャリアカー" ? "png" : "jpg"}`}
+                           "special"}.${icon.type === "平ボディ" || icon.type === "アームロール" || icon.type === "車両運搬車" ? "png" : "jpg"}`}
                       alt={icon.type}
                       style={{
                         maxWidth: "100%",
@@ -487,7 +485,8 @@ export default function HomePage() {
                       color: "#1A1A1A",
                       maxWidth: "11.43rem",
                       whiteSpace: "pre-line",
-                      padding: "0.17rem"
+                      padding: "0.17rem",
+                      marginTop: icon.type === "ダンプローダーダンプ" ? "0.2rem" : "0"
                     }}
                   >
                     {icon.type === "ダンプローダーダンプ" ? "ダンプ\nローダーダンプ" : icon.type}
@@ -566,8 +565,8 @@ export default function HomePage() {
                     onChange={(e) => setSelectedType(e.target.value)}
                   >
                     <option value="">ボディタイプ：すべて</option>
-                    {vehicleTypeIcons.map((icon) => (
-                      <option key={icon.id} value={icon.type}>{icon.type}</option>
+                    {truckTypes.map((type) => (
+                      <option key={type} value={type}>{type}</option>
                     ))}
                   </select>
                   <ChevronDown 
@@ -615,8 +614,8 @@ export default function HomePage() {
                       WebkitAppearance: "none",
                       MozAppearance: "none"
                     }}
-                    value={selectedType}
-                    onChange={(e) => setSelectedType(e.target.value)}
+                    value={selectedMaker}
+                    onChange={(e) => setSelectedMaker(e.target.value)}
                   >
                     <option value="">メーカー：すべて</option>
                     {makers.map((maker) => (
@@ -668,8 +667,8 @@ export default function HomePage() {
                       WebkitAppearance: "none",
                       MozAppearance: "none"
                     }}
-                    value={selectedType}
-                    onChange={(e) => setSelectedType(e.target.value)}
+                    value={selectedSize}
+                    onChange={(e) => setSelectedSize(e.target.value)}
                   >
                     <option value="">大きさ：すべて</option>
                     {sizes.map((size) => (
@@ -740,6 +739,8 @@ export default function HomePage() {
                   <input
                     type="text"
                     placeholder="問い合わせ番号、車体番号など"
+                    value={searchKeyword}
+                    onChange={(e) => setSearchKeyword(e.target.value)}
                     style={{
                       width: "100%",
                       border: "none",
@@ -818,50 +819,48 @@ export default function HomePage() {
         }}
       >
         {/* NEW TRUCK and 新着車両 section */}
-        <div style={{ marginBottom: "2.857rem" }}>
+        <div style={{ marginBottom: "2.857rem", display: "flex", justifyContent: "center" }}>
           <div 
             style={{
-              width: "14.41%",
-              height: "1.21rem",
-              margin: "0 auto 2px auto",
-              fontFamily: "Noto Sans JP",
-              fontWeight: "400",
-              fontStyle: "Regular",
-              fontSize: "1rem",
-              lineHeight: "100%",
-              letterSpacing: "0%",
-              textAlign: "left",
-              color: "#2B5EC5",
               display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-start",
-              borderRadius: "0.14rem",
-              whiteSpace: "nowrap",
-              paddingLeft: "0",
+              flexDirection: "column",
+              alignItems: "flex-start",
             }}
           >
-            NEW TRUCK
-          </div>
-          <div 
-            style={{
-              width: "14.41%",
-              height: "3rem",
-              margin: "0 auto 0.57rem auto",
-              fontFamily: "Noto Sans JP",
-              fontWeight: "700",
-              fontStyle: "Bold",
-              fontSize: "2.86rem",
-              lineHeight: "100%",
-              letterSpacing: "0%",
-              textAlign: "center",
-              color: "#1A1A1A",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              whiteSpace: "nowrap",
-            }}
-          >
-            新着車両
+            <div 
+              style={{
+                fontFamily: "Noto Sans JP",
+                fontWeight: "400",
+                fontStyle: "Regular",
+                fontSize: "1rem",
+                lineHeight: "100%",
+                letterSpacing: "0%",
+                textAlign: "left",
+                color: "#2B5EC5",
+                borderRadius: "0.14rem",
+                whiteSpace: "nowrap",
+                paddingLeft: "0",
+                marginBottom: "2px",
+              }}
+            >
+              NEW TRUCK
+            </div>
+            <div 
+              style={{
+                fontFamily: "Noto Sans JP",
+                fontWeight: "700",
+                fontStyle: "Bold",
+                fontSize: "2.86rem",
+                lineHeight: "100%",
+                letterSpacing: "0%",
+                textAlign: "left",
+                color: "#1A1A1A",
+                whiteSpace: "nowrap",
+                marginBottom: "0.57rem",
+              }}
+            >
+              新着車両
+            </div>
           </div>
         </div>
 
@@ -878,7 +877,7 @@ export default function HomePage() {
           {/* 現在、X台の在庫が閲覧可能です section */}
           <div style={{ marginBottom: "1rem" }}>
             <p style={{ opacity: 1, fontFamily: "Noto Sans JP", fontWeight: "400", fontStyle: "Regular", fontSize: "1.14rem", lineHeight: "100%", letterSpacing: "0%", color: "#1A1A1A" }}>
-              現在、<span style={{ opacity: 1, fontFamily: "Noto Sans JP", fontWeight: "700", fontStyle: "Bold", fontSize: "2.29rem", lineHeight: "100%", letterSpacing: "0%", color: "#EA1313", textDecoration: "underline" }}>{latestVehicles.length}</span>台の在庫が閲覧可能です
+              現在、<span style={{ opacity: 1, fontFamily: "Noto Sans JP", fontWeight: "700", fontStyle: "Bold", fontSize: "2.29rem", lineHeight: "100%", letterSpacing: "0%", color: "#EA1313", textDecoration: "underline" }}>{totalVehicles}</span>台の在庫が閲覧可能です
             </p>
           </div>
 
@@ -1535,49 +1534,64 @@ export default function HomePage() {
                 style={{
                   width: "15.71rem",
                   height: "2.86rem",
-                  gap: 0,
+                  gap: "2.57rem",
                   opacity: 1,
-                  padding: "0",
+                  paddingTop: "0.57rem",
+                  paddingRight: "0.86rem",
+                  paddingBottom: "0.57rem",
+                  paddingLeft: "0.86rem",
                   borderRadius: "0.29rem",
                   background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
-                  boxShadow: "0.14rem 0.14rem 0.14rem 0px #00000040",
-                  border: "none",
+                  boxShadow: "0.14rem 0.14rem 0.14rem 0 #00000040",
+                  color: "#FFFFFF",
+                  fontFamily: "Noto Sans JP",
+                  fontWeight: "700",
+                  fontStyle: "Bold",
+                  fontSize: "1.14rem",
+                  lineHeight: "100%",
+                  letterSpacing: "0%",
                   cursor: "pointer",
+                  transition: "all 0.3s ease",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  lineHeight: 1
+                  position: "relative"
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.opacity = "0.9";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.opacity = "1";
                 }}
               >
-                <span
+                <span style={{ 
+                  height: "1.64rem",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  textAlign: "center"
+                }}>在庫をもっと見る</span>
+                <svg
+                  width="7.4"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
                   style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "0.29rem",
-                    opacity: 1,
-                    fontFamily: "Noto Sans JP",
-                    fontWeight: 700,
-                    fontStyle: "Bold",
-                    fontSize: "1.14rem",
-                    lineHeight: "100%",
-                    letterSpacing: "0%",
-                    color: "#FFFFFF",
-                    margin: 0,
-                    padding: 0
+                    position: "absolute",
+                    top: "1rem",
+                    left: "13.71rem",
+                    color: "#FFFFFF"
                   }}
                 >
-                  在庫をもっと見る
-                  <ChevronRight
-                    style={{
-                      width: "1.71rem",
-                      height: "1.71rem",
-                      opacity: 1,
-                      color: "#FFFFFF",
-                      margin: 0,
-                      padding: 0
-                    }}
+                  <path
+                    d="M9 18L15 12L9 6"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   />
-                </span>
+                </svg>
               </Button>
             </Link>
           </div>
@@ -1607,48 +1621,44 @@ export default function HomePage() {
             padding: "0 1.43rem"
           }}
         >
-          <div style={{ textAlign: "center", marginBottom: "2.29rem" }}>
+          <div style={{ marginBottom: "2.29rem", display: "flex", justifyContent: "center" }}>
             <div 
               style={{
-                width: "31vw",
-                height: "1.21rem",
-                margin: "0 auto 0.143rem auto",
-                fontFamily: "Noto Sans JP",
-                fontWeight: "400",
-                fontStyle: "Regular",
-                fontSize: "1rem",
-                lineHeight: "100%",
-                letterSpacing: "0%",
-                textAlign: "left",
-                color: "#2B5EC5",
                 display: "flex",
-                alignItems: "center",
-                justifyContent: "flex-start",
+                flexDirection: "column",
+                alignItems: "flex-start",
               }}
             >
-              FEATURE
-            </div>
-            <div 
-              style={{
-                width: "31vw",
-                minWidth: "22.86rem",
-                height: "4.14rem",
-                margin: "0 auto 0 auto",
-                fontFamily: "Noto Sans JP",
-                fontWeight: "700",
-                fontStyle: "Bold",
-                fontSize: "2.86rem",
-                lineHeight: "100%",
-                letterSpacing: "0%",
-                textAlign: "center",
-                color: "#1A1A1A",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                whiteSpace: "nowrap",
-              }}
-            >
-              ノアコーポレーションの特徴3点
+              <div 
+                style={{
+                  fontFamily: "Noto Sans JP",
+                  fontWeight: "400",
+                  fontStyle: "Regular",
+                  fontSize: "1rem",
+                  lineHeight: "100%",
+                  letterSpacing: "0%",
+                  textAlign: "left",
+                  color: "#2B5EC5",
+                  marginBottom: "0.143rem",
+                }}
+              >
+                FEATURE
+              </div>
+              <div 
+                style={{
+                  fontFamily: "Noto Sans JP",
+                  fontWeight: "700",
+                  fontStyle: "Bold",
+                  fontSize: "2.86rem",
+                  lineHeight: "100%",
+                  letterSpacing: "0%",
+                  textAlign: "left",
+                  color: "#1A1A1A",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                ノアコーポレーションの特徴3点
+              </div>
             </div>
           </div>
 
@@ -2117,49 +2127,47 @@ export default function HomePage() {
               width: "66.67vw",
               maxWidth: "960px",
               margin: "2.857rem auto 1.14rem auto",
-              textAlign: "center"
+              display: "flex",
+              justifyContent: "center"
             }}
           >
             <div 
               style={{
-                width: "13vw",
-                height: "1.21rem",
-                margin: "0 auto 0.143rem auto",
-                fontFamily: "Noto Sans JP",
-                fontWeight: "400",
-                fontStyle: "Regular",
-                fontSize: "1rem",
-                lineHeight: "100%",
-                letterSpacing: "0%",
-                textAlign: "left",
-                color: "#2B5EC5",
                 display: "flex",
-                alignItems: "center",
-                justifyContent: "flex-start",
+                flexDirection: "column",
+                alignItems: "flex-start",
               }}
             >
-              FLOW
-            </div>
-            <div 
-              style={{
-                width: "13vw",
-                height: "4.14rem",
-                margin: "0 auto 0 auto",
-                fontFamily: "Noto Sans JP",
-                fontWeight: "700",
-                fontStyle: "Bold",
-                fontSize: "2.86rem",
-                lineHeight: "100%",
-                letterSpacing: "0%",
-                textAlign: "center",
-                color: "#1A1A1A",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                whiteSpace: "nowrap",
-              }}
-            >
-              ご利用の流れ
+              <div 
+                style={{
+                  fontFamily: "Noto Sans JP",
+                  fontWeight: "400",
+                  fontStyle: "Regular",
+                  fontSize: "1rem",
+                  lineHeight: "100%",
+                  letterSpacing: "0%",
+                  textAlign: "left",
+                  color: "#2B5EC5",
+                  marginBottom: "0.143rem",
+                }}
+              >
+                FLOW
+              </div>
+              <div 
+                style={{
+                  fontFamily: "Noto Sans JP",
+                  fontWeight: "700",
+                  fontStyle: "Bold",
+                  fontSize: "2.86rem",
+                  lineHeight: "100%",
+                  letterSpacing: "0%",
+                  textAlign: "left",
+                  color: "#1A1A1A",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                ご利用の流れ
+              </div>
             </div>
           </div>
           
@@ -2365,45 +2373,45 @@ export default function HomePage() {
           }}
         >
           {/* QUESTIONセクション */}
-          <div style={{ textAlign: "center", marginBottom: "3.429rem" }}>
-                        <div
-              style={{
-                width: "15vw",
-                margin: "0 auto 1.143rem auto",
-                fontFamily: "Noto Sans JP",
-                fontWeight: "400",
-                fontStyle: "Regular",
-                fontSize: "1rem",
-                lineHeight: "100%",
-                letterSpacing: "0%",
-                textAlign: "left",
-                color: "#2B5EC5",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "flex-start",
-              }}
-            >
-              QUESTION
-            </div>
+          <div style={{ marginBottom: "3.429rem", display: "flex", justifyContent: "center" }}>
             <div 
               style={{
-                width: "15vw",
-                margin: "0 auto 1.143rem auto",
-                fontFamily: "Noto Sans JP",
-                fontWeight: "700",
-                fontStyle: "Bold",
-                fontSize: "2.857rem",
-                lineHeight: "100%",
-                letterSpacing: "0%",
-                textAlign: "center",
-                color: "#1A1A1A",
                 display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                whiteSpace: "nowrap",
+                flexDirection: "column",
+                alignItems: "flex-start",
               }}
             >
-              よくあるご質問
+              <div
+                style={{
+                  fontFamily: "Noto Sans JP",
+                  fontWeight: "400",
+                  fontStyle: "Regular",
+                  fontSize: "1rem",
+                  lineHeight: "100%",
+                  letterSpacing: "0%",
+                  textAlign: "left",
+                  color: "#2B5EC5",
+                  marginBottom: "0.143rem",
+                }}
+              >
+                QUESTION
+              </div>
+              <div 
+                style={{
+                  fontFamily: "Noto Sans JP",
+                  fontWeight: "700",
+                  fontStyle: "Bold",
+                  fontSize: "2.857rem",
+                  lineHeight: "100%",
+                  letterSpacing: "0%",
+                  textAlign: "left",
+                  color: "#1A1A1A",
+                  whiteSpace: "nowrap",
+                  marginBottom: "1.143rem",
+                }}
+              >
+                よくあるご質問
+              </div>
             </div>
           </div>
 
@@ -2537,7 +2545,7 @@ export default function HomePage() {
       <section 
         style={{
           width: "100%",
-          maxWidth: "1200px",
+          maxWidth: "820px",
           gap: "2.857rem",
           opacity: 1,
           paddingTop: "4.286rem",
@@ -2559,43 +2567,43 @@ export default function HomePage() {
           }}
         >
           {/* SHOP INFOセクション */}
-          <div style={{ textAlign: "center", marginBottom: "1.714rem" }}>
+          <div style={{ marginBottom: "1.714rem", display: "flex", justifyContent: "center" }}>
             <div 
               style={{
-                width: "9vw",
-                fontFamily: "Noto Sans JP",
-                fontWeight: "400",
-                fontStyle: "Regular",
-                fontSize: "1rem",
-                lineHeight: "100%",
-                letterSpacing: "0%",
-                textAlign: "left",
-                color: "#2B5EC5",
                 display: "flex",
-                alignItems: "center",
-                justifyContent: "flex-start",
+                flexDirection: "column",
+                alignItems: "flex-start",
               }}
             >
-              SHOP INFO
-            </div>
-            <div 
-              style={{
-                width: "9vw",
-                fontFamily: "Noto Sans JP",
-                fontWeight: "700",
-                fontStyle: "Bold",
-                fontSize: "2.857rem",
-                lineHeight: "100%",
-                letterSpacing: "0%",
-                textAlign: "center",
-                color: "#1A1A1A",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                whiteSpace: "nowrap",
-              }}
-            >
-              店舗情報
+              <div 
+                style={{
+                  fontFamily: "Noto Sans JP",
+                  fontWeight: "400",
+                  fontStyle: "Regular",
+                  fontSize: "1rem",
+                  lineHeight: "100%",
+                  letterSpacing: "0%",
+                  textAlign: "left",
+                  color: "#2B5EC5",
+                }}
+              >
+                SHOP INFO
+              </div>
+              <div 
+                style={{
+                  fontFamily: "Noto Sans JP",
+                  fontWeight: "700",
+                  fontStyle: "Bold",
+                  fontSize: "2.857rem",
+                  lineHeight: "100%",
+                  letterSpacing: "0%",
+                  textAlign: "left",
+                  color: "#1A1A1A",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                店舗情報
+              </div>
             </div>
           </div>
 
@@ -3157,44 +3165,45 @@ export default function HomePage() {
             }}
           >
             {/* ①CONTACT */}
-            <div 
-              style={{
-                width: "4.429rem",
-                height: "1.214rem",
-                margin: "0 auto 0.5rem auto",
-                fontFamily: "Noto Sans JP",
-                fontWeight: "400",
-                fontStyle: "Regular",
-                fontSize: "1rem",
-                lineHeight: "100%",
-                letterSpacing: "0%",
-                textAlign: "center",
-                color: "#FFFFFF",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center"
-              }}
-            >
-              CONTACT
-            </div>
-            {/* ②お問い合わせ */}
-            <div 
-              style={{
-                width: "17.143rem",
-                fontFamily: "Noto Sans JP",
-                fontWeight: "700",
-                fontStyle: "Bold",
-                fontSize: "2.857rem",
-                lineHeight: "100%",
-                letterSpacing: "0%",
-                textAlign: "center",
-                color: "#FFFFFF",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center"
-              }}
-            >
-              お問い合わせ
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <div 
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "flex-start",
+                }}
+              >
+                <div 
+                  style={{
+                    fontFamily: "Noto Sans JP",
+                    fontWeight: "400",
+                    fontStyle: "Regular",
+                    fontSize: "1rem",
+                    lineHeight: "100%",
+                    letterSpacing: "0%",
+                    textAlign: "left",
+                    color: "#FFFFFF",
+                    marginBottom: "0.5rem",
+                  }}
+                >
+                  CONTACT
+                </div>
+                {/* ②お問い合わせ */}
+                <div 
+                  style={{
+                    fontFamily: "Noto Sans JP",
+                    fontWeight: "700",
+                    fontStyle: "Bold",
+                    fontSize: "2.857rem",
+                    lineHeight: "100%",
+                    letterSpacing: "0%",
+                    textAlign: "left",
+                    color: "#FFFFFF",
+                  }}
+                >
+                  お問い合わせ
+                </div>
+              </div>
             </div>
           </div>
 
