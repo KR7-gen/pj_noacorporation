@@ -807,8 +807,8 @@ export default function HomePage() {
       {/* New Trucks Section */}
       <section 
         style={{
-          width: "100%",
-          maxWidth: "100vw",
+          width: "77.08%",
+          maxWidth: "79.28rem",
           gap: "2.86rem",
           opacity: 1,
           paddingBottom: "2.857rem",
@@ -922,7 +922,6 @@ export default function HomePage() {
                     }}
                   >
                     <span style={{ 
-                      width: "10rem",
                       height: "1.64rem",
                       opacity: 1,
                       fontFamily: "Noto Sans JP",
@@ -936,10 +935,9 @@ export default function HomePage() {
                       textOverflow: "ellipsis",
                       whiteSpace: "nowrap"
                     }}>
-                      {(vehicle.maker === "三菱ふそう" ? "三菱" : vehicle.maker)}
+                      {(vehicle.maker === "三菱ふそう" ? "三菱" : vehicle.maker)} {vehicle.vehicleType || vehicle.bodyType || vehicle.name}
                     </span>
                     <span style={{ 
-                      width: "6.36rem",
                       height: "1.21rem",
                       opacity: 1,
                       fontFamily: "Noto Sans JP",
@@ -965,21 +963,20 @@ export default function HomePage() {
                       justifyContent: "center"
                     }}
                   >
-                    <span style={{
-                      width: "11.21rem",
-                      height: "1.36rem",
-                      opacity: 1,
-                      fontFamily: "Noto Sans JP",
-                      fontWeight: "400",
-                      fontStyle: "Regular",
-                      fontSize: "1.14rem",
-                      lineHeight: "100%",
-                      letterSpacing: "0%",
-                      color: "#1A1A1A",
-                      textAlign: "center"
-                    }}>
-                      問合せ番号: {vehicle.inquiryNumber || "N00000"}
-                    </span>
+                                            <span style={{
+                          height: "1.36rem",
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "400",
+                          fontStyle: "Regular",
+                          fontSize: "1.14rem",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#1A1A1A",
+                          textAlign: "center"
+                        }}>
+                          問合せ番号: {vehicle.inquiryNumber || "N00000"}
+                        </span>
                   </div>
 
                   {/* 車両画像 */}
@@ -991,18 +988,34 @@ export default function HomePage() {
                       overflow: "hidden"
                     }}
                   >
-                    <img
-                      src={vehicle.imageUrls && vehicle.imageUrls.length > 0 ? vehicle.imageUrls[0] : "/placeholder.jpg"}
-                      alt={`${vehicle.maker} ${vehicle.name}`}
-                      style={{
+                                                             {vehicle.imageUrls && vehicle.imageUrls.length > 0 && vehicle.imageUrls[0] ? (
+                      <img
+                        src={vehicle.imageUrls[0]}
+                        alt={`${vehicle.maker} ${vehicle.name}`}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover"
+                        }}
+                        onError={(e) => {
+                          // エラーが発生した場合は画像を非表示にする
+                          (e.target as HTMLImageElement).style.display = "none";
+                        }}
+                      />
+                    ) : (
+                      <div style={{
                         width: "100%",
                         height: "100%",
-                        objectFit: "cover"
-                      }}
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = "/placeholder.jpg";
-                      }}
-                    />
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        backgroundColor: "#f3f4f6",
+                        color: "#9ca3af",
+                        fontSize: "0.86rem"
+                      }}>
+                        画像なし
+                      </div>
+                    )}
                     
                     {/* 商談中・SOLD OUTオーバーレイ */}
                     {(vehicle.isNegotiating || vehicle.isSoldOut) && (
@@ -1020,7 +1033,6 @@ export default function HomePage() {
                         }}
                       >
                         <span style={{
-                          width: "3.43rem",
                           height: "1.64rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
@@ -1065,7 +1077,6 @@ export default function HomePage() {
                         justifyContent: "center"
                       }}>
                         <span style={{
-                          width: "16.57rem",
                           height: "1.21rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
@@ -1093,15 +1104,14 @@ export default function HomePage() {
                       }}
                     >
                       <div style={{
-                        width: "5.71rem",
                         height: "100%",
+                        width:"30.76%",
                         background: "#E6E6E6",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center"
                       }}>
                         <span style={{
-                          width: "4rem",
                           height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
@@ -1114,7 +1124,6 @@ export default function HomePage() {
                         }}>本体価格</span>
                       </div>
                       <div style={{ 
-                        width: "12.86rem",
                         height: "100%",
                         background: "#FFFFFF",
                         display: "flex",
@@ -1123,32 +1132,30 @@ export default function HomePage() {
                         paddingLeft: "0.86rem"
                       }}>
                         <div>
-                          <span style={{
-                            width: "4.07rem",
-                            height: "1.64rem",
-                            opacity: 1,
-                            fontFamily: "Noto Sans JP",
-                            fontWeight: "700",
-                            fontStyle: "Bold",
-                            fontSize: "2.29rem",
-                            lineHeight: "100%",
-                            letterSpacing: "0%",
-                            color: "#2B5EC5"
-                          }}>
-                            {vehicle.price ? Math.floor(vehicle.price / 10000) : "000"}
-                          </span>
-                          <span style={{
-                            width: "4.07rem",
-                            height: "1rem",
-                            opacity: 1,
-                            fontFamily: "Noto Sans JP",
-                            fontWeight: "400",
-                            fontStyle: "Regular",
-                            fontSize: "0.86rem",
-                            lineHeight: "100%",
-                            letterSpacing: "0%",
-                            color: "#2B5EC5"
-                          }}>万円(税別)</span>
+                                                  <span style={{
+                          height: "1.64rem",
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "700",
+                          fontStyle: "Bold",
+                          fontSize: "2.29rem",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#2B5EC5"
+                        }}>
+                          {vehicle.price ? Math.floor(vehicle.price / 10000) : "000"}
+                        </span>
+                        <span style={{
+                          height: "1rem",
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "400",
+                          fontStyle: "Regular",
+                          fontSize: "0.86rem",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#2B5EC5"
+                        }}>万円(税別)</span>
                         </div>
                       </div>
                     </div>
@@ -1165,15 +1172,14 @@ export default function HomePage() {
                       }}
                     >
                       <div style={{
-                        width: "5.71rem",
                         height: "100%",
+                        width:"30.76%",
                         background: "#E6E6E6",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center"
                       }}>
                         <span style={{
-                          width: "4rem",
                           height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
@@ -1186,7 +1192,6 @@ export default function HomePage() {
                         }}>年式</span>
                       </div>
                       <div style={{ 
-                        width: "12.86rem",
                         height: "100%",
                         background: "#FFFFFF",
                         display: "flex",
@@ -1195,13 +1200,12 @@ export default function HomePage() {
                         paddingLeft: "0.86rem"
                       }}>
                         <span style={{
-                          width: "88px",
-                          height: "17px",
+                          height: "1.21rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "400",
                           fontStyle: "Regular",
-                          fontSize: "14px",
+                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
@@ -1223,15 +1227,14 @@ export default function HomePage() {
                       }}
                     >
                       <div style={{
-                        width: "5.71rem",
                         height: "100%",
+                        width:"30.76%",
                         background: "#E6E6E6",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center"
                       }}>
                         <span style={{
-                          width: "4rem",
                           height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
@@ -1244,7 +1247,6 @@ export default function HomePage() {
                         }}>走行距離</span>
                       </div>
                       <div style={{ 
-                        width: "12.86rem",
                         height: "100%",
                         background: "#FFFFFF",
                         display: "flex",
@@ -1253,7 +1255,6 @@ export default function HomePage() {
                         paddingLeft: "0.86rem"
                       }}>
                         <span style={{
-                          width: "6.29rem",
                           height: "1.21rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
@@ -1281,15 +1282,14 @@ export default function HomePage() {
                       }}
                     >
                       <div style={{
-                        width: "5.71rem",
                         height: "100%",
+                        width:"30.76%",
                         background: "#E6E6E6",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center"
                       }}>
                         <span style={{
-                          width: "4rem",
                           height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
@@ -1302,7 +1302,6 @@ export default function HomePage() {
                         }}>積載量</span>
                       </div>
                       <div style={{ 
-                        width: "12.86rem",
                         height: "100%",
                         background: "#FFFFFF",
                         display: "flex",
@@ -1311,7 +1310,6 @@ export default function HomePage() {
                         paddingLeft: "0.86rem"
                       }}>
                         <span style={{
-                          width: "6.29rem",
                           height: "1.21rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
@@ -1339,15 +1337,14 @@ export default function HomePage() {
                       }}
                     >
                       <div style={{
-                        width: "5.71rem",
                         height: "100%",
+                        width:"30.76%",
                         background: "#E6E6E6",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center"
                       }}>
                         <span style={{
-                          width: "4rem",
                           height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
@@ -1360,7 +1357,6 @@ export default function HomePage() {
                         }}>シフト</span>
                       </div>
                       <div style={{ 
-                        width: "12.86rem",
                         height: "100%",
                         background: "#FFFFFF",
                         display: "flex",
@@ -1369,7 +1365,6 @@ export default function HomePage() {
                         paddingLeft: "0.86rem"
                       }}>
                         <span style={{
-                          width: "6.29rem",
                           height: "1.21rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
@@ -1397,15 +1392,14 @@ export default function HomePage() {
                       }}
                     >
                       <div style={{
-                        width: "5.71rem",
                         height: "100%",
+                        width:"30.76%",
                         background: "#E6E6E6",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center"
                       }}>
                         <span style={{
-                          width: "4rem",
                           height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
@@ -1418,7 +1412,6 @@ export default function HomePage() {
                         }}>車検期限</span>
                       </div>
                       <div style={{ 
-                        width: "12.86rem",
                         height: "100%",
                         background: "#FFFFFF",
                         display: "flex",
@@ -1427,7 +1420,6 @@ export default function HomePage() {
                         paddingLeft: "0.86rem"
                       }}>
                         <span style={{
-                          width: "6.29rem",
                           height: "1.21rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
@@ -1455,7 +1447,6 @@ export default function HomePage() {
                     <Link href={`/vehicle/${vehicle.id}`}>
                       <Button 
                         style={{
-                          width: "11.43rem",
                           height: "2.29rem",
                           gap: "0.57rem",
                           opacity: 1,
@@ -1481,7 +1472,6 @@ export default function HomePage() {
                         }}
                       >
                         <span style={{
-                          width: "6rem",
                           height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
@@ -1498,7 +1488,6 @@ export default function HomePage() {
                           詳細はこちら
                         </span>
                         <svg
-                          width="7.4"
                           height="12"
                           viewBox="0 0 24 24"
                           fill="none"

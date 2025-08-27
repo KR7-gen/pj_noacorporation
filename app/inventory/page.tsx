@@ -78,7 +78,7 @@ export default function InventoryPage() {
   const [filteredVehicles, setFilteredVehicles] = useState<Vehicle[]>([])
   const [loading, setLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(1)
-  const vehiclesPerPage = 20
+  const vehiclesPerPage = 16
 
   // ソート機能の状態管理
   const [sortField, setSortField] = useState<string>("")
@@ -145,7 +145,6 @@ export default function InventoryPage() {
       const keyword = formKeyword.toLowerCase();
       filtered = filtered.filter(vehicle => 
         vehicle.inquiryNumber?.toLowerCase().includes(keyword) ||
-        vehicle.bodyNumber?.toLowerCase().includes(keyword) ||
         vehicle.maker?.toLowerCase().includes(keyword) ||
         vehicle.model?.toLowerCase().includes(keyword) ||
         vehicle.bodyType?.toLowerCase().includes(keyword)
@@ -341,22 +340,22 @@ export default function InventoryPage() {
         style={{
           width: "100%",
           maxWidth: "100vw",
-          height: "3282px",
-          gap: "32px",
+          gap: "2.28rem",
           opacity: 1,
           paddingTop: "0px",
           paddingRight: "0px",
-          paddingBottom: "60px",
+          paddingBottom: "0px",
           paddingLeft: "0px",
           margin: "0 auto",
-          background: "#F5F5F5"
+          background: "#F5F5F5",
+          minHeight: "auto"
         }}
       >
         {/* ヘッダー */}
         <div 
           style={{
             width: "100%",
-            height: "400px",
+            minHeight: "28.57rem",
             opacity: 1,
             backgroundImage: "linear-gradient(90deg, rgba(0, 0, 0, 0.4) 43.5%, rgba(255, 255, 255, 0) 100%), url('/sub_background.jpg')",
             backgroundSize: "cover",
@@ -374,7 +373,7 @@ export default function InventoryPage() {
               fontFamily: "Noto Sans JP",
               fontWeight: "700",
               fontStyle: "Bold",
-              fontSize: "40px",
+              fontSize: "2.857rem",
               lineHeight: "100%",
               letterSpacing: "0%",
               color: "#FFFFFF",
@@ -505,7 +504,7 @@ export default function InventoryPage() {
         {/* Search Section */}
         <div 
           style={{
-            padding: "0.857rem 1.43rem 10rem 1.43rem",
+            padding: "0.857rem 1.43rem 2.86rem 1.43rem",
             flex: "1",
             display: "flex",
             justifyContent: "center",
@@ -516,7 +515,7 @@ export default function InventoryPage() {
           <div 
             style={{
               width: "77.08%",
-              maxWidth: "1100px",
+              maxWidth: "78.57rem",
               margin: "0 auto",
               height: "3.93rem",
               display: "flex",
@@ -696,7 +695,7 @@ export default function InventoryPage() {
               </div>
             </div>
 
-                         {/* SOLD/商談中表示制御 */}
+           {/* SOLD/商談中表示制御 */}
              <div 
                style={{
                  width: "15%",
@@ -856,7 +855,7 @@ export default function InventoryPage() {
               <button 
                 onClick={handleSearch}
                 style={{
-                  minWidth: "120px",
+                  minWidth: "8.57rem",
                   width: "15%",
                   height: "2.79rem",
                   display: "flex",
@@ -900,23 +899,23 @@ export default function InventoryPage() {
         {/* 結果件数とソート */}
         <div 
           style={{
-            marginBottom: "24px",
-            padding: "0 20px"
+            marginBottom: "1rem",
+            padding: "0"
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.71rem", flexDirection: "column", justifyContent: "center", width: "100%" }}>
             <p 
               style={{
                 fontFamily: "Noto Sans JP",
                 fontWeight: "400",
-                fontSize: "16px",
+                fontSize: "1rem",
                 color: "#666666",
                 margin: 0
               }}
             >
               検索結果: <span style={{ fontWeight: "600" }}>{filteredVehicles.length}</span>件
               {vehicles.length === 0 && (
-                <span style={{ marginLeft: "8px", color: "#FF6B35" }}>
+                <span style={{ marginLeft: "0.57rem", color: "#FF6B35" }}>
                   （車両データが登録されていません。adminで車両を登録してください）
                 </span>
               )}
@@ -924,20 +923,20 @@ export default function InventoryPage() {
             
             {/* ソートボタン */}
             {filteredVehicles.length > 0 && (
-              <div style={{ display: "flex", gap: "8px" }}>
+              <div style={{ display: "flex", gap: "0.57rem" }}>
               <button
                 onClick={() => handleSort("price")}
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  gap: "4px",
-                  padding: "8px 12px",
-                  border: "1px solid #CCCCCC",
-                  borderRadius: "4px",
+                  gap: "0.29rem",
+                  padding: "0.57rem 0.86rem",
+                  border: "0.07rem solid #CCCCCC",
+                  borderRadius: "0.29rem",
                   background: sortField === "price" ? "#E3F2FD" : "#FFFFFF",
                   color: sortField === "price" ? "#1976D2" : "#666666",
                   fontFamily: "Noto Sans JP",
-                  fontSize: "14px",
+                  fontSize: "1rem",
                   cursor: "pointer",
                   transition: "all 0.2s ease"
                 }}
@@ -957,14 +956,14 @@ export default function InventoryPage() {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  gap: "4px",
-                  padding: "8px 12px",
-                  border: "1px solid #CCCCCC",
-                  borderRadius: "4px",
+                  gap: "0.29rem",
+                  padding: "0.57rem 0.86rem",
+                  border: "0.07rem solid #CCCCCC",
+                  borderRadius: "0.29rem",
                   background: sortField === "year" ? "#E3F2FD" : "#FFFFFF",
                   color: sortField === "year" ? "#1976D2" : "#666666",
                   fontFamily: "Noto Sans JP",
-                  fontSize: "14px",
+                  fontSize: "1rem",
                   cursor: "pointer",
                   transition: "all 0.2s ease"
                 }}
@@ -984,14 +983,14 @@ export default function InventoryPage() {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  gap: "4px",
-                  padding: "8px 12px",
-                  border: "1px solid #CCCCCC",
-                  borderRadius: "4px",
+                  gap: "0.29rem",
+                  padding: "0.57rem 0.86rem",
+                  border: "0.07rem solid #CCCCCC",
+                  borderRadius: "0.29rem",
                   background: sortField === "mileage" ? "#E3F2FD" : "#FFFFFF",
                   color: sortField === "mileage" ? "#1976D2" : "#666666",
                   fontFamily: "Noto Sans JP",
-                  fontSize: "14px",
+                  fontSize: "1rem",
                   cursor: "pointer",
                   transition: "all 0.2s ease"
                 }}
@@ -1009,20 +1008,30 @@ export default function InventoryPage() {
           )}
         </div>
 
-        {/* 車両一覧 */}
-        <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
+       {/* 車両一覧 */}
+        <div style={{ 
+          width: "76.38%", 
+          maxWidth: "78.57rem", 
+          margin: "0 auto", 
+          display: "flex", 
+          flexDirection: "column", 
+          alignItems: "center",
+          minHeight: "auto",
+          paddingTop: "1rem",
+          paddingBottom: "1.43rem"
+        }}>
           {filteredVehicles.length === 0 ? (
             <div 
               style={{
                 textAlign: "center",
-                padding: "48px 20px"
+                padding: "3.43rem 1.43rem"
               }}
             >
               <p 
                 style={{
                   fontFamily: "Noto Sans JP",
                   fontWeight: "400",
-                  fontSize: "18px",
+                  fontSize: "1.29rem",
                   color: "#666666"
                 }}
               >
@@ -1035,27 +1044,26 @@ export default function InventoryPage() {
               style={{
                 display: "grid",
                 gridTemplateColumns: "repeat(4, 1fr)",
-                gridTemplateRows: "repeat(5, 1fr)",
+                gridTemplateRows: `repeat(${Math.ceil(currentVehicles.length / 4)}, 1fr)`,
                 gap: "1.43rem",
                 width: "100%",
-                maxWidth: "1200px",
-                margin: "0 auto 0 auto",
-                padding: "0 20px"
+                maxWidth: "85.71rem",
+                margin: "0 auto",
+                padding: "0"
               }}
             >
               {currentVehicles.map((vehicle) => (
               <Card 
                 key={vehicle.id}
                 style={{
-                  width: "260px",
-                  height: "587px",
-                  gap: "12px",
+                  width: "100%",
+                  gap: "0.86rem",
                   opacity: 1,
                   borderRadius: "0px",
-                  paddingBottom: "16px",
-                  borderWidth: "1px",
+                  paddingBottom: "1.14rem",
+                  borderWidth: "0.07rem",
                   background: "#FFFFFF",
-                  border: "1px solid #F2F2F2",
+                  border: "0.07rem solid #F2F2F2",
                   overflow: "hidden",
                   position: "relative"
                 }}
@@ -1064,22 +1072,21 @@ export default function InventoryPage() {
                   {/* ヘッダーバー */}
                   <div 
                     style={{
-                      height: "39px",
+                      height: "2.79rem",
                       background: "#1A1A1A",
-                      padding: "8px 12px",
+                      padding: "0.57rem 0.86rem",
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center"
                     }}
                   >
                     <span style={{ 
-                      width: "140px",
-                      height: "23px",
+                      height: "1.64rem",
                       opacity: 1,
                       fontFamily: "Noto Sans JP",
                       fontWeight: "700",
                       fontStyle: "Bold",
-                      fontSize: "16px",
+                      fontSize: "1.14rem",
                       lineHeight: "100%",
                       letterSpacing: "0%",
                       color: "#FFFFFF",
@@ -1090,13 +1097,12 @@ export default function InventoryPage() {
                       {(vehicle.maker === "三菱ふそう" ? "三菱" : vehicle.maker)} {vehicle.vehicleType || vehicle.bodyType || vehicle.name}
                     </span>
                     <span style={{ 
-                      width: "89px",
-                      height: "17px",
+                      height: "1.21rem",
                       opacity: 1,
                       fontFamily: "Noto Sans JP",
                       fontWeight: "400",
                       fontStyle: "Regular",
-                      fontSize: "14px",
+                      fontSize: "1rem",
                       lineHeight: "100%",
                       letterSpacing: "0%",
                       color: "#FFFFFF",
@@ -1109,7 +1115,7 @@ export default function InventoryPage() {
                   {/* 問い合わせ番号 */}
                   <div 
                     style={{
-                      height: "35px",
+                      height: "2.5rem",
                       background: "#FFFFFF",
                       display: "flex",
                       alignItems: "center",
@@ -1117,13 +1123,12 @@ export default function InventoryPage() {
                     }}
                   >
                     <span style={{
-                      width: "157px",
-                      height: "19px",
+                      height: "1.36rem",
                       opacity: 1,
                       fontFamily: "Noto Sans JP",
                       fontWeight: "400",
                       fontStyle: "Regular",
-                      fontSize: "16px",
+                      fontSize: "1.14rem",
                       lineHeight: "100%",
                       letterSpacing: "0%",
                       color: "#1A1A1A",
@@ -1138,7 +1143,7 @@ export default function InventoryPage() {
                     style={{
                       position: "relative",
                       width: "100%",
-                      height: "180px",
+                      height: "12.86rem",
                       overflow: "hidden"
                     }}
                   >
@@ -1165,7 +1170,7 @@ export default function InventoryPage() {
                         justifyContent: "center",
                         backgroundColor: "#f3f4f6",
                         color: "#9ca3af",
-                        fontSize: "12px"
+                        fontSize: "0.86rem"
                       }}>
                         画像なし
                       </div>
@@ -1179,7 +1184,7 @@ export default function InventoryPage() {
                           top: "0",
                           left: "0",
                           width: "100%",
-                          height: "39px",
+                          height: "2.79rem",
                           backgroundColor: vehicle.isSoldOut ? "#EA1313" : "#666666",
                           display: "flex",
                           alignItems: "center",
@@ -1187,13 +1192,12 @@ export default function InventoryPage() {
                         }}
                       >
                         <span style={{
-                          width: "48px",
-                          height: "23px",
+                          height: "1.64rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
-                          fontSize: "16px",
+                          fontSize: "1.14rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#FFFFFF"
@@ -1207,7 +1211,7 @@ export default function InventoryPage() {
                   {/* ボディタイプ + 詳細テーブル */}
                   <div 
                     style={{
-                      height: "273px",
+                      height: "19.5rem",
                       display: "flex",
                       flexDirection: "column",
                       justifyContent: "space-between"
@@ -1216,15 +1220,14 @@ export default function InventoryPage() {
                     {/* ボディタイプ */}
                     <div 
                       style={{
-                        height: "calc(273px / 6)",
+                        height: "calc(19.5rem / 6)",
                         display: "flex",
                         alignItems: "center",
                         background: "#FFFFFF",
-                        borderBottom: "1px solid #F2F2F2"
+                        borderBottom: "0.07rem solid #F2F2F2"
                       }}
                     >
                       <div style={{
-                        width: "260px",
                         height: "100%",
                         background: "#FFFFFF",
                         display: "flex",
@@ -1232,13 +1235,12 @@ export default function InventoryPage() {
                         justifyContent: "center"
                       }}>
                         <span style={{
-                          width: "232px",
-                          height: "17px",
+                          height: "1.21rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "400",
                           fontStyle: "Regular",
-                          fontSize: "14px",
+                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
@@ -1251,53 +1253,50 @@ export default function InventoryPage() {
                     {/* 本体価格 */}
                     <div 
                       style={{
-                        height: "calc(273px / 6)",
+                        height: "calc(19.5rem / 6)",
                         display: "flex",
                         alignItems: "center",
-                        fontSize: "11px",
+                        fontSize: "0.79rem",
                         color: "#374151",
-                        borderBottom: "1px solid #F2F2F2"
+                        borderBottom: "0.07rem solid #F2F2F2"
                       }}
                     >
                       <div style={{
-                        width: "80px",
                         height: "100%",
+                        width:"30.76%",
                         background: "#E6E6E6",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center"
                       }}>
                         <span style={{
-                          width: "56px",
-                          height: "20px",
+                          height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
-                          fontSize: "14px",
+                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
                         }}>本体価格</span>
                       </div>
                       <div style={{ 
-                        width: "180px",
                         height: "100%",
                         background: "#FFFFFF",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "flex-start",
-                        paddingLeft: "12px"
+                        paddingLeft: "0.86rem"
                       }}>
                         <div>
                           <span style={{
-                            width: "57px",
-                            height: "23px",
+                            height: "1.64rem",
                             opacity: 1,
                             fontFamily: "Noto Sans JP",
                             fontWeight: "700",
                             fontStyle: "Bold",
-                            fontSize: "32px",
+                            fontSize: "2.29rem",
                             lineHeight: "100%",
                             letterSpacing: "0%",
                             color: "#2B5EC5"
@@ -1305,13 +1304,12 @@ export default function InventoryPage() {
                             {vehicle.price ? Math.floor(vehicle.price / 10000) : "000"}
                           </span>
                           <span style={{
-                            width: "57px",
-                            height: "14px",
+                            height: "1rem",
                             opacity: 1,
                             fontFamily: "Noto Sans JP",
                             fontWeight: "400",
                             fontStyle: "Regular",
-                            fontSize: "12px",
+                            fontSize: "0.86rem",
                             lineHeight: "100%",
                             letterSpacing: "0%",
                             color: "#2B5EC5"
@@ -1323,52 +1321,49 @@ export default function InventoryPage() {
                     {/* 年式 */}
                     <div 
                       style={{
-                        height: "calc(273px / 6)",
+                        height: "calc(19.5rem / 6)",
                         display: "flex",
                         alignItems: "center",
-                        fontSize: "11px",
+                        fontSize: "0.79rem",
                         color: "#374151",
-                        borderBottom: "1px solid #F2F2F2"
+                        borderBottom: "0.07rem solid #F2F2F2"
                       }}
                     >
                       <div style={{
-                        width: "80px",
                         height: "100%",
+                        width:"30.76%",
                         background: "#E6E6E6",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center"
                       }}>
                         <span style={{
-                          width: "56px",
-                          height: "20px",
+                          height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
-                          fontSize: "14px",
+                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
                         }}>年式</span>
                       </div>
                       <div style={{ 
-                        width: "180px",
                         height: "100%",
                         background: "#FFFFFF",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "flex-start",
-                        paddingLeft: "12px"
+                        paddingLeft: "0.86rem"
                       }}>
                         <span style={{
-                          width: "88px",
-                          height: "17px",
+                          height: "1.21rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "400",
                           fontStyle: "Regular",
-                          fontSize: "14px",
+                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
@@ -1381,52 +1376,49 @@ export default function InventoryPage() {
                     {/* 走行距離 */}
                     <div 
                       style={{
-                        height: "calc(273px / 6)",
+                        height: "calc(19.5rem / 6)",
                         display: "flex",
                         alignItems: "center",
-                        fontSize: "11px",
+                        fontSize: "0.79rem",
                         color: "#374151",
-                        borderBottom: "1px solid #F2F2F2"
+                        borderBottom: "0.07rem solid #F2F2F2"
                       }}
                     >
                       <div style={{
-                        width: "80px",
                         height: "100%",
+                        width:"30.76%",
                         background: "#E6E6E6",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center"
                       }}>
                         <span style={{
-                          width: "56px",
-                          height: "20px",
+                          height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
-                          fontSize: "14px",
+                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
                         }}>走行距離</span>
                       </div>
                       <div style={{ 
-                        width: "180px",
                         height: "100%",
                         background: "#FFFFFF",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "flex-start",
-                        paddingLeft: "12px"
+                        paddingLeft: "0.86rem"
                       }}>
                         <span style={{
-                          width: "88px",
-                          height: "17px",
+                          height: "1.21rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "400",
                           fontStyle: "Regular",
-                          fontSize: "14px",
+                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
@@ -1439,52 +1431,49 @@ export default function InventoryPage() {
                     {/* 積載量 */}
                     <div 
                       style={{
-                        height: "calc(273px / 6)",
+                        height: "calc(19.5rem / 6)",
                         display: "flex",
                         alignItems: "center",
-                        fontSize: "11px",
+                        fontSize: "0.79rem",
                         color: "#374151",
-                        borderBottom: "1px solid #F2F2F2"
+                        borderBottom: "0.07rem solid #F2F2F2"
                       }}
                     >
                       <div style={{
-                        width: "80px",
                         height: "100%",
+                        width:"30.76%",
                         background: "#E6E6E6",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center"
                       }}>
                         <span style={{
-                          width: "56px",
-                          height: "20px",
+                          height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
-                          fontSize: "14px",
+                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
                         }}>積載量</span>
                       </div>
                       <div style={{ 
-                        width: "180px",
                         height: "100%",
                         background: "#FFFFFF",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "flex-start",
-                        paddingLeft: "12px"
+                        paddingLeft: "0.86rem"
                       }}>
                         <span style={{
-                          width: "88px",
-                          height: "17px",
+                          height: "1.21rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "400",
                           fontStyle: "Regular",
-                          fontSize: "14px",
+                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
@@ -1497,52 +1486,49 @@ export default function InventoryPage() {
                     {/* シフト */}
                     <div 
                       style={{
-                        height: "calc(273px / 6)",
+                        height: "calc(19.5rem / 6)",
                         display: "flex",
                         alignItems: "center",
-                        fontSize: "11px",
+                        fontSize: "0.79rem",
                         color: "#374151",
-                        borderBottom: "1px solid #F2F2F2"
+                        borderBottom: "0.07rem solid #F2F2F2"
                       }}
                     >
                       <div style={{
-                        width: "80px",
                         height: "100%",
+                        width:"30.76%",
                         background: "#E6E6E6",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center"
                       }}>
                         <span style={{
-                          width: "56px",
-                          height: "20px",
+                          height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
-                          fontSize: "14px",
+                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
                         }}>シフト</span>
                       </div>
                       <div style={{ 
-                        width: "180px",
                         height: "100%",
                         background: "#FFFFFF",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "flex-start",
-                        paddingLeft: "12px"
+                        paddingLeft: "0.86rem"
                       }}>
                         <span style={{
-                          width: "88px",
-                          height: "17px",
+                          height: "1.21rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "400",
                           fontStyle: "Regular",
-                          fontSize: "14px",
+                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
@@ -1555,52 +1541,49 @@ export default function InventoryPage() {
                     {/* 車検期限 */}
                     <div 
                       style={{
-                        height: "calc(273px / 6)",
+                        height: "calc(19.5rem / 6)",
                         display: "flex",
                         alignItems: "center",
-                        fontSize: "11px",
+                        fontSize: "0.79rem",
                         color: "#374151",
-                        borderBottom: "1px solid #F2F2F2"
+                        borderBottom: "0.07rem solid #F2F2F2"
                       }}
                     >
                       <div style={{
-                        width: "80px",
                         height: "100%",
+                        width:"30.76%",
                         background: "#E6E6E6",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center"
                       }}>
                         <span style={{
-                          width: "56px",
-                          height: "20px",
+                          height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
-                          fontSize: "14px",
+                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
                         }}>車検期限</span>
                       </div>
                       <div style={{ 
-                        width: "180px",
                         height: "100%",
                         background: "#FFFFFF",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "flex-start",
-                        paddingLeft: "12px"
+                        paddingLeft: "0.86rem"
                       }}>
                         <span style={{
-                          width: "88px",
-                          height: "17px",
+                          height: "1.21rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "400",
                           fontStyle: "Regular",
-                          fontSize: "14px",
+                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
@@ -1613,7 +1596,7 @@ export default function InventoryPage() {
 
                   {/* 詳細ボタン */}
                   <div style={{ 
-                    height: "60px", 
+                    height: "4.29rem", 
                     display: "flex", 
                     alignItems: "center", 
                     justifyContent: "center",
@@ -1622,18 +1605,17 @@ export default function InventoryPage() {
                     <Link href={`/vehicle/${vehicle.id}`}>
                       <Button 
                         style={{
-                          width: "160px",
-                          height: "32px",
-                          gap: "8px",
+                          height: "2.29rem",
+                          gap: "0.57rem",
                           opacity: 1,
-                          paddingTop: "4px",
-                          paddingRight: "8px",
-                          paddingBottom: "4px",
-                          paddingLeft: "8px",
-                          borderRadius: "4px",
-                          border: "1px solid #333333",
+                          paddingTop: "0.29rem",
+                          paddingRight: "0.57rem",
+                          paddingBottom: "0.29rem",
+                          paddingLeft: "0.57rem",
+                          borderRadius: "0.29rem",
+                          border: "0.07rem solid #333333",
                           background: "#FFFFFF",
-                          boxShadow: "2px 2px 2px 0px #00000040",
+                          boxShadow: "0.14rem 0.14rem 0.14rem 0px #00000040",
                           cursor: "pointer",
                           transition: "all 0.3s ease",
                           display: "flex",
@@ -1648,31 +1630,29 @@ export default function InventoryPage() {
                         }}
                       >
                         <span style={{
-                          width: "84px",
-                          height: "20px",
+                          height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
-                          fontSize: "14px",
-                          lineHeight: "20px",
+                          fontSize: "1rem",
+                          lineHeight: "1.43rem",
                           letterSpacing: "0%",
                           color: "#333333",
                           display: "flex",
                           alignItems: "center",
-                          transform: "translateY(-1px)"
+                          transform: "translateY(-0.07rem)"
                         }}>
                           詳細はこちら
                         </span>
                         <svg
-                          width="7.4"
                           height="12"
                           viewBox="0 0 24 24"
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
                           style={{
                             color: "#333333",
-                            height: "20px",
+                            height: "1.43rem",
                             display: "flex",
                             alignItems: "center"
                           }}
@@ -1692,23 +1672,164 @@ export default function InventoryPage() {
               </Card>
                         ))}
                           </div>
+
+            {/* ページネーション */}
+            {totalPages >= 1 && (
+              <div 
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "0.57rem",
+                  marginTop: "1.43rem",
+                  marginBottom: "1.43rem"
+                }}
+              >
+                {/* 前へボタン */}
+                {currentPage > 1 && (
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: "3.43rem",
+                      height: "3.43rem",
+                      border: "0.07rem solid #CCCCCC",
+                      borderRadius: "0.29rem",
+                      background: "#FFFFFF",
+                      color: "#666666",
+                      fontFamily: "Noto Sans JP",
+                      fontSize: "1rem",
+                      cursor: "pointer",
+                      transition: "all 0.2s ease"
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "#F5F5F5"
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "#FFFFFF"
+                    }}
+                  >
+                    前へ
+                  </button>
+                )}
+
+                {/* ページ番号 */}
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+                  // 現在のページの前後2ページと最初・最後のページを表示
+                  const shouldShow = 
+                    page === 1 || 
+                    page === totalPages || 
+                    (page >= currentPage - 2 && page <= currentPage + 2)
+                  
+                  if (!shouldShow) {
+                    // 省略記号を表示
+                    if (page === currentPage - 3 || page === currentPage + 3) {
+                      return (
+                        <span 
+                          key={page}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            width: "3.43rem",
+                            height: "3.43rem",
+                            color: "#CCCCCC",
+                            fontFamily: "Noto Sans JP",
+                            fontSize: "1rem"
+                          }}
+                        >
+                          ...
+                        </span>
+                      )
+                    }
+                    return null
+                  }
+
+                  return (
+                    <button
+                      key={page}
+                      onClick={() => handlePageChange(page)}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: "3.43rem",
+                        height: "3.43rem",
+                        border: "0.07rem solid #CCCCCC",
+                        borderRadius: "0.29rem",
+                        background: "#999999",
+                        color: "#FFFFFF",
+                        fontFamily: "Noto Sans JP",
+                        fontSize: "1rem",
+                        fontWeight: "400",
+                        cursor: "pointer",
+                        transition: "all 0.2s ease"
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = "#777777"
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = "#999999"
+                      }}
+                    >
+                      {page}
+                    </button>
+                  )
+                })}
+
+                {/* 次へボタン */}
+                {currentPage < totalPages && (
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: "3.43rem",
+                      height: "3.43rem",
+                      border: "0.07rem solid #CCCCCC",
+                      borderRadius: "0.29rem",
+                      background: "#FFFFFF",
+                      color: "#666666",
+                      fontFamily: "Noto Sans JP",
+                      fontSize: "1rem",
+                      cursor: "pointer",
+                      transition: "all 0.2s ease"
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "#F5F5F5"
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "#FFFFFF"
+                    }}
+                  >
+                    次へ
+                  </button>
+                )}
+              </div>
+            )}
             </>
           )}
         </div>
       </div>
+      
+      
       {/* Contact Section */}
       <section 
         style={{
           width: "100%",
           maxWidth: "100vw",
-          height: "671px",
-          gap: "40px",
           opacity: 1,
-          paddingTop: "60px",
-          paddingBottom: "60px",
+          paddingTop: "4.286rem",
+          paddingBottom: "4.286rem",
           background: "#666666",
           color: "white",
-          margin: "0 auto"
+          margin: "0 auto",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center"
         }}
       >
         <div 
@@ -1719,69 +1840,74 @@ export default function InventoryPage() {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            padding: "0 20px"
+            padding: "0 1.429rem"
           }}
         >
-          {/* ①タイトル */}
+          {/* ①と②のコンテナ */}
           <div 
             style={{
-              width: "746px",
-              height: "104px",
-              margin: "0 auto 48px auto",
-              gap: "10px",
+              width: "17.143rem",
+              height: "5.357rem",
+              margin: "0 auto 2.286rem auto",
               opacity: 1,
-              padding: "10px",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "center"
             }}
           >
-            <h2 
-              style={{
-                width: "726px",
-                height: "48px",
-                fontFamily: "Noto Sans JP",
-                fontWeight: "700",
-                fontStyle: "Bold",
-                fontSize: "30px",
-                lineHeight: "100%",
-                letterSpacing: "0%",
-                textAlign: "center",
-                color: "#FFFFFF",
-                margin: "0 auto 16px auto"
-              }}
-            >
-              CONTACT
-            </h2>
-            <p 
-              style={{
-                width: "726px",
-                height: "40px",
-                fontFamily: "Noto Sans JP",
-                fontWeight: "700",
-                fontStyle: "Bold",
-                fontSize: "20px",
-                lineHeight: "100%",
-                letterSpacing: "0%",
-                textAlign: "center",
-                color: "#FFFFFF",
-                margin: "0 auto"
-              }}
-            >
-              お問い合わせ
-            </p>
+            {/* ①CONTACT */}
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <div 
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "flex-start",
+                }}
+              >
+                <div 
+                  style={{
+                    fontFamily: "Noto Sans JP",
+                    fontWeight: "400",
+                    fontStyle: "Regular",
+                    fontSize: "1rem",
+                    lineHeight: "100%",
+                    letterSpacing: "0%",
+                    textAlign: "left",
+                    color: "#FFFFFF",
+                    marginBottom: "0.5rem",
+                  }}
+                >
+                  CONTACT
+                </div>
+                {/* ②お問い合わせ */}
+                <div 
+                  style={{
+                    fontFamily: "Noto Sans JP",
+                    fontWeight: "700",
+                    fontStyle: "Bold",
+                    fontSize: "2.857rem",
+                    lineHeight: "100%",
+                    letterSpacing: "0%",
+                    textAlign: "left",
+                    color: "#FFFFFF",
+                  }}
+                >
+                  お問い合わせ
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* ③説明文 */}
           <div 
             style={{
-              width: "746px",
-              height: "104px",
-              margin: "0 auto 32px auto",
-              gap: "10px",
+              width: "53.286rem",
+              height: "7.429rem",
+              margin: "0 auto 2.286rem auto",
+              gap: "0.714rem",
               opacity: 1,
-              padding: "10px",
+              padding: "0.714rem",
               display: "flex",
               alignItems: "center",
               justifyContent: "center"
@@ -1789,23 +1915,21 @@ export default function InventoryPage() {
           >
             <p 
               style={{
-                width: "726px",
-                height: "84px",
+                width: "51.857rem",
+                height: "6rem",
                 fontFamily: "Noto Sans JP",
                 fontWeight: "700",
                 fontStyle: "Bold",
-                fontSize: "16px",
-                lineHeight: "28px",
+                fontSize: "1.143rem",
+                lineHeight: "2rem",
                 letterSpacing: "0%",
                 textAlign: "center",
                 color: "#FFFFFF"
               }}
             >
-              在庫車輛の詳細/その他お問い合わせ/業販価格のご確認など
+              車両の在庫確認 / 車両の状態、仕様確認 / 買取依頼
               <br />
-              お電話またはお問い合わせフォームよりお気軽にお問い合わせください。
-              <br />
-              在庫にないトラックのご紹介も可能です。
+              気になることがありましたら、お気軽にお問い合わせください。
             </p>
           </div>
 
@@ -1813,23 +1937,23 @@ export default function InventoryPage() {
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(2, 1fr)",
-              gap: "32px",
-              maxWidth: "800px",
+              gap: "2.286rem",
+              maxWidth: "57.143rem",
               width: "100%",
-              marginBottom: "32px"
+              marginBottom: "2.286rem"
             }}
           >
             {/* ①お電話でのお問い合わせ */}
             <Card 
               style={{
-                width: "400px",
-                height: "172px",
+                width: "28.571rem",
+                height: "12.286rem",
                 display: "flex",
                 flexDirection: "column",
-                gap: "8px",
-                borderRadius: "8px",
-                padding: "32px 40px",
-                border: "1px solid #1A1A1A",
+                gap: "0.571rem",
+                borderRadius: "0.571rem",
+                padding: "2.286rem 2.857rem",
+                border: "0.071rem solid #1A1A1A",
                 background: "#FFFFFF",
                 color: "#1a1a1a",
                 boxShadow: "none"
@@ -1847,47 +1971,47 @@ export default function InventoryPage() {
                 {/* ①電話記号＋お電話でのお問い合わせ */}
                 <div 
                   style={{
-                    width: "204px",
-                    height: "24px",
+                    width: "14.571rem",
+                    height: "1.714rem",
                     display: "flex",
                     alignItems: "center",
-                    gap: "4px",
+                    gap: "0.286rem",
                     opacity: 1,
-                    margin: "0 auto 16px auto"
+                    margin: "0 auto 1.143rem auto"
                   }}
                 >
                   <Phone 
                     style={{ 
-                      width: "18px", 
-                      height: "18px", 
+                      width: "1.286rem", 
+                      height: "1.286rem", 
                       color: "#666666",
-                      marginTop: "2.98px",
-                      marginLeft: "3px"
+                      marginTop: "0.213rem",
+                      marginLeft: "0.214rem"
                     }} 
                   />
-                  <h3 style={{ fontWeight: "bold", fontSize: "16px", margin: 0 }}>お電話でのお問い合わせ</h3>
+                  <h3 style={{ fontWeight: "bold", fontSize: "1.143rem", margin: 0 }}>お電話でのお問い合わせ</h3>
                 </div>
                 {/* ②電話番号＋受付時間 */}
                 <div 
                   style={{
-                    width: "320px",
-                    height: "69px",
+                    width: "22.857rem",
+                    height: "4.929rem",
                     display: "flex",
                     flexDirection: "column",
-                    gap: "4px",
+                    gap: "0.286rem",
                     opacity: 1,
                     margin: "0 auto"
                   }}
                 >
-                  <div style={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: "0.571rem" }}>
                     <span 
                       style={{
-                        width: "43px",
-                        height: "29px",
+                        width: "3.071rem",
+                        height: "2.071rem",
                         fontFamily: "Noto Sans JP",
                         fontWeight: "700",
                         fontStyle: "Bold",
-                        fontSize: "20px",
+                        fontSize: "1.429rem",
                         lineHeight: "100%",
                         letterSpacing: "0%",
                         color: "#2B5EC5",
@@ -1898,12 +2022,12 @@ export default function InventoryPage() {
                     </span>
                     <span 
                       style={{
-                        width: "239px",
-                        height: "46px",
+                        width: "17.071rem",
+                        height: "3.286rem",
                         fontFamily: "Noto Sans JP",
                         fontWeight: "700",
                         fontStyle: "Bold",
-                        fontSize: "36px",
+                        fontSize: "2.571rem",
                         lineHeight: "100%",
                         letterSpacing: "0%",
                         color: "#2B5EC5",
@@ -1914,7 +2038,7 @@ export default function InventoryPage() {
                       028-612-1472
                     </span>
                   </div>
-                  <p style={{ fontSize: "14px", color: "#6b7280", margin: 0 }}>受付時間：年中無休 09:00~17:00</p>
+                  <p style={{ fontSize: "1rem", color: "#1a1a1a", margin: 0 }}>受付時間：月〜日 8:00~17:00 <br/>※店舗不在時には折り返しさせて頂きます。</p>
                 </div>
               </CardContent>
             </Card>
@@ -1922,14 +2046,14 @@ export default function InventoryPage() {
             {/* ②フォームでのお問い合わせ */}
             <Card 
               style={{
-                width: "400px",
-                height: "172px",
+                width: "28.571rem",
+                height: "12.286rem",
                 display: "flex",
                 flexDirection: "column",
-                gap: "24px",
-                borderRadius: "8px",
-                padding: "32px 40px",
-                border: "1px solid #1A1A1A",
+                gap: "1.714rem",
+                borderRadius: "0.571rem",
+                padding: "2.286rem 2.857rem",
+                border: "0.071rem solid #1A1A1A",
                 background: "#FFFFFF",
                 color: "#374151",
                 boxShadow: "none"
@@ -1947,51 +2071,89 @@ export default function InventoryPage() {
                 {/* ③フォームでの問い合わせ */}
                 <div 
                   style={{
-                    width: "220px",
-                    height: "24px",
+                    width: "15.714rem",
+                    height: "1.714rem",
                     display: "flex",
                     alignItems: "center",
-                    gap: "4px",
+                    gap: "0.286rem",
                     opacity: 1,
-                    margin: "0 auto 16px auto"
+                    margin: "0 auto 1.143rem auto"
                   }}
                 >
                   <img 
                     src="/forum.png"
                     alt="フォーラム"
                     style={{
-                      width: "20px",
-                      height: "20px"
+                      width: "1.429rem",
+                      height: "1.429rem"
                     }}
                   />
-                  <h3 style={{ fontWeight: "bold", fontSize: "16px", margin: 0 }}>フォームでのお問い合わせ</h3>
+                  <h3 style={{ fontWeight: "bold", fontSize: "1.143rem", margin: 0 }}>フォームでのお問い合わせ</h3>
                 </div>
                 {/* ④お問合せフォームへボタン */}
                 <Link href="/contact">
                   <Button 
                     style={{
-                      width: "280px",
-                      height: "40px",
+                      width: "20.71rem",
+                      height: "2.86rem",
+                      gap: "2.57rem",
+                      opacity: 1,
+                      paddingTop: "0.57rem",
+                      paddingRight: "0.86rem",
+                      paddingBottom: "0.57rem",
+                      paddingLeft: "0.86rem",
+                      borderRadius: "0.29rem",
+                      background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
+                      boxShadow: "0.14rem 0.14rem 0.14rem 0 #00000040",
+                      color: "#FFFFFF",
+                      fontFamily: "Noto Sans JP",
+                      fontWeight: "700",
+                      fontStyle: "Bold",
+                      fontSize: "1.14rem",
+                      lineHeight: "100%",
+                      letterSpacing: "0%",
+                      cursor: "pointer",
+                      transition: "all 0.3s ease",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      gap: "16px",
-                      borderRadius: "4px",
-                      padding: "8px 12px",
-                      background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
-                      boxShadow: "2px 2px 2px 0px #00000040",
-                      border: "none",
-                      cursor: "pointer",
-                      transition: "opacity 0.3s ease"
+                      position: "relative"
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.opacity = "0.8";
+                      e.currentTarget.style.opacity = "0.9";
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.opacity = "1";
                     }}
                   >
-                    お問い合わせフォームへ
+                    <span style={{ 
+                      height: "1.64rem",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      textAlign: "center"
+                    }}>お問い合わせフォームへ</span>
+                    <svg
+                      width="7.4"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      style={{
+                        position: "absolute",
+                        top: "1rem",
+                        right: "0.86rem",
+                        color: "#FFFFFF"
+                      }}
+                    >
+                      <path
+                        d="M9 18L15 12L9 6"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
                   </Button>
                 </Link>
               </CardContent>
@@ -2002,14 +2164,14 @@ export default function InventoryPage() {
           <div style={{ display: "flex", justifyContent: "center" }}>
             <Card 
               style={{
-                width: "472px",
-                height: "100px",
+                width: "33.714rem",
+                height: "7.143rem",
                 display: "flex",
                 flexDirection: "column",
-                gap: "4px",
-                borderRadius: "8px",
-                padding: "24px 60px",
-                border: "1px solid #1A1A1A",
+                gap: "0.286rem",
+                borderRadius: "0.571rem",
+                padding: "1.714rem 4.286rem",
+                border: "0.071rem solid #1A1A1A",
                 background: "#FFFFFF",
                 color: "#2563eb",
                 boxShadow: "none"
@@ -2028,13 +2190,13 @@ export default function InventoryPage() {
                 <Link href="/contact" style={{ textDecoration: "none" }}>
                   <div 
                     style={{
-                      width: "360px",
-                      height: "29px",
+                      width: "25.714rem",
+                      height: "2.071rem",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       opacity: 1,
-                      margin: "0 auto 8px auto",
+                      margin: "0 auto 0.571rem auto",
                       position: "relative",
                       cursor: "pointer",
                       transition: "opacity 0.3s ease"
@@ -2051,31 +2213,32 @@ export default function InventoryPage() {
                         fontFamily: "Noto Sans JP",
                         fontWeight: "700",
                         fontStyle: "Bold",
-                        fontSize: "20px",
+                        fontSize: "1.429rem",
                         lineHeight: "100%",
                         letterSpacing: "0%",
-                        color: "#2B5EC5"
+                        color: "#2B5EC5",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        whiteSpace: "nowrap"
                       }}
                     >
-                      トラック買取をご希望の方はこちら
+                      買取 / 下取り ご希望の方はこちらから
+                      <ChevronRight 
+                        style={{
+                          width: "1.714rem",
+                          height: "1.714rem",
+                          color: "#2B5EC5"
+                        }}
+                      />
                     </div>
-                    <ChevronRight 
-                      style={{
-                        width: "24px",
-                        height: "24px",
-                        color: "#2B5EC5",
-                        position: "absolute",
-                        top: "2.5px",
-                        right: "0px"
-                      }}
-                    />
                   </div>
                 </Link>
                 {/* ⑥無料査定実施中 */}
                 <div 
                   style={{
-                    width: "320px",
-                    height: "19px",
+                    width: "22.857rem",
+                    height: "1.357rem",
                     fontFamily: "Noto Sans JP",
                     fontWeight: "400",
                     fontStyle: "Regular",
@@ -2087,7 +2250,7 @@ export default function InventoryPage() {
                     textAlign: "center"
                   }}
                 >
-                  無料査定実施中！！
+                  LINEで査定実施中！！
                 </div>
               </CardContent>
             </Card>
