@@ -79,14 +79,54 @@ export default function RentalPage() {
             background: 'linear-gradient(90deg, rgba(0, 0, 0, 0.4) 43.5%, rgba(255, 255, 255, 0) 100%)'
           }}
         />
-        <h1 className="relative text-white text-3xl md:text-5xl font-bold tracking-wider">レンタル車両</h1>
+        <h1 className="relative text-white text-3xl md:text-5xl font-bold tracking-wider">レンタル車両一覧</h1>
       </div>
 
       {/* 2. RENTAL */}
       <div className="w-full max-w-[1000px] mx-auto px-4 py-12">
-        <div className="text-center mb-8">
-          <div className="text-xs text-blue-700 tracking-widest mb-2">RENTAL</div>
-          <h2 className="text-2xl md:text-3xl font-bold mb-2">レンタル車両一覧</h2>
+        <div style={{ marginBottom: "2.857rem", display: "flex", justifyContent: "center" }}>
+          <div 
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+            }}
+          >
+            <div 
+              style={{
+                fontFamily: "Noto Sans JP",
+                fontWeight: "400",
+                fontStyle: "Regular",
+                fontSize: "1rem",
+                lineHeight: "100%",
+                letterSpacing: "0%",
+                textAlign: "left",
+                color: "#2B5EC5",
+                borderRadius: "0.14rem",
+                whiteSpace: "nowrap",
+                paddingLeft: "0",
+                marginBottom: "2px",
+              }}
+            >
+              RENTAL
+            </div>
+            <div 
+              style={{
+                fontFamily: "Noto Sans JP",
+                fontWeight: "700",
+                fontStyle: "Bold",
+                fontSize: "2.86rem",
+                lineHeight: "100%",
+                letterSpacing: "0%",
+                textAlign: "left",
+                color: "#1A1A1A",
+                whiteSpace: "nowrap",
+                marginBottom: "0.57rem",
+              }}
+            >
+              レンタル車両一覧
+            </div>
+          </div>
         </div>
         
         {/* 車両一覧 */}
@@ -408,8 +448,50 @@ export default function RentalPage() {
       {/* 3. FLOW */}
       <div className="bg-[#F3F3F3] py-16">
         <div className="w-full max-w-[1000px] mx-auto px-4">
-          <div className="text-xs text-blue-700 tracking-widest mb-2 text-left" style={{position: 'relative', left: '25.2rem'}}>FLOW</div>
-          <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">レンタルの流れ</h2>
+          <div style={{ marginBottom: "2.857rem", display: "flex", justifyContent: "center" }}>
+            <div 
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+              }}
+            >
+              <div 
+                style={{
+                  fontFamily: "Noto Sans JP",
+                  fontWeight: "400",
+                  fontStyle: "Regular",
+                  fontSize: "1rem",
+                  lineHeight: "100%",
+                  letterSpacing: "0%",
+                  textAlign: "left",
+                  color: "#2B5EC5",
+                  borderRadius: "0.14rem",
+                  whiteSpace: "nowrap",
+                  paddingLeft: "0",
+                  marginBottom: "2px",
+                }}
+              >
+                FLOW
+              </div>
+              <div 
+                style={{
+                  fontFamily: "Noto Sans JP",
+                  fontWeight: "700",
+                  fontStyle: "Bold",
+                  fontSize: "2.86rem",
+                  lineHeight: "100%",
+                  letterSpacing: "0%",
+                  textAlign: "left",
+                  color: "#1A1A1A",
+                  whiteSpace: "nowrap",
+                  marginBottom: "0.57rem",
+                }}
+              >
+                レンタルの流れ
+              </div>
+            </div>
+          </div>
           <div className="bg-white rounded-lg shadow p-8">
             <p className="text-center text-gray-700 mb-8">お申し込みから返却までの流れをご紹介します。</p>
                          <div className="space-y-8">
@@ -428,7 +510,7 @@ export default function RentalPage() {
                       height: '2.5rem',
                       marginBottom: '0.5rem',
                       fontSize: '1.25rem'
-                    }}>レンタルのお問い合わせ・お申し込み <span className='inline-block align-middle'>✉️</span></div>
+                    }}>レンタルのお問い合わせ・お申し込み <img src="/mail.svg" alt="mail" className='inline-block align-middle' style={{width: '2.38rem', height: '2.38rem'}} /></div>
                                         <div style={{
                        height: '3.5rem',
                        fontFamily: 'Noto Sans JP',
@@ -461,7 +543,7 @@ export default function RentalPage() {
                        height: '2.5rem',
                        marginBottom: '0.5rem',
                        fontSize: '1.25rem'
-                     }}>ご連絡 <span className='inline-block align-middle'>🚚</span></div>
+                     }}>ご連絡 <img src="/airport_shuttle.svg" alt="shuttle" className='inline-block align-middle' style={{width: '2.38rem', height: '2.38rem'}} /></div>
                      <div style={{
                        height: '3.5rem',
                        fontFamily: 'Noto Sans JP',
@@ -494,7 +576,7 @@ export default function RentalPage() {
                        height: '2.5rem',
                        marginBottom: '0.5rem',
                        fontSize: '1.25rem'
-                     }}>ご来店・ご入金 <span className='inline-block align-middle'>🏢💴</span></div>
+                     }}>ご来店・ご入金 <img src="/calculate.svg" alt="calculate" className='inline-block align-middle' style={{width: '2.38rem', height: '2.38rem'}} /></div>
                      <div style={{
                        height: '3.5rem',
                        fontFamily: 'Noto Sans JP',
@@ -527,7 +609,7 @@ export default function RentalPage() {
                        height: '2.5rem',
                        marginBottom: '0.5rem',
                        fontSize: '1.25rem'
-                     }}>車両の引き渡し <span className='inline-block align-middle'>🔑</span></div>
+                     }}>車両の引き渡し <img src="/car_rental.svg" alt="car rental" className='inline-block align-middle' style={{width: '2.38rem', height: '2.38rem'}} /></div>
                      <div style={{
                        height: '3.5rem',
                        fontFamily: 'Noto Sans JP',
@@ -560,7 +642,7 @@ export default function RentalPage() {
                        height: '2.5rem',
                        marginBottom: '0.5rem',
                        fontSize: '1.25rem'
-                     }}>車両のご返却 <span className='inline-block align-middle'>🔄</span></div>
+                     }}>車両のご返却 <img src="/handshake.svg" alt="handshake" className='inline-block align-middle' style={{width: '2.38rem', height: '2.38rem'}} /></div>
                      <div style={{
                        height: '3.5rem',
                        fontFamily: 'Noto Sans JP',
