@@ -27,33 +27,28 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-white" style={{ height: "9rem" }}>
-      <div className="flex items-center justify-between" style={{ height: "9rem", paddingRight: "0.71rem" }}>
+    <header className="sticky top-0 z-50 w-full border-b bg-white" style={{ height: "9rem", margin: "0" }}>
+      <div className="flex items-center md:grid md:grid-cols-[auto_1fr_auto_auto_auto] md:items-center md:gap-x-4 lg:gap-x-6 xl:gap-x-8" style={{ height: "9rem", padding: "0 1rem", margin: "0" }}>
         
         {/* ロゴ */}
         <a href="/" className="flex items-center" style={{ 
-          position: "absolute",
-          left: "0.71rem",
-          top: "50%",
-          transform: "translateY(-50%)"
+          margin: "0"
         }}>
-          <img src="/logo.png" alt="NOA CORPORATION" style={{ width: "20vw", height: "4.43rem", opacity: 1, transform: "rotate(0deg)" }} />
+          <img src="/logo.png" alt="NOA CORPORATION" style={{ width: "13vw", height: "4.43rem", opacity: 1, transform: "rotate(0deg)", margin: "0" }} />
         </a>
 
         {/* PCナビゲーション */}
-        <nav className="hidden md:flex items-center justify-center space-x-6" style={{ 
-          position: "absolute",
-          left: "calc(20vw + 2.85rem)",
-          top: "50%",
-          transform: "translateY(-50%)",
-          width: "37%", 
+        <nav className="hidden md:flex items-center justify-center" style={{ 
+          width: "100%", 
           height: "3.36rem",
           whiteSpace: "nowrap",
-          overflow: "hidden"
+          overflow: "hidden",
+          margin: "0",
+          gap: "1.4rem"
         }}>
           <a href="/" 
             style={{
-              width: "3.43rem",
+              margin: "0",
               height: "1.64rem",
               opacity: 1,
               fontFamily: "Noto Sans JP, sans-serif",
@@ -77,7 +72,7 @@ export function Header() {
           </a>
           <a href="/inventory"
             style={{
-              width: "9.29rem",
+              margin: "0",
               height: "1.64rem",
               opacity: 1,
               fontFamily: "Noto Sans JP, sans-serif",
@@ -102,7 +97,7 @@ export function Header() {
           </a>
           <a href="/rental"
             style={{
-              width: "6.86rem",
+              margin: "0",
               height: "1.64rem",
               opacity: 1,
               fontFamily: "Noto Sans JP, sans-serif",
@@ -126,7 +121,7 @@ export function Header() {
           </a>
           <a href="/purchase"
             style={{
-              width: "6.86rem",
+              margin: "0",
               height: "1.64rem",
               opacity: 1,
               fontFamily: "Noto Sans JP, sans-serif",
@@ -150,7 +145,7 @@ export function Header() {
           </a>
           <a href="/about"
             style={{
-              width: "8rem",
+              margin: "0",
               height: "1.64rem",
               opacity: 1,
               fontFamily: "Noto Sans JP, sans-serif",
@@ -177,11 +172,7 @@ export function Header() {
         {/* 電話番号 */}
         <div className="hidden md:flex items-center justify-center"
           style={{
-            position: "absolute",
-            left: "calc(20vw + 2.85rem + 37% + 1rem)",
-            top: "50%",
-            transform: "translateY(-50%)",
-            width: "auto",
+            width: "100%",
             minWidth: "14rem",
             height: "3.36rem",
             display: "flex",
@@ -189,11 +180,13 @@ export function Header() {
             alignItems: "center",
             background: "#fff",
             borderRadius: "4px",
-            padding: "0 1rem"
+            padding: "0 1rem",
+            margin: "0"
           }}
         >
           <div
             style={{
+              margin: "0",
               width: "auto",
               minWidth: "13rem",
               height: "2.07rem",
@@ -214,7 +207,7 @@ export function Header() {
               whiteSpace: "nowrap"
             }}
           >
-            <span style={{ display: "flex", alignItems: "center", marginRight: "0.57rem", position: "relative", top: "0.21rem", left: "0.21rem" }}>
+                         <span style={{ display: "flex", alignItems: "center", marginRight: "0.57rem", position: "relative", top: "0.21rem", left: "0.21rem" }}>
               <svg width="1.29rem" height="1.29rem" viewBox="0 0 24 24" fill="none" style={{ background: "#fff", opacity: 1 }} xmlns="http://www.w3.org/2000/svg">
                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" stroke="#1a1a1a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
@@ -223,7 +216,8 @@ export function Header() {
           </div>
           <div
             style={{
-              width: "13.57rem",
+              margin: "0",
+              width: "14vw",
               height: "1rem",
               opacity: 1,
               fontFamily: "Noto Sans JP, sans-serif",
@@ -237,21 +231,19 @@ export function Header() {
               textAlign: "center"
             }}
           >
-            （受付時間）年中無休 09:00~17:00
+            （受付時間）8:00~17:00<br/>※店舗不在時には折り返しさせて頂きます。
           </div>
         </div>
 
         {/* 問い合わせフォーム */}
         <form action="/contact" method="get" className="hidden md:flex items-center justify-center m-0 p-0" style={{ 
-          position: "absolute",
-          left: "calc(20vw + 2.85rem + 37% + 1rem + 11.46% + 2.85rem)",
-          top: "50%",
-          transform: "translateY(-50%)",
-          width: "14.44%", 
-          height: "3.36rem" 
+          width: "100%", 
+          height: "3.36rem",
+          margin: "0" 
         }}>
           <div
             style={{
+              margin: "0",
               width: "100%",
               height: "3.36rem",
               opacity: 1,
@@ -265,6 +257,7 @@ export function Header() {
             <button 
               type="submit"
               style={{
+                margin: "0",
                 width: "100%",
                 height: "1.64rem",
                 opacity: 1,
@@ -288,16 +281,13 @@ export function Header() {
 
         {/* アイコン */}
         <div className="hidden md:flex items-center justify-center" style={{
-          position: "absolute",
-          right: "0.71rem",
-          top: "50%",
-          transform: "translateY(-50%)",
-          width: "8.4%",
+          width: "100%",
           height: "4.41rem",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          justifyContent: "center"
+          justifyContent: "center",
+          margin: "0"
         }}>
           <img
             src="/icon_up.png"
@@ -307,7 +297,7 @@ export function Header() {
               height: "2.91rem",
               objectFit: "cover",
               opacity: 1,
-              marginBottom: "0.14rem"
+              margin: "0"
             }}
           />
           <img
@@ -318,17 +308,18 @@ export function Header() {
               height: "1.5rem",
               objectFit: "cover",
               opacity: 1,
-              marginTop: "0.14rem"
+              margin: "0"
             }}
           />
         </div>
 
         {/* スマホ・タブレット用ハンバーガー */}
-        <div className="md:hidden flex items-center">
+        <div className="md:hidden flex items-center" style={{ margin: "0" }}>
           <button
             type="button"
             className="p-2 rounded bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 border border-blue-300 cursor-pointer"
             onClick={handleMenuClick}
+            style={{ margin: "0" }}
             aria-label="メニューを開く"
           >
             <Menu className="w-6 h-6 text-blue-600" />

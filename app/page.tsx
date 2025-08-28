@@ -935,7 +935,11 @@ export default function HomePage() {
                       textOverflow: "ellipsis",
                       whiteSpace: "nowrap"
                     }}>
-                      {(vehicle.maker === "三菱ふそう" ? "三菱" : vehicle.maker)} {vehicle.vehicleType || vehicle.bodyType || vehicle.name}
+                      {(() => {
+                        const makerLabel = (vehicle.maker === "三菱ふそう" ? "三菱" : vehicle.maker) || "";
+                        const typeLabel = (vehicle.vehicleType || vehicle.model || "").trim();
+                        return `${makerLabel}${typeLabel ? ` ${typeLabel}` : ""}`.trim();
+                      })()}
                     </span>
                     <span style={{ 
                       height: "1.21rem",
