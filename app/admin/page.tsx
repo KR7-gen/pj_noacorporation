@@ -351,6 +351,7 @@ export default function AdminPage() {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>車両写真</TableHead>
               <TableHead>問い合わせ番号</TableHead>
               <TableHead>メーカー</TableHead>
               <TableHead>ボディタイプ</TableHead>
@@ -388,6 +389,25 @@ export default function AdminPage() {
           <TableBody>
             {getSortedVehicles().map((vehicle, index) => (
               <TableRow key={vehicle.id}>
+                <TableCell>
+                  {vehicle.imageUrls && vehicle.imageUrls.length > 0 ? (
+                    <div className="relative w-16 h-12">
+                      <Image
+                        src={vehicle.imageUrls[0]}
+                        alt={`${vehicle.maker} ${vehicle.model}`}
+                        fill
+                        className="object-cover rounded"
+                        onError={() => {
+                          setImageErrors(prev => new Set(prev).add(vehicle.id!))
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-16 h-12 bg-gray-200 rounded flex items-center justify-center">
+                      <span className="text-xs text-gray-500">写真なし</span>
+                    </div>
+                  )}
+                </TableCell>
                 <TableCell>{vehicle.inquiryNumber || "---"}</TableCell>
                 <TableCell>{vehicle.maker}</TableCell>
                 <TableCell>{vehicle.bodyType || "---"}</TableCell>

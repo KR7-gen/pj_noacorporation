@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Phone, Upload, Download } from "lucide-react"
+import { Phone, Upload, Download, PhoneCall, ChevronRight } from "lucide-react"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import ContactForm from "../components/ContactForm"
@@ -92,14 +92,24 @@ const reviews = [
 
 const faqs = [
   {
-    question: "展示場はいつでも見学可能ですか？",
+    question: "査定はいつでも可能ですか？",
     answer:
-      "日曜・祝日を除く毎日、9:00-18:00 までご見学いただけます。対応できる人員に限りがあるため、事前にお電話か問い合わせフォームにて見学ご希望とお知らせの上、お越しください。",
+      "はい。お客様のご都合の良いお時間に当社のLINEに査定車両の情報をお送りください。",
   },
   {
-    question: "在庫にない車も、探してもらうことはできますか?",
+    question: "どんな情報を送ればいいですか?",
     answer:
-      "喜んでお手伝いします！オークションや過去の取引事業者など、弊社の持てる限りのネットワークを駆使して、ご希望のトラックを探索します。",
+      "車検証・車両の外観、内観・直近の不具合等があればお知らせください。",
+  },
+  {
+    question: "LINEで査定にお金はかかりますか？",
+    answer:
+      "LINEで査定は無料でご利用いただけます。",
+  },
+  {
+    question: "ノアコーポレションで購入も買取もした事がないけど利用できますか？",
+    answer:
+      "はい。初めての方もご利用いただけます。初めてが不安という方にはお電話での対応も365日しておりますので、お客様のお手隙なタイミングでお問合せください。",
   },
 ]
 
@@ -158,14 +168,14 @@ const HeroSection = () => (
             fontFamily: 'Noto Sans JP',
             fontWeight: 700,
             fontStyle: 'Bold',
-            fontSize: '1.714rem',
+            fontSize: '2.571rem',
             lineHeight: '100%',
             letterSpacing: '0%',
             left: '7.5rem',
-            top: '8.929rem'
+            top: '7.929rem'
           }}
         >
-          (テキスト)トラック買取
+          気軽に無料で買取依頼
         </h1>
         
         {/* 2. キャッチコピー */}
@@ -188,13 +198,13 @@ const HeroSection = () => (
               fontFamily: 'Noto Sans JP',
               fontWeight: 700,
               fontStyle: 'Bold',
-              fontSize: '1.714rem',
+              fontSize: '4.571rem',
               lineHeight: '100%',
               letterSpacing: '0%',
               transform: 'skewX(20deg)'
             }}
           >
-            キャッチコピー!!
+            LINEで即日査定!!
           </h2>
         </div>
         
@@ -218,7 +228,7 @@ const HeroSection = () => (
                 letterSpacing: '0%'
               }}
             >
-              高額査定
+              高価買取に挑戦。
             </span>
           </div>
           <div 
@@ -239,7 +249,7 @@ const HeroSection = () => (
                 letterSpacing: '0%'
               }}
             >
-              スピード査定
+              LINEでのスピード査定
             </span>
           </div>
           <div 
@@ -259,7 +269,7 @@ const HeroSection = () => (
                 letterSpacing: '0%'
               }}
             >
-              書類手続きはすべて代行
+              車両引上げ / 書類手続きはすべて代行
             </span>
           </div>
         </div>
@@ -280,7 +290,7 @@ const HeroSection = () => (
                 letterSpacing: '0%'
               }}
             >
-              \ 簡単5分!車両情報入力で査定額が分かります! /
+              \ LINEで簡単に査定額が分かります！ /
             </p>
             <Link href="/contact">
               <Button 
@@ -299,7 +309,7 @@ const HeroSection = () => (
                   backgroundColor: 'transparent'
                 }}
               >
-                買取査定フォーム &nbsp;&gt;
+                まずはお友達登録 &nbsp;&gt;
               </Button>
             </Link>
           </div>
@@ -387,21 +397,24 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
                   </div>
                   
                   {/* 4. 高価買取マーク */}
-                  <div 
-                    className="absolute text-white text-sm font-bold flex items-center justify-center"
-                    style={{
-                      width: '5.143rem',
-                      height: '5.143rem',
-                      bottom: '0.857rem',
-                      right: '0',
-                      background: '#EA1313',
-                      border: '0.143rem solid #666666',
-                      borderRadius: '50%',
-                      zIndex: 10
-                    }}
-                  >
-                    高価買取
-                  </div>
+                   <div 
+                     className="absolute text-white text-sm font-bold flex items-center justify-center"
+                     style={{
+                       width: '5.143rem',
+                       height: '5.143rem',
+                       bottom: '0.857rem',
+                       right: '0',
+                       background: '#EA1313',
+                       border: '0.143rem solid #666666',
+                       borderRadius: '50%',
+                       zIndex: 10,
+                       fontSize: '1.428rem',
+                       textAlign: 'center',
+                       lineHeight: '1.2'
+                     }}
+                   >
+                     高価<br />買取
+                   </div>
                 </CardContent>
               </Card>
             ))
@@ -458,31 +471,34 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
                       </p>
                     </div>
                     
-                    {/* 3. 買取価格 */}
-                    <div className="absolute bottom-0 w-full" style={{ height: '3.929rem', background: '#E6E6E6', margin: '0.857rem' }}>
-                      <div className="px-3 h-full flex items-center" style={{ padding: '0 0.857rem' }}>
-                        <span className="text-2xl font-bold">
-                          当社買取額：{Math.floor(purchasePrice / 10000)}万円
-                        </span>
-                      </div>
-                    </div>
-                    
-                    {/* 4. 高価買取マーク */}
-                    <div 
-                      className="absolute text-white text-sm font-bold flex items-center justify-center"
-                      style={{
-                        width: '5.143rem',
-                        height: '5.143rem',
-                        bottom: '0.857rem',
-                        right: '0',
-                        background: '#EA1313',
-                        border: '0.143rem solid #666666',
-                        borderRadius: '50%',
-                        zIndex: 10
-                      }}
-                    >
-                      高価買取
-                    </div>
+                       {/* 3. 買取価格 */}
+                       <div className="absolute bottom-0 w-full" style={{ height: '3.929rem', background: '#E6E6E6', margin: '0.857rem' }}>
+                         <div className="px-3 h-full flex items-center" style={{ padding: '0 0.857rem' }}>
+                           <span className="text-2xl font-bold">
+                             当社買取額：{Math.floor(purchasePrice / 10000)}万円
+                           </span>
+                         </div>
+                       </div>
+                       
+                       {/* 4. 高価買取マーク */}
+                       <div 
+                         className="absolute text-white font-bold flex items-center justify-center"
+                         style={{
+                           width: '5.143rem',
+                           height: '5.143rem',
+                           bottom: '0.857rem',
+                           right: '0',
+                           background: '#EA1313',
+                           border: '0.143rem solid #666666',
+                           borderRadius: '50%',
+                           zIndex: 10,
+                           fontSize: '1.428rem',
+                           textAlign: 'center',
+                           lineHeight: '1.2'
+                         }}
+                       >
+                         高価<br />買取
+                       </div>
                   </CardContent>
                 </Card>
               )
@@ -522,29 +538,32 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
                     </p>
                   </div>
                   
-                  {/* 3. 買取価格 */}
-                  <div className="absolute bottom-0 w-full" style={{ height: '3.929rem', background: '#E6E6E6', margin: '0.857rem' }}>
-                    <div className="px-3 h-full flex items-center" style={{ padding: '0 0.857rem' }}>
-                      <span className="text-2xl font-bold">当社買取額：{item.price}万円</span>
-                    </div>
-                  </div>
-                  
-                  {/* 4. 高価買取マーク */}
-                  <div 
-                    className="absolute text-white text-sm font-bold flex items-center justify-center"
-                    style={{
-                      width: '5.143rem',
-                      height: '5.143rem',
-                      bottom: '0.857rem',
-                      right: '0',
-                      background: '#EA1313',
-                      border: '0.143rem solid #666666',
-                      borderRadius: '50%',
-                      zIndex: 10
-                    }}
-                  >
-                    高価買取
-                  </div>
+                   {/* 3. 買取価格 */}
+                   <div className="absolute bottom-0 w-full" style={{ height: '3.929rem', background: '#E6E6E6', margin: '0.857rem' }}>
+                     <div className="px-3 h-full flex items-center" style={{ padding: '0 0.857rem' }}>
+                       <span className="text-2xl font-bold">当社買取額：{item.price}万円</span>
+                     </div>
+                   </div>
+                   
+                   {/* 4. 高価買取マーク */}
+                   <div 
+                     className="absolute text-white font-bold flex items-center justify-center"
+                     style={{
+                       width: '5.143rem',
+                       height: '5.143rem',
+                       bottom: '0.857rem',
+                       right: '0',
+                       background: '#EA1313',
+                       border: '0.143rem solid #666666',
+                       borderRadius: '50%',
+                       zIndex: 10,
+                       fontSize: '1.428rem',
+                       textAlign: 'center',
+                       lineHeight: '1.2'
+                     }}
+                   >
+                     高価<br />買取
+                   </div>
                 </CardContent>
               </Card>
             ))
@@ -590,15 +609,15 @@ const AssessmentRequestSection = () => (
               color: '#1a1a1a'
             }}
           >
-            査定依頼
+            LINEで査定依頼
           </p>
         </div>
 
         {/* 小見出しと問い合わせ（右） */}
         <div className="text-center" style={{ marginLeft: 'auto', marginRight: '15rem' }}>
-          <p className="text-[1.143rem] font-bold mb-[1.714rem] text-black">査定をご希望の方、ご売却を検討されている方は下記よりご連絡ください。</p>
+          <p className="text-[1.143rem] font-bold mb-[1.714rem] text-black">車両の査定 / 売却を検討されている方は、まずはLINEでお問い合わせください。</p>
           
-          <p className="text-[1.143rem] font-bold mb-[1.714rem] text-black">\ 車輌情報入力で査定額が分かります！査定申込も受付！ /</p>
+          <p className="text-[1.143rem] font-bold mb-[1.714rem] text-black">\ 車検証や車両画像で簡単に査定額が判明します /</p>
           
           {/* 買取査定フォームと電話番号の横並び配置 */}
           <div className="flex justify-center gap-[2.857rem]">
@@ -611,7 +630,7 @@ const AssessmentRequestSection = () => (
                   boxShadow: '2px 2px 2px 0px #00000040'
                 }}
               >
-                <span className="text-[1.429rem] font-bold text-white">買取査定フォーム</span>
+                <span className="text-[1.429rem] font-bold text-white">LINEで査定を依頼する</span>
                 <span className="text-[1.429rem] font-bold text-white">&nbsp;&gt;</span>
               </div>
             </Link>
@@ -624,7 +643,7 @@ const AssessmentRequestSection = () => (
                 </svg>
                 <span className="text-[1.429rem] font-bold text-blue-600">028-612-1472</span>
               </div>
-              <p className="text-sm text-gray-700">（受付時間）年中無休 09:00~17:00</p>
+              <p className="text-sm text-gray-700">（受付時間）08:00~17:00</p>
             </div>
           </div>
         </div>
@@ -640,7 +659,7 @@ const ReasonSection = () => (
             <div className="mb-12 flex flex-col items-center">
         <div className="w-[69.4%] max-w-[1000px] relative">
           <div className="text-center pt-[2.5rem]">
-            <p className="text-[2.571rem] font-bold text-[#1a1a1a] mb-4">トラック買取で当社が選ばれる理由</p>
+            <p className="text-[2.571rem] font-bold text-[#1a1a1a] mb-4">ノアコーポレーションの買取査定の特徴</p>
           </div>
           <h2 className="text-[1rem] font-normal text-[#2B5EC5] absolute top-0" style={{left: '50%', transform: 'translateX(-50%)', width: 'fit-content', marginLeft: '-18rem'}}>REASON</h2>
         </div>
@@ -662,16 +681,13 @@ const ReasonSection = () => (
           </div>
           <div className="w-[45.8%]">
             <div className="text-center mb-4">
-              <p className="text-[1.286rem] text-[#666666] whitespace-nowrap">
-                📝 独自の査定基準！他社様と比べてみてください
-              </p>
             </div>
             <div className="text-center mb-4">
-              <h3 className="text-[2.428rem] text-[#666666] font-bold">自社で再生、直販するから高値で買える！</h3>
+              <h3 className="text-[2.428rem] text-[#666666] font-bold">LINEですぐに金額判明</h3>
             </div>
             <div className="text-center">
               <p className="text-[1rem] text-[#666666] leading-relaxed">
-                当社は、お客様からお預かりしたトラックを自社で整備・再生し、仲介業者を通さずに直接再販売しています。<br />そのため、他社様とは異なる査定基準を持っており、相場よりも高く中古トラックを買い取ることが可能になっています。1円でも高く買い取ってほしい･･･そんなお客様の想いに、精一杯お応えさせていただきます！
+              当社ではLINEによるスピード買取に挑戦しております。<br />既存のお問い合わせ→日程調整→現社確認→査定額提示という手順を<br />すべてLINEで行う事により、<br />どこよりも早く査定金額を知ることができます。
               </p>
             </div>
           </div>
@@ -683,16 +699,13 @@ const ReasonSection = () => (
         <div className="flex gap-8 items-center">
           <div className="w-[45.8%]">
             <div className="text-center mb-4">
-              <p className="text-[1.286rem] text-[#666666]">
-                📝 車検切れ・不動車もOK！どんな車輛にも対応
-              </p>
             </div>
             <div className="text-center mb-4">
-              <h3 className="text-[2.428rem] text-[#666666] font-bold">熟練の買取査定士によるスピード査定！</h3>
+              <h3 className="text-[2.428rem] text-[#666666] font-bold">全国どこでもOK!!<br />不動車 / 事故車でも買取OK!!</h3>
             </div>
             <div className="text-center">
               <p className="text-[1rem] text-[#666666] leading-relaxed">
-                査定を対応するのは、これまで10,000台を超える中古トラックを買い付けてきたトラック買取のエキスパートが率いる査定専門チーム。<br />どんなタイプの車輛でも、高く買取できるポイントを見極めて査定いたします。故障で動かなくなった状態のトラックでも、まずは一度ご相談ください！<br />また、実車査定にお伺いする前の段階でも、フォームから車輛情報を入力・写真をお送りいただければ、目安となる買取金額を1営業日以内にご回答いたします。
+              ノアコーポレーションではLINEでの買取を行っておりますので、<br />全国どこでも、どんな状態の車両でも買取させていただきます。<br />買取実施には、まずはLINEよりお気軽にお問い合わせくださいませ。
               </p>
             </div>
           </div>
@@ -724,110 +737,655 @@ const ReasonSection = () => (
               />
             </div>
           </div>
-          <div className="w-[45.8%]">
-            <div className="text-center mb-4">
-              <p className="text-[1.286rem] text-[#666666]">
-                📝 書類手続きは当社にお任せ！<br />
-                即時振り込み・現金支払いも可能
-              </p>
-            </div>
-            <div className="text-center mb-4">
-              <h3 className="text-[2.428rem] text-[#666666] font-bold whitespace-nowrap">お客様の面倒は一切なし。<br />スムーズなお取引！</h3>
-            </div>
-            <div className="text-center">
-              <p className="text-[1rem] text-[#666666] leading-relaxed">
-                車の売却にあたって避けられない煩わしい書類手続き。お忙しいお客様に代わって、弊社が代行処理いたします。トラックの売却・譲渡がはじめてのお客様も安心してお任せください。<br />取引後の社名消しや、車輛の引き渡しお支払い方法など、お客様のご要望に合わせて迅速に対応させていただきます。
-              </p>
-            </div>
-          </div>
+                     <div className="w-[45.8%]">
+             <div className="text-center mb-4">
+             </div>
+             <div className="text-center mb-4">
+               <h3 className="text-[2.428rem] text-[#666666] font-bold">当社に決めていただければ<br />面倒な手続きは一切なし。</h3>
+             </div>
+             <div className="text-center">
+               <p className="text-[1rem] text-[#666666] leading-relaxed">
+               当社ノアコーポレーションに売却を決めていただけましたら、<br />引上げ及びその後の書類手続きなど<br />すべて弊社で代行させていただきます。また、会社名や会社カラーなども当社の責任をもって対応させいただきます。
+               </p>
+             </div>
+           </div>
         </div>
       </div>
     </div>
   </section>
 )
 
-// 5. お客様の声セクション
-const ReviewSection = () => {
-  const [reviewMarginLeft, setReviewMarginLeft] = useState('-4rem');
 
-  return (
-    <section className="py-16" style={{background: '#F2F2F2'}}>
-      <div className="container mx-auto px-4">
-        <div className="mb-12 flex flex-col items-center">
-          <div className="w-[69.4%] max-w-[1000px] relative">
-            <div className="text-center pt-[2.5rem]">
-              <p className="text-[2.571rem] font-bold text-[#1a1a1a] mb-4">お客様の声</p>
-            </div>
-            <h2 className="text-[1rem] font-normal text-[#2B5EC5] absolute top-0" style={{left: '50%', transform: 'translateX(-50%)', width: 'fit-content', marginLeft: reviewMarginLeft}}>REVIEW</h2>
+// 5. FAQセクション
+const FAQSection = () => (
+  <section 
+    style={{
+      width: "100%",
+      gap: "2.857rem",
+      opacity: 1,
+      background: "#FFFFFF",
+      margin: "0 auto",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    }}
+  >
+    <div 
+      style={{
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "flex-start",
+        alignItems: "center",
+        padding: "0 1.429rem",
+        paddingTop: "2.857rem"
+      }}
+    >
+      {/* QUESTIONセクション */}
+      <div style={{ marginBottom: "3.429rem", display: "flex", justifyContent: "center" }}>
+        <div 
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+          }}
+        >
+          <div
+            style={{
+              fontFamily: "Noto Sans JP",
+              fontWeight: "400",
+              fontStyle: "Regular",
+              fontSize: "1rem",
+              lineHeight: "100%",
+              letterSpacing: "0%",
+              textAlign: "left",
+              color: "#2B5EC5",
+              marginBottom: "0.143rem",
+            }}
+          >
+            QUESTION
           </div>
-          
-          {/* 位置調整用の入力フィールド */}
-          <div className="mt-4 flex items-center gap-2 hidden">
-            <label className="text-sm font-medium">REVIEW位置調整:</label>
-            <input
-              type="number"
-              value={parseFloat(reviewMarginLeft)}
-              onChange={(e) => setReviewMarginLeft(`${e.target.value}rem`)}
-              className="w-20 px-2 py-1 border border-gray-300 rounded text-sm"
-              step="0.1"
-            />
-            <span className="text-sm text-gray-500">rem</span>
+          <div 
+            style={{
+              fontFamily: "Noto Sans JP",
+              fontWeight: "700",
+              fontStyle: "Bold",
+              fontSize: "2.857rem",
+              lineHeight: "100%",
+              letterSpacing: "0%",
+              textAlign: "left",
+              color: "#1A1A1A",
+              whiteSpace: "nowrap",
+              marginBottom: "1.143rem",
+            }}
+          >
+            LINEで査定のよくあるご質問
           </div>
         </div>
+      </div>
 
-      <div className="w-full">
-        <div className="flex flex-col md:flex-row gap-5 justify-center">
-          {reviews.map((review, index) => (
-            <Card key={index} className="border-0 shadow-lg w-[20vw] h-29">
-              <CardContent className="p-0 flex flex-col h-full">
-                <div className="flex">
-                  <div className="w-1/2">
-                    <img 
-                      src={`/review${review.reviewNumber}.jpg`}
-                      alt={`Review ${review.reviewNumber}`}
-                      className="w-full h-full object-cover object-center"
-                      style={{ objectPosition: review.reviewNumber === '03' ? '50% 50%' : '10% 50%' }}
-                      onError={(e) => {
-                        console.error(`Failed to load image: /review${review.reviewNumber}.jpg`);
-                        e.currentTarget.style.display = 'none';
-                      }}
-                    />
-                  </div>
-                  <div className="text-left w-1/2 pl-[0.86rem] flex flex-col gap-1 p-[0.29rem]">
-                    <div className="text-[1rem] font-bold">当社買取価格</div>
-                    <div className="text-[3.43rem] font-bold text-[#2B5EC5] border-b-4 border-[#2B5EC5] pb-0 leading-none">
-                      {review.price}<span className="text-[1.43rem]">万円</span>
-                    </div>
-                    <div className="text-[1rem] font-bold">{review.truck}</div>
-                    <div className="text-[0.86rem] font-normal">{review.location}</div>
-                    <div className="text-[0.86rem] font-normal">{review.customer}</div>
-                  </div>
-                </div>
-
-                <div className="mt-[1.14rem] mb-4 px-[1.71rem] flex-1">
-                  <h4 className="font-bold text-lg mb-2">{review.title}</h4>
-                  <p className="text-sm text-gray-700 leading-relaxed">{review.comment}</p>
-                </div>
-
-                <div className="text-right mb-[1rem] mt-auto">
-                  <span className="text-sm text-gray-500">/ Review {review.reviewNumber}</span>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+      <div 
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "0.143rem",
+          width: "100%",
+          maxWidth: "57.143rem"
+        }}
+      >
+        {faqs.map((faq, index) => (
+          <Card 
+            key={index}
+            className="!p-0 !m-0 !border-0 !shadow-none"
+            style={{
+              backgroundColor: "white",
+              border: "1px solid #e5e7eb",
+              borderRadius: "0.571rem",
+              boxShadow: "0 0.143rem 0.286rem rgba(0, 0, 0, 0.1)",
+              margin: 0
+            }}
+          >
+            <CardContent className="!p-0" style={{ padding: 0 }}>
+              {/* Q部分デザイン */}
+              <div style={{
+                width: "58.571rem",
+                height: "3.214rem",
+                opacity: 1,
+                padding: "0.286rem 0.857rem",
+                borderRadius: "0.286rem",
+                background: "#F2F2F2",
+                display: "flex",
+                alignItems: "center",
+                gap: "1.143rem"
+              }}>
+                <span style={{
+                  width: "1.857rem",
+                  height: "2.071rem",
+                  fontFamily: "Noto Sans JP, sans-serif",
+                  fontWeight: 700,
+                  fontStyle: "bold",
+                  fontSize: "1.429rem",
+                  lineHeight: "100%",
+                  letterSpacing: "0%",
+                  color: "#1CA0C8",
+                  borderRadius: "0.286rem",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginRight: "0.857rem"
+                }}>
+                  Q.
+                </span>
+                <span style={{
+                  flex: 1,
+                  fontFamily: "Noto Sans JP, sans-serif",
+                  fontWeight: 700,
+                  fontStyle: "bold",
+                  fontSize: "1.429rem",
+                  lineHeight: "100%",
+                  letterSpacing: "0%",
+                  color: "#1A1A1A",
+                  display: "flex",
+                  alignItems: "center"
+                }}>
+                  {faq.question}
+                </span>
+              </div>
+              {/* A部分デザイン */}
+              <div style={{
+                width: "58.571rem",
+                height: "5.714rem",
+                opacity: 1,
+                padding: "0.571rem 0.857rem",
+                display: "flex",
+                alignItems: "flex-start",
+                gap: "0.857rem"
+              }}>
+                <span 
+                  style={{
+                    width: "1.857rem",
+                    height: "2.071rem",
+                    fontFamily: "Noto Sans JP, sans-serif",
+                    fontWeight: 700,
+                    fontStyle: "bold",
+                    fontSize: "1.429rem",
+                    lineHeight: "100%",
+                    letterSpacing: "0%",
+                    color: "#EA1313",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginRight: "0.857rem"
+                  }}
+                >
+                  A.
+                </span>
+                <span style={{
+                  width: "51.571rem",
+                  height: "4rem",
+                  fontFamily: "Noto Sans JP, sans-serif",
+                  fontWeight: 700,
+                  fontStyle: "bold",
+                  fontSize: "1.143rem",
+                  lineHeight: "2rem",
+                  letterSpacing: "0%",
+                  color: "#1A1A1A",
+                  display: "flex",
+                  alignItems: "center",
+                  whiteSpace: "pre-line",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis"
+                }}>
+                  {faq.answer}
+                </span>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
       </div>
     </div>
   </section>
-  )
-}
+)
 
-// 6. 問い合わせフォームセクション
-const ContactFormSection = () => (
-  <section className="py-16 FFFFFF">
-    <div className="container mx-auto px-4">
-      <div className="max-w-4xl mx-auto">
-        <ContactForm />
+// 6. お問い合わせセクション
+const ContactSection = () => (
+  <section 
+    style={{
+      width: "100%",
+      maxWidth: "100vw",
+      opacity: 1,
+      paddingTop: "4.286rem",
+      paddingBottom: "4.286rem",
+      background: "#666666",
+      color: "white",
+      margin: "0 auto",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center"
+    }}
+  >
+    <div 
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: "0 1.429rem"
+      }}
+    >
+      {/* ①と②のコンテナ */}
+      <div 
+        style={{
+          width: "17.143rem",
+          height: "5.357rem",
+          margin: "0 auto 2.286rem auto",
+          opacity: 1,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center"
+        }}
+      >
+        {/* ①CONTACT */}
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <div 
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+            }}
+          >
+            <div 
+              style={{
+                fontFamily: "Noto Sans JP",
+                fontWeight: "400",
+                fontStyle: "Regular",
+                fontSize: "1rem",
+                lineHeight: "100%",
+                letterSpacing: "0%",
+                textAlign: "left",
+                color: "#FFFFFF",
+                marginBottom: "0.5rem",
+              }}
+            >
+              CONTACT
+            </div>
+            {/* ②お問い合わせ */}
+            <div 
+              style={{
+                fontFamily: "Noto Sans JP",
+                fontWeight: "700",
+                fontStyle: "Bold",
+                fontSize: "2.857rem",
+                lineHeight: "100%",
+                letterSpacing: "0%",
+                textAlign: "left",
+                color: "#FFFFFF",
+              }}
+            >
+              お問い合わせ
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ③説明文 */}
+      <div 
+        style={{
+          width: "53.286rem",
+          height: "7.429rem",
+          margin: "0 auto 2.286rem auto",
+          gap: "0.714rem",
+          opacity: 1,
+          padding: "0.714rem",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center"
+        }}
+      >
+        <p 
+          style={{
+            width: "51.857rem",
+            height: "6rem",
+            fontFamily: "Noto Sans JP",
+            fontWeight: "700",
+            fontStyle: "Bold",
+            fontSize: "1.143rem",
+            lineHeight: "2rem",
+            letterSpacing: "0%",
+            textAlign: "center",
+            color: "#FFFFFF"
+          }}
+        >
+          車両の在庫確認 / 車両の状態、仕様確認 / 買取依頼
+          <br />
+          気になることがありましたら、お気軽にお問い合わせください。
+        </p>
+      </div>
+
+      <div 
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(2, 1fr)",
+          gap: "2.286rem",
+          maxWidth: "57.143rem",
+          width: "100%",
+          marginBottom: "2.286rem"
+        }}
+      >
+        {/* ①お電話でのお問い合わせ */}
+        <Card 
+          style={{
+            width: "28.571rem",
+            height: "12.286rem",
+            display: "flex",
+            flexDirection: "column",
+            gap: "0.571rem",
+            borderRadius: "0.571rem",
+            padding: "2.286rem 2.857rem",
+            border: "0.071rem solid #1A1A1A",
+            background: "#FFFFFF",
+            color: "#1a1a1a",
+            boxShadow: "none"
+          }}
+        >
+          <CardContent style={{ 
+            padding: 0, 
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100%"
+          }}>
+            {/* ①電話記号＋お電話でのお問い合わせ */}
+            <div 
+              style={{
+                width: "14.571rem",
+                height: "1.714rem",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.286rem",
+                opacity: 1,
+                margin: "0 auto 1.143rem auto"
+              }}
+            >
+              <PhoneCall 
+                style={{ 
+                  width: "1.286rem", 
+                  height: "1.286rem", 
+                  color: "#666666",
+                  marginTop: "0.213rem",
+                  marginLeft: "0.214rem"
+                }} 
+              />
+              <h3 style={{ fontWeight: "bold", fontSize: "1.143rem", margin: 0 }}>お電話でのお問い合わせ</h3>
+            </div>
+            {/* ②電話番号＋受付時間 */}
+            <div 
+              style={{
+                width: "22.857rem",
+                height: "4.929rem",
+                display: "flex",
+                flexDirection: "column",
+                gap: "0.286rem",
+                opacity: 1,
+                margin: "0 auto"
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "baseline", gap: "0.571rem" }}>
+                <span 
+                  style={{
+                    width: "3.071rem",
+                    height: "2.071rem",
+                    fontFamily: "Noto Sans JP",
+                    fontWeight: "700",
+                    fontStyle: "Bold",
+                    fontSize: "1.429rem",
+                    lineHeight: "100%",
+                    letterSpacing: "0%",
+                    color: "#2B5EC5",
+                    opacity: 1
+                  }}
+                >
+                  TEL.
+                </span>
+                <span 
+                  style={{
+                    width: "17.071rem",
+                    height: "3.286rem",
+                    fontFamily: "Noto Sans JP",
+                    fontWeight: "700",
+                    fontStyle: "Bold",
+                    fontSize: "2.571rem",
+                    lineHeight: "100%",
+                    letterSpacing: "0%",
+                    color: "#2B5EC5",
+                    opacity: 1,
+                    whiteSpace: "nowrap"
+                  }}
+                >
+                  028-612-1472
+                </span>
+              </div>
+              <p style={{ fontSize: "1rem", color: "#1a1a1a", margin: 0 }}>受付時間：月〜日 8:00~17:00 <br/>※店舗不在時には折り返しさせて頂きます。</p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* ②フォームでのお問い合わせ */}
+        <Card 
+          style={{
+            width: "28.571rem",
+            height: "12.286rem",
+            display: "flex",
+            flexDirection: "column",
+            gap: "1.714rem",
+            borderRadius: "0.571rem",
+            padding: "2.286rem 2.857rem",
+            border: "0.071rem solid #1A1A1A",
+            background: "#FFFFFF",
+            color: "#374151",
+            boxShadow: "none"
+          }}
+        >
+          <CardContent style={{ 
+            padding: 0, 
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100%"
+          }}>
+            {/* ③フォームでの問い合わせ */}
+            <div 
+              style={{
+                width: "15.714rem",
+                height: "1.714rem",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.286rem",
+                opacity: 1,
+                margin: "0 auto 1.143rem auto"
+              }}
+            >
+              <img 
+                src="/forum.png"
+                alt="フォーラム"
+                style={{
+                  width: "1.429rem",
+                  height: "1.429rem"
+                }}
+              />
+              <h3 style={{ fontWeight: "bold", fontSize: "1.143rem", margin: 0 }}>フォームでのお問い合わせ</h3>
+            </div>
+            {/* ④お問合せフォームへボタン */}
+            <Link href="/contact">
+              <Button 
+                style={{
+                  width: "20.71rem",
+                  height: "2.86rem",
+                  gap: "2.57rem",
+                  opacity: 1,
+                  paddingTop: "0.57rem",
+                  paddingRight: "0.86rem",
+                  paddingBottom: "0.57rem",
+                  paddingLeft: "0.86rem",
+                  borderRadius: "0.29rem",
+                  background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
+                  boxShadow: "0.14rem 0.14rem 0.14rem 0 #00000040",
+                  color: "#FFFFFF",
+                  fontFamily: "Noto Sans JP",
+                  fontWeight: "700",
+                  fontStyle: "Bold",
+                  fontSize: "1.14rem",
+                  lineHeight: "100%",
+                  letterSpacing: "0%",
+                  cursor: "pointer",
+                  transition: "all 0.3s ease",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  position: "relative"
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.opacity = "0.9";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.opacity = "1";
+                }}
+              >
+                <span style={{ 
+                  height: "1.64rem",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  textAlign: "center"
+                }}>お問い合わせフォームへ</span>
+                <svg
+                  width="7.4"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{
+                    position: "absolute",
+                    top: "1rem",
+                    right: "0.86rem",
+                    color: "#FFFFFF"
+                  }}
+                >
+                  <path
+                    d="M9 18L15 12L9 6"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* ③トラック買取の問い合わせ */}
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <Card 
+          style={{
+            width: "33.714rem",
+            height: "7.143rem",
+            display: "flex",
+            flexDirection: "column",
+            gap: "0.286rem",
+            borderRadius: "0.571rem",
+            padding: "1.714rem 4.286rem",
+            border: "0.071rem solid #1A1A1A",
+            background: "#FFFFFF",
+            color: "#2563eb",
+            boxShadow: "none"
+          }}
+        >
+          <CardContent style={{ 
+            padding: 0, 
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100%"
+          }}>
+            {/* ⑤トラック買取をご希望の方はこちら */}
+            <Link href="/contact" style={{ textDecoration: "none" }}>
+              <div 
+                style={{
+                  width: "25.714rem",
+                  height: "2.071rem",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  opacity: 1,
+                  margin: "0 auto 0.571rem auto",
+                  position: "relative",
+                  cursor: "pointer",
+                  transition: "opacity 0.3s ease"
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.opacity = "0.8";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.opacity = "1";
+                }}
+              >
+                <div 
+                  style={{
+                    fontFamily: "Noto Sans JP",
+                    fontWeight: "700",
+                    fontStyle: "Bold",
+                    fontSize: "1.429rem",
+                    lineHeight: "100%",
+                    letterSpacing: "0%",
+                    color: "#2B5EC5",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    whiteSpace: "nowrap"
+                  }}
+                >
+                  買取 / 下取り ご希望の方はこちらから
+                  <ChevronRight 
+                    style={{
+                      width: "1.714rem",
+                      height: "1.714rem",
+                      color: "#2B5EC5"
+                    }}
+                  />
+                </div>
+              </div>
+            </Link>
+            {/* ⑥無料査定実施中 */}
+            <div 
+              style={{
+                width: "22.857rem",
+                height: "1.357rem",
+                fontFamily: "Noto Sans JP",
+                fontWeight: "400",
+                fontStyle: "Regular",
+                fontSize: "16px",
+                lineHeight: "100%",
+                letterSpacing: "0%",
+                color: "#1A1A1A",
+                opacity: 1,
+                textAlign: "center"
+              }}
+            >
+              LINEで査定実施中！！
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   </section>
@@ -978,14 +1536,14 @@ export default function PurchasePage() {
       {/* 4. 選ばれる理由 */}
       <ReasonSection />
       
-      {/* 5. お客様の声 */}
-      <ReviewSection />
+      {/* 5. FAQ */}
+      <FAQSection />
       
-      {/* 6. 問い合わせフォーム */}
-      <ContactFormSection />
-      
-      {/* 7. ドキュメント */}
+      {/* 6. ドキュメント */}
       <DocumentSection />
+      
+      {/* 7. お問い合わせ */}
+      <ContactSection />
     </div>
   )
 }

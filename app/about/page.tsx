@@ -69,7 +69,6 @@ export default function AboutPage() {
         style={{
           width: "100vw",
           maxWidth: "100vw",
-          height: "400px",
           opacity: 1,
           backgroundImage: "url('/sub_background.jpg')",
           backgroundSize: "cover",
@@ -95,16 +94,15 @@ export default function AboutPage() {
         />
         <h1 
           style={{
-            width: "335px",
-            height: "70px",
-            fontSize: "48px",
+            width: "23.929rem",
+            fontSize: "3.429rem",
             fontFamily: "'Noto Sans JP', sans-serif",
             fontWeight: 700,
             fontStyle: "bold",
             lineHeight: "100%",
             letterSpacing: 0,
             color: "white",
-            textShadow: "4px 4px 4px #0000004D",
+            textShadow: "0.286rem 0.286rem 0.286rem #0000004D",
             opacity: 1,
             position: "absolute",
             top: "50%",
@@ -127,11 +125,9 @@ export default function AboutPage() {
         style={{
           width: "100%",
           maxWidth: "100vw",
-          height: "921px",
-          gap: "40px",
+          gap: "2.857rem",
           opacity: 1,
-          paddingTop: "100px",
-          paddingBottom: "80px",
+          paddingTop: "7.143rem",
           background: "#FFFFFF",
           margin: "0 auto"
         }}
@@ -146,7 +142,7 @@ export default function AboutPage() {
             alignItems: "center"
           }}
         >
-          <div style={{ textAlign: "center", marginBottom: "48px" }}>
+          <div style={{ textAlign: "center", marginBottom: "3.429rem" }}>
             <div style={{
               width: "auto",
               height: "auto",
@@ -159,1029 +155,523 @@ export default function AboutPage() {
               letterSpacing: 0,
               color: "#2B5EC5",
               textAlign: "center",
-              margin: "0 auto 8px auto",
+              margin: "0 auto 0.571rem auto",
               padding: "0.29rem 0.57rem",
               borderRadius: "0.14rem",
               display: "inline-block"
             }}>COMPANY INFORMATION</div>
-            <h2 style={{ fontSize: "30px", fontWeight: "bold", marginBottom: "16px" }}>会社情報</h2>
+            <h2 style={{ fontSize: "2.143rem", fontWeight: "bold", marginBottom: "1.143rem" }}>会社情報</h2>
           </div>
 
           {/* カードの枠を削除し、内容だけ表示 */}
-          <div style={{ width: "800px", height: "626px", opacity: 1, maxWidth: "800px", margin: "0 auto" }}>
+          <div style={{ width: "57.143rem", height: "44.714rem", opacity: 1, maxWidth: "57.143rem", margin: "0 auto" }}>
             <div 
               style={{
                 display: "flex",
                 flexDirection: "column",
-                gap: "16px"
+                gap: "1.143rem"
               }}
             >
-              <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "8px" }}>
-                <span style={{
-                  width: "160px",
-                  height: "23px",
-                  color: "#1a1a1a",
-                  fontFamily: "'Noto Sans JP', sans-serif",
-                  fontWeight: 700,
-                  fontStyle: "bold",
-                  fontSize: "16px",
-                  lineHeight: "100%",
-                  letterSpacing: 0,
-                  opacity: 1,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-start",
-                  borderRadius: "4px",
-                  textAlign: "left"
-                }}>会社名</span>
-                <span style={{
-                  width: "auto",
-                  minWidth: 0,
-                  height: "19px",
-                  fontFamily: "'Noto Sans JP', sans-serif",
-                  fontWeight: 400,
-                  fontStyle: "normal",
-                  fontSize: "16px",
-                  lineHeight: "100%",
-                  letterSpacing: 0,
-                  color: "#1A1A1A",
-                  opacity: 1,
-                  textAlign: "left",
-                  display: "flex",
-                  alignItems: "center",
-                  whiteSpace: "nowrap",
-                  marginLeft: "160px"
-                }}>{companyInfo.name}</span>
-              </div>
-              <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "8px" }}>
-                <span style={{
-                  width: "160px",
-                  height: "23px",
-                  color: "#1a1a1a",
-                  fontFamily: "'Noto Sans JP', sans-serif",
-                  fontWeight: 700,
-                  fontStyle: "bold",
-                  fontSize: "16px",
-                  lineHeight: "100%",
-                  letterSpacing: 0,
-                  opacity: 1,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-start",
-                  borderRadius: "4px",
-                  textAlign: "left"
-                }}>代表</span>
-                <span style={{ marginLeft: "160px" }}>{companyInfo.representative}</span>
-              </div>
-              <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "8px" }}>
-                <span style={{
-                  width: "160px",
-                  height: "23px",
-                  color: "#1a1a1a",
-                  fontFamily: "'Noto Sans JP', sans-serif",
-                  fontWeight: 700,
-                  fontStyle: "bold",
-                  fontSize: "16px",
-                  lineHeight: "100%",
-                  letterSpacing: 0,
-                  opacity: 1,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-start",
-                  borderRadius: "4px",
-                  textAlign: "left"
-                }}>設立年月</span>
-                <span style={{ marginLeft: "160px" }}>{companyInfo.established}</span>
-              </div>
-              <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "8px" }}>
-                <span style={{
-                  width: "160px",
-                  height: "23px",
-                  color: "#1a1a1a",
-                  fontFamily: "'Noto Sans JP', sans-serif",
-                  fontWeight: 700,
-                  fontStyle: "bold",
-                  fontSize: "16px",
-                  lineHeight: "100%",
-                  letterSpacing: 0,
-                  opacity: 1,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-start",
-                  borderRadius: "4px",
-                  textAlign: "left"
-                }}>資本金</span>
-                <span style={{ marginLeft: "160px" }}>{companyInfo.capital}</span>
-              </div>
-              <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "8px" }}>
-                <span style={{
-                  width: "160px",
-                  height: "23px",
-                  color: "#1a1a1a",
-                  fontFamily: "'Noto Sans JP', sans-serif",
-                  fontWeight: 700,
-                  fontStyle: "bold",
-                  fontSize: "16px",
-                  lineHeight: "100%",
-                  letterSpacing: 0,
-                  opacity: 1,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-start",
-                  borderRadius: "4px",
-                  textAlign: "left"
-                }}>所在地</span>
-                <span style={{ marginLeft: "160px" }}>{companyInfo.address}</span>
-              </div>
-              <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "8px" }}>
-                <span style={{
-                  width: "160px",
-                  height: "23px",
-                  color: "#1a1a1a",
-                  fontFamily: "'Noto Sans JP', sans-serif",
-                  fontWeight: 700,
-                  fontStyle: "bold",
-                  fontSize: "16px",
-                  lineHeight: "100%",
-                  letterSpacing: 0,
-                  opacity: 1,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-start",
-                  borderRadius: "4px",
-                  textAlign: "left"
-                }}>電話番号</span>
-                <span style={{ marginLeft: "160px" }}>{companyInfo.phone}</span>
-              </div>
-              <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "8px" }}>
-                <span style={{
-                  width: "160px",
-                  height: "23px",
-                  color: "#1a1a1a",
-                  fontFamily: "'Noto Sans JP', sans-serif",
-                  fontWeight: 700,
-                  fontStyle: "bold",
-                  fontSize: "16px",
-                  lineHeight: "100%",
-                  letterSpacing: 0,
-                  opacity: 1,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-start",
-                  borderRadius: "4px",
-                  textAlign: "left"
-                }}>FAX番号</span>
-                <span style={{ marginLeft: "160px" }}>{companyInfo.fax}</span>
-              </div>
-              <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "8px" }}>
-                <span style={{
-                  width: "160px",
-                  height: "23px",
-                  color: "#1a1a1a",
-                  fontFamily: "'Noto Sans JP', sans-serif",
-                  fontWeight: 700,
-                  fontStyle: "bold",
-                  fontSize: "16px",
-                  lineHeight: "100%",
-                  letterSpacing: 0,
-                  opacity: 1,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-start",
-                  borderRadius: "4px",
-                  textAlign: "left"
-                }}>営業時間</span>
-                <span style={{ marginLeft: "160px" }}>{companyInfo.hours}</span>
-              </div>
-              <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "8px" }}>
-                <span style={{
-                  width: "160px",
-                  height: "23px",
-                  color: "#1a1a1a",
-                  fontFamily: "'Noto Sans JP', sans-serif",
-                  fontWeight: 700,
-                  fontStyle: "bold",
-                  fontSize: "16px",
-                  lineHeight: "100%",
-                  letterSpacing: 0,
-                  opacity: 1,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-start",
-                  borderRadius: "4px",
-                  textAlign: "left"
-                }}>事業内容</span>
-                <span style={{ marginLeft: "160px" }}>{companyInfo.business}</span>
-              </div>
-              <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "8px" }}>
-                <span style={{
-                  width: "160px",
-                  height: "23px",
-                  color: "#1a1a1a",
-                  fontFamily: "'Noto Sans JP', sans-serif",
-                  fontWeight: 700,
-                  fontStyle: "bold",
-                  fontSize: "16px",
-                  lineHeight: "100%",
-                  letterSpacing: 0,
-                  opacity: 1,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-start",
-                  borderRadius: "4px",
-                  textAlign: "left"
-                }}>古物法に基づく表示</span>
-                <span style={{ marginLeft: "160px" }}>{companyInfo.license}</span>
-              </div>
+               <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "0.571rem" }}>
+                 <span style={{
+                   width: "14rem",
+                   height: "1.643rem",
+                   color: "#1a1a1a",
+                   fontFamily: "'Noto Sans JP', sans-serif",
+                   fontWeight: 700,
+                   fontStyle: "bold",
+                   fontSize: "1.143rem",
+                   lineHeight: "100%",
+                   letterSpacing: 0,
+                   opacity: 1,
+                   display: "flex",
+                   alignItems: "center",
+                   justifyContent: "flex-start",
+                   borderRadius: "0.286rem",
+                   textAlign: "left"
+                 }}>会社名</span>
+                 <span style={{
+                   width: "auto",
+                   minWidth: 0,
+                   height: "1.357rem",
+                   fontFamily: "'Noto Sans JP', sans-serif",
+                   fontWeight: 400,
+                   fontStyle: "normal",
+                   fontSize: "1.143rem",
+                   lineHeight: "100%",
+                   letterSpacing: 0,
+                   color: "#1A1A1A",
+                   opacity: 1,
+                   textAlign: "left",
+                   display: "flex",
+                   alignItems: "center",
+                   whiteSpace: "nowrap",
+                   marginLeft: "14rem"
+                 }}>{companyInfo.name}</span>
+               </div>
+                             <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "0.571rem" }}>
+                 <span style={{
+                   width: "14rem",
+                   height: "1.643rem",
+                   color: "#1a1a1a",
+                   fontFamily: "'Noto Sans JP', sans-serif",
+                   fontWeight: 700,
+                   fontStyle: "bold",
+                   fontSize: "1.143rem",
+                   lineHeight: "100%",
+                   letterSpacing: 0,
+                   opacity: 1,
+                   display: "flex",
+                   alignItems: "center",
+                   justifyContent: "flex-start",
+                   borderRadius: "0.286rem",
+                   textAlign: "left"
+                 }}>代表</span>
+                 <span style={{ marginLeft: "14rem" }}>{companyInfo.representative}</span>
+               </div>
+                             <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "0.571rem" }}>
+                 <span style={{
+                   width: "14rem",
+                   height: "1.643rem",
+                   color: "#1a1a1a",
+                   fontFamily: "'Noto Sans JP', sans-serif",
+                   fontWeight: 700,
+                   fontStyle: "bold",
+                   fontSize: "1.143rem",
+                   lineHeight: "100%",
+                   letterSpacing: 0,
+                   opacity: 1,
+                   display: "flex",
+                   alignItems: "center",
+                   justifyContent: "flex-start",
+                   borderRadius: "0.286rem",
+                   textAlign: "left"
+                 }}>設立年月</span>
+                 <span style={{ marginLeft: "14rem" }}>{companyInfo.established}</span>
+               </div>
+               <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "0.571rem" }}>
+                 <span style={{
+                   width: "14rem",
+                   height: "1.643rem",
+                   color: "#1a1a1a",
+                   fontFamily: "'Noto Sans JP', sans-serif",
+                   fontWeight: 700,
+                   fontStyle: "bold",
+                   fontSize: "1.143rem",
+                   lineHeight: "100%",
+                   letterSpacing: 0,
+                   opacity: 1,
+                   display: "flex",
+                   alignItems: "center",
+                   justifyContent: "flex-start",
+                   borderRadius: "0.286rem",
+                   textAlign: "left"
+                 }}>資本金</span>
+                 <span style={{ marginLeft: "14rem" }}>{companyInfo.capital}</span>
+               </div>
+               <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "0.571rem" }}>
+                 <span style={{
+                   width: "14rem",
+                   height: "1.643rem",
+                   color: "#1a1a1a",
+                   fontFamily: "'Noto Sans JP', sans-serif",
+                   fontWeight: 700,
+                   fontStyle: "bold",
+                   fontSize: "1.143rem",
+                   lineHeight: "100%",
+                   letterSpacing: 0,
+                   opacity: 1,
+                   display: "flex",
+                   alignItems: "center",
+                   justifyContent: "flex-start",
+                   borderRadius: "0.286rem",
+                   textAlign: "left"
+                 }}>所在地</span>
+                 <span style={{ marginLeft: "14rem" }}>{companyInfo.address}</span>
+               </div>
+               <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "0.571rem" }}>
+                 <span style={{
+                   width: "14rem",
+                   height: "1.643rem",
+                   color: "#1a1a1a",
+                   fontFamily: "'Noto Sans JP', sans-serif",
+                   fontWeight: 700,
+                   fontStyle: "bold",
+                   fontSize: "1.143rem",
+                   lineHeight: "100%",
+                   letterSpacing: 0,
+                   opacity: 1,
+                   display: "flex",
+                   alignItems: "center",
+                   justifyContent: "flex-start",
+                   borderRadius: "0.286rem",
+                   textAlign: "left"
+                 }}>電話番号</span>
+                 <span style={{ marginLeft: "14rem" }}>{companyInfo.phone}</span>
+               </div>
+               <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "0.571rem" }}>
+                 <span style={{
+                   width: "14rem",
+                   height: "1.643rem",
+                   color: "#1a1a1a",
+                   fontFamily: "'Noto Sans JP', sans-serif",
+                   fontWeight: 700,
+                   fontStyle: "bold",
+                   fontSize: "1.143rem",
+                   lineHeight: "100%",
+                   letterSpacing: 0,
+                   opacity: 1,
+                   display: "flex",
+                   alignItems: "center",
+                   justifyContent: "flex-start",
+                   borderRadius: "0.286rem",
+                   textAlign: "left"
+                 }}>FAX番号</span>
+                 <span style={{ marginLeft: "14rem" }}>{companyInfo.fax}</span>
+               </div>
+               <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "0.571rem" }}>
+                 <span style={{
+                   width: "14rem",
+                   height: "1.643rem",
+                   color: "#1a1a1a",
+                   fontFamily: "'Noto Sans JP', sans-serif",
+                   fontWeight: 700,
+                   fontStyle: "bold",
+                   fontSize: "1.143rem",
+                   lineHeight: "100%",
+                   letterSpacing: 0,
+                   opacity: 1,
+                   display: "flex",
+                   alignItems: "center",
+                   justifyContent: "flex-start",
+                   borderRadius: "0.286rem",
+                   textAlign: "left"
+                 }}>営業時間</span>
+                 <span style={{ marginLeft: "14rem" }}>{companyInfo.hours}</span>
+               </div>
+               <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "0.571rem" }}>
+                 <span style={{
+                   width: "14rem",
+                   height: "1.643rem",
+                   color: "#1a1a1a",
+                   fontFamily: "'Noto Sans JP', sans-serif",
+                   fontWeight: 700,
+                   fontStyle: "bold",
+                   fontSize: "1.143rem",
+                   lineHeight: "100%",
+                   letterSpacing: 0,
+                   opacity: 1,
+                   display: "flex",
+                   alignItems: "center",
+                   justifyContent: "flex-start",
+                   borderRadius: "0.286rem",
+                   textAlign: "left"
+                 }}>事業内容</span>
+                 <span style={{ marginLeft: "14rem" }}>{companyInfo.business}</span>
+               </div>
+               <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "0.571rem" }}>
+                 <span style={{
+                   width: "14rem",
+                   height: "1.643rem",
+                   color: "#1a1a1a",
+                   fontFamily: "'Noto Sans JP', sans-serif",
+                   fontWeight: 700,
+                   fontStyle: "bold",
+                   fontSize: "1.143rem",
+                   lineHeight: "100%",
+                   letterSpacing: 0,
+                   opacity: 1,
+                   display: "flex",
+                   alignItems: "center",
+                   justifyContent: "flex-start",
+                   borderRadius: "0.286rem",
+                   textAlign: "left"
+                 }}>古物法に基づく表示</span>
+                 <span style={{ marginLeft: "14rem" }}>{companyInfo.license}</span>
+               </div>
+                             <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "0.571rem" }}>
+                 <span style={{
+                   width: "14rem",
+                   height: "1.643rem",
+                   color: "#1a1a1a",
+                   fontFamily: "'Noto Sans JP', sans-serif",
+                   fontWeight: 700,
+                   fontStyle: "bold",
+                   fontSize: "1.143rem",
+                   lineHeight: "100%",
+                   letterSpacing: 0,
+                   opacity: 1,
+                   display: "flex",
+                   alignItems: "center",
+                   justifyContent: "flex-start",
+                   borderRadius: "0.286rem",
+                   textAlign: "left"
+                 }}>適格請求書（インボイス）発行事業者登録番号</span>
+                 <span style={{ marginLeft: "14rem" }}>T5060001025151</span>
+               </div>
+                             <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "0.571rem" }}>
+                 <span style={{
+                   width: "14rem",
+                   height: "1.643rem",
+                   color: "#1a1a1a",
+                   fontFamily: "'Noto Sans JP', sans-serif",
+                   fontWeight: 700,
+                   fontStyle: "bold",
+                   fontSize: "1.143rem",
+                   lineHeight: "100%",
+                   letterSpacing: 0,
+                   opacity: 1,
+                   display: "flex",
+                   alignItems: "center",
+                   justifyContent: "flex-start",
+                   borderRadius: "0.286rem",
+                   textAlign: "left"
+                 }}>加盟協会</span>
+                 <span style={{ marginLeft: "14rem" }}>JU・日本中古自動車販売協会連合会 / 自動車公正取引協議会</span>
+               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Reason Section & Business Model Diagram */}
-      <section 
-        style={{
-          width: "100%",
-          maxWidth: "100vw",
-          height: "1418px",
-          gap: "40px",
-          opacity: 1,
-          paddingTop: "80px",
-          paddingRight: "40px",
-          paddingBottom: "80px",
-          paddingLeft: "40px",
-          background: "#FFFFFF",
-          margin: "0 auto"
-        }}
-      >
-        <div 
-          style={{
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center"
-          }}
-        >
-          <div style={{ textAlign: "center", marginBottom: "48px" }}>
-            <h2 style={{
-              width: "55px",
-              height: "17px",
+             {/* ノアの特徴４選*/}
+       <section 
+         style={{
+           width: "100%",
+           maxWidth: "100vw",
+           gap: "2.857rem",
+           opacity: 1,
+           paddingTop: "5.714rem",
+           paddingRight: "2.857rem",
+           paddingBottom: "5.714rem",
+           paddingLeft: "2.857rem",
+           background: "#FFFFFF",
+           margin: "0 auto"
+         }}
+       >
+         <div 
+           style={{
+             width: "100%",
+             height: "100%",
+             display: "flex",
+             flexDirection: "column",
+             justifyContent: "center",
+             alignItems: "center"
+           }}
+         >
+           <div style={{ textAlign: "center", marginBottom: "3.429rem" }}>
+             <h2 style={{
+               width: "3.929rem",
+               height: "1.214rem",
+               opacity: 1,
+               fontFamily: "'Noto Sans JP', sans-serif",
+               fontWeight: 400,
+               fontStyle: "normal",
+               fontSize: "1rem",
+               lineHeight: "100%",
+               letterSpacing: 0,
+               color: "#2B5EC5",
+               textAlign: "center",
+               margin: "0 auto 1.143rem auto"
+             }}>FEATURE</h2>
+
+             <p style={{
+               height: "4.143rem",
+               opacity: 1,
+               fontFamily: "'Noto Sans JP', sans-serif",
+               fontWeight: 700,
+               fontStyle: "bold",
+               fontSize: "2.857rem",
+               lineHeight: "100%",
+               letterSpacing: 0,
+               color: "#1A1A1A",
+               textAlign: "center",
+               margin: "0 auto 2.286rem auto"
+             }}>ノアコーポレーションの特徴　4点</p>
+           </div>
+
+                       <div style={{
+              width: "58.571rem",
               opacity: 1,
               fontFamily: "'Noto Sans JP', sans-serif",
               fontWeight: 400,
               fontStyle: "normal",
-              fontSize: "14px",
-              lineHeight: "100%",
-              letterSpacing: 0,
-              color: "#2B5EC5",
-              textAlign: "center",
-              margin: "0 auto 16px auto"
-            }}>REASON</h2>
-            <p style={{
-              width: "200px",
-              height: "58px",
-              opacity: 1,
-              fontFamily: "'Noto Sans JP', sans-serif",
-              fontWeight: 700,
-              fontStyle: "bold",
-              fontSize: "40px",
-              lineHeight: "100%",
+              fontSize: "1.143rem",
+              lineHeight: "1.8",
               letterSpacing: 0,
               color: "#1A1A1A",
-              textAlign: "center",
-              margin: "0 auto 32px auto"
-            }}>安さの理由</p>
-          </div>
+              textAlign: "left",
+              margin: "0 auto 2.286rem auto"
+            }}>
 
-          <div style={{
-            width: "820px",
-            minHeight: "19px",
-            opacity: 1,
-            fontFamily: "'Noto Sans JP', sans-serif",
-            fontWeight: 400,
-            fontStyle: "normal",
-            fontSize: "16px",
-            lineHeight: "100%",
-            letterSpacing: 0,
-            color: "#1A1A1A",
-            textAlign: "left",
-            margin: "0 auto 32px auto"
-          }}>
-            <p style={{ marginBottom: "16px" }}>
-              <span style={{
-                width: "820px",
-                height: "36px",
-                opacity: 1,
-                display: "inline-block"
-              }}>
-                中古トラック業界には、２パターンのプレイヤーが存在します。
-              </span><br />
-              <span style={{
-                width: "820px",
-                height: "56px",
-                opacity: 1,
-                display: "inline-block",
-                fontFamily: "'Noto Sans JP', sans-serif",
-                fontWeight: 400,
-                fontStyle: "normal",
-                fontSize: "16px",
-                lineHeight: "28px",
-                letterSpacing: 0
-              }}>
-                私たちのように、独自の仕入れルートからトラックを直接仕入れて在庫を保有する「トラック販売業者」と、自社在庫は保有せずに全国の販売事業者と提携してトラックの紹介・販売だけを行う「販売代行業者」です。
-              </span>
-            </p>
-            <p style={{ marginBottom: "16px" }}>
-              <span style={{
-                width: "820px",
-                height: "112px",
-                opacity: 1,
-                display: "inline-block",
-                fontFamily: "'Noto Sans JP', sans-serif",
-                fontWeight: 400,
-                fontStyle: "normal",
-                fontSize: "16px",
-                lineHeight: "28px",
-                letterSpacing: 0
-              }}>
-                販売代行業者は、高い資本力や知名度をを持っているため、中古トラックを探しているお客様からすぐに見つけやすく、またすばやく手厚く対応をしてもらえるという絶大なメリットがあります。一方、トラック販売事業者から支払われる販売手数料を主としたビジネスモデルであるため、お客様への最終的な販売価格はどうしても高くなります。また、自社保有在庫ではないため、個々の車輛の品質を担保することまでは難しくなってきます。
-              </span>
-            </p>
+              {/* 特徴1 */}
+               <div style={{ 
+                 marginBottom: "2.857rem",
+                 padding: "2rem",
+                 border: "1px solid #e5e7eb",
+                 borderRadius: "0.571rem",
+                 backgroundColor: "#fafafa"
+               }}>
+                 <h3 style={{
+                   fontSize: "1.429rem",
+                   fontWeight: "700",
+                   color: "#1a1a1a",
+                   marginBottom: "1rem",
+                   display: "flex",
+                   alignItems: "center",
+                   gap: "0.571rem"
+                 }}>
+                  <span style={{
+                    backgroundColor: "#1a1a1a",
+                    color: "white",
+                    width: "1.714rem",
+                    height: "1.714rem",
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "1rem",
+                    fontWeight: "700"
+                  }}>1</span>
+                  ユーザーからの直接仕入れ
+                </h3>
+                <p style={{
+                  fontSize: "1.143rem",
+                  lineHeight: "1.8",
+                  color: "#1A1A1A",
+                  margin: 0
+                }}>
+                  当社では、ユーザーからのLINEで査定などによるユーザー買取を行った車両を国家資格である2級自動車整備士を持った従業員が丹念に車両の確認を行い、次のオーナー様が気持ちよく利用できるように整備し、業界差安値を目指した価格で販売させていただいております。
+                </p>
+              </div>
 
-          </div>
+              {/* 特徴2 */}
+               <div style={{ 
+                 marginBottom: "2.857rem",
+                 padding: "2rem",
+                 border: "1px solid #e5e7eb",
+                 borderRadius: "0.571rem",
+                 backgroundColor: "#fafafa"
+               }}>
+                 <h3 style={{
+                   fontSize: "1.429rem",
+                   fontWeight: "700",
+                   color: "#1a1a1a",
+                   marginBottom: "1rem",
+                   display: "flex",
+                   alignItems: "center",
+                   gap: "0.571rem"
+                 }}>
+                  <span style={{
+                    backgroundColor: "#1a1a1a",
+                    color: "white",
+                    width: "1.714rem",
+                    height: "1.714rem",
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "1rem",
+                    fontWeight: "700"
+                  }}>2</span>
+                  自社塗装施設を完備
+                </h3>
+                <p style={{
+                  fontSize: "1.143rem",
+                  lineHeight: "1.8",
+                  color: "#1A1A1A",
+                  margin: 0
+                }}>
+                  当社では、自社による塗装設備を保有しておりますので、車は気に入ったけど色が気に入らないと言ったような場合にも自社でご希望の色に塗装させていただきます。
+                </p>
+              </div>
 
-          {/* Business Model Diagram */}
-          <div 
-            style={{
-              width: "820px",
-              height: "634px",
-              gap: "10px",
-              opacity: 1,
-              display: "flex",
-              flexDirection: "column",
-              marginBottom: "-80px"
-            }}
-          >
-            <div style={{ display: "flex", flexDirection: "column", gap: "16px", position: "relative" }}>
-                    <div style={{ 
-                      position: "relative",
-                      width: "100%",
-                      height: "60px"
-                    }}>
-                      {/* 吹き出し全体 */}
-                      <div style={{
-                        width: "534px",
-                        height: "61px",
-                        opacity: 1,
-                        position: "absolute",
-                        top: "-50px",
-                        left: "-13px"
-                      }}>
-                        {/* Rectangle 14 - 楕円部分 */}
-                        <div style={{
-                          width: "240px",
-                          height: "48px",
-                          opacity: 1,
-                          position: "absolute",
-                          top: "0px",
-                          left: "0px",
-                          backgroundColor: "#666666",
-                          borderRadius: "25px"
-                        }}></div>
-                        
-                        {/* Polygon 2 - 三角部分 */}
-                        <div style={{
-                          width: "18px",
-                          height: "18px",
-                          opacity: 1,
-                          position: "absolute",
-                          top: "43px",
-                          left: "111px",
-                          backgroundColor: "#666666",
-                          clipPath: "polygon(50% 100%, 0% 0%, 100% 0%)"
-                        }}></div>
-                        
-                        {/* 仕入・保管テキスト */}
-                        <div style={{
-                          width: "120px",
-                          height: "28px",
-                          opacity: 1,
-                          position: "absolute",
-                          top: "11px",
-                          left: "60px",
-                          fontFamily: "Inter, sans-serif",
-                          fontWeight: 700,
-                          fontStyle: "bold",
-                          fontSize: "24px",
-                          lineHeight: "28px",
-                          letterSpacing: 0,
-                          color: "#FFFFFF",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center"
-                        }}>仕入・保管</div>
-                      </div>
-                      <div style={{
-                        width: "214px",
-                        height: "232px",
-                        opacity: 1,
-                        position: "absolute",
-                        top: "13px",
-                        left: "0px",
-                        backgroundColor: "#F2F2F2",
-                        borderRadius: "8px"
-                      }}>
-                        <img 
-                          src="/truck_sales_company.png"
-                          alt="販売事業者"
-                          style={{
-                            width: "161px",
-                            height: "136px",
-                            opacity: 1,
-                            position: "absolute",
-                            top: "62px",
-                            left: "26px",
-                            objectFit: "contain"
-                          }}
-                        />
-                      </div>
-                      <div style={{
-                        width: "100px",
-                        height: "28px",
-                        opacity: 1,
-                        position: "absolute",
-                        top: "13px",
-                        left: "56.93px",
-                        fontFamily: "Inter, sans-serif",
-                        fontWeight: 700,
-                        fontStyle: "bold",
-                        fontSize: "20px",
-                        lineHeight: "28px",
-                        letterSpacing: 0,
-                        color: "#333333",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        whiteSpace: "nowrap"
-                      }}>販売事業者                      </div>
-                      
-                      {/* 販売代行事業者用の吹き出し全体 */}
-                      <div style={{
-                        width: "534px",
-                        height: "61px",
-                        opacity: 1,
-                        position: "absolute",
-                        top: "-50px",
-                        left: "281px"
-                      }}>
-                        {/* Rectangle 14 - 楕円部分 */}
-                        <div style={{
-                          width: "240px",
-                          height: "48px",
-                          opacity: 1,
-                          position: "absolute",
-                          top: "0px",
-                          left: "0px",
-                          backgroundColor: "#666666",
-                          borderRadius: "25px"
-                        }}></div>
-                        
-                        {/* Polygon 2 - 三角部分 */}
-                        <div style={{
-                          width: "18px",
-                          height: "18px",
-                          opacity: 1,
-                          position: "absolute",
-                          top: "43px",
-                          left: "111px",
-                          backgroundColor: "#666666",
-                          clipPath: "polygon(50% 100%, 0% 0%, 100% 0%)"
-                        }}></div>
-                        
-                        {/* 仕入・保管テキスト */}
-                        <div style={{
-                          width: "120px",
-                          height: "28px",
-                          opacity: 1,
-                          position: "absolute",
-                          top: "11px",
-                          left: "60px",
-                          fontFamily: "Inter, sans-serif",
-                          fontWeight: 700,
-                          fontStyle: "bold",
-                          fontSize: "24px",
-                          lineHeight: "28px",
-                          letterSpacing: 0,
-                          color: "#FFFFFF",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center"
-                        }}>販売のみ</div>
-                      </div>
-                      
-                      <div style={{
-                        width: "216px",
-                        height: "232px",
-                        opacity: 1,
-                        position: "absolute",
-                        top: "13px",
-                        left: "292.57px",
-                        backgroundColor: "#F2F2F2",
-                        borderRadius: "8px"
-                      }}>
-                        <img 
-                          src="/truck_sales_agency.png"
-                          alt="販売代行事業者"
-                          style={{
-                            width: "142px",
-                            height: "120px",
-                            opacity: 1,
-                            position: "absolute",
-                            top: "78px",
-                            left: "37px",
-                            objectFit: "contain"
-                          }}
-                        />
-                      </div>
-                      <div style={{
-                        width: "140px",
-                        height: "28px",
-                        opacity: 1,
-                        position: "absolute",
-                        top: "13px",
-                        left: "331.07px",
-                        fontFamily: "Inter, sans-serif",
-                        fontWeight: 700,
-                        fontStyle: "bold",
-                        fontSize: "20px",
-                        lineHeight: "28px",
-                        letterSpacing: 0,
-                        color: "#333333",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        whiteSpace: "nowrap"
-                      }}>販売代行事業者</div>
-                      <div style={{
-                        width: "214px",
-                        height: "232px",
-                        opacity: 1,
-                        position: "absolute",
-                        top: "13px",
-                        left: "587.14px",
-                        backgroundColor: "#F1F6FF",
-                        borderRadius: "8px"
-                      }}>
-                        <img 
-                          src="/customer.png"
-                          alt="お客様"
-                          style={{
-                            width: "122px",
-                            height: "104px",
-                            opacity: 1,
-                            position: "absolute",
-                            top: "64px",
-                            left: "50px",
-                            objectFit: "contain"
-                          }}
-                        />
-                      </div>
-                      <div style={{
-                        width: "60px",
-                        height: "28px",
-                        opacity: 1,
-                        position: "absolute",
-                        top: "13px",
-                        left: "664.14px",
-                        fontFamily: "Inter, sans-serif",
-                        fontWeight: 700,
-                        fontStyle: "bold",
-                        fontSize: "20px",
-                        lineHeight: "28px",
-                        letterSpacing: 0,
-                        color: "#333333",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        whiteSpace: "nowrap"
-                      }}>お客様</div>
-                    </div>
+              {/* 特徴3 */}
+               <div style={{ 
+                 marginBottom: "2.857rem",
+                 padding: "2rem",
+                 border: "1px solid #e5e7eb",
+                 borderRadius: "0.571rem",
+                 backgroundColor: "#fafafa"
+               }}>
+                 <h3 style={{
+                   fontSize: "1.429rem",
+                   fontWeight: "700",
+                   color: "#1a1a1a",
+                   marginBottom: "1rem",
+                   display: "flex",
+                   alignItems: "center",
+                   gap: "0.571rem"
+                 }}>
+                  <span style={{
+                    backgroundColor: "#1a1a1a",
+                    color: "white",
+                    width: "1.714rem",
+                    height: "1.714rem",
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "1rem",
+                    fontWeight: "700"
+                  }}>3</span>
+                  自社による上物載せ替え可能
+                </h3>
+                <p style={{
+                  fontSize: "1.143rem",
+                  lineHeight: "1.8",
+                  color: "#1A1A1A",
+                  margin: 0
+                }}>
+                  当社では、熟練したメンバーにより多くの車両を自社で載せ替えし、生まれ替えさせてきました。平ボディーからクレーン付き、アルミバンから二輪車用積載車。など多くの載せ替えを実施しております。
+                </p>
+              </div>
 
-                    <div style={{
-                      width: "160px",
-                      height: "28px",
-                      opacity: 1,
-                      position: "absolute",
-                      top: "195px",
-                      left: "614.14px",
-                      fontFamily: "Inter, sans-serif",
-                      fontWeight: 700,
-                      fontStyle: "bold",
-                      fontSize: "16px",
-                      lineHeight: "28px",
-                      letterSpacing: 0,
-                      color: "#333333",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center"
-                    }}>希望の中古車輌を購入</div>
-                    
-                    {/* 1つ目の矢印全体 */}
-                    <div style={{
-                      width: "78.57px",
-                      height: "59.54px",
-                      opacity: 1,
-                      position: "absolute",
-                      top: "81.63px",
-                      left: "214px"
-                    }}>
-                      {/* 1つ目の右矢印 - Rectangle 16 */}
-                      <div style={{
-                        width: "53.57px",
-                        height: "35.71px",
-                        opacity: 1,
-                        position: "absolute",
-                        top: "16.96px",
-                        left: "0px",
-                        backgroundColor: "#2B5EC5"
-                      }}></div>
-                      
-                      {/* 1つ目の右矢印 - Polygon 1 */}
-                      <div style={{
-                        width: "25px",
-                        height: "59.54px",
-                        opacity: 1,
-                        position: "absolute",
-                        top: "4px",
-                        left: "53px",
-                        backgroundColor: "#2B5EC5",
-                        clipPath: "polygon(0% 50%, 100% 0%, 100% 100%)",
-                        transform: "rotate(-180deg)"
-                      }}></div>
-                      
-                      {/* 1つ目の矢印内テキスト「委託」 */}
-                      <div style={{
-                        width: "40px",
-                        height: "28px",
-                        opacity: 1,
-                        position: "absolute",
-                        top: "20.6px",
-                        left: "19px",
-                        fontFamily: "Inter, sans-serif",
-                        fontWeight: 700,
-                        fontStyle: "bold",
-                        fontSize: "20px",
-                        lineHeight: "28px",
-                        letterSpacing: 0,
-                        color: "#FFFFFF",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center"
-                      }}>委託</div>
-                    </div>
-                    
-                    {/* 2つ目の矢印全体 */}
-                    <div style={{
-                      width: "78.57px",
-                      height: "59.54px",
-                      opacity: 1,
-                      position: "absolute",
-                      top: "81.63px",
-                      left: "508.57px"
-                    }}>
-                      {/* 2つ目の右矢印 - Rectangle 16 */}
-                      <div style={{
-                        width: "53.57px",
-                        height: "35.71px",
-                        opacity: 1,
-                        position: "absolute",
-                        top: "16.96px",
-                        left: "0px",
-                        backgroundColor: "#2B5EC5"
-                      }}></div>
-                      
-                      {/* 2つ目の右矢印 - Polygon 1 */}
-                      <div style={{
-                        width: "25px",
-                        height: "59.54px",
-                        opacity: 1,
-                        position: "absolute",
-                        top: "4px",
-                        left: "53px",
-                        backgroundColor: "#2B5EC5",
-                        clipPath: "polygon(0% 50%, 100% 0%, 100% 100%)",
-                        transform: "rotate(-180deg)"
-                      }}></div>
-                      
-                      {/* 2つ目の矢印内テキスト「委託」 */}
-                      <div style={{
-                        width: "40px",
-                        height: "28px",
-                        opacity: 1,
-                        position: "absolute",
-                        top: "20.6px",
-                        left: "19px",
-                        fontFamily: "Inter, sans-serif",
-                        fontWeight: 700,
-                        fontStyle: "bold",
-                        fontSize: "20px",
-                        lineHeight: "28px",
-                        letterSpacing: 0,
-                        color: "#FFFFFF",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center"
-                      }}>委託</div>
-                                          </div>
-                    </div>
-                  <div style={{ marginTop: "16px", textAlign: "center" }}>
-                    <span style={{ backgroundColor: "#f3f4f6", padding: "4px 12px", borderRadius: "4px", fontSize: "14px" }}>販売のみ</span>
-                  </div>
-                  
-                  {/* 当社セット */}
-                  <div style={{ 
-                    position: "relative",
-                    width: "100%",
-                    height: "60px",
-                    marginTop: "190px"
-                  }}>
-                    {/* 当社の吹き出し全体 */}
-                    <div style={{
-                      width: "240px",
-                      height: "61px",
-                      opacity: 1,
-                      position: "absolute",
-                      top: "-50px",
-                      left: "-13px"
-                    }}>
-                      {/* Rectangle 14 - 楕円部分 */}
-                      <div style={{
-                        width: "240px",
-                        height: "48px",
-                        opacity: 1,
-                        position: "absolute",
-                        top: "0px",
-                        left: "0px",
-                        backgroundColor: "#666666",
-                        borderRadius: "25px"
-                      }}></div>
-                      
-                      {/* Polygon 2 - 三角部分 */}
-                      <div style={{
-                        width: "18px",
-                        height: "18px",
-                        opacity: 1,
-                        position: "absolute",
-                        top: "43px",
-                        left: "111px",
-                        backgroundColor: "#666666",
-                        clipPath: "polygon(50% 100%, 0% 0%, 100% 0%)"
-                      }}></div>
-                      
-                      {/* 仕入・保管テキスト */}
-                      <div style={{
-                        width: "120px",
-                        height: "28px",
-                        opacity: 1,
-                        position: "absolute",
-                        top: "11px",
-                        left: "60px",
-                        fontFamily: "Inter, sans-serif",
-                        fontWeight: 700,
-                        fontStyle: "bold",
-                        fontSize: "24px",
-                        lineHeight: "28px",
-                        letterSpacing: 0,
-                        color: "#FFFFFF",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center"
-                      }}>仕入・保管</div>
-                    </div>
-                    
-                    {/* 当社背景 */}
-                    <div style={{
-                      width: "214px",
-                      height: "232px",
-                      opacity: 1,
-                      position: "absolute",
-                      top: "13px",
-                      left: "0px",
-                      backgroundColor: "#F2F2F2",
-                      borderRadius: "8px"
-                    }}>
-                      <img 
-                        src="/truck_sales_company.png"
-                        alt="販売事業者"
-                        style={{
-                          width: "161px",
-                          height: "136px",
-                          opacity: 1,
-                          position: "absolute",
-                          top: "62px",
-                          left: "26px",
-                          objectFit: "contain"
-                        }}
-                      />
-                    </div>
-                    
-                    {/* 当社テキスト */}
-                    <div style={{
-                      width: "100px",
-                      height: "28px",
-                      opacity: 1,
-                      position: "absolute",
-                      top: "13px",
-                      left: "56.93px",
-                      fontFamily: "Inter, sans-serif",
-                      fontWeight: 700,
-                      fontStyle: "bold",
-                      fontSize: "20px",
-                      lineHeight: "28px",
-                      letterSpacing: 0,
-                      color: "#333333",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      whiteSpace: "nowrap"
-                    }}>当社</div>
-                    
-                    {/* 2つ目のお客様背景 */}
-                    <div style={{
-                      width: "214px",
-                      height: "232px",
-                      opacity: 1,
-                      position: "absolute",
-                      top: "13px",
-                      left: "587.14px",
-                      backgroundColor: "#F1F6FF",
-                      borderRadius: "8px"
-                    }}>
-                      <img 
-                        src="/customer.png"
-                        alt="お客様"
-                        style={{
-                          width: "122px",
-                          height: "104px",
-                          opacity: 1,
-                          position: "absolute",
-                          top: "64px",
-                          left: "50px",
-                          objectFit: "contain"
-                        }}
-                      />
-                    </div>
-                    
-                    {/* 2つ目のお客様テキスト */}
-                    <div style={{
-                      width: "60px",
-                      height: "28px",
-                      opacity: 1,
-                      position: "absolute",
-                      top: "13px",
-                      left: "664.14px",
-                      fontFamily: "Inter, sans-serif",
-                      fontWeight: 700,
-                      fontStyle: "bold",
-                      fontSize: "20px",
-                      lineHeight: "28px",
-                      letterSpacing: 0,
-                      color: "#333333",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      whiteSpace: "nowrap"
-                    }}>お客様</div>
-                    
-                    {/* 2つ目の希望の中古車輌を購入テキスト */}
-                    <div style={{
-                      width: "160px",
-                      height: "28px",
-                      opacity: 1,
-                      position: "absolute",
-                      top: "195px",
-                      left: "614.14px",
-                      fontFamily: "Inter, sans-serif",
-                      fontWeight: 700,
-                      fontStyle: "bold",
-                      fontSize: "16px",
-                      lineHeight: "28px",
-                      letterSpacing: 0,
-                      color: "#333333",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center"
-                    }}>希望の中古車輌を購入</div>
-                    
-                    {/* 当社から2つ目のお客様への矢印全体 */}
-                    <div style={{
-                      width: "372.98px",
-                      height: "36px",
-                      opacity: 1,
-                      position: "absolute",
-                      top: "98.45px",
-                      left: "214px",
-                      backgroundColor: "transparent"
-                    }}>
-                      {/* Rectangle 16 */}
-                      <div style={{
-                        width: "339px",
-                        height: "36px",
-                        opacity: 1,
-                        position: "absolute",
-                        top: "0px",
-                        left: "0px",
-                        background: "linear-gradient(90deg, #1154AF 0%, #053B65 100%)"
-                      }}></div>
-                      
-                       {/* Polygon 1 */}
-                        <div style={{
-                          width: "33.93px",
-                          height: "68.75px",
-                          opacity: 1,
-                          position: "absolute",
-                          top: "-17px",
-                          left: "338px",
-                          backgroundColor: "#053B65",
-                          clipPath: "polygon(0% 0%, 100% 50%, 0% 100%)"
-                        }}></div>
-                      
-                      {/* 直販テキスト */}
-                      <div style={{
-                        width: "40px",
-                        height: "28px",
-                        opacity: 1,
-                        position: "absolute",
-                        top: "4px",
-                        left: "166px",
-                        fontFamily: "Inter, sans-serif",
-                        fontWeight: 700,
-                        fontStyle: "bold",
-                        fontSize: "20px",
-                        lineHeight: "28px",
-                        letterSpacing: 0,
-                        color: "#FFFFFF",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center"
-                      }}>直販</div>
-                    </div>
-                  </div>
-          </div>
-          <div style={{ maxWidth: "800px", textAlign: "left" }}>
-            <p style={{ marginBottom: "16px" }}>
-              <span style={{
-                width: "820px",
-                height: "84px",
-                opacity: 1,
-                display: "inline-block",
-                fontFamily: "'Noto Sans JP', sans-serif",
-                fontWeight: 400,
-                fontStyle: "normal",
-                fontSize: "16px",
-                lineHeight: "28px",
-                letterSpacing: 0
-              }}>
-                私たちノアコーポレーションは、自社在庫に責任を持つトラック販売事業者でありながら、個別のお客様への直販体制にも力を入れています。そのため、不要なコストを排除し、お客様に品質と価格のバランスが取れた車輛をご紹介できています。
-              </span>
-            </p>
-            <p style={{ marginBottom: "16px" }}>
-              <span style={{
-                width: "820px",
-                height: "56px",
-                opacity: 1,
-                display: "inline-block",
-                fontFamily: "'Noto Sans JP', sans-serif",
-                fontWeight: 400,
-                fontStyle: "normal",
-                fontSize: "16px",
-                lineHeight: "28px",
-                letterSpacing: 0
-              }}>
-                また、「仕入れ」「入庫検査」「販売」「バックオフィス」すべてのプロセスにおいて、業界随一のプロフェッショナルが揃っていることも、お客様にご満足いただけている理由のひとつ。
-              </span>
-            </p>
-            <p style={{ marginBottom: "16px" }}>
-              <span style={{
-                width: "820px",
-                height: "38px",
-                opacity: 1,
-                display: "inline-block",
-                fontFamily: "'Noto Sans JP', sans-serif",
-                fontWeight: 400,
-                fontStyle: "normal",
-                fontSize: "16px",
-                lineHeight: "28px",
-                letterSpacing: 0
-              }}>
-                ノアコーポレーションがこだわる「品質の透明性と安さ」を支えるチームについて、詳しくは、下記メンバー紹介をご覧ください。
-              </span>
-            </p>
-          </div>
-        </div>
-      </section>
+              {/* 特徴4 */}
+               <div style={{ 
+                 marginBottom: "2.857rem",
+                 padding: "2rem",
+                 border: "1px solid #e5e7eb",
+                 borderRadius: "0.571rem",
+                 backgroundColor: "#fafafa"
+               }}>
+                 <h3 style={{
+                   fontSize: "1.429rem",
+                   fontWeight: "700",
+                   color: "#1a1a1a",
+                   marginBottom: "1rem",
+                   display: "flex",
+                   alignItems: "center",
+                   gap: "0.571rem"
+                 }}>
+                  <span style={{
+                    backgroundColor: "#1a1a1a",
+                    color: "white",
+                    width: "1.714rem",
+                    height: "1.714rem",
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "1rem",
+                    fontWeight: "700"
+                  }}>4</span>
+                  大手運送会社のグループ会社
+                </h3>
+                <p style={{
+                  fontSize: "1.143rem",
+                  lineHeight: "1.8",
+                  color: "#1A1A1A",
+                  margin: 0
+                }}>
+                  当社は、東京都江戸川区の株式会社 スワローロジスティクス ( https://www.swallowgroup.jp/corporation/ ) の一員でございます。法令順守の運送業の一員として弊社でも法令順守、安全第一での営業を行っております。ご利用いただくお客様も安心安全に当社サービスをご利用いただけると思います。車両の購入、売却、塗装、車両のご相談など、小さな事でも弊社にお気軽に音合わせ下さい。
+                </p>
+              </div>
+
+            </div>
+            
+         </div>
+       </section>
 
       {/* Member Section */}
       <section 
