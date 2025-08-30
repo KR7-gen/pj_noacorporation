@@ -166,9 +166,9 @@ export default function VehicleDetailPage() {
   }
 
   return (
-    <div className="bg-white min-h-[2800px]">
+    <div className="bg-white">
       {/* 1. 車両タイトル */}
-      <section className="w-[70%] mx-auto pt-4 bg-white opacity-100" style={{ paddingBottom: '1.43rem' }}>
+      <section className="w-[70%] mx-auto pt-4 bg-white opacity-100">
         <div className="w-full max-w-[1000px] h-[3.214rem] mx-auto bg-[#1A1A1A] opacity-100 mb-2 flex items-center justify-start" style={{ padding: '0 1rem' }}>
           <div className="flex items-center gap-[0.58rem]" style={{ whiteSpace: 'nowrap', overflow: 'visible', lineHeight: '1' }}>
             <span className="w-auto opacity-100 font-bold text-white whitespace-nowrap" style={{ fontSize: '1.429rem !important', lineHeight: '1', display: 'flex', alignItems: 'center', fontFamily: 'inherit', fontWeight: 'bold !important', textSizeAdjust: '100%' }}>
@@ -200,7 +200,7 @@ export default function VehicleDetailPage() {
       </section>
 
       {/* 2. 車検期限の表示 */}
-      <section className="w-[1440px] mx-auto pr-10 pl-10 bg-white opacity-100" style={{ paddingBottom: '1.43rem' }}>
+      <section className="w-[70%] mx-auto pt-4 bg-white opacity-100">
         {vehicle.inspectionStatus && (
           <div className="w-[1000px] h-[2.786rem] mx-auto gap-2 opacity-100 mb-2">
             <div className="flex items-center gap-4">
@@ -355,7 +355,7 @@ export default function VehicleDetailPage() {
 
             {/* 3-2. 車両価格 */}
             <div className="w-[52%] mb-4">
-                             {/* Price Table */}
+              {/* Price Table */}
                <div style={{
                  display: 'grid',
                  gridTemplateColumns: '30% 70%',
@@ -363,7 +363,7 @@ export default function VehicleDetailPage() {
                  border: '1px solid #CCCCCC',
                  borderRadius: '0.286rem'
                }}>
-                                  {/* 左上：車両価格（ラベル） */}
+                {/* 左上：車両価格（ラベル） */}
                   <div style={{
                     display: 'flex',
                     justifyContent: 'flex-start',
@@ -375,13 +375,13 @@ export default function VehicleDetailPage() {
                     paddingLeft: '0.75rem'
                   }}>
                     <span style={{
-                      fontSize: '0.875rem',
+                      fontSize: '1rem',
                       fontWeight: 'bold',
                       color: '#1A1A1A'
                     }}>車両価格</span>
                   </div>
                   
-                  {/* 右上：車両価格（金額） */}
+                {/* 右上：車両価格（金額） */}
                   <div style={{
                     display: 'flex',
                     justifyContent: 'flex-start',
@@ -405,7 +405,7 @@ export default function VehicleDetailPage() {
                       fontFamily: 'Noto Sans JP',
                       fontWeight: '400',
                       fontStyle: 'normal',
-                      fontSize: '.875rem',
+                      fontSize: '1rem',
                       lineHeight: '100%',
                       letterSpacing: '0%'
                     }}>万円（税別）</span>
@@ -417,13 +417,13 @@ export default function VehicleDetailPage() {
                   display: 'flex',
                   justifyContent: 'flex-start',
                   alignItems: 'center',
-                  height: '3.71rem',
+                  height: '4rem',
                   borderRight: '1px solid #CCCCCC',
                   background: '#F2F2F2',
                   paddingLeft: '0.75rem'
                 }}>
                   <span style={{
-                    fontSize: '0.875rem',
+                    fontSize: '1rem',
                     fontWeight: 'bold',
                     color: '#1A1A1A'
                   }}>税込価格</span>
@@ -436,7 +436,7 @@ export default function VehicleDetailPage() {
                   alignItems: 'center',
                   height: '3.71rem',
                   background: '#FFFFFF',
-                  paddingLeft: '0.75rem'
+                  paddingLeft: '1rem'
                 }}>
                   <span style={{
                     color: '#1A1A1A'
@@ -445,7 +445,6 @@ export default function VehicleDetailPage() {
                       fontSize: '1.25rem',
                       fontWeight: 'bold',
                       color: '#1A1A1A',
-                      marginRight: '0.5rem'
                     }}>
                       {Math.round(((vehicle.totalPayment || vehicle.price || 0)) / 10000)}
                     </span>
@@ -453,7 +452,7 @@ export default function VehicleDetailPage() {
                       fontFamily: 'Noto Sans JP',
                       fontWeight: '400',
                       fontStyle: 'normal',
-                      fontSize: '0.875rem',
+                      fontSize: '1rem',
                       lineHeight: '100%',
                       letterSpacing: '0%'
                     }}>万円（税込）</span>
@@ -473,14 +472,14 @@ export default function VehicleDetailPage() {
                       fontFamily: 'Noto Sans JP',
                       fontWeight: '400',
                       fontStyle: 'normal',
-                      fontSize: '0.875rem',
+                      fontSize: '1rem',
                       lineHeight: '100%',
                       letterSpacing: '0%',
                       color: '#1A1A1A'
                     }}>毎月返済額シュミレーション</span>
                   </div>
                   
-                                     {/* Simulation Table */}
+                  {/* Simulation Table */}
                    <div style={{
                      display: 'grid',
                      gridTemplateColumns: '28.7% 71.3%',
@@ -543,7 +542,7 @@ export default function VehicleDetailPage() {
                            fontFamily: 'Noto Sans JP',
                            fontWeight: '400',
                            fontStyle: 'normal',
-                           fontSize: '0.875rem',
+                           fontSize: '1rem',
                            lineHeight: '100%',
                            letterSpacing: '0%',
                            color: '#1A1A1A'
@@ -656,7 +655,7 @@ export default function VehicleDetailPage() {
           </div>
         </div>
 
-                 {/* 4-3. 上物情報 */}
+          {/* 4-3. 上物情報 */}
          <div className="w-full max-w-[1000px] mx-auto gap-3 opacity-100 mb-6">
            <h2 className="text-xl font-bold mb-4">上物情報</h2>
            <div style={{height: 'auto'}}>
@@ -685,248 +684,247 @@ export default function VehicleDetailPage() {
       </section>
 
 
-      {/* 6. 問い合わせフォーム */}
-      <section className="w-full max-w-[1000px] mx-auto pb-10 opacity-100" style={{background: '#BCBCBC', position: 'relative', zIndex: 1}}>
-        <div className="w-full max-w-[1000px] mx-auto" style={{paddingTop: '1.429rem'}}>
-          {/* 見出しテキスト */}
-          <h2 
-            className="text-center"
-            style={{
-              fontFamily: 'Noto Sans JP',
-              fontWeight: 700,
-              fontStyle: 'Bold',
-              fontSize: '1.143rem', // 16px ÷ 14px = 1.143rem
-              lineHeight: '100%',
-              letterSpacing: '0%',
-              color: '#FFFFFF',
-              textShadow: '2px 2px 2px rgba(0, 0, 0, 0.25)',
-              marginBottom: '1.43rem',
-              marginTop: '1.429rem', // 20px ÷ 14px = 1.429rem
-            }}
-          >
-            今ご覧の車両が気になったらお気軽にご相談ください！<br />
-            販売価格のご相談も承っております。
-          </h2>
-          
-          {/* 電話問い合わせとメール問い合わせのコンテナ */}
-          <div 
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              gap: '2.286rem',
-              marginTop: '1.429rem',
-            }}
-          >
-            {/* 電話問い合わせ */}
+      {/* 5. 問い合わせフォーム */}
+       <section className="w-[70%] mx-auto pb-10 bg-white opacity-100" style={{position: 'relative', zIndex: 1}}>
+                   <div className="w-full max-w-[1000px] mx-auto" style={{paddingTop: '1.429rem', paddingBottom: '1.429rem', background: '#BCBCBC'}}>
+           {/* 見出しテキスト */}
+           <h2 
+             className="text-center"
+             style={{
+               fontFamily: 'Noto Sans JP',
+               fontWeight: 700,
+               fontStyle: 'Bold',
+               fontSize: '1.143rem', // 16px ÷ 14px = 1.143rem
+               lineHeight: '100%',
+               letterSpacing: '0%',
+               color: '#FFFFFF',
+               textShadow: '2px 2px 2px rgba(0, 0, 0, 0.25)',
+               marginBottom: '1.43rem',
+               marginTop: '1.429rem', // 20px ÷ 14px = 1.429rem
+             }}
+           >
+             今ご覧の車両が気になったらお気軽にご相談ください！<br />
+             販売価格のご相談も承っております。
+           </h2>
+           
+            {/* 電話問い合わせとメール問い合わせのコンテナ */}
             <div 
               style={{
-                width: '38.4%',
-                height: '8.429rem',
-                backgroundColor: '#FFFFFF',
-                borderRadius: '0',
-                boxShadow: '0 0.286rem 0.429rem rgba(0, 0, 0, 0.1)',
                 display: 'flex',
-                alignItems: 'flex-start',
-                gap: '1.5rem',
-                position: 'relative',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '2.286rem',
+                marginTop: '1.429rem',
+                marginBottom: '0',
               }}
             >
-              {/* ①問い合わせ番号 */}
-              <div style={{width: '28%', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative', top: '5rem'}}>
-                <p style={{
-                  fontFamily: 'Noto Sans JP',
-                  fontWeight: '400',
-                  fontStyle: 'normal',
-                  fontSize: '0.857rem',
-                  lineHeight: '100%',
-                  letterSpacing: '0%',
-                  textAlign: 'center',
-                  color: '#1A1A1A',
-                  margin: '0 0 0.5rem 0'
-                }}>
-                  問合せ番号
-                </p>
-                <p style={{
-                  fontFamily: 'Noto Sans JP',
-                  fontWeight: '700',
-                  fontStyle: 'normal',
-                  fontSize: '1.143rem',
-                  lineHeight: '100%',
-                  letterSpacing: '0%',
-                  textAlign: 'center',
-                  color: '#1A1A1A',
-                  margin: '0'
-                }}>
-                  {vehicle.inquiryNumber || vehicle.id}
-                </p>
-              </div>
-              
-              {/* 吹き出し（問い合わせ番号の中央に位置） */}
-              <div style={{width: '28%', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'absolute', top: '0.3rem', left: '0', zIndex: 1001}}>
-                {/* 吹き出しの長方形 */}
-                <div style={{
-                  width: '78.21%',
-                  height: '3.429rem',
-                  backgroundColor: '#2B5EC5',
-                  border: '1px solid #2B5EC5',
+             {/* 電話問い合わせ */}
+              <div 
+                style={{
+                  width: '40%',
+                  height: '8.429rem',
+                  backgroundColor: '#FFFFFF',
                   borderRadius: '0',
+                  boxShadow: '0 0.286rem 0.429rem rgba(0, 0, 0, 0.1)',
                   display: 'flex',
+                  alignItems: 'flex-start',
+                  position: 'relative',
+                }}
+              >
+               {/* ①問い合わせ番号 */}
+               <div style={{width: '28%', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative', top: '5rem'}}>
+                 <p style={{
+                   fontFamily: 'Noto Sans JP',
+                   fontWeight: '400',
+                   fontStyle: 'normal',
+                   fontSize: '0.857rem',
+                   lineHeight: '100%',
+                   letterSpacing: '0%',
+                   textAlign: 'center',
+                   color: '#1A1A1A',
+                   margin: '0 0 0.5rem 0'
+                 }}>
+                   問合せ番号
+                 </p>
+                 <p style={{
+                   fontFamily: 'Noto Sans JP',
+                   fontWeight: '700',
+                   fontStyle: 'normal',
+                   fontSize: '1.143rem',
+                   lineHeight: '100%',
+                   letterSpacing: '0%',
+                   textAlign: 'center',
+                   color: '#1A1A1A',
+                   margin: '0'
+                 }}>
+                   {vehicle.inquiryNumber || vehicle.id}
+                 </p>
+               </div>
+               
+               {/* 吹き出し（問い合わせ番号の中央に位置） */}
+               <div style={{width: '28%', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'absolute', top: '0.3rem', left: '0', zIndex: 1001}}>
+                 {/* 吹き出しの長方形 */}
+                 <div style={{
+                   width: '78.21%',
+                   height: '3.429rem',
+                   backgroundColor: '#2B5EC5',
+                   border: '1px solid #2B5EC5',
+                   borderRadius: '0',
+                   display: 'flex',
+                   alignItems: 'center',
+                   justifyContent: 'center',
+                   position: 'relative',
+                 }}>
+                   <p style={{
+                     fontFamily: 'Noto Sans JP',
+                     fontWeight: '700',
+                     fontStyle: 'normal',
+                     fontSize: '0.714rem',
+                     lineHeight: '100%',
+                     letterSpacing: '0%',
+                     textAlign: 'center',
+                     color: '#FFFFFF',
+                     margin: '0',
+                     zIndex: 10000,
+                     position: 'relative'
+                   }}>
+                     こちらの番号を<br />お伝えください
+                   </p>
+                 </div>
+                 
+                 {/* 吹き出しの三角形 */}
+                 <div style={{
+                   width: '0',
+                   height: '0',
+                   borderLeft: '1rem solid transparent',
+                   borderRight: '0.4rem solid transparent',
+                   borderTop: '2rem solid #2B5EC5',
+                   position: 'absolute',
+                   top: '2.5rem',
+                   left: '60%',
+                   transform: 'translateX(-50%) rotate(45deg)',
+                   zIndex: 9999
+                 }}></div>
+               </div>
+               
+               {/* ②小見出しと電話番号 */}
+               <div style={{display: 'flex', flexDirection: 'column', gap: '0.5rem', width: '72%', alignItems: 'flex-start', position: 'relative'}}>
+                  {/* 小見出し */}
+                  <div style={{position: 'absolute', top: '0rem', backgroundColor: '#F2F2F2', height: '2.571rem', width: '100%', left: '0%', zIndex: 999, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                    <h3 className="text-lg font-semibold" style={{writingMode: 'horizontal-tb'}}>お電話でのお問い合わせ</h3>
+                  </div>
+                  
+                  {/* 在庫店舗名 */}
+                  {vehicle?.storeName && (
+                    <div style={{position: 'absolute', top: '3.3rem', width: '100%', left: '0%', display: 'flex', justifyContent: 'center'}}>
+                      <p style={{
+                        fontFamily: 'Noto Sans JP',
+                        fontWeight: 700,
+                        fontStyle: 'normal',
+                        fontSize: '0.875rem',
+                        lineHeight: '100%',
+                        letterSpacing: '0%',
+                        color: '#1f2937'
+                      }}>{vehicle.storeName}</p>
+                    </div>
+                  )}
+                  
+                  {/* 電話番号 */}
+                  <div style={{position: 'absolute', top: '5rem', width: '100%', left: '0%', display: 'flex', justifyContent: 'center'}}>
+                    <div style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}>
+                      <Phone style={{
+                        height: '1.286rem',
+                        transform: 'rotate(0deg)',
+                        opacity: 1,
+                        color: '#1a1a1a'
+                      }} />
+                      <p style={{
+                        fontFamily: 'Noto Sans JP',
+                        fontWeight: 700,
+                        fontStyle: 'normal',
+                        fontSize: '1.429rem',
+                        lineHeight: '100%',
+                        letterSpacing: '0%',
+                        color: '#1f2937'
+                      }}>028-612-1472</p>
+                    </div>
+                  </div>
+                  
+                  {/* 営業時間 */}
+                  <div style={{position: 'absolute', top: '7rem', width: '100%', left: '0%', display: 'flex', justifyContent: 'center'}}>
+                    <p style={{
+                      fontFamily: 'Noto Sans JP',
+                      fontWeight: 400,
+                      fontStyle: 'normal',
+                      fontSize: '0.857rem',
+                      lineHeight: '100%',
+                      letterSpacing: '0%',
+                      textAlign: 'center',
+                      color: '#1a1a1a'
+                    }}>（受付時間）8:00-17:00</p>
+                  </div>
+               </div>
+               
+                {/* 縦の境界線 */}
+               <div style={{position: 'absolute', top: '0', left: '28%', width: '1px', height: '100%', backgroundColor: '#CCCCCC', zIndex: 1000}}></div>
+             </div>
+             
+             {/* メール問い合わせ */}
+              <div 
+                style={{
+                  width: '40%',
+                  height: '8.429rem', // 118px ÷ 14px = 8.429rem
+                  backgroundColor: '#FFFFFF',
+                  padding: '1.5rem',
+                  borderRadius: '0',
+                  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                  display: 'flex',
+                  flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  position: 'relative',
-                }}>
-                  <p style={{
-                    fontFamily: 'Noto Sans JP',
-                    fontWeight: '700',
-                    fontStyle: 'normal',
-                    fontSize: '0.714rem',
-                    lineHeight: '100%',
-                    letterSpacing: '0%',
-                    textAlign: 'center',
-                    color: '#FFFFFF',
-                    margin: '0',
-                    zIndex: 10000,
-                    position: 'relative'
-                  }}>
-                    こちらの番号を<br />お伝えください
-                  </p>
-                </div>
-                
-                {/* 吹き出しの三角形 */}
-                <div style={{
-                  width: '0',
-                  height: '0',
-                  borderLeft: '1rem solid transparent',
-                  borderRight: '0.4rem solid transparent',
-                  borderTop: '2rem solid #2B5EC5',
-                  position: 'absolute',
-                  top: '2.5rem',
-                  left: '60%',
-                  transform: 'translateX(-50%) rotate(45deg)',
-                  zIndex: 9999
-                }}></div>
-              </div>
-              
-              {/* ②小見出しと電話番号 */}
-              <div style={{display: 'flex', flexDirection: 'column', gap: '0.5rem', width: '72%', alignItems: 'flex-start', position: 'relative'}}>
-                {/* 小見出し */}
-                <div style={{position: 'absolute', top: '0rem', backgroundColor: '#F2F2F2', height: '2.571rem', width: '106.5%', left: '-6.5%', zIndex: 999, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                  <h3 className="text-lg font-semibold" style={{writingMode: 'horizontal-tb'}}>お電話でのお問い合わせ</h3>
-                </div>
-                
-                {/* 在庫店舗名 */}
-                {vehicle?.storeName && (
-                  <div style={{position: 'absolute', top: '3.3rem', width: '106.5%', left: '-6.5%', display: 'flex', justifyContent: 'center'}}>
-                    <p style={{
-                      fontFamily: 'Noto Sans JP',
-                      fontWeight: 700,
-                      fontStyle: 'normal',
-                      fontSize: '0.875rem',
-                      lineHeight: '100%',
-                      letterSpacing: '0%',
-                      color: '#1f2937'
-                    }}>{vehicle.storeName}</p>
-                  </div>
-                )}
-                
-                {/* 電話番号 */}
-                <div style={{position: 'absolute', top: '5rem', width: '106.5%', left: '-6.5%', display: 'flex', justifyContent: 'center'}}>
-                  <div style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}>
-                    <Phone style={{
-                      width: '1.286rem',
-                      height: '1.286rem',
-                      transform: 'rotate(0deg)',
-                      opacity: 1,
-                      color: '#1a1a1a'
-                    }} />
-                    <p style={{
-                      fontFamily: 'Noto Sans JP',
-                      fontWeight: 700,
-                      fontStyle: 'normal',
-                      fontSize: '1.429rem',
-                      lineHeight: '100%',
-                      letterSpacing: '0%',
-                      color: '#1f2937'
-                    }}>028-612-1472</p>
-                  </div>
-                </div>
-                
-                {/* 営業時間 */}
-                <div style={{position: 'absolute', top: '7rem', width: '106.5%', left: '-6.5%', display: 'flex', justifyContent: 'center'}}>
-                  <p style={{
-                    fontFamily: 'Noto Sans JP',
-                    fontWeight: 400,
-                    fontStyle: 'normal',
-                    fontSize: '0.857rem',
-                    lineHeight: '100%',
-                    letterSpacing: '0%',
-                    textAlign: 'center',
-                    color: '#1a1a1a'
-                  }}>年中無休 9:00-17:00</p>
-                </div>
-              </div>
-              
-              {/* 縦の境界線 */}
-              <div style={{position: 'absolute', top: '0', left: '28%', width: '1px', height: '100%', backgroundColor: '#CCCCCC', zIndex: 1000}}></div>
-            </div>
-            
-            {/* メール問い合わせ */}
-            <div 
-              style={{
-                width: '38.4%',
-                height: '8.429rem', // 118px ÷ 14px = 8.429rem
-                backgroundColor: '#FFFFFF',
-                padding: '1.5rem',
-                borderRadius: '0',
-                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              {/* ①小見出し */}
-              <h3 className="text-lg font-semibold mb-3">メールでの問い合わせ</h3>
-              
-              {/* ②問い合わせボタン */}
-                              <Button 
-                  style={{
-                    width: '60%',
-                    height: '4rem',
-                    background: 'linear-gradient(180deg, #1154AF 0%, #053B65 100%)',
-                    boxShadow: '0.143rem 0.143rem 0.143rem 0px #0000000D',
-                    border: 'none',
-                    borderRadius: '0',
-                    color: '#FFFFFF',
-                    fontFamily: 'Noto Sans JP',
-                    fontWeight: 700,
-                    fontStyle: 'normal',
-                    fontSize: '1rem',
-                    lineHeight: '100%',
-                    letterSpacing: '0%',
-                    textAlign: 'center',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '0.5rem',
-                    cursor: 'pointer',
-                    transition: 'opacity 0.2s'
-                  }}
-                  onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
-                  onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
-                  onClick={() => window.location.href = '/contact'}
-                >
-                  <Mail style={{
-                    width: '1.429rem',
-                    height: '1.143rem',
-                    transform: 'rotate(0deg)',
-                    opacity: 1
-                  }} />
-                  お問い合せ<br />フォーム
-                </Button>
-            </div>
-          </div>
+                }}
+              >
+               {/* ①小見出し */}
+               <h3 className="text-lg font-semibold mb-3">メールでの問い合わせ</h3>
+               
+               {/* ②問い合わせボタン */}
+                               <Button 
+                   style={{
+                     width: '60%',
+                     height: '4rem',
+                     background: 'linear-gradient(180deg, #1154AF 0%, #053B65 100%)',
+                     boxShadow: '0.143rem 0.143rem 0.143rem 0px #0000000D',
+                     border: 'none',
+                     borderRadius: '0',
+                     color: '#FFFFFF',
+                     fontFamily: 'Noto Sans JP',
+                     fontWeight: 700,
+                     fontStyle: 'normal',
+                     fontSize: '1rem',
+                     lineHeight: '100%',
+                     letterSpacing: '0%',
+                     textAlign: 'center',
+                     display: 'flex',
+                     alignItems: 'center',
+                     justifyContent: 'center',
+                     gap: '0.5rem',
+                     cursor: 'pointer',
+                     transition: 'opacity 0.2s'
+                   }}
+                   onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
+                   onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+                   onClick={() => window.location.href = '/contact'}
+                 >
+                   <Mail style={{
+                     width: '1.429rem',
+                     height: '1.143rem',
+                     transform: 'rotate(0deg)',
+                     opacity: 1
+                   }} />
+                   お問い合せ<br />フォーム
+                 </Button>
+             </div>
+           </div>
         </div>
       </section>
 
@@ -956,550 +954,526 @@ export default function VehicleDetailPage() {
           </div>
           
           
-          {/* サンプルカード */}
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
-            gap: "1.714rem",
-            width: "100%"
-          }}>
-            {/* 他の車両のサンプル表示 */}
-            {Array.from({ length: 3 }, (_, i) => (
-              <Card 
-                key={i}
-                style={{
-                  width: "18.571rem",
-                  height: "41.929rem",
-                  gap: "0.857rem",
-                  opacity: 1,
-                  paddingBottom: "1.143rem",
-                  borderWidth: "1px",
-                  background: "#FFFFFF",
-                  border: "1px solid #F2F2F2",
-                  overflow: "hidden",
-                  position: "relative"
-                }}
-              >
-                <CardContent style={{ padding: "0" }}>
-                  {/* ヘッダーバー */}
-                  <div 
-                    style={{
-                      height: "2.786rem",
-                      background: "#1A1A1A",
-                      padding: "0.571rem 0.857rem",
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center"
-                    }}
-                  >
-                    <span style={{ 
-                      width: "10rem",
-                      height: "1.643rem",
-                      opacity: 1,
-                      fontFamily: "Noto Sans JP",
-                      fontWeight: "700",
-                      fontStyle: "Bold",
-                      fontSize: "1.143rem",
-                      lineHeight: "100%",
-                      letterSpacing: "0%",
-                      color: "#FFFFFF",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap"
-                    }}>
-                      三菱 トラック
-                    </span>
-                    <span style={{ 
-                      width: "6.357rem",
-                      height: "1.214rem",
-                      opacity: 1,
-                      fontFamily: "Noto Sans JP",
-                      fontWeight: "400",
-                      fontStyle: "Regular",
-                      fontSize: "1rem",
-                      lineHeight: "100%",
-                      letterSpacing: "0%",
-                      color: "#FFFFFF"
-                    }}>
-                      FK4J23A
-                    </span>
-                  </div>
-                  
-                  {/* 問い合わせ番号 */}
-                  <div 
-                    style={{
-                      height: "2.5rem",
-                      background: "#FFFFFF",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center"
-                    }}
-                  >
-                    <span style={{
-                      width: "11.214rem",
-                      height: "1.357rem",
-                      opacity: 1,
-                      fontFamily: "Noto Sans JP",
-                      fontWeight: "400",
-                      fontStyle: "Regular",
-                      fontSize: "1.143rem",
-                      lineHeight: "100%",
-                      letterSpacing: "0%",
-                      color: "#1A1A1A",
-                      textAlign: "center"
-                    }}>
-                      問合せ番号: N00000
-                    </span>
-                  </div>
+                     {/* サンプルカード */}
+           <div style={{
+             display: "flex",
+             justifyContent: "space-between",
+             width: "100%"
+           }}>
+             {/* 他の車両のサンプル表示 */}
+             {Array.from({ length: 3 }, (_, i) => (
+               <Card 
+                 key={i}
+                 style={{
+                   width: "32%",
+                   gap: "0.86rem",
+                   opacity: 1,
+                   borderRadius: "0px",
+                   paddingBottom: "1.14rem",
+                   borderWidth: "0.07rem",
+                   background: "#FFFFFF",
+                   border: "0.07rem solid #F2F2F2",
+                   overflow: "hidden",
+                   position: "relative"
+                 }}
+               >
+                 <CardContent style={{ padding: "0" }}>
+                   {/* ヘッダーバー */}
+                   <div 
+                     style={{
+                       height: "2.79rem",
+                       background: "#1A1A1A",
+                       padding: "0.57rem 0.86rem",
+                       display: "flex",
+                       justifyContent: "space-between",
+                       alignItems: "center"
+                     }}
+                   >
+                     <span style={{ 
+                       height: "1.64rem",
+                       opacity: 1,
+                       fontFamily: "Noto Sans JP",
+                       fontWeight: "700",
+                       fontStyle: "Bold",
+                       fontSize: "1.14rem",
+                       lineHeight: "100%",
+                       letterSpacing: "0%",
+                       color: "#FFFFFF",
+                       overflow: "hidden",
+                       textOverflow: "ellipsis",
+                       whiteSpace: "nowrap"
+                     }}>
+                       三菱 トラック
+                     </span>
+                     <span style={{ 
+                       height: "1.21rem",
+                       opacity: 1,
+                       fontFamily: "Noto Sans JP",
+                       fontWeight: "400",
+                       fontStyle: "Regular",
+                       fontSize: "1rem",
+                       lineHeight: "100%",
+                       letterSpacing: "0%",
+                       color: "#FFFFFF",
+                       whiteSpace: "nowrap"
+                     }}>
+                       FK4J23A
+                     </span>
+                   </div>
+                   
+                   {/* 問い合わせ番号 */}
+                   <div 
+                     style={{
+                       height: "2.5rem",
+                       background: "#FFFFFF",
+                       display: "flex",
+                       alignItems: "center",
+                       justifyContent: "center"
+                     }}
+                   >
+                     <span style={{
+                       height: "1.36rem",
+                       opacity: 1,
+                       fontFamily: "Noto Sans JP",
+                       fontWeight: "400",
+                       fontStyle: "Regular",
+                       fontSize: "1.14rem",
+                       lineHeight: "100%",
+                       letterSpacing: "0%",
+                       color: "#1A1A1A",
+                       textAlign: "center"
+                     }}>
+                       問合せ番号: N00000
+                     </span>
+                   </div>
 
-                  {/* 車両画像 */}
-                  <div 
-                    style={{
-                      position: "relative",
-                      width: "100%",
-                      height: "12.857rem",
-                      overflow: "hidden"
-                    }}
-                  >
-                    <img
-                      src="/placeholder.jpg"
-                      alt="サンプル車両"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover"
-                      }}
-                    />
-                  </div>
+                   {/* 車両画像 */}
+                   <div 
+                     style={{
+                       position: "relative",
+                       width: "100%",
+                       height: "12.86rem",
+                       overflow: "hidden"
+                     }}
+                   >
+                     <img
+                       src="/placeholder.jpg"
+                       alt="サンプル車両"
+                       style={{
+                         width: "100%",
+                         height: "100%",
+                         objectFit: "cover"
+                       }}
+                     />
+                   </div>
 
-                  {/* ボディタイプ + 詳細テーブル */}
-                  <div 
-                    style={{
-                      height: "19.5rem",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "space-between"
-                    }}
-                  >
-                    {/* ボディタイプ */}
-                    <div 
-                      style={{
-                        height: "calc(19.5rem / 6)",
-                        display: "flex",
-                        alignItems: "center",
-                        background: "#FFFFFF",
-                        borderBottom: "1px solid #F2F2F2"
-                      }}
-                    >
-                      <div style={{
-                        width: "18.571rem",
-                        height: "100%",
-                        background: "#FFFFFF",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center"
-                      }}>
-                        <span style={{
-                          width: "16.571rem",
-                          height: "1.214rem",
-                          opacity: 1,
-                          fontFamily: "Noto Sans JP",
-                          fontWeight: "400",
-                          fontStyle: "Regular",
-                          fontSize: "1rem",
-                          lineHeight: "100%",
-                          letterSpacing: "0%",
-                          color: "#1A1A1A"
-                        }}>
-                          トラック
-                        </span>
-                      </div>
-                    </div>
+                   {/* ボディタイプ + 詳細テーブル */}
+                   <div 
+                     style={{
+                       height: "19.5rem",
+                       display: "flex",
+                       flexDirection: "column",
+                       justifyContent: "space-between"
+                     }}
+                   >
+                     {/* ボディタイプ */}
+                     <div 
+                       style={{
+                         height: "calc(19.5rem / 6)",
+                         display: "flex",
+                         alignItems: "center",
+                         background: "#FFFFFF",
+                         borderBottom: "0.07rem solid #F2F2F2"
+                       }}
+                     >
+                       <div style={{
+                         height: "100%",
+                         background: "#FFFFFF",
+                         display: "flex",
+                         alignItems: "center",
+                         justifyContent: "center"
+                       }}>
+                         <span style={{
+                           height: "1.21rem",
+                           opacity: 1,
+                           fontFamily: "Noto Sans JP",
+                           fontWeight: "400",
+                           fontStyle: "Regular",
+                           fontSize: "1rem",
+                           lineHeight: "100%",
+                           letterSpacing: "0%",
+                           color: "#1A1A1A"
+                         }}>
+                           トラック
+                         </span>
+                       </div>
+                     </div>
 
-                    {/* 本体価格 */}
-                    <div 
-                      style={{
-                        height: "calc(19.5rem / 6)",
-                        display: "flex",
-                        alignItems: "center",
-                        fontSize: "0.786rem",
-                        color: "#374151",
-                        borderBottom: "1px solid #F2F2F2"
-                      }}
-                    >
-                      <div style={{
-                        width: "5.714rem",
-                        height: "100%",
-                        background: "#E6E6E6",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center"
-                      }}>
-                        <span style={{
-                          width: "4rem",
-                          height: "1.429rem",
-                          opacity: 1,
-                          fontFamily: "Noto Sans JP",
-                          fontWeight: "700",
-                          fontStyle: "Bold",
-                          fontSize: "1rem",
-                          lineHeight: "100%",
-                          letterSpacing: "0%",
-                          color: "#1A1A1A"
-                        }}>本体価格</span>
-                      </div>
-                      <div style={{ 
-                        width: "12.857rem",
-                        height: "100%",
-                        background: "#FFFFFF",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "flex-start",
-                        paddingLeft: "0.857rem"
-                      }}>
-                        <div>
-                          <span style={{
-                            width: "4.071rem",
-                            height: "1.643rem",
-                            opacity: 1,
-                            fontFamily: "Noto Sans JP",
-                            fontWeight: "700",
-                            fontStyle: "Bold",
-                            fontSize: "2.286rem",
-                            lineHeight: "100%",
-                            letterSpacing: "0%",
-                            color: "#2B5EC5"
-                          }}>
-                            150
-                          </span>
-                          <span style={{
-                            width: "4.071rem",
-                            height: "1rem",
-                            opacity: 1,
-                            fontFamily: "Noto Sans JP",
-                            fontWeight: "400",
-                            fontStyle: "Regular",
-                            fontSize: "0.857rem",
-                            lineHeight: "100%",
-                            letterSpacing: "0%",
-                            color: "#2B5EC5"
-                          }}>万円(税別)</span>
-                        </div>
-                      </div>
-                    </div>
+                     {/* 本体価格 */}
+                     <div 
+                       style={{
+                         height: "calc(19.5rem / 6)",
+                         display: "flex",
+                         alignItems: "center",
+                         fontSize: "0.79rem",
+                         color: "#374151",
+                         borderBottom: "0.07rem solid #F2F2F2"
+                       }}
+                     >
+                       <div style={{
+                         height: "100%",
+                         width:"30.76%",
+                         background: "#E6E6E6",
+                         display: "flex",
+                         alignItems: "center",
+                         justifyContent: "center"
+                       }}>
+                         <span style={{
+                           height: "1.43rem",
+                           opacity: 1,
+                           fontFamily: "Noto Sans JP",
+                           fontWeight: "700",
+                           fontStyle: "Bold",
+                           fontSize: "1rem",
+                           lineHeight: "100%",
+                           letterSpacing: "0%",
+                           color: "#1A1A1A"
+                         }}>本体価格</span>
+                       </div>
+                       <div style={{ 
+                         height: "100%",
+                         background: "#FFFFFF",
+                         display: "flex",
+                         alignItems: "center",
+                         justifyContent: "flex-start",
+                         paddingLeft: "0.86rem"
+                       }}>
+                         <div>
+                           <span style={{
+                             height: "1.64rem",
+                             opacity: 1,
+                             fontFamily: "Noto Sans JP",
+                             fontWeight: "700",
+                             fontStyle: "Bold",
+                             fontSize: "2.29rem",
+                             lineHeight: "100%",
+                             letterSpacing: "0%",
+                             color: "#2B5EC5"
+                           }}>
+                             150
+                           </span>
+                           <span style={{
+                             height: "1rem",
+                             opacity: 1,
+                             fontFamily: "Noto Sans JP",
+                             fontWeight: "400",
+                             fontStyle: "Regular",
+                             fontSize: "0.86rem",
+                             lineHeight: "100%",
+                             letterSpacing: "0%",
+                             color: "#2B5EC5"
+                           }}>万円(税別)</span>
+                         </div>
+                       </div>
+                     </div>
 
-                    {/* 年式 */}
-                    <div 
-                      style={{
-                        height: "calc(19.5rem / 6)",
-                        display: "flex",
-                        alignItems: "center",
-                        fontSize: "0.786rem",
-                        color: "#374151",
-                        borderBottom: "1px solid #F2F2F2"
-                      }}
-                    >
-                      <div style={{
-                        width: "5.714rem",
-                        height: "100%",
-                        background: "#E6E6E6",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center"
-                      }}>
-                        <span style={{
-                          width: "4rem",
-                          height: "1.429rem",
-                          opacity: 1,
-                          fontFamily: "Noto Sans JP",
-                          fontWeight: "700",
-                          fontStyle: "Bold",
-                          fontSize: "1rem",
-                          lineHeight: "100%",
-                          letterSpacing: "0%",
-                          color: "#1A1A1A"
-                        }}>年式</span>
-                      </div>
-                      <div style={{ 
-                        width: "12.857rem",
-                        height: "100%",
-                        background: "#FFFFFF",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "flex-start",
-                        paddingLeft: "0.857rem"
-                      }}>
-                        <span style={{
-                          width: "6.286rem",
-                          height: "1.214rem",
-                          opacity: 1,
-                          fontFamily: "Noto Sans JP",
-                          fontWeight: "400",
-                          fontStyle: "Regular",
-                          fontSize: "1rem",
-                          lineHeight: "100%",
-                          letterSpacing: "0%",
-                          color: "#1A1A1A"
-                        }}>
-                          R6年9月
-                        </span>
-                      </div>
-                    </div>
+                     {/* 年式 */}
+                     <div 
+                       style={{
+                         height: "calc(19.5rem / 6)",
+                         display: "flex",
+                         alignItems: "center",
+                         fontSize: "0.79rem",
+                         color: "#374151",
+                         borderBottom: "0.07rem solid #F2F2F2"
+                       }}
+                     >
+                       <div style={{
+                         height: "100%",
+                         width:"30.76%",
+                         background: "#E6E6E6",
+                         display: "flex",
+                         alignItems: "center",
+                         justifyContent: "center"
+                       }}>
+                         <span style={{
+                           height: "1.43rem",
+                           opacity: 1,
+                           fontFamily: "Noto Sans JP",
+                           fontWeight: "700",
+                           fontStyle: "Bold",
+                           fontSize: "1rem",
+                           lineHeight: "100%",
+                           letterSpacing: "0%",
+                           color: "#1A1A1A"
+                         }}>年式</span>
+                       </div>
+                       <div style={{ 
+                         height: "100%",
+                         background: "#FFFFFF",
+                         display: "flex",
+                         alignItems: "center",
+                         justifyContent: "flex-start",
+                         paddingLeft: "0.86rem"
+                       }}>
+                         <span style={{
+                           height: "1.21rem",
+                           opacity: 1,
+                           fontFamily: "Noto Sans JP",
+                           fontWeight: "400",
+                           fontStyle: "Regular",
+                           fontSize: "1rem",
+                           lineHeight: "100%",
+                           letterSpacing: "0%",
+                           color: "#1A1A1A"
+                         }}>
+                           R6年9月
+                         </span>
+                       </div>
+                     </div>
 
-                    {/* 走行距離 */}
-                    <div 
-                      style={{
-                        height: "calc(19.5rem / 6)",
-                        display: "flex",
-                        alignItems: "center",
-                        fontSize: "0.786rem",
-                        color: "#374151",
-                        borderBottom: "1px solid #F2F2F2"
-                      }}
-                    >
-                      <div style={{
-                        width: "5.714rem",
-                        height: "100%",
-                        background: "#E6E6E6",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center"
-                      }}>
-                        <span style={{
-                          width: "4rem",
-                          height: "1.429rem",
-                          opacity: 1,
-                          fontFamily: "Noto Sans JP",
-                          fontWeight: "700",
-                          fontStyle: "Bold",
-                          fontSize: "1rem",
-                          lineHeight: "100%",
-                          letterSpacing: "0%",
-                          color: "#1A1A1A"
-                        }}>走行距離</span>
-                      </div>
-                      <div style={{ 
-                        width: "12.857rem",
-                        height: "100%",
-                        background: "#FFFFFF",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "flex-start",
-                        paddingLeft: "0.857rem"
-                      }}>
-                        <span style={{
-                          width: "6.286rem",
-                          height: "1.214rem",
-                          opacity: 1,
-                          fontFamily: "Noto Sans JP",
-                          fontWeight: "400",
-                          fontStyle: "Regular",
-                          fontSize: "1rem",
-                          lineHeight: "100%",
-                          letterSpacing: "0%",
-                          color: "#1A1A1A"
-                        }}>
-                          00,000km
-                        </span>
-                      </div>
-                    </div>
+                     {/* 走行距離 */}
+                     <div 
+                       style={{
+                         height: "calc(19.5rem / 6)",
+                         display: "flex",
+                         alignItems: "center",
+                         fontSize: "0.79rem",
+                         color: "#374151",
+                         borderBottom: "0.07rem solid #F2F2F2"
+                       }}
+                     >
+                       <div style={{
+                         height: "100%",
+                         width:"30.76%",
+                         background: "#E6E6E6",
+                         display: "flex",
+                         alignItems: "center",
+                         justifyContent: "center"
+                       }}>
+                         <span style={{
+                           height: "1.43rem",
+                           opacity: 1,
+                           fontFamily: "Noto Sans JP",
+                           fontWeight: "700",
+                           fontStyle: "Bold",
+                           fontSize: "1rem",
+                           lineHeight: "100%",
+                           letterSpacing: "0%",
+                           color: "#1A1A1A"
+                         }}>走行距離</span>
+                       </div>
+                       <div style={{ 
+                         height: "100%",
+                         background: "#FFFFFF",
+                         display: "flex",
+                         alignItems: "center",
+                         justifyContent: "flex-start",
+                         paddingLeft: "0.86rem"
+                       }}>
+                         <span style={{
+                           height: "1.21rem",
+                           opacity: 1,
+                           fontFamily: "Noto Sans JP",
+                           fontWeight: "400",
+                           fontStyle: "Regular",
+                           fontSize: "1rem",
+                           lineHeight: "100%",
+                           letterSpacing: "0%",
+                           color: "#1A1A1A"
+                         }}>
+                           00,000km
+                         </span>
+                       </div>
+                     </div>
 
-                    {/* 積載量 */}
-                    <div 
-                      style={{
-                        height: "calc(19.5rem / 6)",
-                        display: "flex",
-                        alignItems: "center",
-                        fontSize: "0.786rem",
-                        color: "#374151",
-                        borderBottom: "1px solid #F2F2F2"
-                      }}
-                    >
-                      <div style={{
-                        width: "5.714rem",
-                        height: "100%",
-                        background: "#E6E6E6",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center"
-                      }}>
-                        <span style={{
-                          width: "4rem",
-                          height: "1.429rem",
-                          opacity: 1,
-                          fontFamily: "Noto Sans JP",
-                          fontWeight: "700",
-                          fontStyle: "Bold",
-                          fontSize: "1rem",
-                          lineHeight: "100%",
-                          letterSpacing: "0%",
-                          color: "#1A1A1A"
-                        }}>積載量</span>
-                      </div>
-                      <div style={{ 
-                        width: "12.857rem",
-                        height: "100%",
-                        background: "#FFFFFF",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "flex-start",
-                        paddingLeft: "0.857rem"
-                      }}>
-                        <span style={{
-                          width: "6.286rem",
-                          height: "1.214rem",
-                          opacity: 1,
-                          fontFamily: "Noto Sans JP",
-                          fontWeight: "400",
-                          fontStyle: "Regular",
-                          fontSize: "1rem",
-                          lineHeight: "100%",
-                          letterSpacing: "0%",
-                          color: "#1A1A1A"
-                        }}>
-                          4.0t
-                        </span>
-                      </div>
-                    </div>
+                     {/* 積載量 */}
+                     <div 
+                       style={{
+                         height: "calc(19.5rem / 6)",
+                         display: "flex",
+                         alignItems: "center",
+                         fontSize: "0.79rem",
+                         color: "#374151",
+                         borderBottom: "0.07rem solid #F2F2F2"
+                       }}
+                     >
+                       <div style={{
+                         height: "100%",
+                         width:"30.76%",
+                         background: "#E6E6E6",
+                         display: "flex",
+                         alignItems: "center",
+                         justifyContent: "center"
+                       }}>
+                         <span style={{
+                           height: "1.43rem",
+                           opacity: 1,
+                           fontFamily: "Noto Sans JP",
+                           fontWeight: "700",
+                           fontStyle: "Bold",
+                           fontSize: "1rem",
+                           lineHeight: "100%",
+                           letterSpacing: "0%",
+                           color: "#1A1A1A"
+                         }}>積載量</span>
+                       </div>
+                       <div style={{ 
+                         height: "100%",
+                         background: "#FFFFFF",
+                         display: "flex",
+                         alignItems: "center",
+                         justifyContent: "flex-start",
+                         paddingLeft: "0.86rem"
+                       }}>
+                         <span style={{
+                           height: "1.21rem",
+                           opacity: 1,
+                           fontFamily: "Noto Sans JP",
+                           fontWeight: "400",
+                           fontStyle: "Regular",
+                           fontSize: "1rem",
+                           lineHeight: "100%",
+                           letterSpacing: "0%",
+                           color: "#1A1A1A"
+                         }}>
+                           4.0t
+                         </span>
+                       </div>
+                     </div>
 
-                    {/* 車検期限 */}
-                    <div 
-                      style={{
-                        height: "calc(19.5rem / 6)",
-                        display: "flex",
-                        alignItems: "center",
-                        fontSize: "0.786rem",
-                        color: "#374151",
-                        borderBottom: "1px solid #F2F2F2"
-                      }}
-                    >
-                      <div style={{
-                        width: "5.714rem",
-                        height: "100%",
-                        background: "#E6E6E6",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center"
-                      }}>
-                        <span style={{
-                          width: "4rem",
-                          height: "1.429rem",
-                          opacity: 1,
-                          fontFamily: "Noto Sans JP",
-                          fontWeight: "700",
-                          fontStyle: "Bold",
-                          fontSize: "1rem",
-                          lineHeight: "100%",
-                          letterSpacing: "0%",
-                          color: "#1A1A1A"
-                        }}>車検期限</span>
-                      </div>
-                      <div style={{ 
-                        width: "12.857rem",
-                        height: "100%",
-                        background: "#FFFFFF",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "flex-start",
-                        paddingLeft: "0.857rem"
-                      }}>
-                        <span style={{
-                          width: "6.286rem",
-                          height: "1.214rem",
-                          opacity: 1,
-                          fontFamily: "Noto Sans JP",
-                          fontWeight: "400",
-                          fontStyle: "Regular",
-                          fontSize: "1rem",
-                          lineHeight: "100%",
-                          letterSpacing: "0%",
-                          color: "#1A1A1A"
-                        }}>
-                          抹消
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+                     {/* 車検期限 */}
+                     <div 
+                       style={{
+                         height: "calc(19.5rem / 6)",
+                         display: "flex",
+                         alignItems: "center",
+                         fontSize: "0.79rem",
+                         color: "#374151",
+                         borderBottom: "0.07rem solid #F2F2F2"
+                       }}
+                     >
+                       <div style={{
+                         height: "100%",
+                         width:"30.76%",
+                         background: "#E6E6E6",
+                         display: "flex",
+                         alignItems: "center",
+                         justifyContent: "center"
+                       }}>
+                         <span style={{
+                           height: "1.43rem",
+                           opacity: 1,
+                           fontFamily: "Noto Sans JP",
+                           fontWeight: "700",
+                           fontStyle: "Bold",
+                           fontSize: "1rem",
+                           lineHeight: "100%",
+                           letterSpacing: "0%",
+                           color: "#1A1A1A"
+                         }}>車検期限</span>
+                       </div>
+                       <div style={{ 
+                         height: "100%",
+                         background: "#FFFFFF",
+                         display: "flex",
+                         alignItems: "center",
+                         justifyContent: "flex-start",
+                         paddingLeft: "0.86rem"
+                       }}>
+                         <span style={{
+                           height: "1.21rem",
+                           opacity: 1,
+                           fontFamily: "Noto Sans JP",
+                           fontWeight: "400",
+                           fontStyle: "Regular",
+                           fontSize: "1rem",
+                           lineHeight: "100%",
+                           letterSpacing: "0%",
+                           color: "#1A1A1A"
+                         }}>
+                           抹消
+                         </span>
+                       </div>
+                     </div>
+                   </div>
 
-                  {/* 詳細ボタン */}
-                  <div style={{ 
-                    height: "4.286rem",
-                    display: "flex", 
-                    alignItems: "center", 
-                    justifyContent: "center",
-                    background: "#FFFFFF"
-                  }}>
-                    <Button 
-                      style={{
-                        width: "11.429rem",
-                        height: "2.286rem",
-                        gap: "0.571rem",
-                        opacity: 1,
-                        paddingTop: "0.286rem",
-                        paddingRight: "0.571rem",
-                        paddingBottom: "0.286rem",
-                        paddingLeft: "0.571rem",
-                        borderRadius: "0.286rem",
-                        border: "1px solid #333333",
-                        background: "#FFFFFF",
-                        boxShadow: "0.143rem 0.143rem 0.143rem 0px #00000040",
-                        cursor: "pointer",
-                        transition: "all 0.3s ease",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center"
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.opacity = "0.9";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.opacity = "1";
-                      }}
-                    >
-                      <span style={{
-                        width: "6rem",
-                        height: "1.429rem",
-                        opacity: 1,
-                        fontFamily: "Noto Sans JP",
-                        fontWeight: "700",
-                        fontStyle: "Bold",
-                        fontSize: "1rem",
-                        lineHeight: "1.429rem",
-                        letterSpacing: "0%",
-                        color: "#333333",
-                        display: "flex",
-                        alignItems: "center",
-                        transform: "translateY(-0.071rem)"
-                      }}>
-                        詳細はこちら
-                      </span>
-                      <svg
-                        width="0.529rem"
-                        height="0.857rem"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        style={{
-                          color: "#333333",
-                          height: "1.429rem",
-                          display: "flex",
-                          alignItems: "center"
-                        }}
-                      >
-                        <path
-                          d="M9 18L15 12L9 6"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                   {/* 詳細ボタン */}
+                   <div style={{ 
+                     height: "4.29rem", 
+                     display: "flex", 
+                     alignItems: "center", 
+                     justifyContent: "center",
+                     background: "#FFFFFF"
+                   }}>
+                     <Button 
+                       style={{
+                         height: "2.29rem",
+                         gap: "0.57rem",
+                         opacity: 1,
+                         paddingTop: "0.29rem",
+                         paddingRight: "0.57rem",
+                         paddingBottom: "0.29rem",
+                         paddingLeft: "0.57rem",
+                         borderRadius: "0.29rem",
+                         border: "0.07rem solid #333333",
+                         background: "#FFFFFF",
+                         boxShadow: "0.14rem 0.14rem 0.14rem 0px #00000040",
+                         cursor: "pointer",
+                         transition: "all 0.3s ease",
+                         display: "flex",
+                         alignItems: "center",
+                         justifyContent: "center"
+                       }}
+                       onMouseEnter={(e) => {
+                         e.currentTarget.style.opacity = "0.9";
+                       }}
+                       onMouseLeave={(e) => {
+                         e.currentTarget.style.opacity = "1";
+                       }}
+                     >
+                       <span style={{
+                         height: "1.43rem",
+                         opacity: 1,
+                         fontFamily: "Noto Sans JP",
+                         fontWeight: "700",
+                         fontStyle: "Bold",
+                         fontSize: "1rem",
+                         lineHeight: "1.43rem",
+                         letterSpacing: "0%",
+                         color: "#333333",
+                         display: "flex",
+                         alignItems: "center",
+                         transform: "translateY(-0.07rem)"
+                       }}>
+                         詳細はこちら
+                       </span>
+                       <svg
+                         height="12"
+                         viewBox="0 0 24 24"
+                         fill="none"
+                         xmlns="http://www.w3.org/2000/svg"
+                         style={{
+                           color: "#333333",
+                           height: "1.43rem",
+                           display: "flex",
+                           alignItems: "center"
+                         }}
+                       >
+                         <path
+                           d="M9 18L15 12L9 6"
+                           stroke="currentColor"
+                           strokeWidth="2"
+                           strokeLinecap="round"
+                           strokeLinejoin="round"
+                         />
+                       </svg>
+                     </Button>
+                   </div>
+                 </CardContent>
+               </Card>
+             ))}
+           </div>
         </div>
       </section>
 
