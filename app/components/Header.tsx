@@ -27,25 +27,26 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-white" style={{ height: "9rem", margin: "0" }}>
-      <div className="flex items-center md:grid md:grid-cols-[auto_1fr_auto_auto_auto] md:items-center md:gap-x-4 lg:gap-x-6 xl:gap-x-8" style={{ height: "9rem", padding: "0 1rem", margin: "0" }}>
+         <header className="sticky top-0 z-50 w-full border-b bg-white" style={{ height: "9rem", margin: "0" }}>
+       <div className="flex items-center justify-between" style={{ height: "9rem", padding: "0 1rem", margin: "0" }}>
         
-        {/* ロゴ */}
-        <a href="/" className="flex items-center" style={{ 
-          margin: "0"
-        }}>
-          <img src="/logo.png" alt="NOA CORPORATION" style={{ width: "13vw", height: "4.43rem", opacity: 1, transform: "rotate(0deg)", margin: "0" }} />
-        </a>
+                 {/* ロゴ */}
+         <a href="/" className="flex items-center" style={{ 
+           margin: "0",
+           flexShrink: 0
+         }}>
+           <img src="/logo.png" alt="NOA CORPORATION" style={{ width: "13vw", maxWidth: "200px", minWidth: "120px", height: "4.43rem", opacity: 1, transform: "rotate(0deg)", margin: "0" }} />
+         </a>
 
-        {/* PCナビゲーション */}
-        <nav className="hidden md:flex items-center justify-center" style={{ 
-          width: "100%", 
-          height: "3.36rem",
-          whiteSpace: "nowrap",
-          overflow: "hidden",
-          margin: "0",
-          gap: "1.4rem"
-        }}>
+                 {/* PCナビゲーション */}
+         <nav className="hidden lg:flex items-center justify-center" style={{ 
+           height: "3.36rem",
+           whiteSpace: "nowrap",
+           overflow: "hidden",
+           margin: "0",
+           gap: "1.4rem",
+           flexShrink: 0
+         }}>
           <a href="/" 
             style={{
               margin: "0",
@@ -169,21 +170,21 @@ export function Header() {
           </a>
         </nav>
 
-        {/* 電話番号 */}
-        <div className="hidden md:flex items-center justify-center"
-          style={{
-            width: "100%",
-            minWidth: "14rem",
-            height: "3.36rem",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            background: "#fff",
-            borderRadius: "4px",
-            padding: "0 1rem",
-            margin: "0"
-          }}
-        >
+                 {/* 電話番号 */}
+         <div className="hidden lg:flex items-center justify-center"
+           style={{
+             minWidth: "14rem",
+             height: "3.36rem",
+             display: "flex",
+             flexDirection: "column",
+             alignItems: "center",
+             background: "#fff",
+             borderRadius: "4px",
+             padding: "0 1rem",
+             margin: "0",
+             flexShrink: 0
+           }}
+         >
           <div
             style={{
               margin: "0",
@@ -214,33 +215,35 @@ export function Header() {
             </span>
             028-612-1472
           </div>
-          <div
-            style={{
-              margin: "0",
-              width: "14vw",
-              height: "1rem",
-              opacity: 1,
-              fontFamily: "Noto Sans JP, sans-serif",
-              fontWeight: 400,
-              fontStyle: "normal",
-              fontSize: "0.86rem",
-              lineHeight: "100%",
-              letterSpacing: "0%",
-              background: "transparent",
-              color: "#1a1a1a",
-              textAlign: "center"
-            }}
-          >
-            （受付時間）8:00~17:00<br/>※店舗不在時には折り返しさせて頂きます。
-          </div>
+                     <div
+             style={{
+               margin: "0",
+               width: "14vw",
+               maxWidth: "200px",
+               minWidth: "140px",
+               height: "1rem",
+               opacity: 1,
+               fontFamily: "Noto Sans JP, sans-serif",
+               fontWeight: 400,
+               fontStyle: "normal",
+               fontSize: "0.86rem",
+               lineHeight: "100%",
+               letterSpacing: "0%",
+               background: "transparent",
+               color: "#1a1a1a",
+               textAlign: "center"
+             }}
+           >
+             （受付時間）8:00~17:00<br/><span style={{ whiteSpace: "nowrap" }}>※店舗不在時には折り返しさせて頂きます。</span>
+           </div>
         </div>
 
-        {/* 問い合わせフォーム */}
-        <form action="/contact" method="get" className="hidden md:flex items-center justify-center m-0 p-0" style={{ 
-          width: "100%", 
-          height: "3.36rem",
-          margin: "0" 
-        }}>
+                 {/* 問い合わせフォーム */}
+         <form action="/contact" method="get" className="hidden lg:flex items-center justify-center m-0 p-0" style={{ 
+           height: "3.36rem",
+           margin: "0",
+           flexShrink: 0
+         }}>
           <div
             style={{
               margin: "0",
@@ -279,16 +282,16 @@ export function Header() {
           </div>
         </form>
 
-        {/* アイコン */}
-        <div className="hidden md:flex items-center justify-center" style={{
-          width: "100%",
-          height: "4.41rem",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          margin: "0"
-        }}>
+                 {/* アイコン */}
+         <div className="hidden lg:flex items-center justify-center" style={{
+           height: "4.41rem",
+           display: "flex",
+           flexDirection: "column",
+           alignItems: "center",
+           justifyContent: "center",
+           margin: "0",
+           flexShrink: 0
+         }}>
           <img
             src="/icon_up.png"
             alt="上アイコン"
@@ -313,8 +316,8 @@ export function Header() {
           />
         </div>
 
-        {/* スマホ・タブレット用ハンバーガー */}
-        <div className="md:hidden flex items-center" style={{ margin: "0" }}>
+                 {/* スマホ・タブレット用ハンバーガー */}
+         <div className="lg:hidden flex items-center" style={{ margin: "0" }}>
           <button
             type="button"
             className="p-2 rounded bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 border border-blue-300 cursor-pointer"

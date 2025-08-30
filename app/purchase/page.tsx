@@ -1170,7 +1170,7 @@ const ContactSection = () => (
                   028-612-1472
                 </span>
               </div>
-              <p style={{ fontSize: "1rem", color: "#1a1a1a", margin: 0 }}>受付時間：月〜日 8:00~17:00 <br/>※店舗不在時には折り返しさせて頂きます。</p>
+              <p style={{ fontSize: "1rem", color: "#1a1a1a", margin: 0 }}>受付時間：月〜日 8:00~17:00 <br/><span style={{ whiteSpace: "nowrap" }}>※店舗不在時には折り返しさせて頂きます。</span></p>
             </div>
           </CardContent>
         </Card>
