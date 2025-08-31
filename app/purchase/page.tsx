@@ -615,89 +615,89 @@ const AssessmentRequestSection = () => (
     style={{ background: '#CCCCCC' }}
   >
     <div className="container mx-auto px-4">
-      {/* 見出しと小見出しの横並び配置 */}
-      <div className="flex justify-between items-start" style={{ paddingTop: '7.143rem' }}>
-        {/* 見出し（左） */}
-        <div style={{ marginLeft: '20rem' }}>
-          <div 
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-start",
-            }}
-          >
-            <div 
-              style={{
-                fontFamily: "Noto Sans JP",
-                fontWeight: "400",
-                fontStyle: "Regular",
-                fontSize: "1rem",
-                lineHeight: "100%",
-                letterSpacing: "0%",
-                textAlign: "left",
-                color: "#2B5EC5",
-                borderRadius: "0.14rem",
-                whiteSpace: "nowrap",
-                paddingLeft: "0",
-                marginBottom: "2px",
-              }}
-            >
-              CONTACT
-            </div>
-            <div 
-              style={{
-                fontFamily: "Noto Sans JP",
-                fontWeight: "700",
-                fontStyle: "Bold",
-                fontSize: "2.86rem",
-                lineHeight: "100%",
-                letterSpacing: "0%",
-                textAlign: "left",
-                color: "#1A1A1A",
-                whiteSpace: "nowrap",
-                marginBottom: "0.57rem",
-              }}
-            >
-              LINEで査定依頼
-            </div>
-          </div>
-        </div>
+        {/* 見出しと小見出しの横並び配置 */}
+       <div className="flex justify-center items-start" style={{ paddingTop: '7.143rem', gap: '9.35rem' }}>
+         {/* 見出し（左） */}
+         <div>
+           <div 
+             style={{
+               display: "flex",
+               flexDirection: "column",
+               alignItems: "flex-start",
+             }}
+           >
+             <div 
+               style={{
+                 fontFamily: "Noto Sans JP",
+                 fontWeight: "400",
+                 fontStyle: "Regular",
+                 fontSize: "1rem",
+                 lineHeight: "100%",
+                 letterSpacing: "0%",
+                 textAlign: "left",
+                 color: "#2B5EC5",
+                 borderRadius: "0.14rem",
+                 whiteSpace: "nowrap",
+                 paddingLeft: "0",
+                 marginBottom: "2px",
+               }}
+             >
+               CONTACT
+             </div>
+             <div 
+               style={{
+                 fontFamily: "Noto Sans JP",
+                 fontWeight: "700",
+                 fontStyle: "Bold",
+                 fontSize: "2.86rem",
+                 lineHeight: "100%",
+                 letterSpacing: "0%",
+                 textAlign: "left",
+                 color: "#1A1A1A",
+                 whiteSpace: "nowrap",
+                 marginBottom: "0.57rem",
+               }}
+             >
+               LINEで査定依頼
+             </div>
+           </div>
+         </div>
 
-        {/* 小見出しと問い合わせ（右） */}
-        <div className="text-center" style={{ marginLeft: 'auto', marginRight: '15rem' }}>
-          <p className="text-[1.143rem] font-bold mb-[1.714rem] text-black">車両の査定 / 売却を検討されている方は、まずはLINEでお問い合わせください。</p>
-          
-          <p className="text-[1.143rem] font-bold mb-[1.714rem] text-black">\ 車検証や車両画像で簡単に査定額が判明します /</p>
-          
-          {/* 買取査定フォームと電話番号の横並び配置 */}
-          <div className="flex justify-center gap-[2.857rem]">
-            {/* 買取査定フォーム（左） */}
-            <Link href="/contact">
-              <div 
-                className="h-[3.214rem] flex items-center justify-center rounded-lg px-6 whitespace-nowrap"
-                style={{
-                  background: 'linear-gradient(180deg, #1154AF 0%, #053B65 100%)',
-                  boxShadow: '2px 2px 2px 0px #00000040'
-                }}
-              >
-                <span className="text-[1.429rem] font-bold text-white">LINEで査定を依頼する</span>
-                <span className="text-[1.429rem] font-bold text-white">&nbsp;&gt;</span>
-              </div>
-            </Link>
-            
-            {/* 電話番号セクション（右） */}
-            <div>
-              <div className="h-[3.214rem] flex items-center bg-white border-2 border-blue-600 rounded-lg px-6 mb-2 whitespace-nowrap">
-                <svg className="w-6 h-6 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
-                <span className="text-[1.429rem] font-bold text-blue-600">028-612-1472</span>
-              </div>
-              <p className="text-sm text-gray-700">（受付時間）08:00~17:00</p>
-            </div>
-          </div>
-        </div>
-      </div>
+         {/* 小見出しと問い合わせ（右） */}
+         <div className="text-center">
+           <p className="text-[1.143rem] font-bold mb-[1.714rem] text-black">車両の査定 / 売却を検討されている方は、まずはLINEでお問い合わせください。</p>
+           
+           <p className="text-[1.143rem] font-bold mb-[1.714rem] text-black">\ 車検証や車両画像で簡単に査定額が判明します /</p>
+           
+           {/* 買取査定フォームと電話番号の横並び配置 */}
+           <div className="flex justify-center gap-[2.857rem]">
+             {/* 買取査定フォーム（左） */}
+             <Link href="/contact">
+               <div 
+                 className="h-[3.214rem] flex items-center justify-center rounded-lg px-6 whitespace-nowrap"
+                 style={{
+                   background: 'linear-gradient(180deg, #1154AF 0%, #053B65 100%)',
+                   boxShadow: '2px 2px 2px 0px #00000040'
+                 }}
+               >
+                 <span className="text-[1.429rem] font-bold text-white">LINEで査定を依頼する</span>
+                 <span className="text-[1.429rem] font-bold text-white">&nbsp;&gt;</span>
+               </div>
+             </Link>
+             
+             {/* 電話番号セクション（右） */}
+             <div>
+               <div className="h-[3.214rem] flex items-center bg-white border-2 border-blue-600 rounded-lg px-6 mb-2 whitespace-nowrap">
+                 <svg className="w-6 h-6 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                 </svg>
+                 <span className="text-[1.429rem] font-bold text-blue-600">028-612-1472</span>
+               </div>
+               <p className="text-sm text-gray-700">（受付時間）08:00~17:00</p>
+             </div>
+           </div>
+         </div>
+       </div>
     </div>
   </section>
 )

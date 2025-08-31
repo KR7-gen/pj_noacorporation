@@ -30,7 +30,7 @@ export function Header() {
          <header className="sticky top-0 z-50 w-full border-b bg-white" style={{ height: "9rem", margin: "0" }}>
        <div className="flex items-center justify-between" style={{ height: "9rem", padding: "0 1rem", margin: "0" }}>
         
-                 {/* ロゴ */}
+        {/* ロゴ */}
          <a href="/" className="flex items-center" style={{ 
            margin: "0",
            flexShrink: 0
@@ -38,7 +38,7 @@ export function Header() {
            <img src="/logo.png" alt="NOA CORPORATION" style={{ width: "13vw", maxWidth: "200px", minWidth: "120px", height: "4.43rem", opacity: 1, transform: "rotate(0deg)", margin: "0" }} />
          </a>
 
-                 {/* PCナビゲーション */}
+        {/* PCナビゲーション */}
          <nav className="hidden lg:flex items-center justify-center" style={{ 
            height: "3.36rem",
            whiteSpace: "nowrap",
@@ -170,7 +170,7 @@ export function Header() {
           </a>
         </nav>
 
-                 {/* 電話番号 */}
+        {/* 電話番号 */}
          <div className="hidden lg:flex items-center justify-center"
            style={{
              minWidth: "14rem",
@@ -208,7 +208,7 @@ export function Header() {
               whiteSpace: "nowrap"
             }}
           >
-                         <span style={{ display: "flex", alignItems: "center", marginRight: "0.57rem", position: "relative", top: "0.21rem", left: "0.21rem" }}>
+            <span style={{ display: "flex", alignItems: "center", marginRight: "0.57rem", position: "relative", top: "0.21rem", left: "0.21rem" }}>
               <svg width="1.29rem" height="1.29rem" viewBox="0 0 24 24" fill="none" style={{ background: "#fff", opacity: 1 }} xmlns="http://www.w3.org/2000/svg">
                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" stroke="#1a1a1a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
@@ -238,7 +238,7 @@ export function Header() {
            </div>
         </div>
 
-                 {/* 問い合わせフォーム */}
+        {/* 問い合わせフォーム */}
          <form action="/contact" method="get" className="hidden lg:flex items-center justify-center m-0 p-0" style={{ 
            height: "3.36rem",
            margin: "0",

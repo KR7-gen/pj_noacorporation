@@ -3,7 +3,7 @@ import Link from "next/link"
 export function Footer() {
   return (
     <footer className="border-t">
-      <div className="container flex flex-col gap-8 py-8">
+      <div className="flex flex-col gap-8 py-8" style={{ width: '83%', maxWidth: '1200px', margin: '0 auto' }}>
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
           <div className="space-y-4">
             <h3 className="font-bold">会社情報</h3>

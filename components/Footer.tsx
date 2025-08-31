@@ -30,31 +30,31 @@ const footerLinks = {
 export function Footer() {
   return (
     <footer className="bg-gray-900 text-white">
-      <div className="container mx-auto px-4 py-12">
+      <div className="px-4 py-12" style={{ width: '83%', maxWidth: '1200px', margin: '0 auto' }}>
         {/* Company Info */}
         <div className="mb-8">
-          <div className="flex items-center mb-4">
-            <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center mr-3">
-              <div className="w-8 h-8 bg-white rounded"></div>
+          <div className="flex items-center gap-4">
+            <div className="w-22 h-12 flex items-center justify-center">
+              <img src="/logo.png" alt="Noa Corporation Logo" className="w-full h-full object-contain" />
             </div>
             <div>
-              <div className="font-bold text-xl">ロゴ</div>
-              <div className="text-sm text-gray-400">会社名</div>
+              <div className="text-sm text-gray-400">株式会社 Noa Corporation</div>
             </div>
-          </div>
-          <div className="text-sm text-gray-400">
-            <p>〒000-0000　住所テキスト</p>
-            <p>TEL：000-000-0000</p>
+            <div className="text-sm text-gray-400">
+              <span>〒329-1326　栃木県さくら市向河原3994-1</span>
+            </div>
+            <div className="text-sm text-gray-400">
+              <span>TEL：028-612-1472</span>
+            </div>
           </div>
         </div>
 
         {/* Sitemap */}
         <div className="mb-8">
-          <h3 className="font-bold text-lg mb-4">サイトマップ</h3>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="flex justify-between flex-nowrap overflow-x-auto">
             {/* Pages */}
-            <div>
-              <h4 className="font-medium mb-3">ページ</h4>
+            <div style={{ width: '21.66%' }}>
+              <h4 className="font-medium mb-3 border-b border-white pb-1">サイトマップ</h4>
               <ul className="space-y-2 text-sm">
                 {footerLinks.pages.map((page, index) => (
                   <li key={index}>
@@ -67,8 +67,8 @@ export function Footer() {
             </div>
 
             {/* Body Types */}
-            <div>
-              <h4 className="font-medium mb-3">ボディタイプで中古トラックを探す</h4>
+            <div style={{ width: '22.66%' }}>
+              <h4 className="font-medium mb-3 border-b border-white pb-1">ボディタイプで中古トラックを探す</h4>
               <ul className="space-y-2 text-sm">
                 {footerLinks.bodyTypes.map((type, index) => (
                   <li key={index}>
@@ -84,8 +84,8 @@ export function Footer() {
             </div>
 
             {/* Makers */}
-            <div>
-              <h4 className="font-medium mb-3">メーカーで中古トラックを探す</h4>
+            <div style={{ width: '21.66%' }}>
+              <h4 className="font-medium mb-3 border-b border-white pb-1">メーカーで中古トラックを探す</h4>
               <ul className="space-y-2 text-sm">
                 {footerLinks.makers.map((maker, index) => (
                   <li key={index}>
@@ -101,8 +101,8 @@ export function Footer() {
             </div>
 
             {/* Sizes */}
-            <div>
-              <h4 className="font-medium mb-3">大きさで中古トラックを探す</h4>
+            <div style={{ width: '21.66%'}}>
+              <h4 className="font-medium mb-3 border-b border-white pb-1">大きさで中古トラックを探す</h4>
               <ul className="space-y-2 text-sm">
                 {footerLinks.sizes.map((size, index) => (
                   <li key={index}>
