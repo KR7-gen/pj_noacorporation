@@ -355,7 +355,7 @@ export default function HomePage() {
                 textAlign: "left"
               }}
             >
-              豊富な在庫!!挑戦価格‼<br/>　　　ノアコーポレション
+              豊富な在庫!!挑戦価格‼<br/>　　　ノアコーポレーション
             </h1>
             <div 
               style={{
@@ -652,7 +652,7 @@ export default function HomePage() {
                   position: "relative"
                 }}
               >
-                                  <select
+                  <select
                     style={{
                       width: "100%",
                       border: "none",
