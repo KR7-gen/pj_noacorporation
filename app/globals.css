@@ -88,49 +88,12 @@ body {
   * {
     @apply border-border;
   }
-  body {
-    @apply bg-background text-foreground;
+  html {
+    font-size: 14px;
   }
   
-  /* レスポンシブフォントサイズ設定 */
-  /* 基本設定 - clampで最小・最大値を制限 */
-  html { 
-    font-size: clamp(11px, 2.5vw, 14px); 
-  }
-
-  /* より細かいブレークポイント制御 */
-  /* 大画面（横1200px以下） */
-  @media (max-width: 1200px) {
-    html { 
-      font-size: 13.5px; 
-    }
-  }
-
-  /* タブレット（横1024px以下） */
-  @media (max-width: 1024px) {
-    html { 
-      font-size: 13px; 
-    }
-  }
-
-  /* スマホ（横768px以下） */
-  @media (max-width: 768px) {
-    html { 
-      font-size: 12px; 
-    }
-  }
-
-  /* 中サイズスマホ（横480px以下） */
-  @media (max-width: 480px) {
-    html { 
-      font-size: 11.5px; 
-    }
-  }
-
-  /* 小さめスマホ（横360px以下） */
-  @media (max-width: 360px) {
-    html { 
-      font-size: 11px; 
-    }
+  body {
+    @apply bg-background text-foreground;
+    line-height: 1.6;
   }
 }

@@ -215,7 +215,7 @@ export function Header() {
             </span>
             028-612-1472
           </div>
-                     <div
+            <div
              style={{
                margin: "0",
                width: "14vw",
@@ -239,11 +239,11 @@ export function Header() {
         </div>
 
         {/* 問い合わせフォーム */}
-         <form action="/contact" method="get" className="hidden lg:flex items-center justify-center m-0 p-0" style={{ 
-           height: "3.36rem",
-           margin: "0",
-           flexShrink: 0
-         }}>
+        <form action="/contact" method="get" className="flex items-center justify-center m-0 p-0" style={{ 
+          height: "3.36rem",
+          margin: "0",
+          flexShrink: 0
+        }}>
           <div
             style={{
               margin: "0",
@@ -282,16 +282,12 @@ export function Header() {
           </div>
         </form>
 
-                 {/* アイコン */}
-         <div className="hidden lg:flex items-center justify-center" style={{
-           height: "4.41rem",
-           display: "flex",
-           flexDirection: "column",
-           alignItems: "center",
-           justifyContent: "center",
-           margin: "0",
-           flexShrink: 0
-         }}>
+        {/* アイコン */}
+        <div className="hidden md:block" style={{
+          height: "4.41rem",
+          margin: "0",
+          flexShrink: 0
+        }}>
           <img
             src="/icon_up.png"
             alt="上アイコン"
@@ -316,7 +312,7 @@ export function Header() {
           />
         </div>
 
-                 {/* スマホ・タブレット用ハンバーガー */}
+        {/* スマホ・タブレット用ハンバーガー */}
          <div className="lg:hidden flex items-center" style={{ margin: "0" }}>
           <button
             type="button"

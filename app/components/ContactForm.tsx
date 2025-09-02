@@ -224,7 +224,7 @@ export default function ContactForm({
             type="tel"
             value={formData.phone}
             onChange={(e) => handleChange("phone", e.target.value)}
-            placeholder="例）0123456789"
+            placeholder="例）080-1234-5678"
             className={errors.phone ? "border-red-500" : ""}
           />
           {errors.phone && (
@@ -243,7 +243,7 @@ export default function ContactForm({
             type="email"
             value={formData.email}
             onChange={(e) => handleChange("email", e.target.value)}
-            placeholder="例）xxxx@xxx.jp"
+            placeholder="例）noacorporation@gmail.jp"
             className={errors.email ? "border-red-500" : ""}
           />
           {errors.email && (
