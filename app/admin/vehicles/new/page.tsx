@@ -146,8 +146,8 @@ export default function VehicleNewPage() {
   const router = useRouter()
   const [formData, setFormData] = useState<Partial<Vehicle>>({
     name: "",
-    price: "",
-    totalPayment: "",
+    price: 0,
+    totalPayment: 0,
     bodyType: "",
     maker: "",
     size: "",
@@ -156,18 +156,18 @@ export default function VehicleNewPage() {
     modelCode: "",
     year: "",
     month: "",
-    mileage: "",
-    loadingCapacity: "",
+    mileage: 0,
+    loadingCapacity: 0,
     shift: "",
     mission: "",
     inspectionStatus: "",
     inspectionDate: "",
-    outerLength: "",
-    outerWidth: "",
-    outerHeight: "",
-    totalWeight: "",
-    horsepower: "",
-    displacement: "",
+    outerLength: 0,
+    outerWidth: 0,
+    outerHeight: 0,
+    totalWeight: 0,
+    horsepower: 0,
+    displacement: 0,
     fuel: "",
     turbo: "",
     wholesalePrice: 0,
@@ -179,9 +179,11 @@ export default function VehicleNewPage() {
     bodyMaker: "",
     bodyModel: "",
     bodyYear: "",
-    innerLength: "",
-    innerWidth: "",
-    innerHeight: "",
+    innerLength: 0,
+    innerWidth: 0,
+    innerHeight: 0,
+    // エンジン情報
+    engineModel: "",
     // 店舗関連フィールド
     storeName: "",
     storeId: undefined,
@@ -442,18 +444,20 @@ export default function VehicleNewPage() {
         totalWeight: formData.totalWeight ? Number(formData.totalWeight?.toString().replace(/,/g, '')) : undefined,
         horsepower: formData.horsepower ? Number(formData.horsepower?.toString().replace(/,/g, '')) : undefined,
         displacement: formData.displacement ? Number(formData.displacement?.toString().replace(/,/g, '')) : undefined,
-        fuel: formData.fuel,
-        equipment: formData.equipment ? formData.equipment.join(',') : undefined,
-        inspectionImageUrl: formData.inspectionImageUrl,
-        conditionImageUrl: formData.conditionImageUrl,
+        fuel: formData.fuel || "",
+        equipment: formData.equipment ? formData.equipment.join(',') : "",
+        inspectionImageUrl: formData.inspectionImageUrl || "",
+        conditionImageUrl: formData.conditionImageUrl || "",
+        // エンジン情報
+        engineModel: formData.engineModel || "",
         // 商談関連フィールド
         isNegotiating: formData.isNegotiating || false,
         isSoldOut: formData.isSoldOut || false,
         isPrivate: formData.isPrivate || false,
         isTemporarySave: true, // 一時保存としてマーク
-        negotiationDeadline: formData.negotiationDeadline,
-        salesRepresentative: formData.salesRepresentative,
-        customerName: formData.customerName,
+        negotiationDeadline: formData.negotiationDeadline || "",
+        salesRepresentative: formData.salesRepresentative || "",
+        customerName: formData.customerName || "",
       }
 
       console.log("一時保存する車両データ:", vehicleData)
@@ -517,18 +521,20 @@ export default function VehicleNewPage() {
         totalWeight: formData.totalWeight ? Number(formData.totalWeight?.toString().replace(/,/g, '')) : undefined,
         horsepower: formData.horsepower ? Number(formData.horsepower?.toString().replace(/,/g, '')) : undefined,
         displacement: formData.displacement ? Number(formData.displacement?.toString().replace(/,/g, '')) : undefined,
-        fuel: formData.fuel,
-        equipment: formData.equipment ? formData.equipment.join(',') : undefined,
-        inspectionImageUrl: formData.inspectionImageUrl,
-        conditionImageUrl: formData.conditionImageUrl,
+        fuel: formData.fuel || "",
+        equipment: formData.equipment ? formData.equipment.join(',') : "",
+        inspectionImageUrl: formData.inspectionImageUrl || "",
+        conditionImageUrl: formData.conditionImageUrl || "",
+        // エンジン情報
+        engineModel: formData.engineModel || "",
         // 商談関連フィールド
         isNegotiating: formData.isNegotiating || false,
         isSoldOut: formData.isSoldOut || false,
         isPrivate: formData.isPrivate || false,
         isTemporarySave: false, // 通常保存としてマーク
-        negotiationDeadline: formData.negotiationDeadline,
-        salesRepresentative: formData.salesRepresentative,
-        customerName: formData.customerName,
+        negotiationDeadline: formData.negotiationDeadline || "",
+        salesRepresentative: formData.salesRepresentative || "",
+        customerName: formData.customerName || "",
       }
 
       console.log("保存する車両データ:", vehicleData)

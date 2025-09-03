@@ -228,6 +228,8 @@ export default function VehicleEditPage() {
             innerHeight: formatNumberWithCommas(fetchedVehicle.innerHeight) || "",
             mission: fetchedVehicle.mission || "",
             turbo: fetchedVehicle.turbo || "",
+            // エンジン情報
+            engineModel: fetchedVehicle.engineModel || "",
             // 店舗関連フィールド
             storeName: fetchedVehicle.storeName || "",
             storeId: fetchedVehicle.storeId || undefined,
@@ -503,6 +505,8 @@ export default function VehicleEditPage() {
         vehicleType: formData.vehicleType,
         chassisNumber: formData.chassisNumber,
         month: formData.month,
+        // エンジン情報
+        engineModel: formData.engineModel,
         isTemporarySave: false, // 通常保存としてマーク
         updatedAt: new Date(),
       }

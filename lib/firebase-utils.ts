@@ -108,8 +108,13 @@ export const addVehicle = async (vehicle: Omit<Vehicle, 'id' | 'createdAt' | 'up
     const inquiryNumber = await generateInquiryNumber();
     console.log("生成された問い合わせ番号:", inquiryNumber);
     
+    // undefinedフィールドを除外
+    const cleanedVehicle = Object.fromEntries(
+      Object.entries(vehicle).filter(([_, value]) => value !== undefined)
+    );
+    
     const vehicleDataWithInquiry = {
-      ...vehicle,
+      ...cleanedVehicle,
       inquiryNumber, // 自動生成された問い合わせ番号を追加
       createdAt: new Date(),
       updatedAt: new Date()
