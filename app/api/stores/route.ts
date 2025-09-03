@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { storeDataManager } from '@/lib/store-data'
+import { addStore, getStores } from '@/lib/firebase-utils'
 
 export async function POST(request: NextRequest) {
   try {
@@ -7,8 +7,8 @@ export async function POST(request: NextRequest) {
     
     console.log('POST request received:', body)
     
-    // 新規店舗を作成
-    const newId = storeDataManager.addStore(body)
+    // Firebase Firestoreに新規店舗を作成
+    const newId = await addStore(body)
     
     console.log(`店舗ID ${newId} を作成しました`)
     
@@ -27,7 +27,8 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    const stores = storeDataManager.getAllStores()
+    // Firebase Firestoreから店舗一覧を取得
+    const stores = await getStores()
     const response = NextResponse.json(stores)
     
     // キャッシュを無効化するヘッダーを追加

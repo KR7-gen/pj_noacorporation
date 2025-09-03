@@ -5,7 +5,7 @@ import { useRouter, useParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { Trash2 } from "lucide-react"
-import { DetailedStore } from "@/lib/store-data"
+import { Store } from "@/types"
 
 export default function StoreEditPage() {
   const router = useRouter()
@@ -14,21 +14,13 @@ export default function StoreEditPage() {
   const [isSaving, setIsSaving] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [storeData, setStoreData] = useState<DetailedStore | null>(null)
+  const [storeData, setStoreData] = useState<Store | null>(null)
   const [formData, setFormData] = useState({
     name: "",
     address: "",
     tel: "",
     fax: "",
-    businessHours: {
-      monday: { start: "09:00", end: "18:00", closed: false },
-      tuesday: { start: "09:00", end: "18:00", closed: false },
-      wednesday: { start: "09:00", end: "18:00", closed: false },
-      thursday: { start: "09:00", end: "18:00", closed: false },
-      friday: { start: "09:00", end: "18:00", closed: false },
-      saturday: { start: "10:00", end: "17:00", closed: false },
-      sunday: { start: "10:00", end: "17:00", closed: true }
-    }
+    businessHours: "月〜金 09:00~18:00"
   })
 
   // 店舗データを取得
@@ -37,20 +29,23 @@ export default function StoreEditPage() {
       try {
         setLoading(true)
         const storeId = params.id
-        const response = await fetch(`/api/stores/${storeId}`)
+        console.log(`店舗ID ${storeId} のデータを取得中...`)
         
+        const response = await fetch(`/api/stores/${storeId}`)
         if (!response.ok) {
           throw new Error('店舗データの取得に失敗しました')
         }
         
         const data = await response.json()
+        console.log('取得した店舗データ:', data)
+        
         setStoreData(data)
         setFormData({
-          name: data.name,
-          address: data.address,
-          tel: data.tel,
-          fax: data.fax,
-          businessHours: data.businessHours
+          name: data.name || "",
+          address: data.address || "",
+          tel: data.phone || "",
+          fax: data.phone || "", // デフォルト値
+          businessHours: data.businessHours || "月〜金 09:00~18:00"
         })
       } catch (error) {
         console.error('店舗データ取得エラー:', error)
@@ -109,24 +104,12 @@ export default function StoreEditPage() {
       const storeId = params.id
       console.log(`店舗ID ${storeId} を保存中...`)
       
-      // 営業時間データを整形
-      const businessHoursData = {}
-      Object.keys(formData.businessHours).forEach(day => {
-        const dayData = formData.businessHours[day]
-        businessHoursData[day] = {
-          start: dayData.start,
-          end: dayData.end,
-          closed: dayData.closed // そのまま使用
-        }
-      })
-      
       // 保存用データを準備
       const saveData = {
         name: formData.name,
         address: formData.address,
-        tel: formData.tel,
-        fax: formData.fax,
-        businessHours: businessHoursData
+        phone: formData.tel,
+        businessHours: formData.businessHours
       }
       
       console.log('Saving data:', saveData)
@@ -166,19 +149,6 @@ export default function StoreEditPage() {
     setFormData(prev => ({
       ...prev,
       [field]: value
-    }))
-  }
-
-  const handleBusinessHoursChange = (day: string, field: string, value: string | boolean) => {
-    setFormData(prev => ({
-      ...prev,
-      businessHours: {
-        ...prev.businessHours,
-        [day]: {
-          ...prev.businessHours[day],
-          [field]: value
-        }
-      }
     }))
   }
 
@@ -297,45 +267,16 @@ export default function StoreEditPage() {
               />
             </div>
 
-            <div>
-              <h3 className="text-sm font-medium mb-4">営業時間</h3>
-              <div className="space-y-4">
-                {[
-                  { day: "月曜日", key: "monday" },
-                  { day: "火曜日", key: "tuesday" },
-                  { day: "水曜日", key: "wednesday" },
-                  { day: "木曜日", key: "thursday" },
-                  { day: "金曜日", key: "friday" },
-                  { day: "土曜日", key: "saturday" },
-                  { day: "日曜日", key: "sunday" }
-                ].map(({ day, key }) => (
-                  <div key={day} className="flex items-center gap-4">
-                    <div className="w-24">
-                      <input
-                        type="checkbox"
-                        id={`day-${day}`}
-                        checked={!formData.businessHours[key].closed}
-                        onChange={(e) => handleBusinessHoursChange(key, 'closed', !e.target.checked)}
-                        className="mr-2"
-                      />
-                      <label htmlFor={`day-${day}`}>{day}</label>
-                    </div>
-                    <input
-                      type="time"
-                      className="border rounded px-2 py-1"
-                      value={formData.businessHours[key].start}
-                      onChange={(e) => handleBusinessHoursChange(key, 'start', e.target.value)}
-                    />
-                    <span>〜</span>
-                    <input
-                      type="time"
-                      className="border rounded px-2 py-1"
-                      value={formData.businessHours[key].end}
-                      onChange={(e) => handleBusinessHoursChange(key, 'end', e.target.value)}
-                    />
-                  </div>
-                ))}
-              </div>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium">営業時間</label>
+              <input
+                type="text"
+                className="w-full border rounded px-2 py-1"
+                value={formData.businessHours}
+                onChange={(e) => handleInputChange('businessHours', e.target.value)}
+                placeholder="例: 月〜金 09:00~18:00"
+                required
+              />
             </div>
           </div>
 

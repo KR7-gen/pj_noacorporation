@@ -4,14 +4,6 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 
-interface BusinessHours {
-  [key: string]: {
-    start: string
-    end: string
-    closed: boolean
-  }
-}
-
 export default function StoreCreatePage() {
   const router = useRouter()
   const [isSaving, setIsSaving] = useState(false)
@@ -20,15 +12,7 @@ export default function StoreCreatePage() {
     address: "",
     tel: "",
     fax: "",
-    businessHours: {
-      monday: { start: "09:00", end: "18:00", closed: false },
-      tuesday: { start: "09:00", end: "18:00", closed: false },
-      wednesday: { start: "09:00", end: "18:00", closed: false },
-      thursday: { start: "09:00", end: "18:00", closed: false },
-      friday: { start: "09:00", end: "18:00", closed: false },
-      saturday: { start: "10:00", end: "17:00", closed: false },
-      sunday: { start: "10:00", end: "17:00", closed: true }
-    } as BusinessHours
+    businessHours: "月〜金 09:00~18:00"
   })
 
   const handleInputChange = (field: string, value: string) => {
@@ -38,42 +22,17 @@ export default function StoreCreatePage() {
     }))
   }
 
-  const handleBusinessHoursChange = (day: string, field: string, value: string | boolean) => {
-    setFormData(prev => ({
-      ...prev,
-      businessHours: {
-        ...prev.businessHours,
-        [day]: {
-          ...prev.businessHours[day],
-          [field]: value
-        }
-      }
-    }))
-  }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSaving(true)
     
     try {
-      // 営業時間データを整形
-      const businessHoursData = {}
-      Object.keys(formData.businessHours).forEach(day => {
-        const dayData = formData.businessHours[day]
-        businessHoursData[day] = {
-          start: dayData.start,
-          end: dayData.end,
-          closed: dayData.closed
-        }
-      })
-      
       // 保存用データを準備
       const saveData = {
         name: formData.name,
         address: formData.address,
-        tel: formData.tel,
-        fax: formData.fax,
-        businessHours: businessHoursData
+        phone: formData.tel,
+        businessHours: formData.businessHours
       }
       
       console.log('Creating store with data:', saveData)
@@ -111,8 +70,11 @@ export default function StoreCreatePage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">店舗登録</h1>
+      <div className="text-center">
+        <h1 className="text-3xl font-bold">新規店舗登録</h1>
+        <p className="text-gray-600 mt-2">
+          新しい店舗の情報を入力してください
+        </p>
       </div>
 
       <div className="bg-white p-6 rounded-lg shadow-sm">
@@ -123,7 +85,6 @@ export default function StoreCreatePage() {
               <input
                 type="text"
                 className="w-full border rounded px-2 py-1"
-                placeholder="例：○○店"
                 value={formData.name}
                 onChange={(e) => handleInputChange('name', e.target.value)}
                 required
@@ -135,7 +96,6 @@ export default function StoreCreatePage() {
               <input
                 type="text"
                 className="w-full border rounded px-2 py-1"
-                placeholder="例：東京都渋谷区○○1-1-1"
                 value={formData.address}
                 onChange={(e) => handleInputChange('address', e.target.value)}
                 required
@@ -147,7 +107,6 @@ export default function StoreCreatePage() {
               <input
                 type="tel"
                 className="w-full border rounded px-2 py-1"
-                placeholder="例：000-0000-0000"
                 value={formData.tel}
                 onChange={(e) => handleInputChange('tel', e.target.value)}
                 required
@@ -159,51 +118,21 @@ export default function StoreCreatePage() {
               <input
                 type="tel"
                 className="w-full border rounded px-2 py-1"
-                placeholder="例：000-0000-0000"
                 value={formData.fax}
                 onChange={(e) => handleInputChange('fax', e.target.value)}
               />
             </div>
 
-            <div>
-              <h3 className="text-sm font-medium mb-4">営業時間</h3>
-              <div className="space-y-4">
-                {[
-                  { day: "月曜日", key: "monday" },
-                  { day: "火曜日", key: "tuesday" },
-                  { day: "水曜日", key: "wednesday" },
-                  { day: "木曜日", key: "thursday" },
-                  { day: "金曜日", key: "friday" },
-                  { day: "土曜日", key: "saturday" },
-                  { day: "日曜日", key: "sunday" }
-                ].map(({ day, key }) => (
-                  <div key={day} className="flex items-center gap-4">
-                    <div className="w-24">
-                      <input
-                        type="checkbox"
-                        id={`day-${day}`}
-                        checked={!formData.businessHours[key].closed}
-                        onChange={(e) => handleBusinessHoursChange(key, 'closed', !e.target.checked)}
-                        className="mr-2"
-                      />
-                      <label htmlFor={`day-${day}`}>{day}</label>
-                    </div>
-                    <input
-                      type="time"
-                      className="border rounded px-2 py-1"
-                      value={formData.businessHours[key].start}
-                      onChange={(e) => handleBusinessHoursChange(key, 'start', e.target.value)}
-                    />
-                    <span>〜</span>
-                    <input
-                      type="time"
-                      className="border rounded px-2 py-1"
-                      value={formData.businessHours[key].end}
-                      onChange={(e) => handleBusinessHoursChange(key, 'end', e.target.value)}
-                    />
-                  </div>
-                ))}
-              </div>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium">営業時間</label>
+              <input
+                type="text"
+                className="w-full border rounded px-2 py-1"
+                value={formData.businessHours}
+                onChange={(e) => handleInputChange('businessHours', e.target.value)}
+                placeholder="例: 月〜金 09:00~18:00"
+                required
+              />
             </div>
           </div>
 

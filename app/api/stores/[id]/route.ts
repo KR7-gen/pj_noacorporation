@@ -1,17 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { storeDataManager } from '@/lib/store-data'
+import { getStore, updateStore, deleteStore } from '@/lib/firebase-utils'
 
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    const storeId = parseInt(params.id)
+    const storeId = params.id
     
     console.log(`DELETE request for store ${storeId}`)
     
     // 店舗が存在するかチェック
-    const store = storeDataManager.getStoreById(storeId)
+    const store = await getStore(storeId)
     
     if (!store) {
       return NextResponse.json(
@@ -20,15 +20,8 @@ export async function DELETE(
       )
     }
 
-    // 共通のデータストアから削除
-    const success = storeDataManager.deleteStore(storeId)
-    
-    if (!success) {
-      return NextResponse.json(
-        { error: '店舗の削除に失敗しました' },
-        { status: 500 }
-      )
-    }
+    // Firebase Firestoreから削除
+    await deleteStore(storeId)
     
     console.log(`店舗ID ${storeId} を削除しました`)
     
@@ -50,8 +43,12 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const storeId = parseInt(params.id)
-    const store = storeDataManager.getDetailedStoreById(storeId)
+    const storeId = params.id
+    
+    console.log(`GET request for store ${storeId}`)
+    
+    // Firebase Firestoreから店舗詳細を取得
+    const store = await getStore(storeId)
     
     if (!store) {
       return NextResponse.json(
@@ -75,13 +72,13 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    const storeId = parseInt(params.id)
+    const storeId = params.id
     const body = await request.json()
     
     console.log('PUT request received:', { storeId, body })
     
     // 店舗が存在するかチェック
-    const store = storeDataManager.getStoreById(storeId)
+    const store = await getStore(storeId)
     
     if (!store) {
       return NextResponse.json(
@@ -90,18 +87,11 @@ export async function PUT(
       )
     }
 
-    // 共通のデータストアを更新
-    const success = storeDataManager.updateStore(storeId, body)
-    
-    if (!success) {
-      return NextResponse.json(
-        { error: '店舗の更新に失敗しました' },
-        { status: 500 }
-      )
-    }
+    // Firebase Firestoreを更新
+    await updateStore(storeId, body)
     
     // 更新後の詳細データを取得
-    const updatedStore = storeDataManager.getDetailedStoreById(storeId)
+    const updatedStore = await getStore(storeId)
     
     console.log(`店舗ID ${storeId} を更新しました`)
     

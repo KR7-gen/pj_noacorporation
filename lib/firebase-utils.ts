@@ -484,6 +484,27 @@ export const addStore = async (store: Omit<Store, 'id' | 'createdAt' | 'updatedA
   }
 };
 
+export const getStore = async (id: string) => {
+  try {
+    const docRef = doc(db, "stores", id);
+    const docSnap = await getDoc(docRef);
+    
+    if (docSnap.exists()) {
+      return {
+        id: docSnap.id,
+        ...docSnap.data(),
+        createdAt: convertTimestamp(docSnap.data().createdAt),
+        updatedAt: convertTimestamp(docSnap.data().updatedAt)
+      } as Store;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("Error getting store: ", error);
+    throw error;
+  }
+};
+
 export const updateStore = async (id: string, store: Partial<Store>) => {
   try {
     const docRef = doc(db, "stores", id);

@@ -19,7 +19,7 @@ import { formatNumberWithCommas, formatInputWithCommas } from "@/lib/utils"
 import type { Vehicle } from "@/types"
 import { storage } from "@/lib/firebase"
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
-import { Store } from "@/lib/store-data"
+import { Store } from "@/types"
 
 // プルダウンの選択肢
 const bodyTypes = [
@@ -180,14 +180,24 @@ export default function VehicleEditPage() {
     const fetchStores = async () => {
       try {
         setLoadingStores(true)
+        console.log('店舗データを取得中...')
+        
         const response = await fetch('/api/stores')
+        console.log('店舗APIレスポンス:', response.status, response.ok)
+        
         if (!response.ok) {
-          throw new Error('店舗データの取得に失敗しました')
+          const errorText = await response.text()
+          console.error('店舗APIエラー:', errorText)
+          throw new Error(`店舗データの取得に失敗しました: ${response.status}`)
         }
+        
         const data = await response.json()
+        console.log('取得した店舗データ:', data)
         setStores(data)
       } catch (error) {
         console.error('店舗データ取得エラー:', error)
+        // エラー時は空配列を設定
+        setStores([])
       } finally {
         setLoadingStores(false)
       }
@@ -258,6 +268,7 @@ export default function VehicleEditPage() {
     }
   }, [vehicleId])
 
+  // フォーム入力変更ハンドラー
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
@@ -265,17 +276,17 @@ export default function VehicleEditPage() {
     
     // 店舗選択の場合の特別処理
     if (name === 'storeId') {
-      const selectedStore = stores.find(store => store.id === parseInt(value))
+      const selectedStore = stores.find(store => store.id === value)
       setFormData((prev) => ({
         ...prev,
-        storeId: parseInt(value) || undefined,
+        storeId: value || undefined,
         storeName: selectedStore?.name || ""
       }))
       return
     }
     
     // カンマ区切りが必要な項目
-    const commaFields = ['price', 'wholesalePrice', 'totalPayment', 'mileage', 'loadingCapacity', 'outerLength', 'outerWidth', 'outerHeight', 'totalWeight', 'horsepower', 'displacement', 'innerLength', 'innerWidth', 'innerHeight'];
+    const commaFields = ['price', 'wholesalePrice', 'totalPayment', 'mileage', 'loadingCapacity', 'outerLength', 'outerWidth', 'outerHeight', 'totalWeight', 'horsepower', 'displacement'];
     
     if (commaFields.includes(name)) {
       const formattedValue = formatInputWithCommas(value);

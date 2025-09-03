@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Store } from "@/lib/store-data"
+import { Store } from "@/types"
 
 export default function StoresPage() {
   const router = useRouter()
@@ -93,6 +93,14 @@ export default function StoresPage() {
           >
             更新
           </Button>
+          <Link href="/admin/stores/migrate">
+            <Button 
+              variant="outline"
+              className="bg-blue-100 hover:bg-blue-200 text-blue-700 border-blue-300"
+            >
+              データ移行
+            </Button>
+          </Link>
           <Link href="/admin/stores/new">
             <Button className="bg-gray-600 hover:bg-gray-700 text-white">
               新規店舗登録
