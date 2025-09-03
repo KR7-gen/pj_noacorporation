@@ -35,7 +35,7 @@ export function Header() {
            margin: "0",
            flexShrink: 0
          }}>
-           <img src="/logo.png" alt="NOA CORPORATION" style={{ width: "13vw", maxWidth: "200px", minWidth: "120px", height: "4.43rem", opacity: 1, transform: "rotate(0deg)", margin: "0" }} />
+           <img src="/logo.png" alt="NOA CORPORATION" style={{ width: "13vw", maxWidth: "200px", minWidth: "100px", height: "3.43rem", opacity: 1, transform: "rotate(0deg)", margin: "0" }} />
          </a>
 
         {/* PCナビゲーション */}
@@ -171,11 +171,10 @@ export function Header() {
         </nav>
 
         {/* 電話番号 */}
-         <div className="hidden lg:flex items-center justify-center"
+         <div className="hidden lg:flex items-center justify-center flex-1 min-w-[100px] lg:flex-none"
            style={{
              minWidth: "14rem",
              height: "3.36rem",
-             display: "flex",
              flexDirection: "column",
              alignItems: "center",
              background: "#fff",
@@ -209,37 +208,54 @@ export function Header() {
             }}
           >
             <span style={{ display: "flex", alignItems: "center", marginRight: "0.57rem", position: "relative", top: "0.21rem", left: "0.21rem" }}>
-              <svg width="1.29rem" height="1.29rem" viewBox="0 0 24 24" fill="none" style={{ background: "#fff", opacity: 1 }} xmlns="http://www.w3.org/2000/svg">
-                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" stroke="#1a1a1a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              <img src="/call.svg" alt="電話" style={{ width: "1.29rem", height: "1.29rem" }} />
             </span>
-            028-612-1472
+           028-612-1472
           </div>
-            <div
-             style={{
-               margin: "0",
-               width: "14vw",
-               maxWidth: "200px",
-               minWidth: "140px",
-               height: "1rem",
-               opacity: 1,
-               fontFamily: "Noto Sans JP, sans-serif",
-               fontWeight: 400,
-               fontStyle: "normal",
-               fontSize: "0.86rem",
-               lineHeight: "100%",
-               letterSpacing: "0%",
-               background: "transparent",
-               color: "#1a1a1a",
-               textAlign: "center"
-             }}
-           >
-             （受付時間）8:00~17:00<br/><span style={{ whiteSpace: "nowrap" }}>※店舗不在時には折り返しさせて頂きます。</span>
-           </div>
+          <div
+           style={{
+             margin: "0",
+             width: "12vw",
+             maxWidth: "200px",
+             minWidth: "140px",
+             height: "1rem",
+             opacity: 1,
+             fontFamily: "Noto Sans JP, sans-serif",
+             fontWeight: 400,
+             fontStyle: "normal",
+             fontSize: "0.86rem",
+             lineHeight: "100%",
+             letterSpacing: "0%",
+             background: "transparent",
+             color: "#1a1a1a",
+             textAlign: "center"
+           }}
+         >
+           （受付時間）8:00~17:00<br/><span style={{ whiteSpace: "nowrap" }}>※店舗不在時には折り返しさせて頂きます。</span>
+         </div>
+        </div>
+
+        {/* スマホ版電話番号（TEL + 電話記号） */}
+        <div className="lg:hidden flex items-center justify-center">
+          <a 
+            href="tel:028-612-1472" 
+            className="flex items-center justify-center px-3 py-2 rounded-lg hover:opacity-80 transition-opacity"
+            style={{
+              background: "#666666",
+              color: "white",
+              fontFamily: "Noto Sans JP, sans-serif",
+              fontWeight: 600,
+              fontSize: "0.875rem"
+            }}
+            aria-label="電話をかける"
+          >
+            <span className="mr-2">TEL</span>
+            <img src="/call.svg" alt="電話" style={{ width: "1.25rem", height: "1.25rem", filter: "brightness(0) invert(1)" }} />
+          </a>
         </div>
 
         {/* 問い合わせフォーム */}
-        <form action="/contact" method="get" className="flex items-center justify-center m-0 p-0" style={{ 
+        <form action="/contact" method="get" className="hidden lg:flex items-center justify-center m-0 p-0 flex-1 min-w-[100px] lg:flex-none" style={{ 
           height: "3.36rem",
           margin: "0",
           flexShrink: 0
@@ -256,6 +272,7 @@ export function Header() {
               alignItems: "center",
               justifyContent: "center"
             }}
+            className="hidden lg:block"
           >
             <button 
               type="submit"
@@ -277,10 +294,33 @@ export function Header() {
                 background: "transparent"
               }}
             >
-              お問い合わせフォームへ
+              <span className="lg:hidden flex items-center">
+                <span className="mr-2">MAIL</span>
+                <img src="/mail.svg" alt="メール" style={{ width: "1.25rem", height: "1.25rem", filter: "brightness(0) invert(1)" }} />
+              </span>
+              <span className="hidden lg:inline">お問い合わせフォームへ</span>
             </button>
           </div>
         </form>
+
+        {/* スマホ版問い合わせフォーム（MAIL + メール記号） */}
+        <div className="lg:hidden flex items-center justify-center">
+          <a 
+            href="/contact" 
+            className="flex items-center justify-center px-3 py-2 rounded-lg hover:opacity-80 transition-opacity"
+            style={{
+              background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
+              color: "white",
+              fontFamily: "Noto Sans JP, sans-serif",
+              fontWeight: 600,
+              fontSize: "0.875rem"
+            }}
+            aria-label="お問い合わせ"
+          >
+            <span className="mr-2">MAIL</span>
+            <img src="/mail.svg" alt="メール" style={{ width: "1.25rem", height: "1.25rem", filter: "brightness(0) invert(1)" }} />
+          </a>
+        </div>
 
         {/* アイコン */}
         <div className="hidden md:block" style={{
