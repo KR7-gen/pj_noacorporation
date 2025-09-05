@@ -305,10 +305,10 @@ export default function HomePage() {
     <div className="min-h-screen bg-white" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
       {/* Hero, Truck Type Grid, Search Section Combined */}
       <section 
+        className="desktop-only"
         style={{
           width: "100%",
           maxWidth: "100vw",
-          height: "57.14rem",
           opacity: 1,
           top: "9rem",
           left: "50%",
@@ -320,7 +320,7 @@ export default function HomePage() {
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
           position: "absolute",
-          zIndex: 1
+          zIndex: 1,
         }}
       >
         {/* Hero Section */}
@@ -341,7 +341,6 @@ export default function HomePage() {
           >
             <h1 
               style={{
-                width: "45.14rem",
                 opacity: 1,
                 fontFamily: "Noto Sans JP",
                 fontWeight: 700,
@@ -354,12 +353,12 @@ export default function HomePage() {
                 margin: "0 0 2.43rem 0",
                 textAlign: "left"
               }}
+              className="hidden lg:block"
             >
               豊富な在庫!!挑戦価格‼<br/>　　　ノアコーポレーション
             </h1>
             <div 
               style={{
-                width: "45.14rem",
                 height: "8.57rem",
                 opacity: 1,
                 fontFamily: "Noto Sans JP",
@@ -371,7 +370,71 @@ export default function HomePage() {
                 color: "#FFFFFF",
                 textShadow: "0.14rem 0.14rem 0.14rem rgba(0, 0, 0, 0.3)",
                 margin: "0",
-                textAlign: "left"
+                textAlign: "left",
+                whiteSpace: "nowrap"
+              }}
+              className="hidden lg:block"
+            >
+              豊富な在庫車両数から、お探しの1台に出会える
+              <br />
+              栃木の中古トラック販売店です。
+              <br />
+              お気軽にお問合せ、現車確認にお越しください。
+            </div>
+          </div>
+        </div>
+
+        {/* Hero Section (Mobile only) */}
+        <div 
+          className="block lg:hidden"
+          style={{
+            color: "white",
+            height: "auto",
+            background: "linear-gradient(90deg, rgba(0, 0, 0, 0.4) 43.5%, rgba(255, 255, 255, 0) 100%), url('/background.png')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat"
+          }}
+        >
+          <div 
+            style={{
+              width: "77.08%",
+              maxWidth: "1100px",
+              textAlign: "left"
+            }}
+          >
+            <h1 
+              style={{
+                opacity: 1,
+                fontFamily: "Noto Sans JP",
+                fontWeight: 700,
+                fontStyle: "Bold",
+                fontSize: "18px",
+                lineHeight: "140%",
+                letterSpacing: "0%",
+                color: "#FFFFFF",
+                textShadow: "0.29rem 0.29rem 0.29rem 0px #0000004D",
+                margin: "0 0 1rem 1rem",
+                textAlign: "left",
+                whiteSpace: "nowrap"
+              }}
+            >
+              豊富な在庫!!<br/>挑戦価格!!<br/>ノアコーポレーション
+            </h1>
+            <div 
+              style={{
+                height: "auto",
+                opacity: 1,
+                fontFamily: "Noto Sans JP",
+                fontWeight: 700,
+                fontSize: "12px",
+                lineHeight: "1.6",
+                letterSpacing: "0%",
+                color: "#FFFFFF",
+                textShadow: "0.14rem 0.14rem 0.14rem rgba(0, 0, 0, 0.3)",
+                margin: "0 0 1rem 1rem",
+                textAlign: "left",
+                whiteSpace: "nowrap"
               }}
             >
               豊富な在庫車両数から、お探しの1台に出会える
@@ -383,8 +446,10 @@ export default function HomePage() {
           </div>
         </div>
 
+
         {/* Truck Type Grid */}
         <div 
+          className="hidden lg:block"
           style={{
             padding: "3.43rem 1.43rem 0 1.43rem",
             flex: "1"
@@ -405,7 +470,6 @@ export default function HomePage() {
                 key={icon.id}
                 href={`/inventory?type=${encodeURIComponent(icon.type)}`}
                 style={{
-                  height: "6.86rem",
                   borderRadius: "0.29rem",
                   display: "flex",
                   flexDirection: "column",
@@ -499,6 +563,7 @@ export default function HomePage() {
 
         {/* Search Section */}
         <div 
+          className="hidden lg:block"
           style={{
             padding: "0.857rem 1.43rem 10rem 1.43rem",
             flex: "1",
@@ -546,7 +611,7 @@ export default function HomePage() {
                   position: "relative"
                 }}
               >
-                                  <select
+                  <select
                     style={{
                       width: "100%",
                       border: "none",
@@ -599,7 +664,7 @@ export default function HomePage() {
                   position: "relative"
                 }}
               >
-                                  <select
+                  <select
                     style={{
                       width: "100%",
                       border: "none",
@@ -801,8 +866,457 @@ export default function HomePage() {
         </div>
       </section>
       
+      {/* スマホ版 Hero Section - 独立した要素 */}
+      <section 
+        className="block lg:hidden"
+        style={{
+          width: "100%",
+          maxWidth: "100vw",
+          opacity: 1,
+          top: "9rem",
+          left: "50%",
+          transform: "translateX(-50%)",
+          position: "absolute",
+          zIndex: 1
+        }}
+      >
+        <div 
+          style={{
+            color: "white",
+            height: "500px",
+            background: "linear-gradient(90deg, rgba(0, 0, 0, 0.4) 43.5%, rgba(255, 255, 255, 0) 100%), url('/background.png')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat"
+          }}
+        >
+          <div 
+            style={{
+              width: "77.08%",
+              maxWidth: "1100px",
+              textAlign: "left"
+            }}
+          >
+            <h1 
+              style={{
+                opacity: 1,
+                fontFamily: "Noto Sans JP",
+                fontWeight: 700,
+                fontStyle: "Bold",
+                fontSize: "18px",
+                lineHeight: "140%",
+                letterSpacing: "0%",
+                color: "#FFFFFF",
+                textShadow: "0.29rem 0.29rem 0.29rem 0px #0000004D",
+                margin: "0 0 1rem 1rem",
+                textAlign: "left",
+                whiteSpace: "nowrap"
+              }}
+            >
+              豊富な在庫!!<br/>挑戦価格!!<br/>ノアコーポレーション
+            </h1>
+            <div 
+              style={{
+                height: "auto",
+                opacity: 1,
+                fontFamily: "Noto Sans JP",
+                fontWeight: 700,
+                fontSize: "12px",
+                lineHeight: "1.6",
+                letterSpacing: "0%",
+                color: "#FFFFFF",
+                textShadow: "0.14rem 0.14rem 0.14rem rgba(0, 0, 0, 0.3)",
+                margin: "0 0 1rem 1rem",
+                textAlign: "left",
+                whiteSpace: "nowrap"
+              }}
+            >
+              豊富な在庫車両数から、お探しの1台に出会える
+              <br />
+              栃木の中古トラック販売店です。
+              <br />
+              お気軽にお問合せ、現車確認にお越しください。
+            </div>
+          </div>
+        </div>
+      </section>
+      
       {/* Spacer to account for absolute positioned Hero Section */}
       <div style={{ height: "66.14rem" }}></div>
+
+      {/* スマホ版 Truck Type Grid - 独立した要素 */}
+      <section 
+        className="lg:hidden block"
+        style={{
+          width: "100%",
+          maxWidth: "100vw",
+          opacity: 1,
+          top: "calc(9rem + 20rem)",
+          left: "50%",
+          transform: "translateX(-50%)",
+          position: "absolute",
+          zIndex: 1,
+          padding: "2rem 1rem",
+          background: "white"
+        }}
+      >
+        <div 
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gridTemplateRows: "repeat(6, 1fr)",
+            gap: "1rem",
+            width: "100%",
+            maxWidth: "100%",
+            margin: "0 auto",
+            height: "auto"
+          }}
+        >
+          {vehicleTypeIcons.map((icon) => (
+            <Link
+              key={icon.id}
+              href={`/inventory?type=${encodeURIComponent(icon.type)}`}
+              style={{
+                height: "8rem",
+                borderRadius: "0.5rem",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "white",
+                textDecoration: "none",
+                transition: "all 0.3s ease",
+                boxShadow: "0 0.07rem 0.21rem rgba(0, 0, 0, 0.1)",
+                opacity: 1,
+                border: "1px solid #e5e7eb"
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-0.14rem)";
+                e.currentTarget.style.boxShadow = "0 0.29rem 0.57rem rgba(0, 0, 0, 0.15)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "0 0.07rem 0.21rem rgba(0, 0, 0, 0.1)";
+              }}
+            >
+              <div 
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "flex-start",
+                  position: "relative",
+                  padding: "0.5rem"
+                }}
+              >
+                <div 
+                  style={{
+                    width: icon.type === "ダンプローダーダンプ" ? "3rem" : "3.5rem",
+                    height: icon.type === "ダンプローダーダンプ" ? "3rem" : "3.5rem",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginBottom: icon.type === "ダンプローダーダンプ" ? "0.5rem" : "0.29rem"
+                  }}
+                >
+                  <img 
+                    src={`/${icon.type === "クレーン" ? "crane" : 
+                         icon.type === "ダンプローダーダンプ" ? "dump" :
+                         icon.type === "平ボディ" ? "flatbed" :
+                         icon.type === "重機回送車" ? "carrier" :
+                         icon.type === "ミキサー車" ? "mixer" :
+                         icon.type === "アルミバン" ? "van" :
+                         icon.type === "高所作業車" ? "aerial" :
+                         icon.type === "アルミウィング" ? "wing" :
+                         icon.type === "車両運搬車" ? "car_carrier" :
+                         icon.type === "塵芥車" ? "garbage" :
+                         icon.type === "アームロール" ? "arm-roll" :
+                         "special"}.${icon.type === "平ボディ" || icon.type === "アームロール" || icon.type === "車両運搬車" ? "png" : "jpg"}`}
+                    alt={icon.type}
+                    style={{
+                      maxWidth: "100%",
+                      maxHeight: "100%",
+                      objectFit: "contain"
+                    }}
+                    onError={(e) => {
+                      console.error(`画像読み込みエラー: ${icon.type}`, (e.target as HTMLImageElement).src);
+                    }}
+                  />
+                </div>
+                <span 
+                  style={{
+                    fontFamily: "'Noto Sans JP', sans-serif",
+                    fontWeight: 700,
+                    fontStyle: "bold",
+                    fontSize: "0.9rem",
+                    lineHeight: "120%",
+                    letterSpacing: "0%",
+                    textAlign: "center",
+                    color: "#1A1A1A",
+                    maxWidth: "100%",
+                    whiteSpace: "pre-line",
+                    padding: "0.17rem",
+                    marginTop: icon.type === "ダンプローダーダンプ" ? "0.2rem" : "0"
+                  }}
+                >
+                  {icon.type === "ダンプローダーダンプ" ? "ダンプ\nローダーダンプ" : icon.type}
+                </span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* スマホ版 Search Section - 独立した要素 */}
+      <section 
+        className="lg:hidden block"
+        style={{
+          width: "100%",
+          maxWidth: "100vw",
+          opacity: 1,
+          top: "calc(9rem + 20rem + 37rem)",
+          left: "50%",
+          transform: "translateX(-50%)",
+          position: "absolute",
+          zIndex: 1,
+          padding: "2rem 1rem",
+          background: "white"
+        }}
+      >
+        <div 
+          style={{
+            width: "100%",
+            margin: "0 auto",
+            height: "auto",
+            display: "flex",
+            flexDirection: "column",
+            gap: "1rem",
+            opacity: 1,
+            borderRadius: "0.5rem",
+            padding: "1rem",
+            background: "#f5f5f5"
+          }}
+        >
+          {/* 車両検索（ボディタイプ） */}
+          <div 
+            style={{
+              width: "100%",
+              height: "3rem",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              borderRadius: "0.5rem",
+              padding: "0 1rem",
+              background: "#FFFFFF",
+              position: "relative"
+            }}
+          >
+            <select
+              style={{
+                width: "100%",
+                border: "none",
+                background: "transparent",
+                fontSize: "1rem",
+                fontFamily: "Noto Sans JP",
+                fontWeight: "400",
+                color: "#1A1A1A",
+                outline: "none",
+                cursor: "pointer",
+                appearance: "none",
+                WebkitAppearance: "none",
+                MozAppearance: "none"
+              }}
+              value={selectedType}
+              onChange={(e) => setSelectedType(e.target.value)}
+            >
+              <option value="">ボディタイプ：すべて</option>
+              {truckTypes.map((type) => (
+                <option key={type} value={type}>{type}</option>
+              ))}
+            </select>
+            <ChevronDown 
+              size={20} 
+              style={{ 
+                color: "#1A1A1A",
+                position: "absolute",
+                right: "1rem",
+                top: "50%",
+                transform: "translateY(-50%)",
+                pointerEvents: "none"
+              }} 
+            />
+          </div>
+
+          {/* 車両検索（メーカー） */}
+          <div 
+            style={{
+              width: "100%",
+              height: "3rem",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              borderRadius: "0.5rem",
+              padding: "0 1rem",
+              background: "#FFFFFF",
+              position: "relative"
+            }}
+          >
+            <select
+              style={{
+                width: "100%",
+                border: "none",
+                background: "transparent",
+                fontSize: "1rem",
+                fontFamily: "Noto Sans JP",
+                fontWeight: "400",
+                color: "#1A1A1A",
+                outline: "none",
+                cursor: "pointer",
+                appearance: "none",
+                WebkitAppearance: "none",
+                MozAppearance: "none"
+              }}
+              value={selectedMaker}
+              onChange={(e) => setSelectedMaker(e.target.value)}
+            >
+              <option value="">メーカー：すべて</option>
+              {makers.map((maker) => (
+                <option key={maker} value={maker}>{maker}</option>
+              ))}
+            </select>
+            <ChevronDown 
+              size={20} 
+              style={{ 
+                color: "#1A1A1A",
+                position: "absolute",
+                right: "1rem",
+                top: "50%",
+                transform: "translateY(-50%)",
+                pointerEvents: "none"
+              }} 
+            />
+          </div>
+
+          {/* 車両検索（大きさ） */}
+          <div 
+            style={{
+              width: "100%",
+              height: "3rem",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              borderRadius: "0.5rem",
+              padding: "0 1rem",
+              background: "#FFFFFF",
+              position: "relative"
+            }}
+          >
+            <select
+              style={{
+                width: "100%",
+                border: "none",
+                background: "transparent",
+                fontSize: "1rem",
+                fontFamily: "Noto Sans JP",
+                fontWeight: "400",
+                color: "#1A1A1A",
+                outline: "none",
+                cursor: "pointer",
+                appearance: "none",
+                WebkitAppearance: "none",
+                MozAppearance: "none"
+              }}
+              value={selectedSize}
+              onChange={(e) => setSelectedSize(e.target.value)}
+            >
+              <option value="">大きさ：すべて</option>
+              {sizes.map((size) => (
+                <option key={size} value={size}>{size}</option>
+              ))}
+            </select>
+            <ChevronDown 
+              size={20} 
+              style={{ 
+                color: "#1A1A1A",
+                position: "absolute",
+                right: "1rem",
+                top: "50%",
+                transform: "translateY(-50%)",
+                pointerEvents: "none"
+              }} 
+            />
+          </div>
+
+          {/* 右側のフリーワードと検索ボタン */}
+          <div 
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem"
+            }}
+          >
+            {/* 車両検索（フリーワード） */}
+            <div 
+              style={{
+                flex: 1,
+                height: "3rem",
+                display: "flex",
+                alignItems: "center",
+                borderRadius: "0.5rem",
+                padding: "0 1rem",
+                background: "#FFFFFF"
+              }}
+            >
+              <input
+                type="text"
+                placeholder="問い合わせ番号、車体番号など"
+                value={searchKeyword}
+                onChange={(e) => setSearchKeyword(e.target.value)}
+                style={{
+                  width: "100%",
+                  border: "none",
+                  background: "transparent",
+                  fontSize: "1rem",
+                  fontFamily: "Noto Sans JP",
+                  fontWeight: "400",
+                  color: "#1A1A1A",
+                  outline: "none"
+                }}
+              />
+            </div>
+
+            {/* 検索ボタン */}
+            <button
+              onClick={handleSearch}
+              style={{
+                minWidth: "6rem",
+                height: "3rem",
+                borderRadius: "0.5rem",
+                background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
+                color: "white",
+                border: "none",
+                fontSize: "1rem",
+                fontFamily: "Noto Sans JP",
+                fontWeight: "600",
+                cursor: "pointer",
+                transition: "opacity 0.2s"
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.opacity = "0.8";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.opacity = "1";
+              }}
+            >
+              検索する
+            </button>
+          </div>
+
+        </div>
+      </section>
 
       {/* New Trucks Section */}
       <section 

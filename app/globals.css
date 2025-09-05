@@ -10,6 +10,16 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  
+  .desktop-only {
+    display: none !important;
+  }
+  
+  @media (min-width: 1024px) {
+    .desktop-only {
+      display: flex !important;
+    }
+  }
 }
 
 @layer base {

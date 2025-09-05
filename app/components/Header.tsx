@@ -368,7 +368,7 @@ export function Header() {
         {/* ドロワーメニュー */}
         {menuOpen && (
           <div className="fixed inset-0 z-50 bg-black bg-opacity-40 flex justify-end">
-            <div className="w-4/5 max-w-xs bg-white h-full shadow-lg p-6 flex flex-col justify-center">
+            <div className="bg-white shadow-lg p-6 flex flex-col" style={{ width: "100%", height: "1200px", overflow: "hidden" }}>
               <div className="flex items-center justify-end mb-8">
                 <button
                   type="button"
