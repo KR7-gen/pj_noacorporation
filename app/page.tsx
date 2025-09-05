@@ -1320,6 +1320,7 @@ export default function HomePage() {
 
       {/* New Trucks Section */}
       <section 
+        className="new-trucks-section"
         style={{
           width: "77.08%",
           maxWidth: "79.28rem",
@@ -1397,6 +1398,7 @@ export default function HomePage() {
 
           {/* 新着車輌の表示 */}
           <div 
+            className="home-vehicle-grid"
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(4, 1fr)",
@@ -1426,6 +1428,7 @@ export default function HomePage() {
                 <CardContent style={{ padding: "0" }}>
                   {/* ヘッダーバー */}
                   <div 
+                    className="vehicle-card-header"
                     style={{
                       height: "2.79rem",
                       background: "#1A1A1A",
@@ -1473,6 +1476,7 @@ export default function HomePage() {
                   
                   {/* 問い合わせ番号 */}
                   <div 
+                    className="vehicle-inquiry-number"
                     style={{
                       height: "2.5rem",
                       background: "#FFFFFF",
@@ -1481,7 +1485,7 @@ export default function HomePage() {
                       justifyContent: "center"
                     }}
                   >
-                                            <span style={{
+                        <span style={{
                           height: "1.36rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
@@ -1506,7 +1510,7 @@ export default function HomePage() {
                       overflow: "hidden"
                     }}
                   >
-                                                             {vehicle.imageUrls && vehicle.imageUrls.length > 0 && vehicle.imageUrls[0] ? (
+                    {vehicle.imageUrls && vehicle.imageUrls.length > 0 && vehicle.imageUrls[0] ? (
                       <img
                         src={vehicle.imageUrls[0]}
                         alt={`${vehicle.maker} ${vehicle.name}`}
@@ -1569,6 +1573,7 @@ export default function HomePage() {
 
                   {/* ボディタイプ + 詳細テーブル */}
                   <div 
+                    className="vehicle-detail-table"
                     style={{
                       height: "19.5rem",
                       display: "flex",
@@ -1603,7 +1608,8 @@ export default function HomePage() {
                           fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
-                          color: "#1A1A1A"
+                          color: "#1A1A1A",
+                          whiteSpace: "nowrap"
                         }}>
                           {vehicle.bodyType || vehicle.vehicleType || "未設定"}
                         </span>
@@ -1638,7 +1644,8 @@ export default function HomePage() {
                           fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
-                          color: "#1A1A1A"
+                          color: "#1A1A1A",
+                          whiteSpace: "nowrap"
                         }}>本体価格</span>
                       </div>
                       <div style={{ 
@@ -1649,8 +1656,8 @@ export default function HomePage() {
                         justifyContent: "flex-start",
                         paddingLeft: "0.86rem"
                       }}>
-                        <div>
-                                                  <span style={{
+                        <div style={{ whiteSpace: "nowrap" }}>
+                        <span style={{
                           height: "1.64rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
@@ -1660,7 +1667,7 @@ export default function HomePage() {
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#2B5EC5"
-                        }}>
+                        }} className="price-text">
                           {vehicle.price ? Math.floor(vehicle.price / 10000) : "000"}
                         </span>
                         <span style={{
@@ -1706,7 +1713,8 @@ export default function HomePage() {
                           fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
-                          color: "#1A1A1A"
+                          color: "#1A1A1A",
+                          whiteSpace: "nowrap"
                         }}>年式</span>
                       </div>
                       <div style={{ 
@@ -1726,7 +1734,8 @@ export default function HomePage() {
                           fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
-                          color: "#1A1A1A"
+                          color: "#1A1A1A",
+                          whiteSpace: "nowrap"
                         }}>
                           {vehicle.year ? `${vehicle.year}年${vehicle.month ? vehicle.month.replace('月', '') + '月' : ''}` : "R6年9月"}
                         </span>
@@ -1761,7 +1770,8 @@ export default function HomePage() {
                           fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
-                          color: "#1A1A1A"
+                          color: "#1A1A1A",
+                          whiteSpace: "nowrap"
                         }}>走行距離</span>
                       </div>
                       <div style={{ 
@@ -1781,7 +1791,8 @@ export default function HomePage() {
                           fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
-                          color: "#1A1A1A"
+                          color: "#1A1A1A",
+                          whiteSpace: "nowrap"
                         }}>
                           {vehicle.mileage ? `${vehicle.mileage.toLocaleString()}km` : "00,000km"}
                         </span>
@@ -1816,7 +1827,8 @@ export default function HomePage() {
                           fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
-                          color: "#1A1A1A"
+                          color: "#1A1A1A",
+                          whiteSpace: "nowrap"
                         }}>積載量</span>
                       </div>
                       <div style={{ 
@@ -1836,7 +1848,8 @@ export default function HomePage() {
                           fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
-                          color: "#1A1A1A"
+                          color: "#1A1A1A",
+                          whiteSpace: "nowrap"
                         }}>
                           {vehicle.loadingCapacity ? `${vehicle.loadingCapacity.toLocaleString()}kg` : "0,000kg"}
                         </span>
@@ -1871,7 +1884,8 @@ export default function HomePage() {
                           fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
-                          color: "#1A1A1A"
+                          color: "#1A1A1A",
+                          whiteSpace: "nowrap"
                         }}>シフト</span>
                       </div>
                       <div style={{ 
@@ -1891,7 +1905,8 @@ export default function HomePage() {
                           fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
-                          color: "#1A1A1A"
+                          color: "#1A1A1A",
+                          whiteSpace: "nowrap"
                         }}>
                           {vehicle.mission || vehicle.shift || "AT"}
                         </span>
@@ -1926,7 +1941,8 @@ export default function HomePage() {
                           fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
-                          color: "#1A1A1A"
+                          color: "#1A1A1A",
+                          whiteSpace: "nowrap"
                         }}>車検期限</span>
                       </div>
                       <div style={{ 
@@ -1946,7 +1962,8 @@ export default function HomePage() {
                           fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
-                          color: "#1A1A1A"
+                          color: "#1A1A1A",
+                          whiteSpace: "nowrap"
                         }}>
                           {vehicle.inspectionStatus || "抹消"}
                         </span>

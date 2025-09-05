@@ -503,6 +503,7 @@ export default function InventoryPage() {
 
         {/* Search Section */}
         <div 
+          className="search-section"
           style={{
             padding: "0.857rem 1.43rem 2.86rem 1.43rem",
             flex: "1",
@@ -1041,6 +1042,7 @@ export default function InventoryPage() {
           ) : (
             <>
             <div 
+              className="inventory-vehicle-grid"
               style={{
                 display: "grid",
                 gridTemplateColumns: "repeat(4, 1fr)",

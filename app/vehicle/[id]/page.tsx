@@ -955,11 +955,14 @@ export default function VehicleDetailPage() {
           
           
                      {/* サンプルカード */}
-           <div style={{
-             display: "flex",
-             justifyContent: "space-between",
-             width: "100%"
-           }}>
+           <div 
+             className="vehicle-detail-samples"
+             style={{
+               display: "flex",
+               justifyContent: "space-between",
+               width: "100%"
+             }}
+           >
              {/* 他の車両のサンプル表示 */}
              {Array.from({ length: 3 }, (_, i) => (
                <Card 
