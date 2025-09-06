@@ -69,11 +69,21 @@ const SortableImage = ({ id, imageUrl, onDelete, isSelectionMode, isSelected, on
     opacity: isDragging ? 0.5 : 1,
   }
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent) => {
+    // ドラッグ操作の場合はクリックイベントを無視
+    if (e.defaultPrevented) return
+    
     if (isSelectionMode) {
       onToggleSelection(imageUrl)
     } else {
       onImageClick(imageUrl)
+    }
+  }
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    // 一括削除モード時はドラッグを無効化
+    if (isSelectionMode) {
+      e.preventDefault()
     }
   }
 
@@ -85,10 +95,14 @@ const SortableImage = ({ id, imageUrl, onDelete, isSelectionMode, isSelected, on
          width: '5.714rem',
          height: '4.286rem'
        }}
-       className={`relative group bg-gray-100 overflow-hidden cursor-pointer ${
+       className={`relative group bg-gray-100 overflow-hidden ${
+         isSelectionMode ? 'cursor-pointer' : 'cursor-grab active:cursor-grabbing'
+       } ${
          isSelectionMode && isSelected ? 'ring-2 ring-blue-500' : ''
        }`}
        onClick={handleClick}
+       onMouseDown={handleMouseDown}
+       {...(!isSelectionMode ? { ...attributes, ...listeners } : {})}
      >
        <img
          src={imageUrl}
@@ -98,27 +112,18 @@ const SortableImage = ({ id, imageUrl, onDelete, isSelectionMode, isSelected, on
        />
       <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-200">
         {!isSelectionMode && (
-          <>
-            <div className="absolute top-1 right-1">
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  onDelete(imageUrl)
-                }}
-                className="h-4 w-4 p-0 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
-              >
-                <X className="h-2 w-2" />
-              </button>
-            </div>
-            <div
-              {...attributes}
-              {...listeners}
-              className="absolute top-1 left-1 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity"
+          <div className="absolute top-1 right-1">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation()
+                onDelete(imageUrl)
+              }}
+              className="h-4 w-4 p-0 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
             >
-              <GripVertical className="h-3 w-3 text-white" />
-            </div>
-          </>
+              <X className="h-2 w-2" />
+            </button>
+          </div>
         )}
         {isSelectionMode && (
           <div className="absolute top-1 left-1">
@@ -128,6 +133,9 @@ const SortableImage = ({ id, imageUrl, onDelete, isSelectionMode, isSelected, on
               onChange={(e) => {
                 e.stopPropagation()
                 onToggleSelection(imageUrl)
+              }}
+              onClick={(e) => {
+                e.stopPropagation()
               }}
               className="h-3 w-3 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
             />
@@ -146,7 +154,11 @@ export default function ImageUploader({ images, onImagesChange, vehicleId }: Ima
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8, // 8px以上移動した場合のみドラッグ開始
+      },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
@@ -190,8 +202,10 @@ export default function ImageUploader({ images, onImagesChange, vehicleId }: Ima
   }, [images, onImagesChange, vehicleId])
 
   const handleDelete = useCallback((imageUrl: string) => {
-    const newImages = filteredImageUrls.filter(img => img !== imageUrl)
-    onImagesChange(newImages)
+    if (window.confirm('この画像を削除しますか？')) {
+      const newImages = filteredImageUrls.filter(img => img !== imageUrl)
+      onImagesChange(newImages)
+    }
   }, [filteredImageUrls, onImagesChange])
 
   const handleDragEnd = useCallback((event: any) => {
@@ -215,10 +229,19 @@ export default function ImageUploader({ images, onImagesChange, vehicleId }: Ima
   }, [])
 
   const handleBulkDelete = useCallback(() => {
-    const newImages = filteredImageUrls.filter(img => !selectedImages.includes(img))
-    onImagesChange(newImages)
-    setSelectedImages([])
+    if (window.confirm(`選択した${selectedImages.length}枚の画像を削除しますか？`)) {
+      const newImages = filteredImageUrls.filter(img => !selectedImages.includes(img))
+      onImagesChange(newImages)
+      setSelectedImages([])
+    }
   }, [filteredImageUrls, selectedImages, onImagesChange])
+
+  const handleDeleteAll = useCallback(() => {
+    if (window.confirm('全ての画像を削除しますか？')) {
+      onImagesChange([])
+      setSelectedImages([])
+    }
+  }, [onImagesChange])
 
   const handleCancelSelection = useCallback(() => {
     setIsSelectionMode(false)
@@ -289,7 +312,7 @@ export default function ImageUploader({ images, onImagesChange, vehicleId }: Ima
                 size="sm"
                 onClick={() => setIsSelectionMode(true)}
               >
-                一括削除モード
+                一括削除もしくは全削除する
               </Button>
             )}
           </div>
@@ -304,6 +327,15 @@ export default function ImageUploader({ images, onImagesChange, vehicleId }: Ima
                 disabled={selectedImages.length === 0}
               >
                 一括削除 ({selectedImages.length}枚)
+              </Button>
+              <Button
+                type="button"
+                variant="destructive"
+                size="sm"
+                onClick={handleDeleteAll}
+                disabled={filteredImageUrls.length === 0}
+              >
+                全削除
               </Button>
               <Button
                 type="button"

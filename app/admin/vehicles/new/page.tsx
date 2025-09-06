@@ -45,6 +45,9 @@ const makers = [
   "いすゞ",
   "三菱ふそう",
   "UD",
+  "トヨタ",
+  "日産",
+  "マツダ",
   "その他"
 ]
 
@@ -77,20 +80,33 @@ const sizes = [
   "小型"
 ]
 
-const years = [
-  "R7",
-  "R6",
-  "R5",
-  "R4",
-  "R3",
-  "R2",
-  "R1",
-  "H31",
-  "H30",
-  "H29",
-  "H28",
-  "H27"
-]
+// 年式選択肢を生成する関数
+const generateYears = () => {
+  const currentYear = new Date().getFullYear();
+  const years = [];
+  
+  for (let i = 0; i < 45; i++) {
+    const year = currentYear - i;
+    let eraYear;
+    
+    if (year >= 2019) {
+      // 令和
+      eraYear = `R${year - 2018}`;
+    } else if (year >= 1989) {
+      // 平成
+      eraYear = `H${year - 1988}`;
+    } else {
+      // 昭和
+      eraYear = `S${year - 1925}`;
+    }
+    
+    years.push(eraYear);
+  }
+  
+  return years;
+};
+
+const years = generateYears();
 
 const mileages = [
   "上限なし",
@@ -275,6 +291,17 @@ export default function VehicleNewPage() {
 
     generateInquiryNumber()
   }, [])
+
+  // トラック名の自動反映
+  useEffect(() => {
+    if (formData.maker && formData.vehicleType) {
+      const truckName = `${formData.maker} ${formData.vehicleType}`;
+      setFormData((prev) => ({
+        ...prev,
+        name: truckName,
+      }));
+    }
+  }, [formData.maker, formData.vehicleType]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -572,169 +599,206 @@ export default function VehicleNewPage() {
       <div className="bg-white p-6 rounded-lg shadow-sm">
         <form className="space-y-8" onSubmit={handleSubmit}>
           {/* 基本情報 */}
-          <div className="grid grid-cols-6 gap-6">
-            <div className="space-y-2">
-              <label className="block text-sm font-medium">問い合わせ番号</label>
-              <input
-                type="text"
-                value={generatedInquiryNumber}
-                className={`w-full border rounded px-2 py-1 ${
-                  generatedInquiryNumber === "生成中..." || generatedInquiryNumber === "エラー"
-                    ? "bg-gray-100 text-gray-500"
-                    : "bg-blue-50 text-blue-700 font-medium"
-                }`}
-                disabled
-                readOnly
-              />
+          <div className="space-y-6">
+            {/* 1行目：問い合わせ番号 */}
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+              <div className="space-y-2">
+                <label className="block text-sm font-medium">問い合わせ番号</label>
+                <input
+                  type="text"
+                  value={generatedInquiryNumber}
+                  className={`w-full border rounded px-2 py-1 ${
+                    generatedInquiryNumber === "生成中..." || generatedInquiryNumber === "エラー"
+                      ? "bg-gray-100 text-gray-500"
+                      : "bg-blue-50 text-blue-700 font-medium"
+                  }`}
+                  disabled
+                  readOnly
+                />
+              </div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
             </div>
-            <div className="space-y-2">
-              <label className="block text-sm font-medium">トラック名</label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                className="w-full border rounded px-2 py-1"
-                placeholder="日野 レンジャー"
-              />
+
+            {/* 2行目：トラック名 + 在庫店舗名 */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <label className="block text-sm font-medium">トラック名</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  className="w-full border rounded px-2 py-1 bg-gray-100 text-gray-700"
+                  placeholder="メーカーと車種を選択すると自動入力されます"
+                  readOnly
+                  disabled
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="block text-sm font-medium">在庫店舗名</label>
+                <select
+                  name="storeId"
+                  value={formData.storeId || ""}
+                  onChange={handleChange}
+                  className="w-full border rounded px-2 py-1"
+                  disabled={loadingStores}
+                >
+                  <option value="">店舗を選択してください</option>
+                  {stores.map((store) => (
+                    <option key={store.id} value={store.id}>
+                      {store.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div></div>
             </div>
-            <div className="space-y-2">
-              <label className="block text-sm font-medium">在庫店舗名</label>
-              <select
-                name="storeId"
-                value={formData.storeId || ""}
-                onChange={handleChange}
-                className="w-full border rounded px-2 py-1"
-                disabled={loadingStores}
-              >
-                <option value="">店舗を選択してください</option>
-                {stores.map((store) => (
-                  <option key={store.id} value={store.id}>
-                    {store.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="space-y-2">
-              <label className="block text-sm font-medium">車両価格（税抜）</label>
-              <input
-                type="text"
-                name="price"
-                value={formData.price}
-                onChange={handleChange}
-                className="w-full border rounded px-2 py-1"
-                placeholder="5,000,000"
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="block text-sm font-medium">業販金額</label>
-              <input
-                type="text"
-                name="wholesalePrice"
-                value={formData.wholesalePrice}
-                onChange={handleChange}
-                className="w-full border rounded px-2 py-1"
-                placeholder="4,500,000"
-              />
-            </div>
-            <div className="space-y-2">
-                              <label className="block text-sm font-medium">車両総額</label>
-              <input
-                type="text"
-                name="totalPayment"
-                value={formData.totalPayment}
-                onChange={handleChange}
-                className="w-full border rounded px-2 py-1"
-                placeholder="5,500,000"
-              />
+
+            {/* 3行目：業販金額 + 車両価格（税抜）+ 車両総額 */}
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+              <div className="space-y-2">
+                <label className="block text-sm font-medium">業販金額</label>
+                <input
+                  type="text"
+                  name="wholesalePrice"
+                  value={formData.wholesalePrice}
+                  onChange={handleChange}
+                  className="w-full border rounded px-2 py-1"
+                  placeholder="4,500,000"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="block text-sm font-medium">車両価格（税抜）</label>
+                <input
+                  type="text"
+                  name="price"
+                  value={formData.price}
+                  onChange={handleChange}
+                  className="w-full border rounded px-2 py-1"
+                  placeholder="5,000,000"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="block text-sm font-medium">車両総額</label>
+                <input
+                  type="text"
+                  name="totalPayment"
+                  value={formData.totalPayment}
+                  onChange={handleChange}
+                  className="w-full border rounded px-2 py-1"
+                  placeholder="5,500,000"
+                />
+              </div>
+              <div></div>
+              <div></div>
             </div>
           </div>
 
           {/* 商談管理セクション */}
           <div className="bg-gray-50 p-6 rounded-lg border">
             <h3 className="text-lg font-medium mb-4">商談管理</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* 商談中スイッチ */}
-              <div className="flex items-center justify-between">
-                <Label htmlFor="isNegotiating" className="text-base">商談中</Label>
-                <Switch
-                  id="isNegotiating"
-                  checked={formData.isNegotiating || false}
-                  onCheckedChange={(checked) => handleNegotiationChange('isNegotiating', checked)}
-                  className="data-[state=checked]:bg-orange-500"
-                />
+            <div className="space-y-6">
+              {/* 1行目：商談中スイッチ + 商談期限 + 空欄 + 空欄 + 空欄 */}
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                {/* 商談中スイッチ */}
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="isNegotiating" className="text-base">商談中</Label>
+                  <Switch
+                    id="isNegotiating"
+                    checked={formData.isNegotiating || false}
+                    onCheckedChange={(checked) => handleNegotiationChange('isNegotiating', checked)}
+                    className="data-[state=checked]:bg-orange-500"
+                  />
+                </div>
+                
+                {/* 商談期限 */}
+                <div>
+                  <Label htmlFor="negotiationDeadline" className={formData.isNegotiating ? "text-red-600" : ""}>
+                    商談期限{formData.isNegotiating && <span className="text-red-500">*</span>}
+                  </Label>
+                  <Input 
+                    id="negotiationDeadline" 
+                    type="date" 
+                    value={formData.negotiationDeadline || ""}
+                    onChange={(e) => handleNegotiationChange('negotiationDeadline', e.target.value)}
+                    required={formData.isNegotiating}
+                    className={formData.isNegotiating && !formData.negotiationDeadline ? "border-red-500" : ""}
+                  />
+                </div>
+                <div></div>
+                <div></div>
+                <div></div>
               </div>
               
-              {/* SOLD OUTスイッチ */}
-              <div className="flex items-center justify-between">
-                <Label htmlFor="isSoldOut" className="text-base">SOLD OUT</Label>
-                <Switch
-                  id="isSoldOut"
-                  checked={formData.isSoldOut || false}
-                  onCheckedChange={(checked) => handleNegotiationChange('isSoldOut', checked)}
-                  className="data-[state=checked]:bg-red-500"
-                />
+              {/* 2行目：営業担当 + 顧客名 + 空欄 + 空欄 + 空欄 */}
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                {/* 営業担当 */}
+                <div>
+                  <Label htmlFor="salesRepresentative" className={formData.isNegotiating ? "text-red-600" : ""}>
+                    営業担当{formData.isNegotiating && <span className="text-red-500">*</span>}
+                  </Label>
+                  <Select 
+                    value={formData.salesRepresentative || ""} 
+                    onValueChange={(value) => handleNegotiationChange('salesRepresentative', value)}
+                  >
+                    <SelectTrigger className={formData.isNegotiating && !formData.salesRepresentative ? "border-red-500" : ""}>
+                      <SelectValue placeholder="選択" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {salesRepresentatives.map((rep) => (
+                        <SelectItem key={rep} value={rep}>{rep}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                {/* 顧客名 */}
+                <div>
+                  <Label htmlFor="customerName" className={formData.isNegotiating ? "text-red-600" : ""}>
+                    顧客名{formData.isNegotiating && <span className="text-red-500">*</span>}
+                  </Label>
+                  <Input 
+                    id="customerName" 
+                    placeholder="テキスト入力" 
+                    value={formData.customerName || ""}
+                    onChange={(e) => handleNegotiationChange('customerName', e.target.value)}
+                    required={formData.isNegotiating}
+                    className={formData.isNegotiating && !formData.customerName ? "border-red-500" : ""}
+                  />
+                </div>
+                <div></div>
+                <div></div>
+                <div></div>
               </div>
               
-              {/* 非公開スイッチ */}
-              <div className="flex items-center justify-between">
-                <Label htmlFor="isPrivate" className="text-base">非公開</Label>
-                <Switch
-                  id="isPrivate"
-                  checked={formData.isPrivate || false}
-                  onCheckedChange={(checked) => handleNegotiationChange('isPrivate', checked)}
-                  className="data-[state=checked]:bg-gray-500"
-                />
-              </div>
-              
-              {/* 商談期限 */}
-              <div>
-                <Label htmlFor="negotiationDeadline" className={formData.isNegotiating ? "text-red-600" : ""}>
-                  商談期限{formData.isNegotiating && <span className="text-red-500">*</span>}
-                </Label>
-                <Input 
-                  id="negotiationDeadline" 
-                  type="date" 
-                  value={formData.negotiationDeadline || ""}
-                  onChange={(e) => handleNegotiationChange('negotiationDeadline', e.target.value)}
-                  required={formData.isNegotiating}
-                  className={formData.isNegotiating && !formData.negotiationDeadline ? "border-red-500" : ""}
-                />
-              </div>
-              
-              {/* 営業担当 */}
-              <div>
-                <Label htmlFor="salesRepresentative" className={formData.isNegotiating ? "text-red-600" : ""}>
-                  営業担当{formData.isNegotiating && <span className="text-red-500">*</span>}
-                </Label>
-                <Select 
-                  value={formData.salesRepresentative || ""} 
-                  onValueChange={(value) => handleNegotiationChange('salesRepresentative', value)}
-                >
-                  <SelectTrigger className={formData.isNegotiating && !formData.salesRepresentative ? "border-red-500" : ""}>
-                    <SelectValue placeholder="選択" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {salesRepresentatives.map((rep) => (
-                      <SelectItem key={rep} value={rep}>{rep}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              {/* 顧客名 */}
-              <div className="md:col-span-2">
-                <Label htmlFor="customerName" className={formData.isNegotiating ? "text-red-600" : ""}>
-                  顧客名{formData.isNegotiating && <span className="text-red-500">*</span>}
-                </Label>
-                <Input 
-                  id="customerName" 
-                  placeholder="テキスト入力" 
-                  value={formData.customerName || ""}
-                  onChange={(e) => handleNegotiationChange('customerName', e.target.value)}
-                  required={formData.isNegotiating}
-                  className={formData.isNegotiating && !formData.customerName ? "border-red-500" : ""}
-                />
+              {/* 3行目：SOLD OUTスイッチ + 非公開スイッチ + 空欄 + 空欄 + 空欄 */}
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                {/* SOLD OUTスイッチ */}
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="isSoldOut" className="text-base">SOLD OUT</Label>
+                  <Switch
+                    id="isSoldOut"
+                    checked={formData.isSoldOut || false}
+                    onCheckedChange={(checked) => handleNegotiationChange('isSoldOut', checked)}
+                    className="data-[state=checked]:bg-red-500"
+                  />
+                </div>
+                
+                {/* 非公開スイッチ */}
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="isPrivate" className="text-base">非公開</Label>
+                  <Switch
+                    id="isPrivate"
+                    checked={formData.isPrivate || false}
+                    onCheckedChange={(checked) => handleNegotiationChange('isPrivate', checked)}
+                    className="data-[state=checked]:bg-gray-500"
+                  />
+                </div>
+                <div></div>
+                <div></div>
+                <div></div>
               </div>
             </div>
           </div>
@@ -749,24 +813,56 @@ export default function VehicleNewPage() {
           </div>
 
           {/* 車両情報 */}
-          <div>
+          <div className="bg-gray-50 p-6 rounded-lg border">
             <h3 className="text-lg font-medium mb-4">車両情報</h3>
-            <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-              <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-6">
+              {/* 1行目：年式 + 車体番号 + 空欄 + 空欄 + 空欄 */}
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium">ボディタイプ</label>
-                  <select
-                    name="bodyType"
-                    value={formData.bodyType}
+                  <label className="block text-sm font-medium">年式</label>
+                  <div className="flex gap-2">
+                    <select
+                      name="year"
+                      value={formData.year}
+                      onChange={handleChange}
+                      className="w-1/2 border rounded px-2 py-1"
+                    >
+                      <option value="">選択</option>
+                      {years.map((year) => (
+                        <option key={year} value={year}>{year}</option>
+                      ))}
+                    </select>
+                    <select
+                      name="month"
+                      value={formData.month}
+                      onChange={handleChange}
+                      className="w-1/2 border rounded px-2 py-1"
+                    >
+                      <option value="">月</option>
+                      {months.map((month) => (
+                        <option key={month} value={month}>{month}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">車体番号</label>
+                  <input
+                    type="text"
+                    name="chassisNumber"
+                    value={formData.chassisNumber}
                     onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
-                  >
-                    <option value="">選択</option>
-                    {bodyTypes.map((type) => (
-                      <option key={type} value={type}>{type}</option>
-                    ))}
-                  </select>
+                    placeholder="車体番号を入力"
+                  />
                 </div>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+
+              {/* 2行目：メーカー + 車種 + 型式 + 原動機型式 + 空欄 */}
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">メーカー</label>
                   <select
@@ -778,20 +874,6 @@ export default function VehicleNewPage() {
                     <option value="">選択</option>
                     {makers.map((maker) => (
                       <option key={maker} value={maker}>{maker}</option>
-                    ))}
-                  </select>
-                </div>
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium">大きさ</label>
-                  <select
-                    name="size"
-                    value={formData.size}
-                    onChange={handleChange}
-                    className="w-full border rounded px-2 py-1"
-                  >
-                    <option value="">選択</option>
-                    {sizes.map((size) => (
-                      <option key={size} value={size}>{size}</option>
                     ))}
                   </select>
                 </div>
@@ -821,54 +903,48 @@ export default function VehicleNewPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium">車体番号</label>
+                  <label className="block text-sm font-medium">原動機型式</label>
                   <input
                     type="text"
-                    name="chassisNumber"
-                    value={formData.chassisNumber}
+                    name="engineModel"
+                    value={formData.engineModel}
                     onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
-                    placeholder="車体番号を入力"
+                    placeholder="原動機型式を入力"
                   />
                 </div>
+                <div></div>
+              </div>
+
+              {/* 3行目：大きさ + ボディタイプ + 積載量 + 車両総重量 + 空欄 */}
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium">年式</label>
-                  <div className="flex gap-2">
-                    <select
-                      name="year"
-                      value={formData.year}
-                      onChange={handleChange}
-                      className="w-1/2 border rounded px-2 py-1"
-                    >
-                      <option value="">選択</option>
-                      {years.map((year) => (
-                        <option key={year} value={year}>{year}</option>
-                      ))}
-                    </select>
-                    <select
-                      name="month"
-                      value={formData.month}
-                      onChange={handleChange}
-                      className="w-1/2 border rounded px-2 py-1"
-                    >
-                      <option value="">月</option>
-                      {months.map((month) => (
-                        <option key={month} value={month}>{month}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium">走行距離</label>
-                  <input
-                    type="text"
-                    name="mileage"
-                    value={formData.mileage}
+                  <label className="block text-sm font-medium">大きさ</label>
+                  <select
+                    name="size"
+                    value={formData.size}
                     onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
-                    placeholder="100,000"
-                    style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
-                  />
+                  >
+                    <option value="">選択</option>
+                    {sizes.map((size) => (
+                      <option key={size} value={size}>{size}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">ボディタイプ</label>
+                  <select
+                    name="bodyType"
+                    value={formData.bodyType}
+                    onChange={handleChange}
+                    className="w-full border rounded px-2 py-1"
+                  >
+                    <option value="">選択</option>
+                    {bodyTypes.map((type) => (
+                      <option key={type} value={type}>{type}</option>
+                    ))}
+                  </select>
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">積載量</label>
@@ -883,79 +959,6 @@ export default function VehicleNewPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium">シフト</label>
-                  <select
-                    name="shift"
-                    value={formData.shift}
-                    onChange={handleChange}
-                    className="w-full border rounded px-2 py-1"
-                  >
-                    <option value="">選択</option>
-                    {shifts.map((shift) => (
-                      <option key={shift} value={shift}>{shift}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium">車検状態</label>
-                  <select
-                    name="inspectionStatus"
-                    value={formData.inspectionStatus}
-                    onChange={handleChange}
-                    className="w-full border rounded px-2 py-1"
-                  >
-                    <option value="">選択</option>
-                    {vehicleStatuses.map((status) => (
-                      <option key={status} value={status}>{status}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium">車検有効期限</label>
-                  <input
-                    type="text"
-                    name="inspectionDate"
-                    value={formData.inspectionDate}
-                    onChange={handleChange}
-                    className="w-full border rounded px-2 py-1"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium">車体寸法</label>
-                  <div className="space-y-2">
-                    <input
-                      type="text"
-                      name="outerLength"
-                      value={formData.outerLength}
-                      onChange={handleChange}
-                      className="w-full border rounded px-2 py-1"
-                      placeholder="7,000"
-                      style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
-                    />
-                    <input
-                      type="text"
-                      name="outerWidth"
-                      value={formData.outerWidth}
-                      onChange={handleChange}
-                      className="w-full border rounded px-2 py-1"
-                      placeholder="2,200"
-                      style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
-                    />
-                    <input
-                      type="text"
-                      name="outerHeight"
-                      value={formData.outerHeight}
-                      onChange={handleChange}
-                      className="w-full border rounded px-2 py-1"
-                      placeholder="2,800"
-                      style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
-                    />
-                  </div>
-                </div>
-                <div className="space-y-2">
                   <label className="block text-sm font-medium">車両総重量</label>
                   <input
                     type="text"
@@ -967,42 +970,10 @@ export default function VehicleNewPage() {
                     style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                   />
                 </div>
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium">原動機型式</label>
-                  <input
-                    type="text"
-                    name="engineModel"
-                    value={formData.engineModel}
-                    onChange={handleChange}
-                    className="w-full border rounded px-2 py-1"
-                    placeholder="原動機型式を入力"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium">馬力</label>
-                  <input
-                    type="text"
-                    name="horsepower"
-                    value={formData.horsepower}
-                    onChange={handleChange}
-                    className="w-full border rounded px-2 py-1"
-                    placeholder="300"
-                    style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
-                  />
-                </div>
-                                         <div className="space-y-2">
-                           <label className="block text-sm font-medium">過給機</label>
-                           <select
-                             name="turbo"
-                             value={formData.turbo}
-                             onChange={handleChange}
-                             className="w-full border rounded px-2 py-1"
-                           >
-                             <option value="">選択</option>
-                             <option value="有">有</option>
-                             <option value="無">無</option>
-                           </select>
-                         </div>
+              </div>
+
+              {/* 4行目：排気量 + 燃料 + 車体寸法（L）+ 車体寸法（W）+ 車体寸法（H） */}
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">排気量</label>
                   <input
@@ -1029,7 +1000,130 @@ export default function VehicleNewPage() {
                     <option value="その他">その他</option>
                   </select>
                 </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">車体寸法（L）</label>
+                  <input
+                    type="text"
+                    name="outerLength"
+                    value={formData.outerLength}
+                    onChange={handleChange}
+                    className="w-full border rounded px-2 py-1"
+                    placeholder="7,000"
+                    style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">車体寸法（W）</label>
+                  <input
+                    type="text"
+                    name="outerWidth"
+                    value={formData.outerWidth}
+                    onChange={handleChange}
+                    className="w-full border rounded px-2 py-1"
+                    placeholder="2,200"
+                    style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">車体寸法（H）</label>
+                  <input
+                    type="text"
+                    name="outerHeight"
+                    value={formData.outerHeight}
+                    onChange={handleChange}
+                    className="w-full border rounded px-2 py-1"
+                    placeholder="2,800"
+                    style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
+                  />
+                </div>
+                <div></div>
+              </div>
 
+              {/* 5行目：車検状態 + 車検有効期限 + 空欄 + 空欄 + 空欄 */}
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">車検状態</label>
+                  <select
+                    name="inspectionStatus"
+                    value={formData.inspectionStatus}
+                    onChange={handleChange}
+                    className="w-full border rounded px-2 py-1"
+                  >
+                    <option value="">選択</option>
+                    {vehicleStatuses.map((status) => (
+                      <option key={status} value={status}>{status}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">車検有効期限</label>
+                  <input
+                    type="text"
+                    name="inspectionDate"
+                    value={formData.inspectionDate}
+                    onChange={handleChange}
+                    className="w-full border rounded px-2 py-1"
+                  />
+                </div>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+
+              {/* 6行目：走行距離 + シフト + 馬力 + 過給機 + 空欄 */}
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">走行距離</label>
+                  <input
+                    type="text"
+                    name="mileage"
+                    value={formData.mileage}
+                    onChange={handleChange}
+                    className="w-full border rounded px-2 py-1"
+                    placeholder="100,000"
+                    style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">シフト</label>
+                  <select
+                    name="shift"
+                    value={formData.shift}
+                    onChange={handleChange}
+                    className="w-full border rounded px-2 py-1"
+                  >
+                    <option value="">選択</option>
+                    {shifts.map((shift) => (
+                      <option key={shift} value={shift}>{shift}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">馬力</label>
+                  <input
+                    type="text"
+                    name="horsepower"
+                    value={formData.horsepower}
+                    onChange={handleChange}
+                    className="w-full border rounded px-2 py-1"
+                    placeholder="300"
+                    style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">過給機</label>
+                  <select
+                    name="turbo"
+                    value={formData.turbo}
+                    onChange={handleChange}
+                    className="w-full border rounded px-2 py-1"
+                  >
+                    <option value="">選択</option>
+                    <option value="有">有</option>
+                    <option value="無">無</option>
+                  </select>
+                </div>
+                <div></div>
               </div>
             </div>
           </div>
@@ -1037,80 +1131,91 @@ export default function VehicleNewPage() {
 
 
           {/* 上物情報 */}
-          <div>
+          <div className="bg-gray-50 p-6 rounded-lg border">
             <h3 className="text-lg font-medium mb-4">上物情報</h3>
-            <div className="grid grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="block text-sm font-medium">上物メーカー</label>
-                <input
-                  type="text"
-                  name="bodyMaker"
-                  value={formData.bodyMaker}
-                  onChange={handleChange}
-                  className="w-full border rounded px-2 py-1"
-                  placeholder="上物メーカーを入力"
-                />
+            <div className="space-y-6">
+              {/* 1行目：上物メーカー + 上物型式 + 上物年式 + 空欄 + 空欄 */}
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">上物メーカー</label>
+                  <input
+                    type="text"
+                    name="bodyMaker"
+                    value={formData.bodyMaker}
+                    onChange={handleChange}
+                    className="w-full border rounded px-2 py-1"
+                    placeholder="上物メーカーを入力"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">上物型式</label>
+                  <input
+                    type="text"
+                    name="bodyModel"
+                    value={formData.bodyModel}
+                    onChange={handleChange}
+                    className="w-full border rounded px-2 py-1"
+                    placeholder="上物型式を入力"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">上物年式</label>
+                  <select
+                    name="bodyYear"
+                    value={formData.bodyYear}
+                    onChange={handleChange}
+                    className="w-full border rounded px-2 py-1"
+                  >
+                    <option value="">選択</option>
+                    {years.map((year) => (
+                      <option key={year} value={year}>{year}</option>
+                    ))}
+                  </select>
+                </div>
+                <div></div>
+                <div></div>
               </div>
-              <div className="space-y-2">
-                <label className="block text-sm font-medium">上物型式</label>
-                <input
-                  type="text"
-                  name="bodyModel"
-                  value={formData.bodyModel}
-                  onChange={handleChange}
-                  className="w-full border rounded px-2 py-1"
-                  placeholder="上物型式を入力"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="block text-sm font-medium">上物年式</label>
-                <select
-                  name="bodyYear"
-                  value={formData.bodyYear}
-                  onChange={handleChange}
-                  className="w-full border rounded px-2 py-1"
-                >
-                  <option value="">選択</option>
-                  {years.map((year) => (
-                    <option key={year} value={year}>{year}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="space-y-2">
-                <label className="block text-sm font-medium">内寸長</label>
-                <input
-                  type="text"
-                  name="innerLength"
-                  value={formData.innerLength}
-                  onChange={handleChange}
-                  className="w-full border rounded px-2 py-1"
-                  placeholder="内寸長 (mm)"
-                  style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="block text-sm font-medium">内寸幅</label>
-                <input
-                  type="text"
-                  name="innerWidth"
-                  value={formData.innerWidth}
-                  onChange={handleChange}
-                  className="w-full border rounded px-2 py-1"
-                  placeholder="内寸幅 (mm)"
-                  style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="block text-sm font-medium">内寸高</label>
-                <input
-                  type="text"
-                  name="innerHeight"
-                  value={formData.innerHeight}
-                  onChange={handleChange}
-                  className="w-full border rounded px-2 py-1"
-                  placeholder="内寸高 (mm)"
-                  style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
-                />
+
+              {/* 2行目：内寸長 + 内寸幅 + 内寸高 + 空欄 + 空欄 */}
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">内寸長</label>
+                  <input
+                    type="text"
+                    name="innerLength"
+                    value={formData.innerLength}
+                    onChange={handleChange}
+                    className="w-full border rounded px-2 py-1"
+                    placeholder="内寸長 (mm)"
+                    style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">内寸幅</label>
+                  <input
+                    type="text"
+                    name="innerWidth"
+                    value={formData.innerWidth}
+                    onChange={handleChange}
+                    className="w-full border rounded px-2 py-1"
+                    placeholder="内寸幅 (mm)"
+                    style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">内寸高</label>
+                  <input
+                    type="text"
+                    name="innerHeight"
+                    value={formData.innerHeight}
+                    onChange={handleChange}
+                    className="w-full border rounded px-2 py-1"
+                    placeholder="内寸高 (mm)"
+                    style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
+                  />
+                </div>
+                <div></div>
+                <div></div>
               </div>
             </div>
           </div>
