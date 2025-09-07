@@ -1309,22 +1309,42 @@ export default function VehicleEditPage() {
 
 
 
-          <div className="flex justify-center gap-4">
+        </form>
+      </div>
+
+      {/* 固定フッターボタン */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50">
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
             <Button 
               type="button" 
               variant="outline" 
               onClick={handleTemporarySave} 
               disabled={saving}
-              className="px-8"
+              className="w-full sm:w-auto sm:min-w-[120px] text-sm sm:text-base"
             >
               {saving ? '保存中...' : '一時保存する'}
             </Button>
-            <Button type="submit" className="px-8" disabled={saving}>
+            <Button 
+              type="submit" 
+              disabled={saving}
+              className="w-full sm:w-auto sm:min-w-[140px] text-sm sm:text-base"
+              onClick={(e) => {
+                e.preventDefault();
+                const form = document.querySelector('form');
+                if (form) {
+                  form.requestSubmit();
+                }
+              }}
+            >
               {saving ? '保存中...' : '保存・出品する'}
             </Button>
           </div>
-        </form>
+        </div>
       </div>
+
+      {/* フッターの高さ分の余白を追加 */}
+      <div className="h-16 sm:h-20"></div>
     </div>
   );
 }

@@ -453,7 +453,20 @@ export default function VehicleDetailPage() {
                       color: '#1A1A1A',
                       marginRight: '0.5rem'
                     }}>
-                      {Math.round(((vehicle.totalPayment || vehicle.price || 0)) / 10000)}
+                      {(() => {
+                        // totalPaymentが文字列の場合、カンマを除去して数値に変換
+                        let totalAmount = 0;
+                        if (vehicle.totalPayment) {
+                          if (typeof vehicle.totalPayment === 'string') {
+                            totalAmount = Number(vehicle.totalPayment.replace(/,/g, '')) || 0;
+                          } else {
+                            totalAmount = vehicle.totalPayment;
+                          }
+                        } else if (vehicle.price) {
+                          totalAmount = vehicle.price;
+                        }
+                        return totalAmount > 0 ? Math.round(totalAmount / 10000) : 0;
+                      })()}
                     </span>
                     <span style={{
                       fontFamily: 'Noto Sans JP',

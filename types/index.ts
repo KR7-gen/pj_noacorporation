@@ -42,7 +42,7 @@ export interface Vehicle {
   bodyMaker?: string;
   bodyModel?: string;
   bodyYear?: string;
-  equipment?: string[]; // ←ここをstring[]に修正
+  equipment?: string; // 装備品をカンマ区切り文字列として保存
   etc?: boolean;
   backCamera?: boolean;
   recordBook?: boolean;

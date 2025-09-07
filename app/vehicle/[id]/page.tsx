@@ -446,7 +446,11 @@ export default function VehicleDetailPage() {
                       fontWeight: 'bold',
                       color: '#1A1A1A',
                     }}>
-                      {Math.round(((vehicle.totalPayment || vehicle.price || 0)) / 10000)}
+                      {vehicle.totalPayment && vehicle.totalPayment > 0 
+                        ? Math.round(vehicle.totalPayment / 10000)
+                        : vehicle.price && vehicle.price > 0 
+                          ? Math.round(vehicle.price / 10000)
+                          : 0}
                     </span>
                     <span style={{
                       fontFamily: 'Noto Sans JP',
@@ -526,13 +530,31 @@ export default function VehicleDetailPage() {
                            letterSpacing: '0%'
                          }}>
                            {(() => {
-                             const totalAmount = vehicle.totalPayment || vehicle.price || 0;
+                             // totalPaymentが文字列の場合、カンマを除去して数値に変換
+                             let totalAmount = 0;
+                             if (vehicle.totalPayment) {
+                               if (typeof vehicle.totalPayment === 'string') {
+                                 totalAmount = Number(vehicle.totalPayment.replace(/,/g, '')) || 0;
+                               } else {
+                                 totalAmount = vehicle.totalPayment;
+                               }
+                             } else if (vehicle.price) {
+                               totalAmount = vehicle.price;
+                             }
+                             
+                             console.log('シミュレーション計算:', {
+                               totalPayment: vehicle.totalPayment,
+                               price: vehicle.price,
+                               totalAmount: totalAmount
+                             });
+                             
                              if (totalAmount > 0) {
                                // 年利8.2%で84回支払いの計算
                                const annualRate = 0.082;
                                const monthlyRate = annualRate / 12;
                                const numberOfPayments = 84; // 84回支払い
                                const monthlyPayment = (totalAmount * monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) / (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
+                               console.log('月額計算結果:', monthlyPayment);
                                return (monthlyPayment / 10000).toFixed(1);
                              }
                              return "---";

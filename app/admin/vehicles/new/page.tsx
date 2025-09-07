@@ -17,6 +17,24 @@ import { addVehicle } from "@/lib/firebase-utils"
 import ImageUploader from "@/components/ImageUploader"
 import { formatNumberWithCommas, formatInputWithCommas } from "@/lib/utils"
 import type { Vehicle } from "@/types"
+
+// フォーム用の型定義（数値フィールドを文字列として扱う）
+type VehicleFormData = Omit<Vehicle, 'price' | 'totalPayment' | 'wholesalePrice' | 'mileage' | 'loadingCapacity' | 'outerLength' | 'outerWidth' | 'outerHeight' | 'totalWeight' | 'horsepower' | 'displacement' | 'innerLength' | 'innerWidth' | 'innerHeight'> & {
+  price: string;
+  totalPayment: string;
+  wholesalePrice: string;
+  mileage: string;
+  loadingCapacity: string;
+  outerLength: string;
+  outerWidth: string;
+  outerHeight: string;
+  totalWeight: string;
+  horsepower: string;
+  displacement: string;
+  innerLength: string;
+  innerWidth: string;
+  innerHeight: string;
+}
 import { storage } from "@/lib/firebase"
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
 import { Store } from "@/types"
@@ -160,7 +178,7 @@ const equipmentList = [
 
 export default function VehicleNewPage() {
   const router = useRouter()
-  const [formData, setFormData] = useState<Partial<Vehicle>>({
+  const [formData, setFormData] = useState<Partial<VehicleFormData>>({
     name: "",
     price: "",
     totalPayment: "",
@@ -189,7 +207,7 @@ export default function VehicleNewPage() {
     wholesalePrice: "",
     description: "",
     imageUrls: [],
-    equipment: [],
+    equipment: "",
     chassisNumber: "",
     // 上物情報
     bodyMaker: "",
@@ -367,11 +385,15 @@ export default function VehicleNewPage() {
   // 装備品の選択・解除
   const handleEquipmentToggle = (item: string) => {
     setFormData((prev) => {
-      const eq = prev.equipment || [];
-      if (eq.includes(item)) {
-        return { ...prev, equipment: eq.filter((e) => e !== item) };
+      const currentEquipment = prev.equipment || "";
+      const equipmentList = currentEquipment ? currentEquipment.split(',') : [];
+      
+      if (equipmentList.includes(item)) {
+        const newList = equipmentList.filter((e) => e !== item);
+        return { ...prev, equipment: newList.join(',') };
       } else {
-        return { ...prev, equipment: [...eq, item] };
+        const newList = [...equipmentList, item];
+        return { ...prev, equipment: newList.join(',') };
       }
     });
   };
@@ -379,7 +401,7 @@ export default function VehicleNewPage() {
   // 毎月支払額シミュレーション用のハンドラー
   const handleSimulationChange = (index: number, value: string) => {
     const formattedValue = formatInputWithCommas(value);
-    const simulationKey = `simulation${index + 2}Year` as keyof Vehicle;
+    const simulationKey = `simulation${index + 2}Year` as keyof VehicleFormData;
     setFormData(prev => ({
       ...prev,
       [simulationKey]: formattedValue
@@ -454,37 +476,44 @@ export default function VehicleNewPage() {
       console.log("一時保存する画像URL:", validImageUrls);
 
       const vehicleData = {
-        name: formData.name,
-        maker: formData.maker,
-        model: formData.model,
-        year: formData.year,
-        month: formData.month,
-        mileage: formData.mileage,
-        price: Number(formData.price?.toString().replace(/,/g, '')),
-        description: formData.description,
+        name: formData.name || "",
+        maker: formData.maker || "",
+        model: formData.model || "",
+        year: formData.year || "",
+        month: formData.month || "",
+        mileage: Number(formData.mileage?.toString().replace(/,/g, '')) || 0,
+        price: Number(formData.price?.toString().replace(/,/g, '')) || 0,
+        description: formData.description || "",
         imageUrls: validImageUrls, // 有効な画像URLのみを保存
-        wholesalePrice: Number(formData.wholesalePrice?.toString().replace(/,/g, '')),
-        totalPayment: Number(formData.totalPayment?.toString().replace(/,/g, '')),
-        expiryDate: formData.inspectionDate,
+        wholesalePrice: Number(formData.wholesalePrice?.toString().replace(/,/g, '')) || 0,
+        totalPayment: Number(formData.totalPayment?.toString().replace(/,/g, '')) || 0,
+        expiryDate: formData.inspectionDate || "",
         // その他のフィールド
-        bodyType: formData.bodyType,
-        size: formData.size,
-        vehicleType: formData.vehicleType,
-        chassisNumber: formData.chassisNumber,
-        shift: formData.shift,
-        inspectionStatus: formData.inspectionStatus,
-        outerLength: formData.outerLength ? Number(formData.outerLength?.toString().replace(/,/g, '')) : undefined,
-        outerWidth: formData.outerWidth ? Number(formData.outerWidth?.toString().replace(/,/g, '')) : undefined,
-        outerHeight: formData.outerHeight ? Number(formData.outerHeight?.toString().replace(/,/g, '')) : undefined,
-        totalWeight: formData.totalWeight ? Number(formData.totalWeight?.toString().replace(/,/g, '')) : undefined,
-        horsepower: formData.horsepower ? Number(formData.horsepower?.toString().replace(/,/g, '')) : undefined,
-        displacement: formData.displacement ? Number(formData.displacement?.toString().replace(/,/g, '')) : undefined,
+        bodyType: formData.bodyType || "",
+        size: formData.size || "",
+        vehicleType: formData.vehicleType || "",
+        chassisNumber: formData.chassisNumber || "",
+        shift: formData.shift || "",
+        inspectionStatus: formData.inspectionStatus || "",
+        outerLength: formData.outerLength ? Number(formData.outerLength.toString().replace(/,/g, '')) : undefined,
+        outerWidth: formData.outerWidth ? Number(formData.outerWidth.toString().replace(/,/g, '')) : undefined,
+        outerHeight: formData.outerHeight ? Number(formData.outerHeight.toString().replace(/,/g, '')) : undefined,
+        totalWeight: formData.totalWeight ? Number(formData.totalWeight.toString().replace(/,/g, '')) : undefined,
+        horsepower: formData.horsepower ? Number(formData.horsepower.toString().replace(/,/g, '')) : undefined,
+        displacement: formData.displacement ? Number(formData.displacement.toString().replace(/,/g, '')) : undefined,
         fuel: formData.fuel || "",
-        equipment: formData.equipment ? formData.equipment.join(',') : "",
+        equipment: formData.equipment || "",
         inspectionImageUrl: formData.inspectionImageUrl || "",
         conditionImageUrl: formData.conditionImageUrl || "",
         // エンジン情報
         engineModel: formData.engineModel || "",
+        // 上物情報
+        bodyMaker: formData.bodyMaker || "",
+        bodyModel: formData.bodyModel || "",
+        bodyYear: formData.bodyYear || "",
+        innerLength: formData.innerLength ? Number(formData.innerLength.toString().replace(/,/g, '')) : undefined,
+        innerWidth: formData.innerWidth ? Number(formData.innerWidth.toString().replace(/,/g, '')) : undefined,
+        innerHeight: formData.innerHeight ? Number(formData.innerHeight.toString().replace(/,/g, '')) : undefined,
         // 商談関連フィールド
         isNegotiating: formData.isNegotiating || false,
         isSoldOut: formData.isSoldOut || false,
@@ -531,37 +560,44 @@ export default function VehicleNewPage() {
       console.log("保存する画像URL:", validImageUrls);
 
       const vehicleData = {
-        name: formData.name,
-        maker: formData.maker,
-        model: formData.model,
-        year: formData.year,
-        month: formData.month,
-        mileage: formData.mileage,
-        price: Number(formData.price?.toString().replace(/,/g, '')),
-        description: formData.description,
+        name: formData.name || "",
+        maker: formData.maker || "",
+        model: formData.model || "",
+        year: formData.year || "",
+        month: formData.month || "",
+        mileage: Number(formData.mileage?.toString().replace(/,/g, '')) || 0,
+        price: Number(formData.price?.toString().replace(/,/g, '')) || 0,
+        description: formData.description || "",
         imageUrls: validImageUrls, // 有効な画像URLのみを保存
-        wholesalePrice: Number(formData.wholesalePrice?.toString().replace(/,/g, '')),
-        totalPayment: Number(formData.totalPayment?.toString().replace(/,/g, '')),
-        expiryDate: formData.inspectionDate,
+        wholesalePrice: Number(formData.wholesalePrice?.toString().replace(/,/g, '')) || 0,
+        totalPayment: Number(formData.totalPayment?.toString().replace(/,/g, '')) || 0,
+        expiryDate: formData.inspectionDate || "",
         // その他のフィールド
-        bodyType: formData.bodyType,
-        size: formData.size,
-        vehicleType: formData.vehicleType,
-        chassisNumber: formData.chassisNumber,
-        shift: formData.shift,
-        inspectionStatus: formData.inspectionStatus,
-        outerLength: formData.outerLength ? Number(formData.outerLength?.toString().replace(/,/g, '')) : undefined,
-        outerWidth: formData.outerWidth ? Number(formData.outerWidth?.toString().replace(/,/g, '')) : undefined,
-        outerHeight: formData.outerHeight ? Number(formData.outerHeight?.toString().replace(/,/g, '')) : undefined,
-        totalWeight: formData.totalWeight ? Number(formData.totalWeight?.toString().replace(/,/g, '')) : undefined,
-        horsepower: formData.horsepower ? Number(formData.horsepower?.toString().replace(/,/g, '')) : undefined,
-        displacement: formData.displacement ? Number(formData.displacement?.toString().replace(/,/g, '')) : undefined,
+        bodyType: formData.bodyType || "",
+        size: formData.size || "",
+        vehicleType: formData.vehicleType || "",
+        chassisNumber: formData.chassisNumber || "",
+        shift: formData.shift || "",
+        inspectionStatus: formData.inspectionStatus || "",
+        outerLength: formData.outerLength ? Number(formData.outerLength.toString().replace(/,/g, '')) : undefined,
+        outerWidth: formData.outerWidth ? Number(formData.outerWidth.toString().replace(/,/g, '')) : undefined,
+        outerHeight: formData.outerHeight ? Number(formData.outerHeight.toString().replace(/,/g, '')) : undefined,
+        totalWeight: formData.totalWeight ? Number(formData.totalWeight.toString().replace(/,/g, '')) : undefined,
+        horsepower: formData.horsepower ? Number(formData.horsepower.toString().replace(/,/g, '')) : undefined,
+        displacement: formData.displacement ? Number(formData.displacement.toString().replace(/,/g, '')) : undefined,
         fuel: formData.fuel || "",
-        equipment: formData.equipment ? formData.equipment.join(',') : "",
+        equipment: formData.equipment || "",
         inspectionImageUrl: formData.inspectionImageUrl || "",
         conditionImageUrl: formData.conditionImageUrl || "",
         // エンジン情報
         engineModel: formData.engineModel || "",
+        // 上物情報
+        bodyMaker: formData.bodyMaker || "",
+        bodyModel: formData.bodyModel || "",
+        bodyYear: formData.bodyYear || "",
+        innerLength: formData.innerLength ? Number(formData.innerLength.toString().replace(/,/g, '')) : undefined,
+        innerWidth: formData.innerWidth ? Number(formData.innerWidth.toString().replace(/,/g, '')) : undefined,
+        innerHeight: formData.innerHeight ? Number(formData.innerHeight.toString().replace(/,/g, '')) : undefined,
         // 商談関連フィールド
         isNegotiating: formData.isNegotiating || false,
         isSoldOut: formData.isSoldOut || false,
@@ -1241,24 +1277,42 @@ export default function VehicleNewPage() {
             </div>
               </div>
 
-              <div className="flex justify-center gap-4 pt-6">
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  onClick={handleTemporarySave} 
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? "保存中..." : "一時保存する"}
-                </Button>
-                <Button 
-                  type="submit" 
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? "登録中..." : "車両を登録する"}
-                </Button>
-              </div>
             </form>
       </div>
+
+      {/* 固定フッターボタン */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50">
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={handleTemporarySave} 
+              disabled={isSubmitting}
+              className="w-full sm:w-auto sm:min-w-[120px] text-sm sm:text-base"
+            >
+              {isSubmitting ? "保存中..." : "一時保存する"}
+            </Button>
+            <Button 
+              type="submit" 
+              disabled={isSubmitting}
+              className="w-full sm:w-auto sm:min-w-[140px] text-sm sm:text-base"
+              onClick={(e) => {
+                e.preventDefault();
+                const form = document.querySelector('form');
+                if (form) {
+                  form.requestSubmit();
+                }
+              }}
+            >
+              {isSubmitting ? "登録中..." : "車両を登録する"}
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* フッターの高さ分の余白を追加 */}
+      <div className="h-16 sm:h-20"></div>
     </div>
   );
 }
