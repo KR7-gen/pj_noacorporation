@@ -210,7 +210,7 @@ export function Header() {
             <span style={{ display: "flex", alignItems: "center", marginRight: "0.57rem", position: "relative", top: "0.21rem", left: "0.21rem" }}>
               <img src="/call.svg" alt="電話" style={{ width: "1.29rem", height: "1.29rem" }} />
             </span>
-           028-612-1472
+           028-612-1474
           </div>
           <div
            style={{
@@ -238,7 +238,7 @@ export function Header() {
         {/* スマホ版電話番号（TEL + 電話記号） */}
         <div className="lg:hidden flex items-center justify-center">
           <a 
-            href="tel:028-612-1472" 
+            href="tel:028-612-1474" 
             className="flex items-center justify-center px-3 py-2 rounded-lg hover:opacity-80 transition-opacity"
             style={{
               background: "#666666",

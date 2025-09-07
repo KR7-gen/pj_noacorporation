@@ -162,8 +162,8 @@ export default function VehicleNewPage() {
   const router = useRouter()
   const [formData, setFormData] = useState<Partial<Vehicle>>({
     name: "",
-    price: 0,
-    totalPayment: 0,
+    price: "",
+    totalPayment: "",
     bodyType: "",
     maker: "",
     size: "",
@@ -172,21 +172,21 @@ export default function VehicleNewPage() {
     modelCode: "",
     year: "",
     month: "",
-    mileage: 0,
-    loadingCapacity: 0,
+    mileage: "",
+    loadingCapacity: "",
     shift: "",
     mission: "",
     inspectionStatus: "",
     inspectionDate: "",
-    outerLength: 0,
-    outerWidth: 0,
-    outerHeight: 0,
-    totalWeight: 0,
-    horsepower: 0,
-    displacement: 0,
+    outerLength: "",
+    outerWidth: "",
+    outerHeight: "",
+    totalWeight: "",
+    horsepower: "",
+    displacement: "",
     fuel: "",
     turbo: "",
-    wholesalePrice: 0,
+    wholesalePrice: "",
     description: "",
     imageUrls: [],
     equipment: [],
@@ -195,9 +195,9 @@ export default function VehicleNewPage() {
     bodyMaker: "",
     bodyModel: "",
     bodyYear: "",
-    innerLength: 0,
-    innerWidth: 0,
-    innerHeight: 0,
+    innerLength: "",
+    innerWidth: "",
+    innerHeight: "",
     // エンジン情報
     engineModel: "",
     // 店舗関連フィールド
@@ -591,15 +591,21 @@ export default function VehicleNewPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">車両登録</h1>
+    <div className="container mx-auto px-4 py-8">
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold mb-2">新規車両登録</h1>
+        <Button 
+          variant="outline" 
+          onClick={() => router.push('/admin/vehicles')}
+        >
+          一覧に戻る
+        </Button>
       </div>
 
-      <div className="bg-white p-6 rounded-lg shadow-sm">
-        <form className="space-y-8" onSubmit={handleSubmit}>
-          {/* 基本情報 */}
-          <div className="space-y-6">
+      <div className="bg-white p-6 rounded-lg shadow">
+            <form className="space-y-8" onSubmit={handleSubmit}>
+              {/* 基本情報 */}
+              <div className="space-y-6">
             {/* 1行目：問い合わせ番号 */}
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
               <div className="space-y-2">
@@ -1233,25 +1239,25 @@ export default function VehicleNewPage() {
                 placeholder="その他の装備や仕様を入力してください..."
               />
             </div>
-          </div>
+              </div>
 
-
-
-          <div className="flex justify-center gap-4">
-            <Button 
-              type="button" 
-              variant="outline" 
-              onClick={handleTemporarySave} 
-              disabled={isSubmitting}
-              className="px-8"
-            >
-              {isSubmitting ? "保存中..." : "一時保存する"}
-            </Button>
-            <Button type="submit" className="px-8" disabled={isSubmitting}>
-              {isSubmitting ? "登録中..." : "変更を保存する"}
-            </Button>
-          </div>
-        </form>
+              <div className="flex justify-center gap-4 pt-6">
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={handleTemporarySave} 
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "保存中..." : "一時保存する"}
+                </Button>
+                <Button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "登録中..." : "車両を登録する"}
+                </Button>
+              </div>
+            </form>
       </div>
     </div>
   );

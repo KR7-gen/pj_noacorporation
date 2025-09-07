@@ -22,7 +22,6 @@ const footerLinks = {
     { name: "レンタル車両", href: "/rental" },
     { name: "トラック買取", href: "/purchase" },
     { name: "私たちについて", href: "/about" },
-    { name: "お知らせ", href: "/news" },
     { name: "お問い合わせ", href: "/contact" },
   ],
 }
@@ -36,15 +35,6 @@ export function Footer() {
           <div className="flex items-center gap-4">
             <div className="w-22 h-12 flex items-center justify-center">
               <img src="/logo.png" alt="Noa Corporation Logo" className="w-full h-full object-contain" />
-            </div>
-            <div>
-              <div className="text-sm text-gray-400">株式会社 Noa Corporation</div>
-            </div>
-            <div className="text-sm text-gray-400">
-              <span>〒329-1326　栃木県さくら市向河原3994-1</span>
-            </div>
-            <div className="text-sm text-gray-400">
-              <span>TEL：028-612-1472</span>
             </div>
           </div>
         </div>

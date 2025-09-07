@@ -3220,7 +3220,7 @@ export default function HomePage() {
                           textAlign: "left",
                           whiteSpace: "pre-line"
                         }}>
-                          〒329-1326{'\n'}栃木県さくら市向河原3994-1
+                          〒321-0411{'\n'}栃木県宇都宮市宮山田町406-1
                         </span>
                       </div>
                     </div>
@@ -3336,7 +3336,7 @@ export default function HomePage() {
                           color: "#1A1A1A",
                           textAlign: "left",
                           whiteSpace: "nowrap"
-                        }}>028-612-1471</span>
+                        }}>028-333-1023</span>
                       </div>
                     </div>
                     <div style={{ 
@@ -3867,7 +3867,7 @@ export default function HomePage() {
                         whiteSpace: "nowrap"
                       }}
                     >
-                      028-612-1472
+                      028-612-1474
                     </span>
                   </div>
                   <p style={{ fontSize: "1rem", color: "#1a1a1a", margin: 0 }}>受付時間：月〜日 8:00~17:00 <br/><span style={{ whiteSpace: "nowrap" }}>※店舗不在時には折り返しさせて頂きます。</span></p>

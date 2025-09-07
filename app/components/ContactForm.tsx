@@ -76,7 +76,6 @@ export default function ContactForm({
   const validateForm = () => {
     const newErrors: Record<string, string> = {}
 
-    if (!formData.companyName) newErrors.companyName = "会社名を入力してください"
     if (!formData.name) newErrors.name = "お名前を入力してください"
     if (!formData.prefecture) newErrors.prefecture = "都道府県を選択してください"
     if (!formData.phone) newErrors.phone = "電話番号を入力してください"
@@ -103,8 +102,8 @@ export default function ContactForm({
       };
       const type = typeMap[formData.inquiryType];
 
-      // 会社名＋名前を連結
-      const fullName = `${formData.companyName} ${formData.name}`;
+      // 会社名＋名前を連結（会社名が空の場合は名前のみ）
+      const fullName = formData.companyName ? `${formData.companyName} ${formData.name}` : formData.name;
 
       // Firebaseに送信
       await addInquiry({
@@ -154,7 +153,7 @@ export default function ContactForm({
         {/* 会社名 */}
         <div>
           <div className="flex items-center mb-2">
-            <span className="mr-2 text-[0.857rem] text-white bg-red-500 px-2 py-0.5 rounded">必須</span>
+            <span className="mr-2 text-[0.857rem] text-white px-2 py-0.5 rounded" style={{background: '#666666'}}>任意</span>
             <Label htmlFor="companyName" className="text-[1.143rem] font-bold">会社名</Label>
           </div>
           <Input

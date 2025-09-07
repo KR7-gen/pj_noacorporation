@@ -413,7 +413,7 @@ export default function AboutPage() {
                  }}>古物法に基づく表示</span>
                  <span style={{ marginLeft: "14rem" }}>{companyInfo.license}</span>
                </div>
-                             <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "0.571rem" }}>
+                <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "0.571rem" }}>
                  <span style={{
                    width: "14rem",
                    height: "1.643rem",
@@ -433,7 +433,7 @@ export default function AboutPage() {
                  }}>適格請求書（インボイス）発行事業者登録番号</span>
                  <span style={{ marginLeft: "14rem" }}>T5060001025151</span>
                </div>
-                             <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "0.571rem" }}>
+                <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "0.571rem" }}>
                  <span style={{
                    width: "14rem",
                    height: "1.643rem",
@@ -734,7 +734,7 @@ export default function AboutPage() {
             alignItems: "center"
           }}
         >
-                     <div style={{ marginBottom: "2.857rem", display: "flex", justifyContent: "center" }}>
+            <div style={{ marginBottom: "2.857rem", display: "flex", justifyContent: "center" }}>
              <div 
                style={{
                  display: "flex",
@@ -1054,7 +1054,7 @@ export default function AboutPage() {
             margin: "0 auto"
           }}
         >
-                     <div style={{ marginBottom: "2.857rem", display: "flex", justifyContent: "center" }}>
+            <div style={{ marginBottom: "2.857rem", display: "flex", justifyContent: "center" }}>
              <div 
                style={{
                  display: "flex",
@@ -1109,7 +1109,7 @@ export default function AboutPage() {
             }}
           >
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3210.1234567890123!2d139.12345678901234!3d36.12345678901234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzbCsDA3JzM0LjQiTiAxMznCsDA3JzM0LjQiRQ!5e0!3m2!1sja!2sjp!4v1234567890123"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3210.8543762615753!2d139.99547797635924!3d36.51745839711242!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x601f4b5a0e8e2b91%3A0x1234567890abcdef!2z44CSMzI5LTEzMjYg5qCD5pyo55yM44GV44GP44KJ5biC5ZCR5rKz5Y6f77yT77yZ77yZ77yU4oiS77yR!5e0!3m2!1sja!2sjp!4v1234567890123"
               width="100%"
               height="100%"
               style={{ border: 0 }}
@@ -1135,7 +1135,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-             {/* Contact Section */}
+      {/* Contact Section */}
        <section 
          style={{
            width: "100%",
