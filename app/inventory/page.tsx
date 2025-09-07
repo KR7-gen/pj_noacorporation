@@ -15,35 +15,32 @@ import type { Vehicle } from "@/types"
 // 車両タイプのアイコンデータ
 const vehicleTypeIcons = [
   { id: 1, type: "クレーン", icon: "/icons/crane.png" },
-  { id: 2, type: "ダンプローダーダンプ", icon: "/icons/dump.png" },
-  { id: 3, type: "平ボディ", icon: "/icons/flatbed.png" },
-  { id: 4, type: "重機回送車", icon: "/icons/carrier.png" },
-  { id: 5, type: "ミキサー車", icon: "/icons/mixer.png" },
-  { id: 6, type: "アルミバン", icon: "/icons/van.png" },
+  { id: 2, type: "ダンプ・ローダーダンプ", icon: "/icons/dump.png" },
+  { id: 3, type: "ミキサー車", icon: "/icons/mixer.png" },
+  { id: 4, type: "アームロール", icon: "/icons/arm-roll.png" },
+  { id: 5, type: "重機回送車", icon: "/icons/carrier.png" },
+  { id: 6, type: "車両運搬車", icon: "/icons/car-carrier.png" },
   { id: 7, type: "高所作業車", icon: "/icons/aerial.png" },
-  { id: 8, type: "アルミウィング", icon: "/icons/wing.png" },
-  { id: 9, type: "車両運搬車", icon: "/icons/car-carrier.png" },
-  { id: 10, type: "塵芥車", icon: "/icons/garbage.png" },
-  { id: 11, type: "アームロール", icon: "/icons/arm-roll.png" },
+  { id: 8, type: "塵芥車", icon: "/icons/garbage.png" },
+  { id: 9, type: "平ボディ", icon: "/icons/flatbed.png" },
+  { id: 10, type: "バン・ウイング", icon: "/icons/van.png" },
+  { id: 11, type: "冷蔵冷凍車", icon: "/icons/refrigerated.png" },
   { id: 12, type: "特装車・その他", icon: "/icons/special.png" },
 ]
 
 // プルダウンの選択肢
 const bodyTypes = [
   "クレーン",
-  "ダンプ",
-  "平ボディ",
-  "車輌運搬車",
+  "ダンプ・ローダーダンプ",
   "ミキサー車",
-  "高所作業車",
-  "アルミバン",
-  "アルミウィング",
-  "キャリアカー",
-  "塵芥車",
   "アームロール",
-  "バス",
+  "重機回送車",
+  "車両運搬車",
+  "高所作業車",
+  "塵芥車",
+  "平ボディ",
+  "バン・ウイング",
   "冷蔵冷凍車",
-  "タンクローリー",
   "特装車・その他"
 ]
 
@@ -52,7 +49,10 @@ const makers = [
   "いすゞ",
   "三菱ふそう",
   "UD",
-  "その他"
+  "トヨタ",
+  "日産",
+  "マツダ",
+  "その他",
 ]
 
 const sizes = [

@@ -26,6 +26,8 @@ import {
 import Image from "next/image"
 import { formatNumberWithCommas, formatInputWithCommas } from "@/lib/utils"
 import { Skeleton } from "@/components/ui/skeleton"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 export default function AdminVehiclesPage() {
   const router = useRouter()
@@ -34,7 +36,13 @@ export default function AdminVehiclesPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null)
-  const [searchQuery, setSearchQuery] = useState("")
+  
+  // 検索フィルター用の状態
+  const [selectedMaker, setSelectedMaker] = useState<string>("all")
+  const [selectedBodyType, setSelectedBodyType] = useState<string>("all")
+  const [selectedSize, setSelectedSize] = useState<string>("all")
+  const [selectedStatus, setSelectedStatus] = useState<string>("all")
+  const [freeWordSearch, setFreeWordSearch] = useState<string>("")
   
   // インライン編集用の状態
   const [editingValues, setEditingValues] = useState<{
@@ -49,6 +57,33 @@ export default function AdminVehiclesPage() {
   // ソート状態管理
   const [sortField, setSortField] = useState<'inspectionDate' | 'negotiationDeadline' | null>(null)
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
+
+  // 固定の選択肢（指定に合わせて統一）
+  const fixedMakers = [
+    "日野",
+    "いすゞ",
+    "三菱ふそう",
+    "UD",
+    "トヨタ",
+    "日産",
+    "マツダ",
+    "その他",
+  ]
+
+  const fixedBodyTypes = [
+    "クレーン",
+    "ダンプ・ローダーダンプ",
+    "ミキサー車",
+    "アームロール",
+    "重機回送車",
+    "車両運搬車",
+    "高所作業車",
+    "塵芥車",
+    "平ボディ",
+    "バン・ウイング",
+    "冷蔵冷凍車",
+    "特装車・その他",
+  ]
 
   useEffect(() => {
     const fetchVehicles = async () => {
@@ -96,21 +131,68 @@ export default function AdminVehiclesPage() {
 
   // 検索フィルタリング
   useEffect(() => {
-    if (!searchQuery.trim()) {
-      setFilteredVehicles(vehicles)
-      return
+    let filtered = vehicles
+
+    // メーカーフィルター
+    if (selectedMaker && selectedMaker !== "all") {
+      filtered = filtered.filter(vehicle => vehicle.maker === selectedMaker)
     }
 
-    const filtered = vehicles.filter(vehicle => {
-      const query = searchQuery.toLowerCase()
-      const inquiryNumber = vehicle.inquiryNumber?.toLowerCase() || ""
-      const chassisNumber = vehicle.chassisNumber?.toLowerCase() || ""
-      
-      return inquiryNumber.includes(query) || chassisNumber.includes(query)
-    })
+    // ボディタイプフィルター
+    if (selectedBodyType && selectedBodyType !== "all") {
+      filtered = filtered.filter(vehicle => vehicle.bodyType === selectedBodyType)
+    }
+
+    // サイズフィルター
+    if (selectedSize && selectedSize !== "all") {
+      filtered = filtered.filter(vehicle => vehicle.size === selectedSize)
+    }
+
+    // 掲載状態フィルター
+    if (selectedStatus && selectedStatus !== "all") {
+      filtered = filtered.filter(vehicle => {
+        switch (selectedStatus) {
+          case '公開':
+            return !vehicle.isPrivate && !vehicle.isSoldOut && !vehicle.isTemporarySave
+          case '非公開':
+            return vehicle.isPrivate && !vehicle.isSoldOut && !vehicle.isTemporarySave
+          case '商談中':
+            return vehicle.isNegotiating
+          case 'SOLD':
+            return vehicle.isSoldOut
+          case '一時保存':
+            return vehicle.isTemporarySave
+          default:
+            return true
+        }
+      })
+    }
+
+    // フリーワード検索
+    if (freeWordSearch.trim()) {
+      const query = freeWordSearch.toLowerCase()
+      filtered = filtered.filter(vehicle => {
+        const inquiryNumber = vehicle.inquiryNumber?.toLowerCase() || ""
+        const chassisNumber = vehicle.chassisNumber?.toLowerCase() || ""
+        const name = vehicle.name?.toLowerCase() || ""
+        const maker = vehicle.maker?.toLowerCase() || ""
+        const model = vehicle.model?.toLowerCase() || ""
+        
+        return inquiryNumber.includes(query) || 
+               chassisNumber.includes(query) || 
+               name.includes(query) ||
+               maker.includes(query) ||
+               model.includes(query)
+      })
+    }
     
     setFilteredVehicles(filtered)
-  }, [searchQuery, vehicles])
+  }, [selectedMaker, selectedBodyType, selectedSize, selectedStatus, freeWordSearch, vehicles])
+
+  // 検索フィルター用のオプションを生成
+  const getUniqueValues = (key: keyof Vehicle) => {
+    return Array.from(new Set(vehicles.map(vehicle => vehicle[key]).filter((value): value is string => typeof value === 'string' && value !== ''))).sort()
+  }
 
   const handleDelete = (vehicle: Vehicle) => {
     setSelectedVehicle(vehicle)
@@ -232,7 +314,14 @@ export default function AdminVehiclesPage() {
 
   // ソートされた車両リストを取得
   const getSortedVehicles = () => {
-    if (!sortField) return filteredVehicles
+    if (!sortField) {
+      // デフォルトは作成日時の降順（最新が上）
+      return [...filteredVehicles].sort((a, b) => {
+        const aDate = new Date(a.createdAt).getTime()
+        const bDate = new Date(b.createdAt).getTime()
+        return bDate - aDate
+      })
+    }
 
     return [...filteredVehicles].sort((a, b) => {
       let aValue: string = ''
@@ -318,32 +407,109 @@ export default function AdminVehiclesPage() {
         </div>
       </div>
 
-      {/* 検索欄 */}
+      {/* 検索フィルター */}
       <div className="mb-6">
-        <div className="flex items-center gap-4">
-          <div className="flex-1 max-w-md">
-            <input
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-4">
+          {/* メーカー */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">メーカー</label>
+            <Select value={selectedMaker} onValueChange={setSelectedMaker}>
+              <SelectTrigger>
+                <SelectValue placeholder="すべて" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">すべて</SelectItem>
+                {fixedMakers.map((maker) => (
+                  <SelectItem key={maker} value={maker}>{maker}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* ボディタイプ */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">ボディタイプ</label>
+            <Select value={selectedBodyType} onValueChange={setSelectedBodyType}>
+              <SelectTrigger>
+                <SelectValue placeholder="すべて" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">すべて</SelectItem>
+                {fixedBodyTypes.map((bodyType) => (
+                  <SelectItem key={bodyType} value={bodyType}>{bodyType}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* サイズ */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">サイズ</label>
+            <Select value={selectedSize} onValueChange={setSelectedSize}>
+              <SelectTrigger>
+                <SelectValue placeholder="すべて" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">すべて</SelectItem>
+                {getUniqueValues('size').map((size) => (
+                  <SelectItem key={size} value={size}>
+                    {size}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* 掲載状態 */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">掲載状態</label>
+            <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+              <SelectTrigger>
+                <SelectValue placeholder="すべて" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">すべて</SelectItem>
+                <SelectItem value="公開">公開</SelectItem>
+                <SelectItem value="非公開">非公開</SelectItem>
+                <SelectItem value="商談中">商談中</SelectItem>
+                <SelectItem value="SOLD">SOLD</SelectItem>
+                <SelectItem value="一時保存">一時保存</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* フリーワード検索 */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">フリーワード</label>
+            <Input
               type="text"
-              placeholder="問い合わせ番号または車体番号で検索..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="車名、問い合わせ番号など..."
+              value={freeWordSearch}
+              onChange={(e) => setFreeWordSearch(e.target.value)}
             />
           </div>
-          {searchQuery && (
+        </div>
+
+        {/* フィルタークリアボタン */}
+        {(selectedMaker !== "all" || selectedBodyType !== "all" || selectedSize !== "all" || selectedStatus !== "all" || freeWordSearch) && (
+          <div className="flex items-center gap-4">
             <Button
               variant="outline"
-              onClick={() => setSearchQuery("")}
+              onClick={() => {
+                setSelectedMaker("all")
+                setSelectedBodyType("all")
+                setSelectedSize("all")
+                setSelectedStatus("all")
+                setFreeWordSearch("")
+              }}
               className="px-4 py-2"
             >
-              クリア
+              フィルターをクリア
             </Button>
-          )}
-        </div>
-        {searchQuery && (
-          <p className="text-sm text-gray-600 mt-2">
-            検索結果: {filteredVehicles.length}件
-          </p>
+            <p className="text-sm text-gray-600">
+              検索結果: {filteredVehicles.length}件
+            </p>
+          </div>
         )}
       </div>
 
@@ -351,6 +517,7 @@ export default function AdminVehiclesPage() {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="text-right">操作</TableHead>
               <TableHead>車両写真</TableHead>
               <TableHead>問い合わせ番号</TableHead>
               <TableHead>メーカー</TableHead>
@@ -382,13 +549,40 @@ export default function AdminVehiclesPage() {
                   </span>
                 </div>
               </TableHead>
-              <TableHead>非公開</TableHead>
-              <TableHead className="text-right">操作</TableHead>
+              <TableHead>状態</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {getSortedVehicles().map((vehicle, index) => (
               <TableRow key={vehicle.id}>
+                <TableCell className="text-right">
+                  <div className="flex gap-2 justify-end">
+                    {hasChanges[vehicle.id!] && (
+                      <Button
+                        onClick={() => handleSave(vehicle.id!)}
+                        disabled={saving}
+                        size="sm"
+                        className="bg-green-600 hover:bg-green-700"
+                      >
+                        {saving ? "保存中..." : "保存"}
+                      </Button>
+                    )}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleEdit(vehicle.id!)}
+                    >
+                      編集
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => handleDelete(vehicle)}
+                    >
+                      削除
+                    </Button>
+                  </div>
+                </TableCell>
                 <TableCell>
                   {vehicle.imageUrls && vehicle.imageUrls.length > 0 ? (
                     <div className="relative w-16 h-12">
@@ -447,52 +641,37 @@ export default function AdminVehiclesPage() {
                   }
                 </TableCell>
                 <TableCell>
-                  {vehicle.salesRepresentative && vehicle.negotiationDeadline
-                    ? `${vehicle.salesRepresentative} ${vehicle.negotiationDeadline}`
-                    : vehicle.salesRepresentative || vehicle.negotiationDeadline || "---"
-                  }
+                  {vehicle.isNegotiating
+                    ? (
+                        (vehicle.salesRepresentative || vehicle.negotiationDeadline)
+                          ? `${vehicle.salesRepresentative || ''}${vehicle.salesRepresentative && vehicle.negotiationDeadline ? ' ' : ''}${vehicle.negotiationDeadline || ''}`
+                          : '---'
+                      )
+                    : '---'}
                 </TableCell>
                 <TableCell>
-                  {vehicle.isTemporarySave ? (
-                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                      一時保存
-                    </span>
-                  ) : vehicle.isPrivate ? (
-                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                      非公開
-                    </span>
-                  ) : (
-                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                      公開
-                    </span>
-                  )}
-                </TableCell>
-                <TableCell className="text-right">
-                  <div className="flex gap-2 justify-end">
-                    {hasChanges[vehicle.id!] && (
-                      <Button
-                        onClick={() => handleSave(vehicle.id!)}
-                        disabled={saving}
-                        size="sm"
-                        className="bg-green-600 hover:bg-green-700"
-                      >
-                        {saving ? "保存中..." : "保存"}
-                      </Button>
+                  <div className="flex flex-col gap-1">
+                    {vehicle.isTemporarySave && (
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                        一時保存
+                      </span>
                     )}
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleEdit(vehicle.id!)}
-                    >
-                      編集
-                    </Button>
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => handleDelete(vehicle)}
-                    >
-                      削除
-                    </Button>
+                    {vehicle.isSoldOut && (
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                        SOLD OUT
+                      </span>
+                    )}
+                    {!vehicle.isTemporarySave && (
+                      vehicle.isPrivate ? (
+                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                          非公開
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                          公開
+                        </span>
+                      )
+                    )}
                   </div>
                 </TableCell>
               </TableRow>

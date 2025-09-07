@@ -534,9 +534,9 @@ export default function VehicleDetailPage() {
                              let totalAmount = 0;
                              if (vehicle.totalPayment) {
                                if (typeof vehicle.totalPayment === 'string') {
-                                 totalAmount = Number(vehicle.totalPayment.replace(/,/g, '')) || 0;
+                                 totalAmount = Number((vehicle.totalPayment as string).replace(/,/g, '')) || 0;
                                } else {
-                                 totalAmount = vehicle.totalPayment;
+                                 totalAmount = vehicle.totalPayment as number;
                                }
                              } else if (vehicle.price) {
                                totalAmount = vehicle.price;
@@ -1539,16 +1539,16 @@ export default function VehicleDetailPage() {
             }}>
             {[
               { id: 1, type: "クレーン", icon: "crane" },
-              { id: 2, type: "ダンプ", icon: "dump" },
-              { id: 3, type: "平ボディ", icon: "flatbed" },
-              { id: 4, type: "車輌運搬車", icon: "carrier" },
-              { id: 5, type: "ミキサー車", icon: "mixer" },
-              { id: 6, type: "アルミバン", icon: "van" },
+              { id: 2, type: "ダンプ・ローダーダンプ", icon: "dump" },
+              { id: 3, type: "ミキサー車", icon: "mixer" },
+              { id: 4, type: "アームロール", icon: "arm-roll" },
+              { id: 5, type: "重機回送車", icon: "carrier" },
+              { id: 6, type: "車両運搬車", icon: "car_carrier" },
               { id: 7, type: "高所作業車", icon: "aerial" },
-              { id: 8, type: "アルミウィング", icon: "wing" },
-              { id: 9, type: "キャリアカー", icon: "car_carrier" },
-              { id: 10, type: "塵芥車", icon: "garbage" },
-              { id: 11, type: "アームロール", icon: "arm-roll" },
+              { id: 8, type: "塵芥車", icon: "garbage" },
+              { id: 9, type: "平ボディ", icon: "flatbed" },
+              { id: 10, type: "バン・ウイング", icon: "van" },
+              { id: 11, type: "冷蔵冷凍車", icon: "refrigerated" },
               { id: 12, type: "特装車・その他", icon: "special" }
             ].map((icon) => (
               <Link
@@ -1599,7 +1599,7 @@ export default function VehicleDetailPage() {
                     }}
                   >
                     <img 
-                      src={`/${icon.icon}.${icon.type === "平ボディ" || icon.type === "アームロール" || icon.type === "キャリアカー" ? "png" : "jpg"}`}
+                      src={`/${icon.icon}.${icon.type === "平ボディ" || icon.type === "アームロール" || icon.type === "車両運搬車" ? "png" : "jpg"}`}
                       alt={icon.type}
                       style={{
                         maxWidth: "100%",

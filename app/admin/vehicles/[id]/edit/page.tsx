@@ -24,19 +24,16 @@ import { Store } from "@/types"
 // プルダウンの選択肢
 const bodyTypes = [
   "クレーン",
-  "ダンプ",
-  "平ボディ",
-  "車輌運搬車",
+  "ダンプ・ローダーダンプ",
   "ミキサー車",
-  "高所作業車",
-  "アルミバン",
-  "アルミウィング",
-  "キャリアカー",
-  "塵芥車",
   "アームロール",
-  "バス",
+  "重機回送車",
+  "車両運搬車",
+  "高所作業車",
+  "塵芥車",
+  "平ボディ",
+  "バン・ウイング",
   "冷蔵冷凍車",
-  "タンクローリー",
   "特装車・その他"
 ]
 
@@ -470,6 +467,7 @@ export default function VehicleEditPage() {
         totalPayment: Number(formData.totalPayment?.toString().replace(/,/g, '')) || 0,
         mileage: Number(formData.mileage?.toString().replace(/,/g, '')) || 0,
         loadingCapacity: Number(formData.loadingCapacity?.toString().replace(/,/g, '')) || 0,
+        inspectionDate: formData.inspectionDate || "",
         outerLength: Number(formData.outerLength?.toString().replace(/,/g, '')) || 0,
         outerWidth: Number(formData.outerWidth?.toString().replace(/,/g, '')) || 0,
         outerHeight: Number(formData.outerHeight?.toString().replace(/,/g, '')) || 0,
