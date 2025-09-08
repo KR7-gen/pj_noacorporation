@@ -3153,7 +3153,7 @@ export default function HomePage() {
                 flexDirection: "column"
               }}
             >
-                              <div 
+                <div 
                   style={{
                     flex: "1"
                   }}
@@ -3224,7 +3224,7 @@ export default function HomePage() {
                           textAlign: "left",
                           whiteSpace: "pre-line"
                         }}>
-                          〒321-0411{'\n'}栃木県宇都宮市宮山田町406-1
+                          〒321-0411{'\n'}栃木県宇都宮市宮山田町406-4
                         </span>
                       </div>
                     </div>
