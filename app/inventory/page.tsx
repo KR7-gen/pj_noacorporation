@@ -80,7 +80,7 @@ export default function InventoryPage() {
   const [filteredVehicles, setFilteredVehicles] = useState<Vehicle[]>([])
   const [loading, setLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(1)
-  const vehiclesPerPage = 16
+  const [vehiclesPerPage, setVehiclesPerPage] = useState<number>(20)
 
   // ソート機能の状態管理
   const [sortField, setSortField] = useState<string>("")
@@ -111,8 +111,53 @@ export default function InventoryPage() {
           id: doc.id,
           ...doc.data()
         })) as Vehicle[];
-        setVehicles(fetchedVehicles);
-        setFilteredVehicles(fetchedVehicles);
+        // ダミー車両を110台生成（灰色プレースホルダー表示のため imageUrls は空）
+        const bodyTypeCycle = [
+          "クレーン",
+          "ダンプ・ローダーダンプ",
+          "ミキサー車",
+          "アームロール",
+          "重機回送車",
+          "車両運搬車",
+          "高所作業車",
+          "塵芥車",
+          "平ボディ",
+          "バン・ウイング",
+          "冷蔵冷凍車",
+          "特装車・その他",
+        ];
+        const makerCycle = ["日野", "いすゞ", "三菱ふそう", "UD", "トヨタ", "日産", "マツダ", "その他"];
+        const sizeCycle = ["大型", "増トン", "中型", "小型"];
+        const dummyVehicles: Vehicle[] = Array.from({length: 110}, (_, i) => {
+          const idx = i + 1;
+          return {
+            id: `DUMMY-${idx}`,
+            name: `ダミー車両 ${idx}`,
+            maker: makerCycle[i % makerCycle.length],
+            model: `D-${idx}`,
+            modelCode: `DM${idx}`,
+            bodyType: bodyTypeCycle[i % bodyTypeCycle.length],
+            vehicleType: bodyTypeCycle[i % bodyTypeCycle.length],
+            size: sizeCycle[i % sizeCycle.length],
+            price: undefined,
+            year: undefined,
+            month: undefined,
+            mileage: undefined,
+            loadingCapacity: undefined,
+            mission: undefined,
+            shift: undefined,
+            inspectionStatus: undefined,
+            inquiryNumber: `N${String(idx).padStart(5, '0')}`,
+            imageUrls: [],
+            isPrivate: false,
+            isTemporarySave: false,
+            isSoldOut: false,
+            isNegotiating: false,
+          } as unknown as Vehicle;
+        });
+        const combined = [...dummyVehicles, ...fetchedVehicles];
+        setVehicles(combined);
+        setFilteredVehicles(combined);
       } catch (error) {
         console.error("Error fetching vehicles:", error);
       } finally {
@@ -928,7 +973,7 @@ export default function InventoryPage() {
             
             {/* ソートボタン */}
             {filteredVehicles.length > 0 && (
-              <div style={{ display: "flex", gap: "0.57rem" }}>
+              <div style={{ display: "flex", gap: "0.57rem", alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
               <button
                 onClick={() => handleSort("price")}
                 style={{
@@ -1009,6 +1054,39 @@ export default function InventoryPage() {
                 <ArrowUpDown size={16} />
                 走行距離：{sortField === "mileage" ? (sortDirection === "asc" ? "少ない" : "多い") : "多い/少ない"}
               </button>
+
+              {/* 1ページあたりの掲載台数切替 */}
+              <div style={{ display: "flex", gap: "0.29rem", marginLeft: "0.86rem" }}>
+                {[20, 50, 100].map((size) => (
+                  <button
+                    key={size}
+                    onClick={() => { setVehiclesPerPage(size); setCurrentPage(1); }}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.29rem",
+                      padding: "0.57rem 0.86rem",
+                      border: "0.07rem solid #CCCCCC",
+                      borderRadius: "0.29rem",
+                      background: vehiclesPerPage === size ? "#E3F2FD" : "#FFFFFF",
+                      color: vehiclesPerPage === size ? "#1976D2" : "#666666",
+                      fontFamily: "Noto Sans JP",
+                      fontSize: "1rem",
+                      cursor: "pointer",
+                      transition: "all 0.2s ease",
+                      whiteSpace: "nowrap"
+                    }}
+                    onMouseEnter={(e) => {
+                      (e.currentTarget as HTMLButtonElement).style.background = vehiclesPerPage === size ? "#BBDEFB" : "#F5F5F5"
+                    }}
+                    onMouseLeave={(e) => {
+                      (e.currentTarget as HTMLButtonElement).style.background = vehiclesPerPage === size ? "#E3F2FD" : "#FFFFFF"
+                    }}
+                  >
+                    {size}台/ページ
+                  </button>
+                ))}
+              </div>
             </div>
           )}
         </div>

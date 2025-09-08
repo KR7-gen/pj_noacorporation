@@ -1101,13 +1101,21 @@ const DocumentSection = () => (
                }}
                onClick={() => {
                  try {
-                   const link = document.createElement('a');
-                   link.href = '/transfer-certificate.pdf';
-                   link.download = '譲渡証明書.pdf';
-                   link.target = '_blank';
-                   document.body.appendChild(link);
-                   link.click();
-                   document.body.removeChild(link);
+                   const files = [
+                     {href: '/transfer-certificate_ex.pdf', name: 'transfer-certificate_ex.pdf'},
+                     {href: '/transfer-certificate.pdf', name: 'transfer-certificate.pdf'},
+                   ];
+                   files.forEach((f, idx) => {
+                     setTimeout(() => {
+                       const a = document.createElement('a');
+                       a.href = f.href;
+                       a.download = f.name;
+                       a.target = '_blank';
+                       document.body.appendChild(a);
+                       a.click();
+                       document.body.removeChild(a);
+                     }, idx * 200);
+                   });
                  } catch (error) {
                    console.error('PDFダウンロードエラー:', error);
                    alert('PDFのダウンロードに失敗しました。');
@@ -1127,13 +1135,21 @@ const DocumentSection = () => (
                }}
                onClick={() => {
                  try {
-                   const link = document.createElement('a');
-                   link.href = '/power-of-attorney.pdf';
-                   link.download = '委任状.pdf';
-                   link.target = '_blank';
-                   document.body.appendChild(link);
-                   link.click();
-                   document.body.removeChild(link);
+                   const files = [
+                     {href: '/power-of-attorney.pdf', name: 'power-of-attorney.pdf'},
+                     {href: '/power-of-attorney_ex.pdf', name: 'power-of-attorney_ex.pdf'},
+                   ];
+                   files.forEach((f, idx) => {
+                     setTimeout(() => {
+                       const a = document.createElement('a');
+                       a.href = f.href;
+                       a.download = f.name;
+                       a.target = '_blank';
+                       document.body.appendChild(a);
+                       a.click();
+                       document.body.removeChild(a);
+                     }, idx * 200);
+                   });
                  } catch (error) {
                    console.error('PDFダウンロードエラー:', error);
                    alert('PDFのダウンロードに失敗しました。');
