@@ -444,10 +444,20 @@ export default function VehicleEditPage() {
       // 問い合わせ番号を除外して更新データを作成
       const { inquiryNumber, ...updateData } = formData;
       
-      // undefinedのフィールドを除外して更新データを作成
+      // undefinedのフィールドを除外
       const cleanedUpdateData = Object.fromEntries(
         Object.entries(updateData).filter(([_, value]) => value !== undefined)
       );
+
+      // 型式・店舗情報は空文字で既存値を潰さない（空文字なら送らない）
+      const cleanedUpdateDataNoEmpty = Object.fromEntries(
+        Object.entries(cleanedUpdateData).filter(([key, value]) => {
+          if (["modelCode", "storeId", "storeName"].includes(key)) {
+            return typeof value === 'number' ? true : (typeof value === 'string' ? value.trim() !== "" : !!value)
+          }
+          return true
+        })
+      )
       
       // 画像URLからダミー写真と一時的なURLを除外
       const filteredImageUrls = (formData.imageUrls || []).filter((url: any) => 
@@ -460,23 +470,24 @@ export default function VehicleEditPage() {
       );
 
       const updatedVehicle: Partial<Vehicle> = {
-        ...cleanedUpdateData,
+        ...cleanedUpdateDataNoEmpty,
         imageUrls: filteredImageUrls,
-        price: Number(formData.price?.toString().replace(/,/g, '')) || 0,
-        wholesalePrice: Number(formData.wholesalePrice?.toString().replace(/,/g, '')) || 0,
-        totalPayment: Number(formData.totalPayment?.toString().replace(/,/g, '')) || 0,
-        mileage: Number(formData.mileage?.toString().replace(/,/g, '')) || 0,
-        loadingCapacity: Number(formData.loadingCapacity?.toString().replace(/,/g, '')) || 0,
-        inspectionDate: formData.inspectionDate || "",
-        outerLength: Number(formData.outerLength?.toString().replace(/,/g, '')) || 0,
-        outerWidth: Number(formData.outerWidth?.toString().replace(/,/g, '')) || 0,
-        outerHeight: Number(formData.outerHeight?.toString().replace(/,/g, '')) || 0,
-        totalWeight: Number(formData.totalWeight?.toString().replace(/,/g, '')) || 0,
-        horsepower: Number(formData.horsepower?.toString().replace(/,/g, '')) || 0,
-        displacement: Number(formData.displacement?.toString().replace(/,/g, '')) || 0,
-        vehicleType: formData.vehicleType,
-        chassisNumber: formData.chassisNumber,
-        month: formData.month,
+        ...(formData.price !== undefined && formData.price !== "" ? { price: Number(formData.price.toString().replace(/,/g, '')) } : {}),
+        ...(formData.wholesalePrice !== undefined && formData.wholesalePrice !== "" ? { wholesalePrice: Number(formData.wholesalePrice.toString().replace(/,/g, '')) } : {}),
+        ...(formData.totalPayment !== undefined && formData.totalPayment !== "" ? { totalPayment: Number(formData.totalPayment.toString().replace(/,/g, '')) } : {}),
+        ...(formData.mileage !== undefined && formData.mileage !== "" ? { mileage: Number(formData.mileage.toString().replace(/,/g, '')) } : {}),
+        ...(formData.loadingCapacity !== undefined && formData.loadingCapacity !== "" ? { loadingCapacity: Number(formData.loadingCapacity.toString().replace(/,/g, '')) } : {}),
+        ...(formData.inspectionDate !== undefined && formData.inspectionDate !== "" ? { inspectionDate: formData.inspectionDate } : {}),
+        ...(formData.outerLength !== undefined && formData.outerLength !== "" ? { outerLength: Number(formData.outerLength.toString().replace(/,/g, '')) } : {}),
+        ...(formData.outerWidth !== undefined && formData.outerWidth !== "" ? { outerWidth: Number(formData.outerWidth.toString().replace(/,/g, '')) } : {}),
+        ...(formData.outerHeight !== undefined && formData.outerHeight !== "" ? { outerHeight: Number(formData.outerHeight.toString().replace(/,/g, '')) } : {}),
+        ...(formData.totalWeight !== undefined && formData.totalWeight !== "" ? { totalWeight: Number(formData.totalWeight.toString().replace(/,/g, '')) } : {}),
+        ...(formData.horsepower !== undefined && formData.horsepower !== "" ? { horsepower: Number(formData.horsepower.toString().replace(/,/g, '')) } : {}),
+        ...(formData.displacement !== undefined && formData.displacement !== "" ? { displacement: Number(formData.displacement.toString().replace(/,/g, '')) } : {}),
+        ...(formData.vehicleType !== undefined && formData.vehicleType !== "" ? { vehicleType: formData.vehicleType } : {}),
+        ...(formData.chassisNumber !== undefined && formData.chassisNumber !== "" ? { chassisNumber: formData.chassisNumber } : {}),
+        ...(formData.month !== undefined && formData.month !== "" ? { month: formData.month } : {}),
+        ...(formData.turbo !== undefined && formData.turbo !== "" ? { turbo: formData.turbo } : {}),
         isTemporarySave: true, // 一時保存としてマーク
         updatedAt: new Date(),
       }
@@ -527,22 +538,23 @@ export default function VehicleEditPage() {
       const updatedVehicle: Partial<Vehicle> = {
         ...cleanedUpdateData,
         imageUrls: filteredImageUrls,
-        price: Number(formData.price?.toString().replace(/,/g, '')) || 0,
-        wholesalePrice: Number(formData.wholesalePrice?.toString().replace(/,/g, '')) || 0,
-        totalPayment: Number(formData.totalPayment?.toString().replace(/,/g, '')) || 0,
-        mileage: Number(formData.mileage?.toString().replace(/,/g, '')) || 0,
-        loadingCapacity: Number(formData.loadingCapacity?.toString().replace(/,/g, '')) || 0,
-        outerLength: Number(formData.outerLength?.toString().replace(/,/g, '')) || 0,
-        outerWidth: Number(formData.outerWidth?.toString().replace(/,/g, '')) || 0,
-        outerHeight: Number(formData.outerHeight?.toString().replace(/,/g, '')) || 0,
-        totalWeight: Number(formData.totalWeight?.toString().replace(/,/g, '')) || 0,
-        horsepower: Number(formData.horsepower?.toString().replace(/,/g, '')) || 0,
-        displacement: Number(formData.displacement?.toString().replace(/,/g, '')) || 0,
-        vehicleType: formData.vehicleType,
-        chassisNumber: formData.chassisNumber,
-        month: formData.month,
+        ...(formData.price !== undefined && formData.price !== "" ? { price: Number(formData.price.toString().replace(/,/g, '')) } : {}),
+        ...(formData.wholesalePrice !== undefined && formData.wholesalePrice !== "" ? { wholesalePrice: Number(formData.wholesalePrice.toString().replace(/,/g, '')) } : {}),
+        ...(formData.totalPayment !== undefined && formData.totalPayment !== "" ? { totalPayment: Number(formData.totalPayment.toString().replace(/,/g, '')) } : {}),
+        ...(formData.mileage !== undefined && formData.mileage !== "" ? { mileage: Number(formData.mileage.toString().replace(/,/g, '')) } : {}),
+        ...(formData.loadingCapacity !== undefined && formData.loadingCapacity !== "" ? { loadingCapacity: Number(formData.loadingCapacity.toString().replace(/,/g, '')) } : {}),
+        ...(formData.outerLength !== undefined && formData.outerLength !== "" ? { outerLength: Number(formData.outerLength.toString().replace(/,/g, '')) } : {}),
+        ...(formData.outerWidth !== undefined && formData.outerWidth !== "" ? { outerWidth: Number(formData.outerWidth.toString().replace(/,/g, '')) } : {}),
+        ...(formData.outerHeight !== undefined && formData.outerHeight !== "" ? { outerHeight: Number(formData.outerHeight.toString().replace(/,/g, '')) } : {}),
+        ...(formData.totalWeight !== undefined && formData.totalWeight !== "" ? { totalWeight: Number(formData.totalWeight.toString().replace(/,/g, '')) } : {}),
+        ...(formData.horsepower !== undefined && formData.horsepower !== "" ? { horsepower: Number(formData.horsepower.toString().replace(/,/g, '')) } : {}),
+        ...(formData.displacement !== undefined && formData.displacement !== "" ? { displacement: Number(formData.displacement.toString().replace(/,/g, '')) } : {}),
+        ...(formData.vehicleType !== undefined && formData.vehicleType !== "" ? { vehicleType: formData.vehicleType } : {}),
+        ...(formData.chassisNumber !== undefined && formData.chassisNumber !== "" ? { chassisNumber: formData.chassisNumber } : {}),
+        ...(formData.month !== undefined && formData.month !== "" ? { month: formData.month } : {}),
+        ...(formData.turbo !== undefined && formData.turbo !== "" ? { turbo: formData.turbo } : {}),
         // エンジン情報
-        engineModel: formData.engineModel,
+        ...(formData.engineModel !== undefined && formData.engineModel !== "" ? { engineModel: formData.engineModel } : {}),
         isTemporarySave: false, // 通常保存としてマーク
         updatedAt: new Date(),
       }
@@ -1004,7 +1016,7 @@ export default function VehicleEditPage() {
                     value={formData.outerLength || ""}
                     onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
-                    placeholder="7,000"
+                    placeholder="840"
                     style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                   />
                 </div>
@@ -1016,7 +1028,7 @@ export default function VehicleEditPage() {
                     value={formData.outerWidth || ""}
                     onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
-                    placeholder="2,200"
+                    placeholder="249"
                     style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                   />
                 </div>
@@ -1028,7 +1040,7 @@ export default function VehicleEditPage() {
                     value={formData.outerHeight || ""}
                     onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
-                    placeholder="2,800"
+                    placeholder="323"
                     style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                   />
                 </div>
@@ -1059,7 +1071,7 @@ export default function VehicleEditPage() {
                     value={formData.inspectionDate || ""}
                     onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
-                    placeholder="2025年12月"
+                    placeholder="2025/09/08"
                   />
                 </div>
                 <div></div>
@@ -1256,7 +1268,7 @@ export default function VehicleEditPage() {
                      value={formData.innerLength || ""}
                      onChange={handleChange}
                      className="w-full border rounded px-2 py-1"
-                     placeholder="内寸長 (mm)"
+                     placeholder="620"
                      style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                    />
                  </div>
@@ -1268,7 +1280,7 @@ export default function VehicleEditPage() {
                      value={formData.innerWidth || ""}
                      onChange={handleChange}
                      className="w-full border rounded px-2 py-1"
-                     placeholder="内寸幅 (mm)"
+                     placeholder="240"
                      style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                    />
                  </div>
@@ -1280,7 +1292,7 @@ export default function VehicleEditPage() {
                      value={formData.innerHeight || ""}
                      onChange={handleChange}
                      className="w-full border rounded px-2 py-1"
-                     placeholder="内寸高 (mm)"
+                     placeholder="196"
                      style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                    />
                  </div>

@@ -327,9 +327,9 @@ const HeroSection = () => (
 
 // 2. 買取実績セクション
 const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[], loading: boolean }) => {
-  // 買取価格を計算（車両価格（税込）から100万円を引く）
+  // 買取価格を計算（車両価格（税込）から30万円を引く）
   const calculatePurchasePrice = (totalPayment: number): number => {
-    return Math.max(0, totalPayment - 1000000)
+    return Math.max(0, totalPayment - 300000)
   }
 
   return (
@@ -380,7 +380,7 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
           </div>
         </div>
 
-                 <div className="flex justify-center gap-1 mb-8" style={{ gap: '1.42rem' }}>
+          <div className="flex justify-center gap-1 mb-8" style={{ gap: '1.42rem' }}>
            {loading ? (
              // ローディング中はデフォルトの表示
              defaultAchievements.map((item, index) => (
@@ -449,7 +449,28 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
             // 実際のSOLD OUT車両データを表示
             achievements.map((vehicle, index) => {
               const purchasePrice = calculatePurchasePrice(vehicle.totalPayment || 0)
-              const japaneseYear = convertYearToJapaneseEra(vehicle.year)
+              const parseYearNumber = (year: any) => {
+                if (!year) return 0
+                if (typeof year === 'string') {
+                  const digits = parseInt(year.replace(/[^0-9]/g, ''))
+                  if (year.startsWith('R') || year.startsWith('令和')) {
+                    return 2018 + (isNaN(digits) ? 0 : digits)
+                  }
+                  if (year.startsWith('H') || year.startsWith('平成')) {
+                    // 平成元年(1989) → 1989年
+                    return 1988 + (isNaN(digits) ? 0 : digits)
+                  }
+                  if (year.startsWith('S') || year.startsWith('昭和')) {
+                    // 昭和元年(1926) → 1926年
+                    return 1925 + (isNaN(digits) ? 0 : digits)
+                  }
+                  return isNaN(digits) ? 0 : digits
+                }
+                const n = parseInt(year)
+                return isNaN(n) ? 0 : n
+              }
+              const yearNum = parseYearNumber(vehicle.year)
+              const japaneseYear = yearNum ? convertYearToJapaneseEra(yearNum) : ''
               const vehicleName = `${vehicle.maker || ""} ${vehicle.vehicleType || ""}`.trim()
               
               return (

@@ -1599,7 +1599,23 @@ export default function VehicleDetailPage() {
                     }}
                   >
                     <img 
-                      src={`/${icon.icon}.${icon.type === "平ボディ" || icon.type === "アームロール" || icon.type === "車両運搬車" ? "png" : "jpg"}`}
+                      src={(() => {
+                        const map: Record<string, string> = {
+                          crane: "/crane.jpg",
+                          dump: "/dump.jpg",
+                          mixer: "/mixer.jpg",
+                          "arm-roll": "/arm-roll.png",
+                          carrier: "/carrier.jpg",
+                          car_carrier: "/car_carrier.png",
+                          aerial: "/aerial.jpg",
+                          garbage: "/garbage.jpg",
+                          flatbed: "/flatbed.png",
+                          van: "/van.png",
+                          refrigerated: "/refrigerated_car.jpg",
+                          special: "/special.jpg",
+                        }
+                        return map[icon.icon] || "/special.jpg"
+                      })()}
                       alt={icon.type}
                       style={{
                         maxWidth: "100%",

@@ -168,13 +168,26 @@ export default function InventoryPage() {
     fetchVehicles();
   }, []);
 
+  const normalizeType = (t: string) => {
+    const s = (t || "").trim();
+    if (!s) return "";
+    if (s === "ダンプ") return "ダンプ・ローダーダンプ";
+    if (s === "車輌運搬車" || s === "キャリアカー") return "車両運搬車";
+    if (s === "アルミウィング" || s === "アルミバン") return "バン・ウイング";
+    if (s === "重機運搬車") return "重機回送車";
+    return s;
+  };
+
   // 検索条件に基づいてフィルタリング
   useEffect(() => {
     let filtered = vehicles;
 
-    // ボディタイプでフィルタリング
+    // ボディタイプでフィルタリング（bodyType が未設定の場合は vehicleType を参照）
     if (formType && formType !== "all") {
-      filtered = filtered.filter(vehicle => vehicle.bodyType === formType);
+      filtered = filtered.filter(vehicle => {
+        const type = normalizeType(vehicle.bodyType || vehicle.vehicleType || "");
+        return type === normalizeType(formType);
+      });
     }
 
     // メーカーでフィルタリング
@@ -214,9 +227,12 @@ export default function InventoryPage() {
       filtered = filtered.filter(vehicle => !vehicle.isSoldOut && !vehicle.isNegotiating);
     }
 
-    // ボディタイプでフィルタリング
+    // ボディタイプでフィルタリング（bodyType が未設定の場合は vehicleType を参照）
     if (selectedType !== "all") {
-      filtered = filtered.filter(vehicle => vehicle.bodyType === selectedType);
+      filtered = filtered.filter(vehicle => {
+        const type = normalizeType(vehicle.bodyType || vehicle.vehicleType || "");
+        return type === normalizeType(selectedType);
+      });
     }
 
     // メーカーでフィルタリング
@@ -306,7 +322,34 @@ export default function InventoryPage() {
 
   // ソートされた車両リストを取得
   const getSortedVehicles = () => {
-    if (!sortField) return filteredVehicles
+    if (!sortField) {
+      // デフォルト並び替え
+      // 1) SOLD OUT は末尾へ
+      // 2) それ以外は作成日時の昇順（最初に出品されたものが先頭）
+      const toTime = (value: any): number => {
+        if (!value) return Number.MAX_SAFE_INTEGER
+        // Firestore Timestamp
+        if (typeof value === 'object' && value !== null) {
+          if (typeof (value as any).toDate === 'function') {
+            try { return (value as any).toDate().getTime() } catch { /* noop */ }
+          }
+          if (value instanceof Date) return value.getTime()
+        }
+        // 数値 or 文字列
+        const t = new Date(value).getTime()
+        return isNaN(t) ? Number.MAX_SAFE_INTEGER : t
+      }
+
+      return [...filteredVehicles].sort((a, b) => {
+        const aSold = a.isSoldOut ? 1 : 0
+        const bSold = b.isSoldOut ? 1 : 0
+        if (aSold !== bSold) return aSold - bSold
+        const aTime = toTime((a as any).createdAt)
+        const bTime = toTime((b as any).createdAt)
+        // 昇順（古い=先に出品）
+        return aTime - bTime
+      })
+    }
 
     return [...filteredVehicles].sort((a, b) => {
       let aValue: any

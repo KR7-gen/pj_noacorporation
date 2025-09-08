@@ -179,16 +179,14 @@ export default function ImageUploader({ images, onImagesChange, vehicleId }: Ima
   }, [images]);
 
   const handleFileUpload = useCallback(async (files: FileList) => {
-    if (!vehicleId) {
-      alert("車両IDが必要です")
-      return
-    }
+    // 新規登録時は一時IDでアップロード先を確保（保存時にURLをそのまま利用）
+    const effectiveId = vehicleId || `new-${Date.now()}`
     setUploading(true)
     try {
       const uploadPromises = Array.from(files).map(async (file, index) => {
         const timestamp = Date.now()
-        const fileName = `${vehicleId}_${timestamp}_${index}.${file.name.split('.').pop()}`
-        const path = `vehicles/${vehicleId}/${fileName}`
+        const fileName = `${effectiveId}_${timestamp}_${index}.${file.name.split('.').pop()}`
+        const path = `vehicles/${effectiveId}/${fileName}`
         return await uploadImage(file, path)
       })
       const newImageUrls = await Promise.all(uploadPromises)

@@ -472,7 +472,7 @@ export default function VehicleNewPage() {
 
       console.log("一時保存する画像URL:", validImageUrls);
 
-      const vehicleData = {
+      const vehicleData: any = {
         name: formData.name || "",
         maker: formData.maker || "",
         model: formData.model || "",
@@ -562,6 +562,7 @@ export default function VehicleNewPage() {
         name: formData.name || "",
         maker: formData.maker || "",
         model: formData.model || "",
+        modelCode: formData.modelCode || "",
         year: formData.year || "",
         month: formData.month || "",
         mileage: Number(formData.mileage?.toString().replace(/,/g, '')) || 0,
@@ -570,6 +571,7 @@ export default function VehicleNewPage() {
         imageUrls: validImageUrls, // 有効な画像URLのみを保存
         wholesalePrice: Number(formData.wholesalePrice?.toString().replace(/,/g, '')) || 0,
         totalPayment: Number(formData.totalPayment?.toString().replace(/,/g, '')) || 0,
+        inspectionDate: formData.inspectionDate || "",
         expiryDate: formData.inspectionDate || "",
         // その他のフィールド
         bodyType: formData.bodyType || "",
@@ -577,6 +579,7 @@ export default function VehicleNewPage() {
         vehicleType: formData.vehicleType || "",
         chassisNumber: formData.chassisNumber || "",
         shift: formData.shift || "",
+        turbo: formData.turbo || "",
         inspectionStatus: formData.inspectionStatus || "",
         outerLength: formData.outerLength ? Number(formData.outerLength.toString().replace(/,/g, '')) : undefined,
         outerWidth: formData.outerWidth ? Number(formData.outerWidth.toString().replace(/,/g, '')) : undefined,
@@ -587,7 +590,6 @@ export default function VehicleNewPage() {
         fuel: formData.fuel || "",
         equipment: formData.equipment || "",
         inspectionImageUrl: formData.inspectionImageUrl || "",
-        conditionImageUrl: formData.conditionImageUrl || "",
         // エンジン情報
         engineModel: formData.engineModel || "",
         // 上物情報
@@ -597,6 +599,9 @@ export default function VehicleNewPage() {
         innerLength: formData.innerLength ? Number(formData.innerLength.toString().replace(/,/g, '')) : undefined,
         innerWidth: formData.innerWidth ? Number(formData.innerWidth.toString().replace(/,/g, '')) : undefined,
         innerHeight: formData.innerHeight ? Number(formData.innerHeight.toString().replace(/,/g, '')) : undefined,
+        // 店舗
+        storeId: formData.storeId || undefined,
+        storeName: formData.storeName || "",
         // 商談関連フィールド
         isNegotiating: formData.isNegotiating || false,
         isSoldOut: formData.isSoldOut || false,
@@ -844,14 +849,94 @@ export default function VehicleNewPage() {
             </div>
           </div>
 
-          {/* 画像アップロード */}
+          {/* 画像アップロード（編集画面と同じUI） */}
           <div>
             <h3 className="text-lg font-medium mb-4">画像登録</h3>
-            <div className="border-2 border-dashed rounded-lg p-8 text-center">
-              <p className="text-gray-500 mb-4">車両登録後に画像をアップロードできます</p>
-              <p className="text-sm text-gray-400">車両を保存後、編集ページで画像を追加してください</p>
+            <ImageUploader
+              images={(formData.imageUrls || []).filter((url) => 
+                url && 
+                url.trim() !== "" && 
+                !url.includes("temp_") && 
+                !url.startsWith("blob:") &&
+                !url.startsWith("data:")
+              )}
+              onImagesChange={(images) => setFormData((prev) => ({ ...prev, imageUrls: images }))}
+            />
+          </div>
+
+          {/* 車検証画像（編集画面と同じUI） */}
+          <div>
+            <h3 className="text-lg font-medium mb-4">車検証画像</h3>
+            <div className="space-y-4">
+              <input
+                type="file"
+                ref={inspectionFileRef}
+                onChange={handleFileSelect(inspectionFileRef as React.RefObject<HTMLInputElement>, handleInspectionImageUpload)}
+                accept="image/*,.pdf"
+                className="hidden"
+              />
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => inspectionFileRef.current?.click()}
+                    disabled={uploadingInspection}
+                    className="w-full"
+                  >
+                    {uploadingInspection ? "アップロード中..." : "車検証を選択"}
+                  </Button>
+                </div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+              {formData.inspectionImageUrl && (
+                <div className="mt-4">
+                  <p className="text-sm text-gray-600 mb-2">アップロード済み:</p>
+                  <div className="border rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-red-500">📄</span>
+                      <a 
+                        href={formData.inspectionImageUrl as string} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:underline"
+                      >
+                        車検証を表示
+                      </a>
+                    </div>
+                    <div className="mt-2">
+                      <img 
+                        src={formData.inspectionImageUrl as string} 
+                        alt="車検証" 
+                        className="max-w-full h-auto max-h-64 rounded"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                          const parent = target.parentElement;
+                          if (parent) {
+                            parent.innerHTML = `
+                              <div class=\"flex items-center gap-2 p-4 bg-gray-50 rounded\"> 
+                                <span class=\"text-red-500 text-2xl\">📄</span>
+                                <span class=\"text-gray-700\">PDFファイル</span>
+                                <a href=\"${formData.inspectionImageUrl}\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline ml-2\">
+                                  開く
+                                </a>
+                              </div>
+                            `;
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
+
+          {/* 状態表画像セクションは不要のため削除 */}
 
           {/* 車両情報 */}
           <div className="bg-gray-50 p-6 rounded-lg border">
@@ -1049,7 +1134,7 @@ export default function VehicleNewPage() {
                     value={formData.outerLength}
                     onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
-                    placeholder="7,000"
+                    placeholder="840"
                     style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                   />
                 </div>
@@ -1061,7 +1146,7 @@ export default function VehicleNewPage() {
                     value={formData.outerWidth}
                     onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
-                    placeholder="2,200"
+                    placeholder="249"
                     style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                   />
                 </div>
@@ -1073,7 +1158,7 @@ export default function VehicleNewPage() {
                     value={formData.outerHeight}
                     onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
-                    placeholder="2,800"
+                    placeholder="323"
                     style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                   />
                 </div>
@@ -1104,6 +1189,7 @@ export default function VehicleNewPage() {
                     value={formData.inspectionDate}
                     onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
+                    placeholder="2025/09/08"
                   />
                 </div>
                 <div></div>
@@ -1227,7 +1313,7 @@ export default function VehicleNewPage() {
                     value={formData.innerLength}
                     onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
-                    placeholder="内寸長 (mm)"
+                    placeholder="620"
                     style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                   />
                 </div>
@@ -1239,7 +1325,7 @@ export default function VehicleNewPage() {
                     value={formData.innerWidth}
                     onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
-                    placeholder="内寸幅 (mm)"
+                    placeholder="240"
                     style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                   />
                 </div>
@@ -1251,7 +1337,7 @@ export default function VehicleNewPage() {
                     value={formData.innerHeight}
                     onChange={handleChange}
                     className="w-full border rounded px-2 py-1"
-                    placeholder="内寸高 (mm)"
+                    placeholder="196"
                     style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                   />
                 </div>
