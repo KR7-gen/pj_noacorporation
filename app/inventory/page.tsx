@@ -12,19 +12,21 @@ import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import type { Vehicle } from "@/types"
 
-// 車両タイプのアイコンデータ
+// 車両タイプのアイコンデータ（2行×6列の並び順に合わせる）
 const vehicleTypeIcons = [
+  // 1行目
   { id: 1, type: "クレーン", icon: "/icons/crane.png" },
   { id: 2, type: "ダンプ・ローダーダンプ", icon: "/icons/dump.png" },
   { id: 3, type: "ミキサー車", icon: "/icons/mixer.png" },
   { id: 4, type: "アームロール", icon: "/icons/arm-roll.png" },
   { id: 5, type: "重機回送車", icon: "/icons/carrier.png" },
   { id: 6, type: "車両運搬車", icon: "/icons/car-carrier.png" },
+  // 2行目
   { id: 7, type: "高所作業車", icon: "/icons/aerial.png" },
   { id: 8, type: "塵芥車", icon: "/icons/garbage.png" },
   { id: 9, type: "平ボディ", icon: "/icons/flatbed.png" },
   { id: 10, type: "バン・ウイング", icon: "/icons/van.png" },
-  { id: 11, type: "冷蔵冷凍車", icon: "/icons/refrigerated.png" },
+  { id: 11, type: "冷蔵冷凍車", icon: "/refrigerated_car.jpg" },
   { id: 12, type: "特装車・その他", icon: "/icons/special.png" },
 ]
 
@@ -445,27 +447,29 @@ export default function InventoryPage() {
                 >
                   <div 
                     style={{
-                      width: icon.type === "ダンプローダーダンプ" ? "3rem" : "4.57rem",
-                      height: icon.type === "ダンプローダーダンプ" ? "3rem" : "4.57rem",
+                      width: icon.type === "ダンプ・ローダーダンプ" ? "3rem" : "4.57rem",
+                      height: icon.type === "ダンプ・ローダーダンプ" ? "3rem" : "4.57rem",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      marginBottom: icon.type === "ダンプローダーダンプ" ? "0.5rem" : "0.29rem"
+                      marginBottom: icon.type === "ダンプ・ローダーダンプ" ? "0.5rem" : "0.29rem"
                     }}
                   >
                     <img 
-                      src={`/${icon.type === "クレーン" ? "crane" : 
-                           icon.type === "ダンプローダーダンプ" ? "dump" :
-                           icon.type === "平ボディ" ? "flatbed" :
-                           icon.type === "重機回送車" ? "carrier" :
-                           icon.type === "ミキサー車" ? "mixer" :
-                           icon.type === "アルミバン" ? "van" :
-                           icon.type === "高所作業車" ? "aerial" :
-                           icon.type === "アルミウィング" ? "wing" :
-                           icon.type === "車両運搬車" ? "car_carrier" :
-                           icon.type === "塵芥車" ? "garbage" :
-                           icon.type === "アームロール" ? "arm-roll" :
-                           "special"}.${icon.type === "平ボディ" || icon.type === "アームロール" || icon.type === "車両運搬車" ? "png" : "jpg"}`}
+                      src={
+                        icon.type === "クレーン" ? "/crane.jpg" :
+                        icon.type === "ダンプ・ローダーダンプ" ? "/dump.jpg" :
+                        icon.type === "ミキサー車" ? "/mixer.jpg" :
+                        icon.type === "アームロール" ? "/arm-roll.png" :
+                        icon.type === "重機回送車" ? "/carrier.jpg" :
+                        icon.type === "車両運搬車" ? "/car_carrier.png" :
+                        icon.type === "高所作業車" ? "/aerial.jpg" :
+                        icon.type === "塵芥車" ? "/garbage.jpg" :
+                        icon.type === "平ボディ" ? "/flatbed.png" :
+                        icon.type === "バン・ウイング" ? "/van.png" :
+                        icon.type === "冷蔵冷凍車" ? "/refrigerated_car.jpg" :
+                        "/special.jpg"
+                      }
                       alt={icon.type}
                       style={{
                         maxWidth: "100%",
@@ -490,10 +494,10 @@ export default function InventoryPage() {
                       maxWidth: "11.43rem",
                       whiteSpace: "pre-line",
                       padding: "0.17rem",
-                      marginTop: icon.type === "ダンプローダーダンプ" ? "0.2rem" : "0"
+                      marginTop: icon.type === "ダンプ・ローダーダンプ" ? "0.2rem" : "0"
                     }}
                   >
-                    {icon.type === "ダンプローダーダンプ" ? "ダンプ\nローダーダンプ" : icon.type}
+                    {icon.type === "ダンプ・ローダーダンプ" ? "ダンプ・\nローダーダンプ" : icon.type}
                   </span>
                 </div>
               </div>
