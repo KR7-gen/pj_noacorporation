@@ -458,6 +458,7 @@ export default function VehicleNewPage() {
   // 一時保存ハンドラー
   const handleTemporarySave = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (isSubmitting) return // 多重送信防止
     setIsSubmitting(true)
 
     try {
@@ -472,10 +473,19 @@ export default function VehicleNewPage() {
 
       console.log("一時保存する画像URL:", validImageUrls);
 
+      // デバッグ用ログ：保存直前の送信データ
+      console.log("一時保存直前の送信データ:", {
+        storeId: formData.storeId,
+        modelCode: formData.modelCode,
+        turbo: formData.turbo,
+        storeName: formData.storeName
+      });
+
       const vehicleData: any = {
         name: formData.name || "",
         maker: formData.maker || "",
         model: formData.model || "",
+        modelCode: formData.modelCode || "", // 追加
         year: formData.year || "",
         month: formData.month || "",
         mileage: Number(formData.mileage?.toString().replace(/,/g, '')) || 0,
@@ -491,6 +501,7 @@ export default function VehicleNewPage() {
         vehicleType: formData.vehicleType || "",
         chassisNumber: formData.chassisNumber || "",
         shift: formData.shift || "",
+        turbo: formData.turbo || "", // 追加
         inspectionStatus: formData.inspectionStatus || "",
         loadingCapacity: formData.loadingCapacity ? Number(formData.loadingCapacity.toString().replace(/,/g, '')) : undefined,
         inspectionDate: formData.inspectionDate || "",
@@ -513,6 +524,9 @@ export default function VehicleNewPage() {
         innerLength: formData.innerLength ? Number(formData.innerLength.toString().replace(/,/g, '')) : undefined,
         innerWidth: formData.innerWidth ? Number(formData.innerWidth.toString().replace(/,/g, '')) : undefined,
         innerHeight: formData.innerHeight ? Number(formData.innerHeight.toString().replace(/,/g, '')) : undefined,
+        // 店舗情報
+        storeId: formData.storeId || undefined, // 追加
+        storeName: formData.storeName || "", // 追加
         // 商談関連フィールド
         isNegotiating: formData.isNegotiating || false,
         isSoldOut: formData.isSoldOut || false,
@@ -531,8 +545,9 @@ export default function VehicleNewPage() {
       // 成功メッセージを表示
       alert("車両が一時保存されました")
       
-      // 管理画面の車両一覧にリダイレクト
+      // 一時保存成功後は車両一覧へ遷移
       router.push("/admin/vehicles")
+      
     } catch (error) {
       console.error("車両一時保存エラー:", error)
       alert("車両の一時保存に失敗しました")
@@ -684,20 +699,25 @@ export default function VehicleNewPage() {
               </div>
               <div className="space-y-2">
                 <label className="block text-sm font-medium">在庫店舗名</label>
-                <select
-                  name="storeId"
-                  value={formData.storeId || ""}
-                  onChange={handleChange}
-                  className="w-full border rounded px-2 py-1"
-                  disabled={loadingStores}
-                >
-                  <option value="">店舗を選択してください</option>
-                  {stores.map((store) => (
-                    <option key={store.id} value={store.id}>
-                      {store.name}
-                    </option>
-                  ))}
-                </select>
+                {loadingStores ? (
+                  <div className="w-full border rounded px-2 py-1 bg-gray-100 text-gray-500">
+                    店舗データ読み込み中...
+                  </div>
+                ) : (
+                  <select
+                    name="storeId"
+                    value={formData.storeId || ""}
+                    onChange={handleChange}
+                    className="w-full border rounded px-2 py-1"
+                  >
+                    <option value="">店舗を選択してください</option>
+                    {stores.map((store) => (
+                      <option key={store.id} value={store.id}>
+                        {store.name}
+                      </option>
+                    ))}
+                  </select>
+                )}
               </div>
               <div></div>
             </div>
