@@ -2177,12 +2177,15 @@ export default function HomePage() {
                   fontFamily: "Noto Sans JP",
                   fontWeight: "700",
                   fontStyle: "Bold",
-                  fontSize: "2.86rem",
-                  lineHeight: "100%",
+                  fontSize: "clamp(1.25rem, 6vw, 2.5rem)",
+                  lineHeight: "1.3",
                   letterSpacing: "0%",
                   textAlign: "left",
                   color: "#1A1A1A",
                   whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  maxWidth: "100%",
                 }}
               >
                 ノアコーポレーションの特徴3点
@@ -2204,8 +2207,10 @@ export default function HomePage() {
             {features.map((feature, index) => (
               <div 
                 key={index}
+                className={index === 0 ? "feature-row feature-row--reason1" : index === 1 ? "feature-row feature-row--reason2" : index === 2 ? "feature-row feature-row--reason3" : undefined}
                 style={{
-                  width: index === 2 ? "60.64rem" : "60.64rem",
+                  width: "100%",
+                  maxWidth: "60.64rem",
                   height: "16.07rem",
                   opacity: 1,
                   display: "flex",
@@ -2216,17 +2221,50 @@ export default function HomePage() {
                 {index === 0 && (
                   <>
                     <div 
+                      className="feature-segment feature-segment--image"
                       style={{
-                        width: "24.07rem",
+                        width: "43%",
                         height: "100%",
                         backgroundImage: "url('/reason1.jpg')",
                         backgroundSize: "cover",
                         backgroundPosition: "center"
                       }}
-                    />
+                    >
+                      {/* mobile only reason badge over image */}
+                      <div className="mobile-only feature-reason-badge">
+                        <div className="reason-label" style={{
+                          height: "1.71rem",
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: 400,
+                          fontStyle: "Regular",
+                          fontSize: "1rem",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#2B5EC5",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center"
+                        }}>reason</div>
+                        <div className="reason-number" style={{
+                          width: "auto",
+                          height: "auto",
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: 600,
+                          fontStyle: "SemiBold",
+                          fontSize: "2rem",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#2B5EC5",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center"
+                        }}>{feature.number}</div>
+                      </div>
+                    </div>
                     <div 
+                      className="feature-segment feature-segment--gray"
                       style={{
-                        width: "25.71rem",
+                        width: "43%",
                         height: "100%",
                         backgroundColor: "#E6E6E6",
                         position: "relative"
@@ -2260,8 +2298,9 @@ export default function HomePage() {
                       </h3>
                     </div>
                     <div 
+                      className="feature-segment feature-segment--white"
                       style={{
-                        width: "10.86rem",
+                        width: "14%",
                         height: "100%",
                         backgroundColor: "white",
                         position: "relative"
@@ -2280,7 +2319,6 @@ export default function HomePage() {
                       >
                         <div 
                           style={{
-                            width: "4.57rem",
                             height: "1.71rem",
                             opacity: 1,
                             fontFamily: "Noto Sans JP",
@@ -2327,8 +2365,9 @@ export default function HomePage() {
                 {index === 1 && (
                   <>
                     <div 
+                      className="feature-segment feature-segment--white"
                       style={{
-                        width: "10.86rem",
+                        width: "14%",
                         height: "100%",
                         backgroundColor: "white",
                         position: "relative"
@@ -2348,7 +2387,6 @@ export default function HomePage() {
                       >
                         <div 
                           style={{
-                            width: "4.57rem",
                             height: "1.71rem",
                             opacity: 1,
                             fontFamily: "Noto Sans JP",
@@ -2367,7 +2405,6 @@ export default function HomePage() {
                         </div>
                         <div 
                           style={{
-                            width: "4rem",
                             height: "3.36rem",
                             opacity: 1,
                             fontFamily: "Noto Sans JP",
@@ -2381,7 +2418,7 @@ export default function HomePage() {
                             alignItems: "center",
                             justifyContent: "center",
                             transform: "translateY(-0.57rem)",
-                            marginRight: "0.5rem"
+                            marginLeft: "0.5rem"
                           }}
                         >
                           {feature.number}
@@ -2389,8 +2426,9 @@ export default function HomePage() {
                       </div>
                     </div>
                     <div 
+                      className="feature-segment feature-segment--gray"
                       style={{
-                        width: "25.71rem",
+                        width: "43%",
                         height: "100%",
                         backgroundColor: "#E6E6E6",
                         position: "relative",
@@ -2402,8 +2440,8 @@ export default function HomePage() {
                     >
                       <h3 
                         style={{
-                          width: "22.86rem",
                           height: "auto",
+                          width: "100%",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
@@ -2428,14 +2466,46 @@ export default function HomePage() {
                       </h3>
                     </div>
                     <div 
+                      className="feature-segment feature-segment--image"
                       style={{
-                        width: "24.07rem",
+                        width: "43%",
                         height: "100%",
                         backgroundImage: "url('/reason2.jpg')",
                         backgroundSize: "cover",
                         backgroundPosition: "center"
                       }}
-                    />
+                    >
+                      {/* mobile only reason badge over image (same as REASON1) */}
+                      <div className="mobile-only feature-reason-badge">
+                        <div className="reason-label" style={{
+                          height: "1.71rem",
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: 400,
+                          fontStyle: "Regular",
+                          fontSize: "1rem",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#2B5EC5",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center"
+                        }}>reason</div>
+                        <div className="reason-number" style={{
+                          width: "auto",
+                          height: "auto",
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: 600,
+                          fontStyle: "SemiBold",
+                          fontSize: "2rem",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#2B5EC5",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center"
+                        }}>{feature.number}</div>
+                      </div>
+                    </div>
                   </>
                 )}
 
@@ -2443,17 +2513,50 @@ export default function HomePage() {
                 {index === 2 && (
                   <>
                     <div 
+                      className="feature-segment feature-segment--image"
                       style={{
-                        width: "24.07rem",
+                        width: "43%",
                         height: "100%",
                         backgroundImage: "url('/reason3.jpg')",
                         backgroundSize: "cover",
                         backgroundPosition: "center"
                       }}
-                    />
+                    >
+                      {/* mobile only reason badge over image (same as REASON1/2) */}
+                      <div className="mobile-only feature-reason-badge">
+                        <div className="reason-label" style={{
+                          height: "1.71rem",
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: 400,
+                          fontStyle: "Regular",
+                          fontSize: "1rem",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#2B5EC5",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center"
+                        }}>reason</div>
+                        <div className="reason-number" style={{
+                          width: "auto",
+                          height: "auto",
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: 600,
+                          fontStyle: "SemiBold",
+                          fontSize: "2rem",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#2B5EC5",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center"
+                        }}>{feature.number}</div>
+                      </div>
+                    </div>
                     <div 
+                      className="feature-segment feature-segment--gray"
                       style={{
-                        width: "25.71rem",
+                        width: "43%",
                         height: "100%",
                         backgroundColor: "#E6E6E6",
                         position: "relative"
@@ -2461,7 +2564,7 @@ export default function HomePage() {
                     >
                       <h3 
                         style={{
-                          width: "22.86rem",
+                          width: "100%",
                           height: "auto",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
@@ -2487,8 +2590,9 @@ export default function HomePage() {
                       </h3>
                     </div>
                     <div 
+                      className="feature-segment feature-segment--white"
                       style={{
-                        width: "10.86rem",
+                        width: "14%",
                         height: "100%",
                         backgroundColor: "white",
                         position: "relative"
@@ -2507,7 +2611,6 @@ export default function HomePage() {
                       >
                         <div 
                           style={{
-                            width: "4.57rem",
                             height: "1.71rem",
                             opacity: 1,
                             fontFamily: "Noto Sans JP",
@@ -2526,7 +2629,6 @@ export default function HomePage() {
                         </div>
                         <div 
                           style={{
-                            width: "4rem",
                             height: "3.36rem",
                             opacity: 1,
                             fontFamily: "Noto Sans JP",
@@ -2648,7 +2750,7 @@ export default function HomePage() {
             padding: "0 20px"
           }}
         >
-          {/* FLOWセクション */}
+        {/* FLOWセクション */}
           {/* 見出し（白枠の外） */}
           <div 
             style={{
@@ -2699,7 +2801,7 @@ export default function HomePage() {
             </div>
           </div>
           
-                    {/* 白枠コンテンツ */}
+          {/* 白枠コンテンツ */}
           <div
             style={{
               width: "66.67vw",

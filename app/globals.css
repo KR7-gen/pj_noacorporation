@@ -146,6 +146,169 @@ body {
   }
 }
 
+/* Responsive layout for Features (mobile only) */
+/* hide mobile-only elements by default */
+.mobile-only {
+  display: none !important;
+}
+
+@media (max-width: 640px) {
+  /* show on mobile */
+  .mobile-only {
+    display: block !important;
+  }
+
+  .feature-row {
+    margin-bottom: 1.25rem;
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .feature-row.feature-row--reason1 {
+    display: flex;
+    flex-direction: column;
+    height: auto !important; /* インラインの固定高さを上書き */
+    overflow: visible !important; /* クリップを解除 */
+    align-items: stretch;
+  }
+
+  .feature-row.feature-row--reason1 .feature-segment {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 10rem;
+  }
+
+  .feature-row.feature-row--reason1 .feature-segment--image {
+    order: 1;
+    min-height: 14rem; /* 画像エリアを拡大 */
+  }
+  .feature-row.feature-row--reason1 .feature-segment--gray {
+    order: 2;
+    padding: 1rem 1.25rem; /* 余白でテキストを内側に収める */
+    min-height: 1rem; /* テキストが隠れないよう高さを確保 */
+  }
+  .feature-row.feature-row--reason1 .feature-segment--white {
+    order: 3;
+  }
+
+  .feature-row.feature-row--reason1 .feature-segment--gray h3 {
+    position: static !important;
+    transform: none !important;
+    width: 100% !important;
+    padding: 0;
+    text-align: center !important;
+    line-height: 1.3 !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    font-size: clamp(1rem, 4.2vw, 1.25rem) !important; /* スマホで収まりやすいサイズ */
+  }
+
+  .feature-row.feature-row--reason1 .feature-segment--white > div {
+    position: static !important;
+    justify-content: center !important;
+    padding: 0.5rem 1rem;
+  }
+
+  /* REASON1: hide white segment on mobile */
+  .feature-row.feature-row--reason1 .feature-segment--white {
+    display: none !important;
+  }
+
+  /* REASON1: place reason badge at top-left of image */
+  .feature-row.feature-row--reason1 .feature-segment--image {
+    position: relative;
+  }
+  .feature-row.feature-row--reason1 .feature-segment--image .feature-reason-badge {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+  }
+  .feature-row.feature-row--reason1 .feature-segment--image .reason-number {
+    transform: translateY(-0.1rem);
+  }
+
+  /* REASON2: stack like REASON1 and hide white on mobile */
+  .feature-row .feature-segment {
+    width: 100% !important;
+  }
+  .feature-row .feature-segment--image,
+  .feature-row .feature-segment--gray,
+  .feature-row .feature-segment--white {
+    height: auto !important;
+  }
+
+  /* keep order: image -> gray; hide white */
+  .feature-row.feature-row--reason2 .feature-segment--image { order: 1; }
+  .feature-row.feature-row--reason2 .feature-segment--gray { order: 2; }
+  .feature-row.feature-row--reason2 .feature-segment--white { display: none !important; }
+
+  .feature-row.feature-row--reason2 .feature-segment--image { position: relative; }
+  /* ensure visible height on mobile */
+  .feature-row.feature-row--reason2 .feature-segment--image { min-height: 14rem; }
+  .feature-row.feature-row--reason2 .feature-segment--gray { min-height: 5rem; padding: 0.75rem 1rem; }
+  .feature-row.feature-row--reason2 .feature-segment--gray h3 {
+    position: static !important;
+    transform: none !important;
+    width: 100% !important;
+    padding: 0;
+    text-align: center !important;
+    line-height: 1.3 !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    font-size: clamp(1rem, 4.2vw, 1.25rem) !important;
+  }
+  .feature-row.feature-row--reason2 .feature-reason-badge {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+  }
+
+  /* hide white segment on mobile for all feature rows */
+  .feature-row.feature-row--reason2 .feature-segment--white { display: none !important; }
+
+  /* REASON3: image -> gray; hide white */
+  .feature-row.feature-row--reason3 .feature-segment { width: 100% !important; }
+  .feature-row.feature-row--reason3 .feature-segment--image { order: 1; position: relative; min-height: 14rem; }
+  .feature-row.feature-row--reason3 .feature-segment--gray { order: 2; min-height: 5rem; padding: 0.75rem 1rem; }
+  .feature-row.feature-row--reason3 .feature-segment--white { display: none !important; }
+  .feature-row.feature-row--reason3 .feature-reason-badge {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+  }
+  .feature-row.feature-row--reason3 .feature-segment--gray h3 {
+    position: static !important;
+    transform: none !important;
+    width: 100% !important;
+    padding: 0;
+    text-align: center !important;
+    line-height: 1.3 !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    font-size: clamp(1rem, 4.2vw, 1.25rem) !important;
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
