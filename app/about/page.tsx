@@ -458,7 +458,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-             {/* ノアの特徴４選*/}
+      {/* ノアの特徴４選*/}
        <section 
          style={{
            width: "100%",
@@ -483,7 +483,7 @@ export default function AboutPage() {
              alignItems: "center"
            }}
          >
-                       <div style={{ marginBottom: "2.857rem", display: "flex", justifyContent: "center" }}>
+            <div style={{ marginBottom: "2.857rem", display: "flex", justifyContent: "center" }}>
               <div 
                 style={{
                   display: "flex",
@@ -528,7 +528,7 @@ export default function AboutPage() {
               </div>
             </div>
 
-                       <div style={{
+            <div style={{
               width: "58.571rem",
               opacity: 1,
               fontFamily: "'Noto Sans JP', sans-serif",
@@ -618,10 +618,299 @@ export default function AboutPage() {
                   fontSize: "1.143rem",
                   lineHeight: "1.8",
                   color: "#1A1A1A",
-                  margin: 0
+                  margin: "0 0 1.5rem 0"
                 }}>
                   当社では、自社による塗装設備を保有しておりますので、車は気に入ったけど色が気に入らないと言ったような場合にも自社でご希望の色に塗装させていただきます。
                 </p>
+                
+                {/* 塗装事例画像 */}
+                <div style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "2rem",
+                  marginTop: "1.5rem",
+                  width: "100%"
+                }}>
+                  {/* 1行目：1番目の事例 */}
+                  <div style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "0.5rem",
+                    width: "100%"
+                  }}>
+                    <h4 style={{
+                      fontSize: "1rem",
+                      fontWeight: "600",
+                      color: "#1a1a1a",
+                      textAlign: "center",
+                      margin: "0 0 0.5rem 0"
+                    }}>
+                      塗装事例 1
+                    </h4>
+                    <div style={{
+                      display: "flex",
+                      gap: "1rem",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      width: "100%"
+                    }}>
+                      {/* Before */}
+                      <div style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        flex: "1"
+                      }}>
+                        <div style={{
+                          position: "relative",
+                          width: "100%",
+                          height: "18rem",
+                          borderRadius: "0.5rem",
+                          overflow: "hidden",
+                          border: "2px solid #666666"
+                        }}>
+                          <img 
+                            src="/1_before_painting_examples.JPG"
+                            alt="塗装前の状態"
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover"
+                            }}
+                          />
+                          <div style={{
+                            position: "absolute",
+                            top: "0.5rem",
+                            left: "0.5rem",
+                            backgroundColor: "#666666",
+                            color: "white",
+                            padding: "0.25rem 0.5rem",
+                            borderRadius: "0.25rem",
+                            fontSize: "0.875rem",
+                            fontWeight: "600"
+                          }}>
+                            BEFORE
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* 矢印 */}
+                      <div style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: "2rem",
+                        height: "2rem",
+                        background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
+                        borderRadius: "50%",
+                        flexShrink: 0
+                      }}>
+                        <svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          style={{
+                            color: "white"
+                          }}
+                        >
+                          <path
+                            d="M8 4L16 12L8 20"
+                            stroke="currentColor"
+                            strokeWidth="3"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </div>
+                      
+                      {/* After */}
+                      <div style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        flex: "1"
+                      }}>
+                        <div style={{
+                          position: "relative",
+                          width: "100%",
+                          height: "18rem",
+                          borderRadius: "0.5rem",
+                          overflow: "hidden",
+                          border: "2px solid #1154AF",
+                          background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
+                          backgroundClip: "padding-box"
+                        }}>
+                          <img 
+                            src="/1_after_painting_examples.JPG"
+                            alt="塗装後の状態"
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover"
+                            }}
+                          />
+                          <div style={{
+                            position: "absolute",
+                            top: "0.5rem",
+                            left: "0.5rem",
+                            background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
+                            color: "white",
+                            padding: "0.25rem 0.5rem",
+                            borderRadius: "0.25rem",
+                            fontSize: "0.875rem",
+                            fontWeight: "600"
+                          }}>
+                            AFTER
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* 2行目：2番目の事例 */}
+                  <div style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "0.5rem",
+                    width: "100%"
+                  }}>
+                    <h4 style={{
+                      fontSize: "1rem",
+                      fontWeight: "600",
+                      color: "#1a1a1a",
+                      textAlign: "center",
+                      margin: "0 0 0.5rem 0"
+                    }}>
+                      塗装事例 2
+                    </h4>
+                    <div style={{
+                      display: "flex",
+                      gap: "1rem",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      width: "100%"
+                    }}>
+                      {/* Before */}
+                      <div style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        flex: "1"
+                      }}>
+                        <div style={{
+                          position: "relative",
+                          width: "100%",
+                          height: "18rem",
+                          borderRadius: "0.5rem",
+                          overflow: "hidden",
+                          border: "2px solid #666666"
+                        }}>
+                          <img 
+                            src="/2_before_painting_examples.JPG"
+                            alt="塗装前の状態"
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover"
+                            }}
+                          />
+                          <div style={{
+                            position: "absolute",
+                            top: "0.5rem",
+                            left: "0.5rem",
+                            backgroundColor: "#666666",
+                            color: "white",
+                            padding: "0.25rem 0.5rem",
+                            borderRadius: "0.25rem",
+                            fontSize: "0.875rem",
+                            fontWeight: "600"
+                          }}>
+                            BEFORE
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* 矢印 */}
+                      <div style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: "2rem",
+                        height: "2rem",
+                        background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
+                        borderRadius: "50%",
+                        flexShrink: 0
+                      }}>
+                        <svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          style={{
+                            color: "white"
+                          }}
+                        >
+                          <path
+                            d="M8 4L16 12L8 20"
+                            stroke="currentColor"
+                            strokeWidth="3"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </div>
+                      
+                      {/* After */}
+                      <div style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        flex: "1"
+                      }}>
+                        <div style={{
+                          position: "relative",
+                          width: "100%",
+                          height: "18rem",
+                          borderRadius: "0.5rem",
+                          overflow: "hidden",
+                          border: "2px solid #1154AF",
+                          background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
+                          backgroundClip: "padding-box"
+                        }}>
+                          <img 
+                            src="/2_after_painting_examples.JPG"
+                            alt="塗装後の状態"
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover"
+                            }}
+                          />
+                          <div style={{
+                            position: "absolute",
+                            top: "0.5rem",
+                            left: "0.5rem",
+                            background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
+                            color: "white",
+                            padding: "0.25rem 0.5rem",
+                            borderRadius: "0.25rem",
+                            fontSize: "0.875rem",
+                            fontWeight: "600"
+                          }}>
+                            AFTER
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               {/* 特徴3 */}
@@ -659,10 +948,299 @@ export default function AboutPage() {
                   fontSize: "1.143rem",
                   lineHeight: "1.8",
                   color: "#1A1A1A",
-                  margin: 0
+                  margin: "0 0 1.5rem 0"
                 }}>
                   当社では、熟練したメンバーにより多くの車両を自社で載せ替えし、生まれ替えさせてきました。平ボディーからクレーン付き、アルミバンから二輪車用積載車。など多くの載せ替えを実施しております。
                 </p>
+                
+                {/* 載せ替え事例画像 */}
+                <div style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "2rem",
+                  marginTop: "1.5rem",
+                  width: "100%"
+                }}>
+                  {/* 1行目：1番目の事例 */}
+                  <div style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "0.5rem",
+                    width: "100%"
+                  }}>
+                    <h4 style={{
+                      fontSize: "1rem",
+                      fontWeight: "600",
+                      color: "#1a1a1a",
+                      textAlign: "center",
+                      margin: "0 0 0.5rem 0"
+                    }}>
+                      載せ替え事例 1
+                    </h4>
+                    <div style={{
+                      display: "flex",
+                      gap: "1rem",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      width: "100%"
+                    }}>
+                      {/* Before */}
+                      <div style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        flex: "1"
+                      }}>
+                        <div style={{
+                          position: "relative",
+                          width: "100%",
+                          height: "18rem",
+                          borderRadius: "0.5rem",
+                          overflow: "hidden",
+                          border: "2px solid #666666"
+                        }}>
+                          <img 
+                            src="/1_before_replacing_examples.JPG"
+                            alt="載せ替え前の状態"
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover"
+                            }}
+                          />
+                          <div style={{
+                            position: "absolute",
+                            top: "0.5rem",
+                            left: "0.5rem",
+                            backgroundColor: "#666666",
+                            color: "white",
+                            padding: "0.25rem 0.5rem",
+                            borderRadius: "0.25rem",
+                            fontSize: "0.875rem",
+                            fontWeight: "600"
+                          }}>
+                            BEFORE
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* 矢印 */}
+                      <div style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: "2rem",
+                        height: "2rem",
+                        background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
+                        borderRadius: "50%",
+                        flexShrink: 0
+                      }}>
+                        <svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          style={{
+                            color: "white"
+                          }}
+                        >
+                          <path
+                            d="M8 4L16 12L8 20"
+                            stroke="currentColor"
+                            strokeWidth="3"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </div>
+                      
+                      {/* After */}
+                      <div style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        flex: "1"
+                      }}>
+                        <div style={{
+                          position: "relative",
+                          width: "100%",
+                          height: "18rem",
+                          borderRadius: "0.5rem",
+                          overflow: "hidden",
+                          border: "2px solid #1154AF",
+                          background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
+                          backgroundClip: "padding-box"
+                        }}>
+                          <img 
+                            src="/1_after_replacing_examples.JPG"
+                            alt="載せ替え後の状態"
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover"
+                            }}
+                          />
+                          <div style={{
+                            position: "absolute",
+                            top: "0.5rem",
+                            left: "0.5rem",
+                            background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
+                            color: "white",
+                            padding: "0.25rem 0.5rem",
+                            borderRadius: "0.25rem",
+                            fontSize: "0.875rem",
+                            fontWeight: "600"
+                          }}>
+                            AFTER
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* 2行目：2番目の事例 */}
+                  <div style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "0.5rem",
+                    width: "100%"
+                  }}>
+                    <h4 style={{
+                      fontSize: "1rem",
+                      fontWeight: "600",
+                      color: "#1a1a1a",
+                      textAlign: "center",
+                      margin: "0 0 0.5rem 0"
+                    }}>
+                      載せ替え事例 2
+                    </h4>
+                    <div style={{
+                      display: "flex",
+                      gap: "1rem",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      width: "100%"
+                    }}>
+                      {/* Before */}
+                      <div style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        flex: "1"
+                      }}>
+                        <div style={{
+                          position: "relative",
+                          width: "100%",
+                          height: "18rem",
+                          borderRadius: "0.5rem",
+                          overflow: "hidden",
+                          border: "2px solid #666666"
+                        }}>
+                          <img 
+                            src="/2_before_replacing_examples.JPG"
+                            alt="載せ替え前の状態"
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover"
+                            }}
+                          />
+                          <div style={{
+                            position: "absolute",
+                            top: "0.5rem",
+                            left: "0.5rem",
+                            backgroundColor: "#666666",
+                            color: "white",
+                            padding: "0.25rem 0.5rem",
+                            borderRadius: "0.25rem",
+                            fontSize: "0.875rem",
+                            fontWeight: "600"
+                          }}>
+                            BEFORE
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* 矢印 */}
+                      <div style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: "2rem",
+                        height: "2rem",
+                        background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
+                        borderRadius: "50%",
+                        flexShrink: 0
+                      }}>
+                        <svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          style={{
+                            color: "white"
+                          }}
+                        >
+                          <path
+                            d="M8 4L16 12L8 20"
+                            stroke="currentColor"
+                            strokeWidth="3"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </div>
+                      
+                      {/* After */}
+                      <div style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        flex: "1"
+                      }}>
+                        <div style={{
+                          position: "relative",
+                          width: "100%",
+                          height: "18rem",
+                          borderRadius: "0.5rem",
+                          overflow: "hidden",
+                          border: "2px solid #1154AF",
+                          background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
+                          backgroundClip: "padding-box"
+                        }}>
+                          <img 
+                            src="/2_after_replacing_examples.JPG"
+                            alt="載せ替え後の状態"
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover"
+                            }}
+                          />
+                          <div style={{
+                            position: "absolute",
+                            top: "0.5rem",
+                            left: "0.5rem",
+                            background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
+                            color: "white",
+                            padding: "0.25rem 0.5rem",
+                            borderRadius: "0.25rem",
+                            fontSize: "0.875rem",
+                            fontWeight: "600"
+                          }}>
+                            AFTER
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               {/* 特徴4 */}
