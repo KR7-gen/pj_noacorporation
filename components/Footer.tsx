@@ -35,7 +35,7 @@ export function Footer() {
         <div className="mb-8">
           <div className="flex items-center gap-4">
             <div className="w-22 h-12 flex items-center justify-center">
-              <img src="/logo.png" alt="Noa Corporation Logo" className="w-full h-full object-contain" />
+              <img src="/logo.png" alt="Noa Corporation Logo" className="object-contain h-10 w-auto lg:h-16" />
             </div>
           </div>
         </div>

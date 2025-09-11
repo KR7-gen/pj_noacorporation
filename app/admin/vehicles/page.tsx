@@ -517,20 +517,14 @@ export default function AdminVehiclesPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="text-right">操作</TableHead>
-              <TableHead>車両写真</TableHead>
-              <TableHead>問い合わせ番号</TableHead>
-              <TableHead>メーカー</TableHead>
-              <TableHead>ボディタイプ</TableHead>
-              <TableHead>サイズ</TableHead>
-              <TableHead>車体番号</TableHead>
-              <TableHead>業販金額</TableHead>
-              <TableHead>車両価格</TableHead>
-              <TableHead>車両総額</TableHead>
-              <TableHead>
+              <TableHead className="text-right whitespace-nowrap">操作</TableHead>
+              <TableHead className="whitespace-nowrap">問合せ番号</TableHead>
+              <TableHead className="whitespace-nowrap">基本情報</TableHead>
+              <TableHead className="whitespace-nowrap">金額</TableHead>
+              <TableHead className="whitespace-nowrap">
                 <div className="flex items-center gap-1 cursor-pointer" onClick={() => handleSort('inspectionDate')}>
-                  <span>車検有効期限</span>
-                  <span className="text-xs">
+                  <span className="whitespace-nowrap">車検有効期限</span>
+                  <span className="text-xs whitespace-nowrap">
                     {sortField === 'inspectionDate' 
                       ? (sortDirection === 'asc' ? '↑' : '↓')
                       : '↕'
@@ -538,10 +532,10 @@ export default function AdminVehiclesPage() {
                   </span>
                 </div>
               </TableHead>
-              <TableHead>
+              <TableHead className="whitespace-nowrap">
                 <div className="flex items-center gap-1 cursor-pointer" onClick={() => handleSort('negotiationDeadline')}>
-                  <span>商談期限</span>
-                  <span className="text-xs">
+                  <span className="whitespace-nowrap">商談期限</span>
+                  <span className="text-xs whitespace-nowrap">
                     {sortField === 'negotiationDeadline' 
                       ? (sortDirection === 'asc' ? '↑' : '↓')
                       : '↕'
@@ -549,13 +543,13 @@ export default function AdminVehiclesPage() {
                   </span>
                 </div>
               </TableHead>
-              <TableHead>状態</TableHead>
+              <TableHead className="whitespace-nowrap">状態</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {getSortedVehicles().map((vehicle, index) => (
               <TableRow key={vehicle.id}>
-                <TableCell className="text-right">
+                <TableCell className="text-right whitespace-nowrap">
                   <div className="flex gap-2 justify-end">
                     {hasChanges[vehicle.id!] && (
                       <Button
@@ -583,64 +577,77 @@ export default function AdminVehiclesPage() {
                     </Button>
                   </div>
                 </TableCell>
-                <TableCell>
-                  {vehicle.imageUrls && vehicle.imageUrls.length > 0 ? (
-                    <div className="relative w-16 h-12">
-                      <Image
-                        src={vehicle.imageUrls[0]}
-                        alt={`${vehicle.maker} ${vehicle.model}`}
-                        fill
-                        className="object-cover rounded"
-                        onError={() => {
-                          setImageErrors(prev => new Set(prev).add(vehicle.id!))
-                        }}
+                <TableCell className="align-top whitespace-nowrap">
+                  <div className="flex flex-col gap-2">
+                    <div className="text-sm font-medium whitespace-nowrap">{vehicle.inquiryNumber || "---"}</div>
+                    {vehicle.imageUrls && vehicle.imageUrls.length > 0 ? (
+                      <div className="relative w-24 h-16">
+                        <Image
+                          src={vehicle.imageUrls[0]}
+                          alt={`${vehicle.maker} ${vehicle.model}`}
+                          fill
+                          className="object-cover rounded"
+                          onError={() => {
+                            setImageErrors(prev => new Set(prev).add(vehicle.id!))
+                          }}
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-24 h-16 bg-gray-200 rounded flex items-center justify-center">
+                        <span className="text-xs text-gray-500 whitespace-nowrap">写真なし</span>
+                      </div>
+                    )}
+                  </div>
+                </TableCell>
+                <TableCell className="align-top whitespace-nowrap">
+                  <div className="flex flex-col text-sm gap-1">
+                    <div className="whitespace-nowrap">{vehicle.maker || "---"}</div>
+                    <div className="whitespace-nowrap">{vehicle.size || "---"}</div>
+                    <div className="whitespace-nowrap">{vehicle.bodyType || "---"}</div>
+                    <div className="whitespace-nowrap">{vehicle.chassisNumber || "---"}</div>
+                  </div>
+                </TableCell>
+                <TableCell className="align-top whitespace-nowrap">
+                  <div className="flex flex-col text-sm gap-1 whitespace-nowrap">
+                    <label className="flex items-center gap-2">
+                      <span className="text-gray-600">業販金額</span>
+                      <input
+                        type="text"
+                        value={editingValues[vehicle.id!]?.wholesalePrice || ''}
+                        onChange={(e) => handleValueChange(vehicle.id!, 'wholesalePrice', handleInputChange(e.target.value))}
+                        className="w-28 border rounded px-2 py-1 text-sm"
+                        placeholder="業販金額"
                       />
-                    </div>
-                  ) : (
-                    <div className="w-16 h-12 bg-gray-200 rounded flex items-center justify-center">
-                      <span className="text-xs text-gray-500">写真なし</span>
-                    </div>
-                  )}
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <span className="text-gray-600">車両価格</span>
+                      <input
+                        type="text"
+                        value={editingValues[vehicle.id!]?.price || ''}
+                        onChange={(e) => handleValueChange(vehicle.id!, 'price', handleInputChange(e.target.value))}
+                        className="w-28 border rounded px-2 py-1 text-sm"
+                        placeholder="車両価格"
+                      />
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <span className="text-gray-600">車両総額</span>
+                      <input
+                        type="text"
+                        value={editingValues[vehicle.id!]?.totalPayment || ''}
+                        onChange={(e) => handleValueChange(vehicle.id!, 'totalPayment', handleInputChange(e.target.value))}
+                        className="w-28 border rounded px-2 py-1 text-sm"
+                        placeholder="車両総額"
+                      />
+                    </label>
+                  </div>
                 </TableCell>
-                <TableCell>{vehicle.inquiryNumber || "---"}</TableCell>
-                <TableCell>{vehicle.maker}</TableCell>
-                <TableCell>{vehicle.bodyType || "---"}</TableCell>
-                <TableCell>{vehicle.size || "---"}</TableCell>
-                <TableCell>{vehicle.chassisNumber || "---"}</TableCell>
-                <TableCell>
-                  <input
-                    type="text"
-                    value={editingValues[vehicle.id!]?.wholesalePrice || ''}
-                    onChange={(e) => handleValueChange(vehicle.id!, 'wholesalePrice', handleInputChange(e.target.value))}
-                    className="w-24 border rounded px-2 py-1 text-sm"
-                    placeholder="業販金額"
-                  />
-                </TableCell>
-                <TableCell>
-                  <input
-                    type="text"
-                    value={editingValues[vehicle.id!]?.price || ''}
-                    onChange={(e) => handleValueChange(vehicle.id!, 'price', handleInputChange(e.target.value))}
-                    className="w-24 border rounded px-2 py-1 text-sm"
-                    placeholder="価格"
-                  />
-                </TableCell>
-                <TableCell>
-                  <input
-                    type="text"
-                    value={editingValues[vehicle.id!]?.totalPayment || ''}
-                    onChange={(e) => handleValueChange(vehicle.id!, 'totalPayment', handleInputChange(e.target.value))}
-                    className="w-24 border rounded px-2 py-1 text-sm"
-                    placeholder="総額"
-                  />
-                </TableCell>
-                <TableCell>
+                <TableCell className="whitespace-nowrap">
                   {vehicle.inspectionStatus && vehicle.inspectionDate 
                     ? `${vehicle.inspectionStatus} ${vehicle.inspectionDate}`
                     : vehicle.inspectionStatus || vehicle.inspectionDate || "---"
                   }
                 </TableCell>
-                <TableCell>
+                <TableCell className="whitespace-nowrap">
                   {vehicle.isNegotiating
                     ? (
                         (vehicle.salesRepresentative || vehicle.negotiationDeadline)
@@ -649,7 +656,7 @@ export default function AdminVehiclesPage() {
                       )
                     : '---'}
                 </TableCell>
-                <TableCell>
+                <TableCell className="whitespace-nowrap">
                   <div className="flex flex-col gap-1">
                     {vehicle.isTemporarySave && (
                       <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">

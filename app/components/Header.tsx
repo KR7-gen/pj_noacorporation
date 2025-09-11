@@ -35,7 +35,8 @@ export function Header() {
            margin: "0",
            flexShrink: 0
          }}>
-           <img src="/logo.png" alt="NOA CORPORATION" style={{ width: "13vw", maxWidth: "200px", minWidth: "100px", height: "3.43rem", opacity: 1, transform: "rotate(0deg)", margin: "0" }} />
+           <img src="/logo.png" alt="NOA CORPORATION" className="hidden lg:block" style={{ width: "10vw", maxWidth: "90px", minWidth: "100px", height: "4.5rem", opacity: 1, transform: "rotate(0deg)", margin: "0" }} />
+           <img src="/logo.png" alt="NOA CORPORATION" className="block lg:hidden" style={{ width: "20vw", maxWidth: "90px", height: "4rem", opacity: 1, transform: "rotate(0deg)", margin: "0" }} />
          </a>
 
         {/* PCナビゲーション */}
