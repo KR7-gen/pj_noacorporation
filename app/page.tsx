@@ -317,10 +317,15 @@ export default function HomePage() {
           transform: "translateX(-50%)",
           display: "flex",
           flexDirection: "column",
-          background: "linear-gradient(90deg, rgba(0, 0, 0, 0.4) 43.5%, rgba(255, 255, 255, 0) 100%), url('/background.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
+          background: `
+            linear-gradient(90deg, rgba(0, 0, 0, 0.4) 43.5%, rgba(255, 255, 255, 0) 100%),
+            url('/store_photos.jpg'),
+            url('/1_after_painting_examples.jpg'),
+            url('/2_after_painting_examples.jpg')
+          `,
+          backgroundSize: "cover, 33.33% 88%, 33.33% 88%, 33.33% 88%",
+          backgroundPosition: "center, left, center, right",
+          backgroundRepeat: "no-repeat, no-repeat, no-repeat, no-repeat",
           position: "absolute",
           zIndex: 1,
         }}
@@ -352,7 +357,7 @@ export default function HomePage() {
                 letterSpacing: "0%",
                 color: "#FFFFFF",
                 textShadow: "0.29rem 0.29rem 0.29rem 0px #0000004D",
-                margin: "0 0 2.43rem 0",
+                margin: "0 0 0 0",
                 textAlign: "left"
               }}
               className="hidden lg:block"
@@ -453,7 +458,7 @@ export default function HomePage() {
         <div 
           className="hidden lg:block"
           style={{
-            padding: "3.43rem 1.43rem 0 1.43rem",
+            padding: "0rem 1.43rem 0 1.43rem",
             flex: "1"
           }}
         >
@@ -569,7 +574,7 @@ export default function HomePage() {
         <div 
           className="hidden lg:block"
           style={{
-            padding: "0.857rem 1.43rem 10rem 1.43rem",
+            padding: "0.857rem 1.43rem 4rem 1.43rem",
             flex: "1",
             display: "flex",
             justifyContent: "center",
@@ -881,17 +886,23 @@ export default function HomePage() {
           left: "50%",
           transform: "translateX(-50%)",
           position: "absolute",
-          zIndex: 1
+          zIndex: 1,
+          backgroundColor: "#E9E9E9"
         }}
       >
         <div 
           style={{
             color: "white",
-            height: "500px",
-            background: "linear-gradient(90deg, rgba(0, 0, 0, 0.4) 43.5%, rgba(255, 255, 255, 0) 100%), url('/background.png')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat"
+            height: "210px",
+            background: `
+              linear-gradient(90deg, rgba(0, 0, 0, 0.4) 43.5%, rgba(255, 255, 255, 0) 100%),
+              url('/store_photos.jpg'),
+              url('/1_after_painting_examples.jpg'),
+              url('/2_after_painting_examples.jpg')
+            `,
+            backgroundSize: "cover, 33.33% 60%, 33.33% 60%, 33.33% 60%",
+            backgroundPosition: "center, left, center, right",
+            backgroundRepeat: "no-repeat, no-repeat, no-repeat, no-repeat"
           }}
         >
           <div 
@@ -946,7 +957,7 @@ export default function HomePage() {
       </section>
       
       {/* Spacer to account for absolute positioned Hero Section */}
-      <div style={{ height: "66.14rem" }}></div>
+      <div style={{ height: "55rem" }}></div>
 
       {/* スマホ版 Truck Type Grid - 独立した要素 */}
       <section 
@@ -1331,7 +1342,6 @@ export default function HomePage() {
           gap: "2.86rem",
           opacity: 1,
           paddingBottom: "2.857rem",
-          background: "#FFFFFF",
           margin: "0 auto",
           marginTop: "0",
           marginBottom: "2.86rem"
