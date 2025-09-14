@@ -312,7 +312,6 @@ export default function HomePage() {
           width: "100%",
           maxWidth: "100vw",
           opacity: 1,
-          top: "9rem",
           left: "50%",
           transform: "translateX(-50%)",
           display: "flex",
@@ -323,7 +322,7 @@ export default function HomePage() {
             url('/1_after_painting_examples.jpg'),
             url('/2_after_painting_examples.jpg')
           `,
-          backgroundSize: "cover, 33.33% 88%, 33.33% 88%, 33.33% 88%",
+          backgroundSize: "cover, 33.33% 75%, 33.33% 75%, 33.33% 75%",
           backgroundPosition: "center, left, center, right",
           backgroundRepeat: "no-repeat, no-repeat, no-repeat, no-repeat",
           position: "absolute",
@@ -875,18 +874,16 @@ export default function HomePage() {
         </div>
       </section>
       
-      {/* スマホ版 Hero Section - 独立した要素 */}
+      {/* Spacer to account for absolute positioned Hero Section - PC版のみ */}
+      <div className="hidden lg:block" style={{ height: "55rem" }}></div>
+
+      {/* スマホ版 Hero Section */}
       <section 
         className="block lg:hidden"
         style={{
           width: "100%",
           maxWidth: "100vw",
           opacity: 1,
-          top: "9rem",
-          left: "50%",
-          transform: "translateX(-50%)",
-          position: "absolute",
-          zIndex: 1,
           backgroundColor: "#E9E9E9"
         }}
       >
@@ -956,30 +953,24 @@ export default function HomePage() {
         </div>
       </section>
       
-      {/* Spacer to account for absolute positioned Hero Section */}
-      <div style={{ height: "55rem" }}></div>
+      {/* セクション間のスペーサー */}
+      <div className="lg:hidden block" style={{ marginTop: "0rem" }}></div>
 
-      {/* スマホ版 Truck Type Grid - 独立した要素 */}
+      {/* スマホ版 Truck Type Grid */}
       <section 
         className="lg:hidden block"
         style={{
           width: "100%",
           maxWidth: "100vw",
           opacity: 1,
-          top: "calc(9rem + 20rem)",
-          left: "50%",
-          transform: "translateX(-50%)",
-          position: "absolute",
-          zIndex: 1,
-          padding: "2rem 1rem",
-          background: "white"
+          padding: "1rem 1rem",
         }}
       >
         <div 
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(3, 1fr)",
-            gridTemplateRows: "repeat(6, 1fr)",
+            gridTemplateRows: "repeat(4, 1fr)",
             gap: "1rem",
             width: "100%",
             maxWidth: "100%",
@@ -992,7 +983,6 @@ export default function HomePage() {
               key={icon.id}
               href={`/inventory?type=${encodeURIComponent(icon.type)}`}
               style={{
-                height: "8rem",
                 borderRadius: "0.5rem",
                 display: "flex",
                 flexDirection: "column",
@@ -1083,20 +1073,18 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+      
+      {/* セクション間のスペーサー */}
+      <div className="lg:hidden block" style={{ marginTop: "0rem" }}></div>
 
-      {/* スマホ版 Search Section - 独立した要素 */}
+      {/* スマホ版 Search Section */}
       <section 
         className="lg:hidden block"
         style={{
           width: "100%",
           maxWidth: "100vw",
           opacity: 1,
-          top: "calc(9rem + 20rem + 37rem)",
-          left: "50%",
-          transform: "translateX(-50%)",
-          position: "absolute",
-          zIndex: 1,
-          padding: "2rem 1rem",
+          padding: "0rem 1rem",
           background: "white"
         }}
       >
@@ -1366,10 +1354,7 @@ export default function HomePage() {
                 letterSpacing: "0%",
                 textAlign: "left",
                 color: "#2B5EC5",
-                borderRadius: "0.14rem",
-                whiteSpace: "nowrap",
-                paddingLeft: "0",
-                marginBottom: "2px",
+                marginBottom: "0.143rem",
               }}
             >
               NEW TRUCK
@@ -1379,13 +1364,15 @@ export default function HomePage() {
                 fontFamily: "Noto Sans JP",
                 fontWeight: "700",
                 fontStyle: "Bold",
-                fontSize: "2.86rem",
-                lineHeight: "100%",
+                fontSize: "clamp(1.25rem, 6vw, 2.5rem)",
+                lineHeight: "1.3",
                 letterSpacing: "0%",
                 textAlign: "left",
                 color: "#1A1A1A",
                 whiteSpace: "nowrap",
-                marginBottom: "0.57rem",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                maxWidth: "100%",
               }}
             >
               新着車両
@@ -2798,12 +2785,15 @@ export default function HomePage() {
                   fontFamily: "Noto Sans JP",
                   fontWeight: "700",
                   fontStyle: "Bold",
-                  fontSize: "2.86rem",
-                  lineHeight: "100%",
+                  fontSize: "clamp(1.25rem, 6vw, 2.5rem)",
+                  lineHeight: "1.3",
                   letterSpacing: "0%",
                   textAlign: "left",
                   color: "#1A1A1A",
                   whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  maxWidth: "100%",
                 }}
               >
                 ご利用の流れ
@@ -2814,7 +2804,7 @@ export default function HomePage() {
           {/* 白枠コンテンツ */}
           <div
             style={{
-              width: "66.67vw",
+              width: "min(100%, 90vw)",
               maxWidth: "960px",
               backgroundColor: "white",
               padding: "2.857rem 0.86rem",
@@ -2827,8 +2817,7 @@ export default function HomePage() {
           >
             <p 
               style={{ 
-                width: "55.43rem",
-                height: "4rem",
+                width: "100%",
                 opacity: 1,
                 fontFamily: "Noto Sans JP",
                 fontWeight: "400",
@@ -2848,27 +2837,34 @@ export default function HomePage() {
                 <div 
                   style={{
                     display: "flex",
-                    alignItems: "stretch",
+                    flexDirection: "column",
                     marginTop: index === 0 ? "2.143rem" : "0",
                     marginBottom: index < flowSteps.length - 1 ? "0.57rem" : "0",
-                    width: "100%",
-                    height: "9.714rem"
+                    width: "100%"
                   }}
                 >
                   <div 
                     style={{
-                      width: "7.71rem",
-                      height: "9.714rem",
-                      opacity: 1,
-                      borderRight: "0.07rem solid #DEEBEF",
-                      padding: "1.14rem 0.57rem",
                       display: "flex",
-                      flexDirection: "column",
                       alignItems: "center",
-                      justifyContent: "center",
-                      marginRight: "1.71rem"
+                      marginBottom: "1rem",
+                      width: "100%"
                     }}
                   >
+                    <div 
+                      style={{
+                        width: "clamp(4rem, 6vw, 7.71rem)",
+                        height: "auto",
+                        opacity: 1,
+                        borderRight: "clamp(0rem, 0.1vw, 0.07rem) solid #DEEBEF",
+                        padding: "1.14rem 0.57rem",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginRight: "clamp(0.5rem, 2vw, 1.71rem)"
+                      }}
+                    >
                     <div 
                       style={{
                         width: "2.86rem",
@@ -2908,10 +2904,8 @@ export default function HomePage() {
                       {step.number}
                     </div>
                   </div>
-                  <div style={{ flex: 1, height: "9.714rem", display: "flex", flexDirection: "column", justifyContent: "center" }}>
                     <h3 
                       style={{
-                        width: "8.57rem",
                         opacity: 1,
                         fontFamily: "Noto Sans JP",
                         fontWeight: "700",
@@ -2920,7 +2914,6 @@ export default function HomePage() {
                         lineHeight: "100%",
                         letterSpacing: "0%",
                         color: "#1A1A1A",
-                        marginBottom: "0.86rem",
                         whiteSpace: "nowrap",
                         display: "flex",
                         alignItems: "center",
@@ -2928,7 +2921,7 @@ export default function HomePage() {
                       }}
                     >
                       {step.title}
-                                            <img
+                      <img
                         src={`/${step.number === "01" ? "mail.svg" : step.number === "02" ? "airport_shuttle.svg" : step.number === "03" ? "calculate.svg" : "handshake.svg"}`}
                         alt={`FLOW ${step.number} icon`}
                         style={{
@@ -2941,9 +2934,11 @@ export default function HomePage() {
                       />
                       {step.number === "01" && "☎"}
                     </h3>
+                  </div>
+                  <div style={{ width: "100%" }}>
                     <p 
                       style={{
-                        width: "98%",
+                        width: "100%",
                         opacity: 1,
                         fontFamily: "Noto Sans JP",
                         fontWeight: "400",
@@ -3041,13 +3036,15 @@ export default function HomePage() {
                   fontFamily: "Noto Sans JP",
                   fontWeight: "700",
                   fontStyle: "Bold",
-                  fontSize: "2.857rem",
-                  lineHeight: "100%",
+                  fontSize: "clamp(1.25rem, 6vw, 2.5rem)",
+                  lineHeight: "1.3",
                   letterSpacing: "0%",
                   textAlign: "left",
                   color: "#1A1A1A",
                   whiteSpace: "nowrap",
-                  marginBottom: "1.143rem",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  maxWidth: "100%",
                 }}
               >
                 よくあるご質問
@@ -3079,7 +3076,7 @@ export default function HomePage() {
                 <CardContent className="!p-0" style={{ padding: 0 }}>
                   {/* Q部分デザイン */}
                   <div style={{
-                    width: "58.571rem",
+                    width: "100%",
                     height: "3.214rem",
                     opacity: 1,
                     padding: "0.286rem 0.857rem",
@@ -3113,7 +3110,7 @@ export default function HomePage() {
                       fontFamily: "Noto Sans JP, sans-serif",
                       fontWeight: 700,
                       fontStyle: "bold",
-                      fontSize: "1.429rem",
+                      fontSize: "clamp(1.1rem, 1.2vw, 1.429rem)",
                       lineHeight: "100%",
                       letterSpacing: "0%",
                       color: "#1A1A1A",
@@ -3128,8 +3125,9 @@ export default function HomePage() {
                   </div>
                   {/* A部分デザイン */}
                   <div style={{
-                    width: "58.571rem",
-                    height: "5.714rem",
+                    width: "100%",
+                    height: "auto",
+                    minHeight: "5.714rem",
                     opacity: 1,
                     padding: "0.571rem 0.857rem",
                     display: "flex",
@@ -3156,20 +3154,18 @@ export default function HomePage() {
                       A.
                     </span>
                     <span style={{
-                      width: "51.571rem",
-                      height: "4rem",
+                      width: "100%",
+                      height: "auto",
                       fontFamily: "Noto Sans JP, sans-serif",
                       fontWeight: 700,
                       fontStyle: "bold",
-                      fontSize: "1.143rem",
+                      fontSize: "clamp(1rem, 1.1vw, 1.143rem)",
                       lineHeight: "2rem",
                       letterSpacing: "0%",
                       color: "#1A1A1A",
                       display: "flex",
-                      alignItems: "center",
-                      whiteSpace: "pre-line",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis"
+                      alignItems: "flex-start",
+                      whiteSpace: "pre-line"
                     }}>
                       {faq.answer}
                     </span>
@@ -3225,6 +3221,7 @@ export default function HomePage() {
                   letterSpacing: "0%",
                   textAlign: "left",
                   color: "#2B5EC5",
+                  marginBottom: "0.143rem",
                 }}
               >
                 SHOP INFO
@@ -3234,12 +3231,15 @@ export default function HomePage() {
                   fontFamily: "Noto Sans JP",
                   fontWeight: "700",
                   fontStyle: "Bold",
-                  fontSize: "2.857rem",
-                  lineHeight: "100%",
+                  fontSize: "clamp(1.25rem, 6vw, 2.5rem)",
+                  lineHeight: "1.3",
                   letterSpacing: "0%",
                   textAlign: "left",
                   color: "#1A1A1A",
                   whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  maxWidth: "100%",
                 }}
               >
                 店舗情報
@@ -3823,7 +3823,7 @@ export default function HomePage() {
                     letterSpacing: "0%",
                     textAlign: "left",
                     color: "#FFFFFF",
-                    marginBottom: "0.5rem",
+                    marginBottom: "0.143rem",
                   }}
                 >
                   CONTACT
@@ -3834,11 +3834,15 @@ export default function HomePage() {
                     fontFamily: "Noto Sans JP",
                     fontWeight: "700",
                     fontStyle: "Bold",
-                    fontSize: "2.857rem",
-                    lineHeight: "100%",
+                    fontSize: "clamp(1.25rem, 6vw, 2.5rem)",
+                    lineHeight: "1.3",
                     letterSpacing: "0%",
                     textAlign: "left",
                     color: "#FFFFFF",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    maxWidth: "100%",
                   }}
                 >
                   お問い合わせ
