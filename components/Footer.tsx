@@ -16,7 +16,7 @@ const footerLinks = {
     "冷蔵冷凍車",
     "特装車・その他",
   ],
-  makers: ["日野", "いすゞ", "三菱ふそう", "UD", "その他"],
+  makers: ["日野", "いすゞ", "三菱ふそう", "UD", "トヨタ", "日産", "マツダ", "その他"],
   sizes: ["大型", "増トン", "中型", "小型"],
   pages: [
     { name: "販売在庫一覧", href: "/inventory" },
@@ -42,14 +42,15 @@ export function Footer() {
 
         {/* Sitemap */}
         <div className="mb-8">
-          <div className="flex justify-between flex-nowrap overflow-x-auto">
+          {/* スマホ: 縦並び、各セクションは2列、PC: 横並び4カラム */}
+          <div className="flex flex-col gap-8 md:flex-row md:justify-between md:flex-nowrap">
             {/* Pages */}
-            <div style={{ width: '21.66%' }}>
+            <div className="w-full md:w-[21.66%]">
               <h4 className="font-medium mb-3 border-b border-white pb-1">サイトマップ</h4>
-              <ul className="space-y-2 text-sm">
+              <ul className="grid grid-cols-2 md:grid-cols-1 gap-x-6 gap-y-2 text-sm">
                 {footerLinks.pages.map((page, index) => (
                   <li key={index}>
-                    <Link href={page.href} className="text-gray-400 hover:text-white transition-colors">
+                    <Link href={page.href} className="text-gray-400 hover:text-white transition-colors whitespace-nowrap">
                       ー　{page.name}
                     </Link>
                   </li>
@@ -58,14 +59,14 @@ export function Footer() {
             </div>
 
             {/* Body Types */}
-            <div style={{ width: '22.66%' }}>
+            <div className="w-full md:w-[22.66%]">
               <h4 className="font-medium mb-3 border-b border-white pb-1">ボディタイプで中古トラックを探す</h4>
-              <ul className="space-y-2 text-sm">
+              <ul className="grid grid-cols-2 md:grid-cols-1 gap-x-6 gap-y-2 text-sm">
                 {footerLinks.bodyTypes.map((type, index) => (
                   <li key={index}>
                     <Link 
                       href={`/inventory?type=${encodeURIComponent(type)}`}
-                      className="text-gray-400 hover:text-white transition-colors"
+                      className="text-gray-400 hover:text-white transition-colors whitespace-nowrap"
                     >
                       ー　{type}
                     </Link>
@@ -75,14 +76,14 @@ export function Footer() {
             </div>
 
             {/* Makers */}
-            <div style={{ width: '21.66%' }}>
+            <div className="w-full md:w-[21.66%]">
               <h4 className="font-medium mb-3 border-b border-white pb-1">メーカーで中古トラックを探す</h4>
-              <ul className="space-y-2 text-sm">
+              <ul className="grid grid-cols-2 md:grid-cols-1 gap-x-6 gap-y-2 text-sm">
                 {footerLinks.makers.map((maker, index) => (
                   <li key={index}>
                     <Link 
                       href={`/inventory?maker=${encodeURIComponent(maker)}`}
-                      className="text-gray-400 hover:text-white transition-colors"
+                      className="text-gray-400 hover:text-white transition-colors whitespace-nowrap"
                     >
                       ー　{maker}
                     </Link>
@@ -92,14 +93,14 @@ export function Footer() {
             </div>
 
             {/* Sizes */}
-            <div style={{ width: '21.66%'}}>
+            <div className="w-full md:w-[21.66%]">
               <h4 className="font-medium mb-3 border-b border-white pb-1">大きさで中古トラックを探す</h4>
-              <ul className="space-y-2 text-sm">
+              <ul className="grid grid-cols-2 md:grid-cols-1 gap-x-6 gap-y-2 text-sm">
                 {footerLinks.sizes.map((size, index) => (
                   <li key={index}>
                     <Link 
                       href={`/inventory?size=${encodeURIComponent(size)}`}
-                      className="text-gray-400 hover:text-white transition-colors"
+                      className="text-gray-400 hover:text-white transition-colors whitespace-nowrap"
                     >
                       ー　{size}
                     </Link>

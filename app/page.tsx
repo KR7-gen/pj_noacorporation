@@ -2843,6 +2843,7 @@ export default function HomePage() {
                     width: "100%"
                   }}
                 >
+                  {/* スマホ版レイアウト */}
                   <div 
                     style={{
                       display: "flex",
@@ -2850,6 +2851,7 @@ export default function HomePage() {
                       marginBottom: "1rem",
                       width: "100%"
                     }}
+                    className="mobile-layout"
                   >
                     <div 
                       style={{
@@ -2935,7 +2937,7 @@ export default function HomePage() {
                       {step.number === "01" && "☎"}
                     </h3>
                   </div>
-                  <div style={{ width: "100%" }}>
+                  <div style={{ width: "100%" }} className="mobile-layout">
                     <p 
                       style={{
                         width: "100%",
@@ -2951,6 +2953,127 @@ export default function HomePage() {
                     >
                       {step.description}
                     </p>
+                  </div>
+
+                  {/* PC版レイアウト */}
+                  <div 
+                    style={{
+                      display: "none",
+                      alignItems: "stretch",
+                      width: "100%",
+                      gap: "1.71rem"
+                    }}
+                    className="desktop-layout"
+                  >
+                    <div 
+                      style={{
+                        width: "7.71rem",
+                        opacity: 1,
+                        borderRight: "0.07rem solid #DEEBEF",
+                        padding: "1.14rem 0.57rem",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        flexShrink: 0,
+                        minHeight: "100%"
+                      }}
+                    >
+                    <div 
+                      style={{
+                        width: "2.86rem",
+                        height: "1.43rem",
+                        opacity: 1,
+                        fontFamily: "Noto Sans JP",
+                        fontWeight: "700",
+                        fontStyle: "Bold",
+                        fontSize: "1rem",
+                        lineHeight: "100%",
+                        letterSpacing: "0%",
+                        color: "#2B5EC5",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center"
+                      }}
+                    >
+                      FLOW
+                    </div>
+                    <div 
+                      style={{
+                        width: "3.07rem",
+                        height: "3.29rem",
+                        opacity: 1,
+                        fontFamily: "Noto Sans JP",
+                        fontWeight: "700",
+                        fontStyle: "Bold",
+                        fontSize: "2.57rem",
+                        lineHeight: "100%",
+                        letterSpacing: "0%",
+                        color: "#2B5EC5",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center"
+                      }}
+                    >
+                      {step.number}
+                    </div>
+                  </div>
+                    <div 
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "0.5rem",
+                        flex: 1
+                      }}
+                    >
+                      <h3 
+                        style={{
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "700",
+                          fontStyle: "Bold",
+                          fontSize: "1.43rem",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          color: "#1A1A1A",
+                          whiteSpace: "nowrap",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "0.57rem",
+                          margin: 0
+                        }}
+                      >
+                        {step.title}
+                        <img
+                          src={`/${step.number === "01" ? "mail.svg" : step.number === "02" ? "airport_shuttle.svg" : step.number === "03" ? "calculate.svg" : "handshake.svg"}`}
+                          alt={`FLOW ${step.number} icon`}
+                          style={{
+                            width: step.number === "01" ? "2.38rem" : "2.86rem",
+                            height: step.number === "01" ? "1.91rem" : "2.86rem",
+                            opacity: 1,
+                            objectFit: "contain",
+                            filter: "brightness(0.4)"
+                          }}
+                        />
+                        {step.number === "01" && "☎"}
+                      </h3>
+                      <p 
+                        style={{
+                          width: "100%",
+                          opacity: 1,
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "400",
+                          fontStyle: "Regular",
+                          fontSize: "1.14rem",
+                          lineHeight: "2rem",
+                          letterSpacing: "0%",
+                          color: "#1A1A1A",
+                          margin: 0
+                        }}
+                      >
+                        {step.description}
+                      </p>
+                    </div>
                   </div>
                 </div>
                 {index < flowSteps.length - 1 && (
@@ -3255,6 +3378,7 @@ export default function HomePage() {
               marginBottom: "1.143rem",
               justifyContent: "space-between",
             }}
+            className="shop-info-container"
           >
             {/* 1. テキストフレーム */}
             <div 
@@ -3264,6 +3388,7 @@ export default function HomePage() {
                 display: "flex",
                 flexDirection: "column"
               }}
+              className="shop-info-text-frame"
             >
                 <div 
                   style={{
@@ -3662,6 +3787,7 @@ export default function HomePage() {
                 display: "flex",
                 flexDirection: "column"
               }}
+              className="shop-info-photo-frame"
             >
               <Card 
                 style={{
@@ -3747,6 +3873,7 @@ export default function HomePage() {
               boxShadow: "0 0.143rem 0.571rem rgba(0,0,0,0.10)",
               marginTop: "1.143rem"
             }}
+            className="shop-info-map-frame"
           >
             <iframe
               title="Google Map"
@@ -3803,6 +3930,7 @@ export default function HomePage() {
               alignItems: "center",
               justifyContent: "center"
             }}
+            className="contact-header"
           >
             {/* ①CONTACT */}
             <div style={{ display: "flex", justifyContent: "center" }}>
@@ -3864,6 +3992,7 @@ export default function HomePage() {
               alignItems: "center",
               justifyContent: "center"
             }}
+            className="contact-description"
           >
             <p 
               style={{
@@ -3894,6 +4023,7 @@ export default function HomePage() {
               width: "100%",
               marginBottom: "2.286rem"
             }}
+            className="contact-cards-container"
           >
             {/* ①お電話でのお問い合わせ */}
             <Card 
@@ -3910,6 +4040,7 @@ export default function HomePage() {
                 color: "#1a1a1a",
                 boxShadow: "none"
               }}
+              className="contact-phone-card"
             >
               <CardContent style={{ 
                 padding: 0, 
@@ -3919,7 +4050,7 @@ export default function HomePage() {
                 alignItems: "center",
                 justifyContent: "center",
                 height: "100%"
-              }}>
+              }} className="contact-phone-content">
                 {/* ①電話記号＋お電話でのお問い合わせ */}
                 <div 
                   style={{
@@ -3931,6 +4062,7 @@ export default function HomePage() {
                     opacity: 1,
                     margin: "0 auto 1.143rem auto"
                   }}
+                  className="contact-phone-title"
                 >
                   <PhoneCall 
                     style={{ 
@@ -3959,7 +4091,6 @@ export default function HomePage() {
                     <span 
                       style={{
                         width: "3.071rem",
-                        height: "2.071rem",
                         fontFamily: "Noto Sans JP",
                         fontWeight: "700",
                         fontStyle: "Bold",
@@ -3975,7 +4106,7 @@ export default function HomePage() {
                     <span 
                       style={{
                         width: "17.071rem",
-                        height: "3.286rem",
+                        height: "3rem",
                         fontFamily: "Noto Sans JP",
                         fontWeight: "700",
                         fontStyle: "Bold",
@@ -3986,6 +4117,7 @@ export default function HomePage() {
                         opacity: 1,
                         whiteSpace: "nowrap"
                       }}
+                      className="phone-number phone-number-height"
                     >
                       028-612-1474
                     </span>
@@ -4010,6 +4142,7 @@ export default function HomePage() {
                 color: "#374151",
                 boxShadow: "none"
               }}
+              className="contact-form-card"
             >
               <CardContent style={{ 
                 padding: 0, 
@@ -4113,7 +4246,7 @@ export default function HomePage() {
           </div>
 
           {/* ③トラック買取の問い合わせ */}
-          <div style={{ display: "flex", justifyContent: "center" }}>
+          <div style={{ display: "flex", justifyContent: "center" }} className="contact-purchase-container">
             <Card 
               style={{
                 width: "33.714rem",
@@ -4128,6 +4261,7 @@ export default function HomePage() {
                 color: "#2563eb",
                 boxShadow: "none"
               }}
+              className="contact-purchase-card"
             >
               <CardContent style={{ 
                 padding: 0, 
@@ -4174,6 +4308,7 @@ export default function HomePage() {
                         gap: "0.5rem",
                         whiteSpace: "nowrap"
                       }}
+                      className="purchase-text"
                     >
                       買取 / 下取り ご希望の方はこちらから
                       <ChevronRight 
@@ -4182,6 +4317,7 @@ export default function HomePage() {
                           height: "1.714rem",
                           color: "#2B5EC5"
                         }}
+                        className="purchase-chevron"
                       />
                     </div>
                   </div>
