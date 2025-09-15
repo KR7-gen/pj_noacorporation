@@ -180,7 +180,7 @@ export function Header() {
              alignItems: "center",
              background: "#fff",
              borderRadius: "4px",
-             padding: "0 1rem",
+             padding: "0.25rem 1rem",
              margin: "0",
              flexShrink: 0
            }}
@@ -216,23 +216,25 @@ export function Header() {
           <div
            style={{
              margin: "0",
-             width: "12vw",
-             maxWidth: "200px",
-             minWidth: "140px",
-             height: "1rem",
+             width: "100%",
+             maxWidth: "100%",
+             minWidth: "0",
+             height: "auto",
              opacity: 1,
              fontFamily: "Noto Sans JP, sans-serif",
              fontWeight: 400,
              fontStyle: "normal",
-             fontSize: "0.86rem",
-             lineHeight: "100%",
+             fontSize: "0.8rem",
+             lineHeight: "120%",
              letterSpacing: "0%",
              background: "transparent",
              color: "#1a1a1a",
-             textAlign: "center"
+             textAlign: "center",
+             whiteSpace: "normal",
+             overflowWrap: "anywhere"
            }}
          >
-           （受付時間）8:00~17:00<br/><span style={{ whiteSpace: "nowrap" }}>※店舗不在時には折り返しさせて頂きます。</span>
+           （受付時間）8:00~17:00<br/><span>※店舗不在時には折り返しさせて頂きます。</span>
          </div>
         </div>
 
@@ -257,7 +259,7 @@ export function Header() {
 
         {/* 問い合わせフォーム */}
         <form action="/contact" method="get" className="hidden lg:flex items-center justify-center m-0 p-0 flex-1 min-w-[100px] lg:flex-none" style={{ 
-          height: "3.36rem",
+          height: "3rem",
           margin: "0",
           flexShrink: 0
         }}>
@@ -265,13 +267,15 @@ export function Header() {
             style={{
               margin: "0",
               width: "100%",
-              height: "3.36rem",
+              height: "100%",
               opacity: 1,
               borderRadius: "4px",
               background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
               display: "flex",
               alignItems: "center",
-              justifyContent: "center"
+              justifyContent: "center",
+              boxSizing: "border-box",
+              padding: "0.5rem 0.5rem"
             }}
             className="hidden lg:block"
           >
@@ -280,7 +284,7 @@ export function Header() {
               style={{
                 margin: "0",
                 width: "100%",
-                height: "1.64rem",
+                height: "auto",
                 opacity: 1,
                 fontFamily: "Noto Sans JP, sans-serif",
                 fontWeight: 700,
@@ -292,7 +296,8 @@ export function Header() {
                 border: "none",
                 borderRadius: "0.29rem",
                 cursor: "pointer",
-                background: "transparent"
+                background: "transparent",
+                padding: "0.5rem 0.75rem"
               }}
             >
               <span className="lg:hidden flex items-center">

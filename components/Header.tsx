@@ -41,6 +41,7 @@ export function Header() {
               <div className="flex flex-col">
                 <div className="font-bold text-xl whitespace-nowrap">028-612-1474</div>
                 <div className="text-gray-600 text-xs whitespace-nowrap">(受付時間) 年中無休 09:00-17:00</div>
+                <div className="text-gray-600 text-[11px] whitespace-nowrap">※店舗不在時には折り返しさせて頂きます。</div>
               </div>
             </div>
             <Link href="/contact">

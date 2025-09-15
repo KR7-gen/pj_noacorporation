@@ -623,7 +623,7 @@ export default function InventoryPage() {
             {/* 左側の検索フィールド群 */}
             <div 
               style={{
-                width: "50.27%",
+                width: "52%",
                 display: "flex",
                 alignItems: "center"
               }}
@@ -631,7 +631,7 @@ export default function InventoryPage() {
               {/* 車両検索（ボディタイプ） */}
               <div 
                 style={{
-                  width: "39%",
+                  width: "44%",
                   margin: "0.43rem",
                   height: "2.29rem",
                   display: "flex",
@@ -648,7 +648,7 @@ export default function InventoryPage() {
                     width: "100%",
                     border: "none",
                     background: "transparent",
-                    fontSize: "1.14rem",
+                    fontSize: "0.9rem",
                     fontFamily: "Noto Sans JP",
                     fontWeight: "400",
                     color: "#1A1A1A",
@@ -684,7 +684,7 @@ export default function InventoryPage() {
               {/* 車両検索（メーカー） */}
               <div 
                 style={{
-                  width: "33%",
+                  width: "36%",
                   margin: "0.43rem",
                   height: "2.36rem",
                   display: "flex",
@@ -701,7 +701,7 @@ export default function InventoryPage() {
                     width: "100%",
                     border: "none",
                     background: "transparent",
-                    fontSize: "1.14rem",
+                    fontSize: "0.9rem",
                     fontFamily: "Noto Sans JP",
                     fontWeight: "400",
                     color: "#1A1A1A",
@@ -754,7 +754,7 @@ export default function InventoryPage() {
                     width: "100%",
                     border: "none",
                     background: "transparent",
-                    fontSize: "1.14rem",
+                    fontSize: "0.9rem",
                     fontFamily: "Noto Sans JP",
                     fontWeight: "400",
                     color: "#1A1A1A",
@@ -821,7 +821,7 @@ export default function InventoryPage() {
                      cursor: "pointer"
                    }}
                  >
-                                       {tempShowSoldNegotiating && (
+                    {tempShowSoldNegotiating && (
                       <svg
                         width="16"
                         height="16"
@@ -884,7 +884,7 @@ export default function InventoryPage() {
             {/* 右側のフリーワードと検索ボタン */}
             <div 
               style={{
-                width: "35%",
+                width: "31%",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between"
@@ -903,7 +903,7 @@ export default function InventoryPage() {
                   style={{
                     fontFamily: "Noto Sans JP",
                     fontWeight: "400",
-                    fontSize: "1.14rem",
+                    fontSize: "0.9rem",
                     lineHeight: "100%",
                     letterSpacing: "0%",
                     color: "#1A1A1A",
@@ -948,7 +948,7 @@ export default function InventoryPage() {
               <button 
                 onClick={handleSearch}
                 style={{
-                  minWidth: "8.57rem",
+                  minWidth: "7rem",
                   width: "15%",
                   height: "2.79rem",
                   display: "flex",

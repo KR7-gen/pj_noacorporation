@@ -319,8 +319,8 @@ export default function HomePage() {
           background: `
             linear-gradient(90deg, rgba(0, 0, 0, 0.4) 43.5%, rgba(255, 255, 255, 0) 100%),
             url('/store_photos.jpg'),
-            url('/1_after_painting_examples.jpg'),
-            url('/2_after_painting_examples.jpg')
+            url('/1_after_painting_examples.JPG'),
+            url('/2_after_painting_examples.JPG')
           `,
           backgroundSize: "cover, 33.33% 75%, 33.33% 75%, 33.33% 75%",
           backgroundPosition: "center, left, center, right",
@@ -607,14 +607,14 @@ export default function HomePage() {
               {/* 車両検索（ボディタイプ） */}
               <div 
                 style={{
-                  width: "39%",
-                  margin: "0.43rem",
-                  height: "2.29rem",
+                  width: "38%",
+                  margin: "0.29rem",
+                  height: "2.14rem",
                   display: "flex",
                   alignItems: "center",
                   gap: "0.29rem",
                   borderRadius: "0.29rem",
-                  padding: "0.29rem 0.57rem",
+                  padding: "0.23rem 0.43rem",
                   background: "#FFFFFF",
                   position: "relative"
                 }}
@@ -624,7 +624,7 @@ export default function HomePage() {
                       width: "100%",
                       border: "none",
                       background: "transparent",
-                      fontSize: "1.14rem",
+                      fontSize: "0.9rem",
                       fontFamily: "Noto Sans JP",
                       fontWeight: "400",
                       color: "#1A1A1A",
@@ -660,14 +660,14 @@ export default function HomePage() {
               {/* 車両検索（メーカー） */}
               <div 
                 style={{
-                  width: "33%",
-                  margin: "0.43rem",
-                  height: "2.36rem",
+                  width: "31%",
+                  margin: "0.29rem",
+                  height: "2.14rem",
                   display: "flex",
                   alignItems: "center",
                   gap: "0.29rem",
                   borderRadius: "0.29rem",
-                  padding: "0.29rem 0.57rem",
+                  padding: "0.23rem 0.43rem",
                   background: "#FFFFFF",
                   position: "relative"
                 }}
@@ -677,7 +677,7 @@ export default function HomePage() {
                       width: "100%",
                       border: "none",
                       background: "transparent",
-                      fontSize: "1.14rem",
+                      fontSize: "0.9rem",
                       fontFamily: "Noto Sans JP",
                       fontWeight: "400",
                       color: "#1A1A1A",
@@ -696,7 +696,7 @@ export default function HomePage() {
                     ))}
                   </select>
                   <ChevronDown 
-                    size={25} 
+                    size={22} 
                     style={{ 
                       color: "#1A1A1A",
                       position: "absolute",
@@ -713,14 +713,14 @@ export default function HomePage() {
               {/* 車両検索（大きさ） */}
               <div 
                 style={{
-                  width: "30%",
-                  margin: "0.43rem",
-                  height: "2.29rem",
+                  width: "27%",
+                  margin: "0.29rem",
+                  height: "2.14rem",
                   display: "flex",
                   alignItems: "center",
                   gap: "0.29rem",
                   borderRadius: "0.29rem",
-                  padding: "0.29rem 0.57rem",
+                  padding: "0.23rem 0.43rem",
                   background: "#FFFFFF",
                   position: "relative"
                 }}
@@ -730,7 +730,7 @@ export default function HomePage() {
                       width: "100%",
                       border: "none",
                       background: "transparent",
-                      fontSize: "1.14rem",
+                      fontSize: "0.9rem",
                       fontFamily: "Noto Sans JP",
                       fontWeight: "400",
                       color: "#1A1A1A",
@@ -749,7 +749,7 @@ export default function HomePage() {
                     ))}
                   </select>
                   <ChevronDown 
-                    size={24} 
+                    size={22} 
                     style={{ 
                       color: "#1A1A1A",
                       position: "absolute",
@@ -767,7 +767,7 @@ export default function HomePage() {
             {/* 右側のフリーワードと検索ボタン */}
             <div 
               style={{
-                width: "50%",
+                width: "45%",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between"
@@ -786,7 +786,7 @@ export default function HomePage() {
                   style={{
                     fontFamily: "Noto Sans JP",
                     fontWeight: "400",
-                    fontSize: "1.14rem",
+                    fontSize: "0.9rem",
                     lineHeight: "100%",
                     letterSpacing: "0%",
                     color: "#1A1A1A",
@@ -799,13 +799,13 @@ export default function HomePage() {
                 <div 
                   style={{
                     width: "65%",
-                    margin: "0.43rem",
-                    height: "2.29rem",
+                    margin: "1rem",
+                    height: "2.14rem",
                     display: "flex",
                     alignItems: "center",
                     gap: "0.71rem",
                     borderRadius: "0.29rem",
-                    padding: "0.29rem 0.57rem",
+                    padding: "0.23rem 0.43rem",
                     background: "#FFFFFF"
                   }}
                 >
@@ -818,7 +818,7 @@ export default function HomePage() {
                       width: "100%",
                       border: "none",
                       background: "transparent",
-                      fontSize: "1.14rem",
+                      fontSize: "0.9rem",
                       fontFamily: "Noto Sans JP",
                       fontWeight: "400",
                       color: "#1A1A1A",
@@ -2830,7 +2830,7 @@ export default function HomePage() {
                 margin: 0
               }}
             >
-              初回お問い合わせからご納車まで、わかりやすくスムーズなお取引を心がけております。中古トラックの購入がはじめての方も、どうぞお気軽にお問い合わせください。
+              初回お問い合わせからご納車まで、わかりやすくスムーズなお取引を心がけております。<br/>中古トラックの購入がはじめての方も、どうぞお気軽にお問い合わせください。
             </p>
             {flowSteps.map((step, index) => (
               <div key={index}>
