@@ -59,6 +59,11 @@ body {
   
   /* スマホ版での車両グリッド2x2レイアウト */
   @media (max-width: 1023px) {
+    /* 在庫ページヘッダーのスマホ版高さ */
+    .inventory-hero {
+      min-height: 14rem !important;
+    }
+
     /* New Trucks Sectionのスマホ版スタイル */
     .new-trucks-section {
       width: 100% !important;

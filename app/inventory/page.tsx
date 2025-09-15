@@ -443,6 +443,7 @@ export default function InventoryPage() {
       >
         {/* ヘッダー */}
         <div 
+          className="inventory-hero"
           style={{
             width: "100%",
             minHeight: "28.57rem",
@@ -459,6 +460,7 @@ export default function InventoryPage() {
           }}
         >
           <h1 
+            className="inventory-hero-title"
             style={{
               fontFamily: "Noto Sans JP",
               fontWeight: "700",

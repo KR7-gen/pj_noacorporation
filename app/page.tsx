@@ -274,10 +274,16 @@ export default function HomePage() {
       setNewsList(list.sort((a, b) => (b.createdAt as any) - (a.createdAt as any)).slice(0, 3));
     });
 
-    // 最新車両データを取得
-    getNewlyRegisteredVehicles(4).then((vehicles) => {
-      setLatestVehicles(vehicles);
-      console.log("最新車両データ取得完了:", vehicles);
+    // 最新車両データを取得（公開中かつ売り切れでない上位4台）
+    // まず多めに取得し、クライアント側でフィルタ・ソート・スライス
+    getNewlyRegisteredVehicles(12).then((vehicles) => {
+      const filtered = vehicles
+        .filter((v:any) => (v as any).isPublished === true || (v as any).isPrivate === false)
+        .filter((v:any) => !(v as any).isSoldOut)
+        .sort((a:any,b:any) => new Date((b as any).createdAt).getTime() - new Date((a as any).createdAt).getTime())
+        .slice(0, 4);
+      setLatestVehicles(filtered);
+      console.log("最新車両データ取得完了 (公開中かつ未売切 上位4):", filtered);
     }).catch((error) => {
       console.error("最新車両データ取得エラー:", error);
     });
@@ -894,8 +900,8 @@ export default function HomePage() {
             background: `
               linear-gradient(90deg, rgba(0, 0, 0, 0.4) 43.5%, rgba(255, 255, 255, 0) 100%),
               url('/store_photos.jpg'),
-              url('/1_after_painting_examples.jpg'),
-              url('/2_after_painting_examples.jpg')
+              url('/1_after_painting_examples.JPG'),
+              url('/2_after_painting_examples.JPG')
             `,
             backgroundSize: "cover, 33.33% 60%, 33.33% 60%, 33.33% 60%",
             backgroundPosition: "center, left, center, right",
