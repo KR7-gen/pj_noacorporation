@@ -55,10 +55,106 @@ body {
       grid-template-columns: repeat(4, 1fr);
       gap: 1.43rem;
     }
+    /* inventory: デスクトップではフリーワードのプレースホルダーを非表示 */
+    .inventory-search-input::placeholder { color: transparent !important; }
+    .inventory-search-input::-webkit-input-placeholder { color: transparent !important; }
+    .inventory-search-input::-moz-placeholder { color: transparent !important; }
+    .inventory-search-input:-ms-input-placeholder { color: transparent !important; }
+    .inventory-search-input::-ms-input-placeholder { color: transparent !important; }
   }
   
   /* スマホ版での車両グリッド2x2レイアウト */
   @media (max-width: 1023px) {
+    /* Contactセクション共通（スマホ）：見出しと電話番号サイズを2remに統一 */
+    .contact-title { font-size: 2rem !important; }
+    .phone-number { font-size: 2rem !important; margin: 0 !important; }
+    /* inventory: ボディタイプのフォント */
+    .inventory-card .body-type-text { font-size: 0.8rem !important; }
+    /* inventory: カード上部タイトル（メーカー+車名 / 型式） */
+    .inventory-card .card-title-maker { font-size: 0.8rem !important; }
+    .inventory-card .card-title-modelcode { font-size: 0.85rem !important; }
+
+    /* inventory: 車両カード テキスト調整用ユーティリティ（手動で変更可能） */
+    .inventory-card .spec-label { font-size: 0.8rem !important; }
+    .inventory-card .spec-value { font-size: 0.8rem !important; }
+    .inventory-card .price-main { font-size: 1.4rem !important; }
+    .inventory-card .price-unit { font-size: 0.8rem !important; }
+
+    /* 上記は初期値。お好みで自由に上書きしてください
+       例）.inventory-card .spec-label { font-size: 0.75rem !important; } */
+    /* 在庫ページヒーロータイトル（販売在庫一覧）フォントサイズ */
+    .inventory-hero-title { font-size: 2rem !important; }
+    /* inventory: Search Section を縦並び・各100%に */
+    .inventory-search-container {
+      flex-direction: column !important;
+      height: auto !important;
+      gap: 0.75rem !important;
+      padding: 1rem !important;
+      /* 画面横いっぱいに広げる（フルブリード） */
+      width: calc(100vw - 2rem) !important;
+      max-width: calc(100vw - 2rem) !important;
+      margin-left: calc(-50vw + 50% + 1rem) !important;
+      margin-right: calc(-50vw + 50% + 1rem) !important;
+      border-radius: 0 !important;
+    }
+    .inventory-search-left,
+    .inventory-search-right {
+      width: 100% !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: stretch !important;
+      gap: 0.5rem !important;
+    }
+    .inventory-search-type,
+    .inventory-search-maker,
+    .inventory-search-size,
+    .inventory-search-keyword {
+      width: 100% !important;
+      height: auto !important;
+      margin: 0 !important; /* フリーワード含め外側余白0 */
+      padding: 0.5rem !important;
+    }
+    /* フリーワードだけ左内側余白を0にして揃える */
+    .inventory-search-keyword { padding-left: 0 !important; }
+    .inventory-search-keyword > div {
+      width: 100% !important;
+      margin: 0 !important;
+    }
+    .inventory-search-button {
+      width: 100% !important;
+      min-width: 0 !important;
+      margin: 0 !important;
+    }
+    /* SOLD/商談中 左寄せ */
+    .inventory-search-sold {
+      align-items: flex-start !important;
+      justify-content: flex-start !important;
+      width: 100% !important;
+    }
+    /* キーワードのラベルを非表示（プレースホルダーへ移行） */
+    .inventory-search-keyword-label { display: none !important; }
+    /* キーワードと検索ボタンを横並び */
+    .inventory-search-right { flex-direction: row !important; gap: 0.5rem !important; align-items: stretch !important; }
+    .inventory-search-keyword { width: 100% !important; justify-content: flex-start !important; flex: 1 1 0 !important; margin: 0 !important; }
+    .inventory-search-keyword > div { width: 100% !important; height: 100% !important; }
+    .inventory-search-button { width: 100% !important; min-width: 0 !important; flex: 1 1 0 !important; }
+    /* 入力欄の高さをボタンと揃える */
+    .inventory-search-input { height: 100% !important; }
+    /* inventory: 車両タイプアイコンのテキストサイズ（スマホ） */
+    .inventory-type-icons span {
+      font-size: 0.85rem !important;
+    }
+    /* inventory: 車両タイプアイコン 3列×4行（12件表示） */
+    .inventory-type-icons {
+      width: 100% !important;
+      max-width: 100% !important;
+      padding: 0 1rem !important;
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 0.57rem !important;
+    }
+    .inventory-type-icons > *:nth-child(n+13) {
+      display: none !important;
+    }
     /* 在庫ページヘッダーのスマホ版高さ */
     .inventory-hero {
       min-height: 14rem !important;
@@ -81,7 +177,12 @@ body {
     .inventory-vehicle-grid {
       grid-template-columns: repeat(2, 1fr) !important;
       grid-template-rows: repeat(auto-fit, 1fr) !important;
-      gap: 1.43rem !important;
+      gap: 1rem !important; /* HOMEの新着と同じ間隔 */
+      /* 外側余白1remのうえで横いっぱいに広げる */
+      width: calc(100vw - 2rem) !important;
+      max-width: calc(100vw - 2rem) !important;
+      margin-left: calc(-50vw + 50% + 1rem) !important;
+      margin-right: calc(-50vw + 50% + 1rem) !important;
     }
     
     /* ホームページの新着車輌グリッド */
@@ -103,7 +204,7 @@ body {
     
     /* スマホ版での価格表示フォントサイズ */
     .vehicle-detail-table .price-text {
-      font-size: 1rem !important; /* 16px */
+      font-size: 1.4rem !important; /* 16px */
     }
     
     /* スマホ版での車両カード詳細テーブルのフォントサイズ（価格表示以外） */
@@ -114,7 +215,7 @@ body {
     /* スマホ版での車両カードヘッダーバーと問い合わせ番号のフォントサイズ */
     .vehicle-card-header span,
     .vehicle-inquiry-number span {
-      font-size: 0.8125rem !important; /* 13px */
+      font-size: 0.8rem !important;
     }
     
     /* スマホ版でのヘッダーバー2行表示 */
@@ -245,13 +346,19 @@ body {
     }
     
     .contact-phone-card .contact-phone-details {
-      margin: 0 auto !important;
+      margin: 0 auto !important; /* 下に張り付かないよう通常位置に戻す */
       text-align: center !important;
       gap: 0 !important;
+      height: auto !important; /* 電話番号と文言の余白を詰める */
     }
     
     .contact-phone-card .contact-phone-details > div {
       gap: 0 !important;
+      margin-bottom: 0.25rem !important; /* 電話番号行と説明文の隙間を最小限に */
+    }
+    .contact-phone-card .contact-phone-details p {
+      margin-top: 0 !important; /* 念のため上余白をゼロに */
+      margin-bottom: 1rem !important; /* 下側余白を1remに */
     }
     
     .contact-phone-card .phone-number {
@@ -279,9 +386,16 @@ body {
     }
     
     .contact-form-card .contact-form-button {
+      display: block !important;
+      width: 100% !important;
+      max-width: 20rem !important;
+      margin: 0 auto !important; /* 中央寄せ */
+    }
+    .contact-form-card .contact-form-button > button {
       width: 100% !important;
       max-width: 20rem !important;
       margin: 0 auto !important;
+      padding: 0.5rem 0.75rem !important; /* 余白を適度に */
     }
     
     .contact-purchase-container {
@@ -306,10 +420,21 @@ body {
     }
     
     .contact-purchase-card .purchase-text {
-      font-size: 1.2rem !important;
+      font-size: 1.2rem !important; /* 指定サイズに調整 */
+      white-space: normal !important; /* 折り返し許可 */
     }
     
     .contact-purchase-card .purchase-chevron {
+      width: 1.2rem !important;
+      height: 1.2rem !important;
+    }
+
+    /* 追加ターゲット（HOME以外でクラスが無い場合のフォールバック） */
+    .contact-purchase-card a > div > div {
+      font-size: 1.2rem !important;      /* テキストを1.2remに */
+      white-space: normal !important;     /* 折り返し許可 */
+    }
+    .contact-purchase-card a > div > div svg {
       width: 1.2rem !important;
       height: 1.2rem !important;
     }

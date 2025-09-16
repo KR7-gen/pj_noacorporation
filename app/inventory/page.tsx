@@ -486,6 +486,7 @@ export default function InventoryPage() {
           }}
         >
           <div 
+            className="inventory-type-icons"
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(6, 1fr)",
@@ -500,7 +501,7 @@ export default function InventoryPage() {
                 key={icon.id}
                 onClick={() => handleIconClick(icon.type)}
                 style={{
-                  height: "6.86rem",
+                  height: "8rem",
                   borderRadius: "0.29rem",
                   display: "flex",
                   flexDirection: "column",
@@ -621,9 +622,11 @@ export default function InventoryPage() {
               padding: "0.57rem 0.35rem",
               background: "#CCCCCC"
             }}
+            className="inventory-search-container"
           >
             {/* 左側の検索フィールド群 */}
             <div 
+              className="inventory-search-left"
               style={{
                 width: "52%",
                 display: "flex",
@@ -632,6 +635,7 @@ export default function InventoryPage() {
             >
               {/* 車両検索（ボディタイプ） */}
               <div 
+                className="inventory-search-type"
                 style={{
                   width: "44%",
                   margin: "0.43rem",
@@ -685,6 +689,7 @@ export default function InventoryPage() {
 
               {/* 車両検索（メーカー） */}
               <div 
+                className="inventory-search-maker"
                 style={{
                   width: "36%",
                   margin: "0.43rem",
@@ -738,6 +743,7 @@ export default function InventoryPage() {
 
               {/* 車両検索（大きさ） */}
               <div 
+                className="inventory-search-size"
                 style={{
                   width: "30%",
                   margin: "0.43rem",
@@ -792,6 +798,7 @@ export default function InventoryPage() {
 
            {/* SOLD/商談中表示制御 */}
              <div 
+               className="inventory-search-sold"
                style={{
                  width: "15%",
                  display: "flex",
@@ -885,6 +892,7 @@ export default function InventoryPage() {
 
             {/* 右側のフリーワードと検索ボタン */}
             <div 
+              className="inventory-search-right"
               style={{
                 width: "31%",
                 display: "flex",
@@ -894,6 +902,7 @@ export default function InventoryPage() {
             >
               {/* 車両検索（フリーワード） */}
               <div 
+                className="inventory-search-keyword"
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -902,6 +911,7 @@ export default function InventoryPage() {
                 }}
               >
                 <span 
+                  className="inventory-search-keyword-label"
                   style={{
                     fontFamily: "Noto Sans JP",
                     fontWeight: "400",
@@ -932,6 +942,8 @@ export default function InventoryPage() {
                     type="text"
                     value={formKeyword}
                     onChange={(e) => setFormKeyword(e.target.value)}
+                    placeholder="フリーワード"
+                    className="inventory-search-input"
                     style={{
                       width: "100%",
                       border: "none",
@@ -948,6 +960,7 @@ export default function InventoryPage() {
 
               {/* 検索するボタン */}
               <button 
+                className="inventory-search-button"
                 onClick={handleSearch}
                 style={{
                   minWidth: "7rem",
@@ -1183,6 +1196,7 @@ export default function InventoryPage() {
             >
               {currentVehicles.map((vehicle) => (
               <Card 
+                className="inventory-card"
                 key={vehicle.id}
                 style={{
                   width: "100%",
@@ -1200,6 +1214,7 @@ export default function InventoryPage() {
                 <CardContent style={{ padding: "0" }}>
                   {/* ヘッダーバー */}
                   <div 
+                    className="vehicle-card-header"
                     style={{
                       height: "2.79rem",
                       background: "#1A1A1A",
@@ -1209,13 +1224,12 @@ export default function InventoryPage() {
                       alignItems: "center"
                     }}
                   >
-                    <span style={{ 
+                    <span className="card-title-maker" style={{ 
                       height: "1.64rem",
                       opacity: 1,
                       fontFamily: "Noto Sans JP",
                       fontWeight: "700",
                       fontStyle: "Bold",
-                      fontSize: "1.14rem",
                       lineHeight: "100%",
                       letterSpacing: "0%",
                       color: "#FFFFFF",
@@ -1229,13 +1243,12 @@ export default function InventoryPage() {
                         return `${makerLabel}${typeLabel ? ` ${typeLabel}` : ""}`.trim();
                       })()}
                     </span>
-                    <span style={{ 
+                    <span className="card-title-modelcode" style={{ 
                       height: "1.21rem",
                       opacity: 1,
                       fontFamily: "Noto Sans JP",
                       fontWeight: "400",
                       fontStyle: "Regular",
-                      fontSize: "1rem",
                       lineHeight: "100%",
                       letterSpacing: "0%",
                       color: "#FFFFFF",
@@ -1255,13 +1268,12 @@ export default function InventoryPage() {
                       justifyContent: "center"
                     }}
                   >
-                    <span style={{
+                    <span className="vehicle-inquiry-number" style={{
                       height: "1.36rem",
                       opacity: 1,
                       fontFamily: "Noto Sans JP",
                       fontWeight: "400",
                       fontStyle: "Regular",
-                      fontSize: "1.14rem",
                       lineHeight: "100%",
                       letterSpacing: "0%",
                       color: "#1A1A1A",
@@ -1367,13 +1379,12 @@ export default function InventoryPage() {
                         alignItems: "center",
                         justifyContent: "center"
                       }}>
-                        <span style={{
+                        <span className="body-type-text" style={{
                           height: "1.21rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "400",
                           fontStyle: "Regular",
-                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
@@ -1402,13 +1413,12 @@ export default function InventoryPage() {
                         alignItems: "center",
                         justifyContent: "center"
                       }}>
-                        <span style={{
+                        <span className="spec-label" style={{
                           height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
-                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
@@ -1423,26 +1433,24 @@ export default function InventoryPage() {
                         paddingLeft: "0.86rem"
                       }}>
                         <div>
-                          <span style={{
+                          <span className="price-main spec-value" style={{
                             height: "1.64rem",
                             opacity: 1,
                             fontFamily: "Noto Sans JP",
                             fontWeight: "700",
                             fontStyle: "Bold",
-                            fontSize: "2.29rem",
                             lineHeight: "100%",
                             letterSpacing: "0%",
                             color: "#2B5EC5"
                           }}>
                             {vehicle.price ? Math.floor(vehicle.price / 10000) : "000"}
                           </span>
-                          <span style={{
+                          <span className="price-unit spec-value" style={{
                             height: "1rem",
                             opacity: 1,
                             fontFamily: "Noto Sans JP",
                             fontWeight: "400",
                             fontStyle: "Regular",
-                            fontSize: "0.86rem",
                             lineHeight: "100%",
                             letterSpacing: "0%",
                             color: "#2B5EC5"
@@ -1470,13 +1478,12 @@ export default function InventoryPage() {
                         alignItems: "center",
                         justifyContent: "center"
                       }}>
-                        <span style={{
+                        <span className="spec-label" style={{
                           height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
-                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
@@ -1490,13 +1497,12 @@ export default function InventoryPage() {
                         justifyContent: "flex-start",
                         paddingLeft: "0.86rem"
                       }}>
-                        <span style={{
+                        <span className="spec-value" style={{
                           height: "1.21rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "400",
                           fontStyle: "Regular",
-                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
@@ -1525,13 +1531,12 @@ export default function InventoryPage() {
                         alignItems: "center",
                         justifyContent: "center"
                       }}>
-                        <span style={{
+                        <span className="spec-label" style={{
                           height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
-                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
@@ -1545,13 +1550,12 @@ export default function InventoryPage() {
                         justifyContent: "flex-start",
                         paddingLeft: "0.86rem"
                       }}>
-                        <span style={{
+                        <span className="spec-value" style={{
                           height: "1.21rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "400",
                           fontStyle: "Regular",
-                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
@@ -1580,13 +1584,12 @@ export default function InventoryPage() {
                         alignItems: "center",
                         justifyContent: "center"
                       }}>
-                        <span style={{
+                        <span className="spec-label" style={{
                           height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
-                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
@@ -1600,13 +1603,12 @@ export default function InventoryPage() {
                         justifyContent: "flex-start",
                         paddingLeft: "0.86rem"
                       }}>
-                        <span style={{
+                        <span className="spec-value" style={{
                           height: "1.21rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "400",
                           fontStyle: "Regular",
-                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
@@ -1635,13 +1637,12 @@ export default function InventoryPage() {
                         alignItems: "center",
                         justifyContent: "center"
                       }}>
-                        <span style={{
+                        <span className="spec-label" style={{
                           height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
-                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
@@ -1655,13 +1656,12 @@ export default function InventoryPage() {
                         justifyContent: "flex-start",
                         paddingLeft: "0.86rem"
                       }}>
-                        <span style={{
+                        <span className="spec-value" style={{
                           height: "1.21rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "400",
                           fontStyle: "Regular",
-                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
@@ -1690,13 +1690,12 @@ export default function InventoryPage() {
                         alignItems: "center",
                         justifyContent: "center"
                       }}>
-                        <span style={{
+                        <span className="spec-label" style={{
                           height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
-                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
@@ -1710,13 +1709,12 @@ export default function InventoryPage() {
                         justifyContent: "flex-start",
                         paddingLeft: "0.86rem"
                       }}>
-                        <span style={{
+                        <span className="spec-value" style={{
                           height: "1.21rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "400",
                           fontStyle: "Regular",
-                          fontSize: "1rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           color: "#1A1A1A"
@@ -1978,6 +1976,7 @@ export default function InventoryPage() {
         >
           {/* ①と②のコンテナ */}
           <div 
+            className="contact-header"
             style={{
               width: "17.143rem",
               height: "5.357rem",
@@ -2015,6 +2014,7 @@ export default function InventoryPage() {
                 </div>
                 {/* ②お問い合わせ */}
                 <div 
+                  className="contact-title"
                   style={{
                     fontFamily: "Noto Sans JP",
                     fontWeight: "700",
@@ -2034,6 +2034,7 @@ export default function InventoryPage() {
 
           {/* ③説明文 */}
           <div 
+            className="contact-description"
             style={{
               width: "53.286rem",
               height: "7.429rem",
@@ -2067,6 +2068,7 @@ export default function InventoryPage() {
           </div>
 
           <div 
+            className="contact-cards-container"
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(2, 1fr)",
@@ -2078,6 +2080,7 @@ export default function InventoryPage() {
           >
             {/* ①お電話でのお問い合わせ */}
             <Card 
+              className="contact-phone-card"
               style={{
                 width: "28.571rem",
                 height: "12.286rem",
@@ -2156,7 +2159,6 @@ export default function InventoryPage() {
                     <span 
                       style={{
                         width: "17.071rem",
-                        height: "3.286rem",
                         fontFamily: "Noto Sans JP",
                         fontWeight: "700",
                         fontStyle: "Bold",
@@ -2167,6 +2169,7 @@ export default function InventoryPage() {
                         opacity: 1,
                         whiteSpace: "nowrap"
                       }}
+                      className="phone-number"
                     >
                       028-612-1474
                     </span>
@@ -2178,6 +2181,7 @@ export default function InventoryPage() {
 
             {/* ②フォームでのお問い合わせ */}
             <Card 
+              className="contact-form-card"
               style={{
                 width: "28.571rem",
                 height: "12.286rem",
@@ -2192,7 +2196,7 @@ export default function InventoryPage() {
                 boxShadow: "none"
               }}
             >
-              <CardContent style={{ 
+              <CardContent className="contact-form-content" style={{ 
                 padding: 0, 
                 textAlign: "center",
                 display: "flex",
@@ -2224,7 +2228,7 @@ export default function InventoryPage() {
                   <h3 style={{ fontWeight: "bold", fontSize: "1.143rem", margin: 0 }}>フォームでのお問い合わせ</h3>
                 </div>
                 {/* ④お問合せフォームへボタン */}
-                <Link href="/contact">
+                <Link href="/contact" className="contact-form-button">
                   <Button 
                     style={{
                       width: "20.71rem",
@@ -2294,8 +2298,9 @@ export default function InventoryPage() {
           </div>
 
           {/* ③トラック買取の問い合わせ */}
-          <div style={{ display: "flex", justifyContent: "center" }}>
+          <div className="contact-purchase-container" style={{ display: "flex", justifyContent: "center" }}>
             <Card 
+              className="contact-purchase-card"
               style={{
                 width: "33.714rem",
                 height: "7.143rem",

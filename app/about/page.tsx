@@ -1742,6 +1742,7 @@ export default function AboutPage() {
          >
        {/* ①と②のコンテナ */}
        <div 
+         className="contact-header"
          style={{
            width: "17.143rem",
            height: "5.357rem",
@@ -1779,6 +1780,7 @@ export default function AboutPage() {
              </div>
              {/* ②お問い合わせ */}
              <div 
+               className="contact-title"
                style={{
                  fontFamily: "Noto Sans JP",
                  fontWeight: "700",
@@ -1798,6 +1800,7 @@ export default function AboutPage() {
 
        {/* ③説明文 */}
        <div 
+         className="contact-description"
          style={{
            width: "53.286rem",
            height: "7.429rem",
@@ -1831,6 +1834,7 @@ export default function AboutPage() {
        </div>
 
        <div 
+         className="contact-cards-container"
          style={{
            display: "grid",
            gridTemplateColumns: "repeat(2, 1fr)",
@@ -1842,6 +1846,7 @@ export default function AboutPage() {
        >
          {/* ①お電話でのお問い合わせ */}
          <Card 
+           className="contact-phone-card"
            style={{
              width: "28.571rem",
              height: "12.286rem",
@@ -1920,7 +1925,6 @@ export default function AboutPage() {
                  <span 
                    style={{
                      width: "17.071rem",
-                     height: "3.286rem",
                      fontFamily: "Noto Sans JP",
                      fontWeight: "700",
                      fontStyle: "Bold",
@@ -1931,6 +1935,7 @@ export default function AboutPage() {
                      opacity: 1,
                      whiteSpace: "nowrap"
                    }}
+                   className="phone-number"
                  >
                    028-612-1474
                  </span>
@@ -1942,6 +1947,7 @@ export default function AboutPage() {
 
          {/* ②フォームでのお問い合わせ */}
          <Card 
+           className="contact-form-card"
            style={{
              width: "28.571rem",
              height: "12.286rem",
@@ -1956,7 +1962,7 @@ export default function AboutPage() {
              boxShadow: "none"
            }}
          >
-           <CardContent style={{ 
+           <CardContent className="contact-form-content" style={{ 
              padding: 0, 
              textAlign: "center",
              display: "flex",
@@ -1988,7 +1994,7 @@ export default function AboutPage() {
                <h3 style={{ fontWeight: "bold", fontSize: "1.143rem", margin: 0 }}>フォームでのお問い合わせ</h3>
              </div>
              {/* ④お問合せフォームへボタン */}
-             <Link href="/contact">
+             <Link href="/contact" className="contact-form-button">
                <Button 
                  style={{
                    width: "20.71rem",
@@ -2058,8 +2064,9 @@ export default function AboutPage() {
        </div>
 
        {/* ③トラック買取の問い合わせ */}
-       <div style={{ display: "flex", justifyContent: "center" }}>
+       <div className="contact-purchase-container" style={{ display: "flex", justifyContent: "center" }}>
          <Card 
+           className="contact-purchase-card"
            style={{
              width: "33.714rem",
              height: "7.143rem",

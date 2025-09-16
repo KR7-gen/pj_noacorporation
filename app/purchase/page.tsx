@@ -935,6 +935,7 @@ const FAQSection = () => (
       </div>
 
       <div 
+        className="contact-header"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -1217,9 +1218,9 @@ const ContactSection = () => (
     >
       {/* ①と②のコンテナ */}
       <div 
+        className="contact-header"
         style={{
           width: "17.143rem",
-          height: "5.357rem",
           margin: "0 auto 2.286rem auto",
           opacity: 1,
           display: "flex",
@@ -1254,6 +1255,7 @@ const ContactSection = () => (
             </div>
             {/* ②お問い合わせ */}
             <div 
+              className="contact-title"
               style={{
                 fontFamily: "Noto Sans JP",
                 fontWeight: "700",
@@ -1273,9 +1275,9 @@ const ContactSection = () => (
 
       {/* ③説明文 */}
       <div 
+        className="contact-description"
         style={{
           width: "53.286rem",
-          height: "7.429rem",
           margin: "0 auto 2.286rem auto",
           gap: "0.714rem",
           opacity: 1,
@@ -1306,6 +1308,7 @@ const ContactSection = () => (
       </div>
 
       <div 
+        className="contact-cards-container"
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(2, 1fr)",
@@ -1317,9 +1320,9 @@ const ContactSection = () => (
       >
         {/* ①お電話でのお問い合わせ */}
         <Card 
+          className="contact-phone-card"
           style={{
             width: "28.571rem",
-            height: "12.286rem",
             display: "flex",
             flexDirection: "column",
             gap: "0.571rem",
@@ -1355,7 +1358,7 @@ const ContactSection = () => (
               <PhoneCall 
                 style={{ 
                   width: "1.286rem", 
-                  height: "1.286rem", 
+                  height: "1.286rem",
                   color: "#666666",
                   marginTop: "0.213rem",
                   marginLeft: "0.214rem"
@@ -1395,7 +1398,6 @@ const ContactSection = () => (
                 <span 
                   style={{
                     width: "17.071rem",
-                    height: "3.286rem",
                     fontFamily: "Noto Sans JP",
                     fontWeight: "700",
                     fontStyle: "Bold",
@@ -1406,6 +1408,7 @@ const ContactSection = () => (
                     opacity: 1,
                     whiteSpace: "nowrap"
                   }}
+                  className="phone-number"
                 >
                   028-612-1474
                 </span>
@@ -1417,6 +1420,7 @@ const ContactSection = () => (
 
         {/* ②フォームでのお問い合わせ */}
         <Card 
+          className="contact-form-card"
           style={{
             width: "28.571rem",
             height: "12.286rem",
@@ -1431,7 +1435,7 @@ const ContactSection = () => (
             boxShadow: "none"
           }}
         >
-          <CardContent style={{ 
+          <CardContent className="contact-form-content" style={{ 
             padding: 0, 
             textAlign: "center",
             display: "flex",
@@ -1463,7 +1467,7 @@ const ContactSection = () => (
               <h3 style={{ fontWeight: "bold", fontSize: "1.143rem", margin: 0 }}>フォームでのお問い合わせ</h3>
             </div>
             {/* ④お問合せフォームへボタン */}
-            <Link href="/contact">
+            <Link href="/contact" className="contact-form-button">
               <Button 
                 style={{
                   width: "20.71rem",
@@ -1533,8 +1537,9 @@ const ContactSection = () => (
       </div>
 
       {/* ③トラック買取の問い合わせ */}
-      <div style={{ display: "flex", justifyContent: "center" }}>
+      <div className="contact-purchase-container" style={{ display: "flex", justifyContent: "center" }}>
         <Card 
+          className="contact-purchase-card"
           style={{
             width: "33.714rem",
             height: "7.143rem",
