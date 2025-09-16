@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import {useIsMobile} from "@/hooks/use-mobile"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -65,6 +66,7 @@ const sizes = [
 ]
 
 export default function InventoryPage() {
+  const isMobile = useIsMobile()
   const router = useRouter()
   const searchParams = useSearchParams()
   
@@ -1292,7 +1294,7 @@ export default function InventoryPage() {
                       overflow: "hidden"
                     }}
                   >
-                                                             {vehicle.imageUrls && vehicle.imageUrls.length > 0 && vehicle.imageUrls[0] ? (
+                    {vehicle.imageUrls && vehicle.imageUrls.length > 0 && vehicle.imageUrls[0] ? (
                       <img
                         src={vehicle.imageUrls[0]}
                         alt={`${vehicle.maker} ${vehicle.name}`}
@@ -1847,16 +1849,27 @@ export default function InventoryPage() {
                 )}
 
                 {/* ページ番号 */}
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+                {Array.from({ length: totalPages }, (_, i) => i + 1)
+                  .filter((page) => {
+                    if (!isMobile) return true
+                    if (currentPage === 1) {
+                      // 1ページ目特例: 1,2,3,最後のみ
+                      return page === 1 || page === 2 || page === 3 || page === totalPages
+                    }
+                    // 通常: 現在の前後1ページ＋最初・最後
+                    const near = page >= currentPage - 1 && page <= currentPage + 1
+                    const edge = page === 1 || page === totalPages
+                    return near || edge
+                  })
+                  .map((page, idx, arr) => {
                   // 現在のページの前後2ページと最初・最後のページを表示
-                  const shouldShow = 
-                    page === 1 || 
-                    page === totalPages || 
-                    (page >= currentPage - 2 && page <= currentPage + 2)
+                  const shouldShow = true
                   
                   if (!shouldShow) {
                     // 省略記号を表示
-                    if (page === currentPage - 3 || page === currentPage + 3) {
+                    // モバイル・デスクトップともに省略記号はフィルタ後の隙間に応じて表示
+                    const prev = arr[idx - 1]
+                    if (prev && page - prev > 1) {
                       return (
                         <span 
                           key={page}

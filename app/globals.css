@@ -61,6 +61,15 @@ body {
     .inventory-search-input::-moz-placeholder { color: transparent !important; }
     .inventory-search-input:-ms-input-placeholder { color: transparent !important; }
     .inventory-search-input::-ms-input-placeholder { color: transparent !important; }
+    /* inventory: 車両カードのデスクトップ版フォントをHOMEと統一 */
+    .inventory-card .card-title-maker { font-size: 1.14rem !important; }
+    .inventory-card .card-title-modelcode { font-size: 1rem !important; }
+    .vehicle-inquiry-number span { font-size: 1.14rem !important; }
+    .inventory-card .body-type-text { font-size: 1rem !important; }
+    .inventory-card .spec-label { font-size: 1rem !important; }
+    .inventory-card .spec-value { font-size: 1rem !important; }
+    .inventory-card .price-main { font-size: 2.29rem !important; }
+    .inventory-card .price-unit { font-size: 0.86rem !important; }
   }
   
   /* スマホ版での車両グリッド2x2レイアウト */
