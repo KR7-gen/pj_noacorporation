@@ -35,15 +35,47 @@ export default function VehicleDetailPage() {
           
           setVehicle(fetchedVehicle)
           const allVehicles = await getVehicles()
-                  const related = allVehicles
-          .filter(v => v.id !== vehicleId)
-          .filter(v => !v.isPrivate && !v.isTemporarySave) // 非公開車両と一時保存車両を除外
-            .filter(v => 
-              v.maker === fetchedVehicle.maker || 
-              v.bodyType === fetchedVehicle.bodyType
-            )
-            .slice(0, 3)
-          setRelatedVehicles(related)
+          
+          // 商談中・売り切れ車両を除外
+          const availableVehicles = allVehicles
+            .filter(v => v.id !== vehicleId)
+            .filter(v => !v.isPrivate && !v.isTemporarySave)
+            .filter(v => !v.isNegotiating && !v.isSoldOut)
+          
+          // 優先条件に基づいて関連車両を選択
+          const related: Vehicle[] = []
+          
+          // 第1優先：同じボディタイプ
+          const sameBodyType = availableVehicles.filter(v => v.bodyType === fetchedVehicle.bodyType)
+          related.push(...sameBodyType.slice(0, 3))
+          
+          // 第2優先：同じメーカー（まだ3台未満の場合）
+          if (related.length < 3) {
+            const sameMaker = availableVehicles
+              .filter(v => v.maker === fetchedVehicle.maker)
+              .filter(v => !related.some(r => r.id === v.id))
+            related.push(...sameMaker.slice(0, 3 - related.length))
+          }
+          
+          // 第3優先：同じサイズ（まだ3台未満の場合）
+          if (related.length < 3) {
+            const sameSize = availableVehicles
+              .filter(v => 
+                v.outerLength === fetchedVehicle.outerLength && 
+                v.outerWidth === fetchedVehicle.outerWidth
+              )
+              .filter(v => !related.some(r => r.id === v.id))
+            related.push(...sameSize.slice(0, 3 - related.length))
+          }
+          
+          // 第4優先：その他の車両（まだ3台未満の場合）
+          if (related.length < 3) {
+            const others = availableVehicles
+              .filter(v => !related.some(r => r.id === v.id))
+            related.push(...others.slice(0, 3 - related.length))
+          }
+          
+          setRelatedVehicles(related.slice(0, 3))
         } else {
           setError("車両が見つかりませんでした")
         }
@@ -293,54 +325,91 @@ export default function VehicleDetailPage() {
                 
                 {/* その他写真 - カルーセル */}
                 {images.length > 1 && (
-                  <div className="mt-4 relative w-full h-[7rem]">
+                  <div className="mt-4 relative w-full h-[7rem] overflow-hidden flex justify-center">
                     <div 
-                      className="flex gap-1 transition-transform duration-300"
+                      className="flex transition-transform duration-300"
                       style={{ 
-                        transform: `translateX(-${Math.floor(currentIndex / 14) * 33.714}rem)`,
-                        width: `${Math.ceil(images.length / 14) * 33.714}rem`
+                        transform: `translateX(-${Math.floor(currentIndex / 12) * 100}%)`,
+                        width: `${Math.ceil(images.length / 12) * 100}%`
                       }}
                     >
-                      {Array.from({ length: Math.ceil(images.length / 14) }, (_, pageIndex) => (
+                      {Array.from({ length: Math.ceil(images.length / 12) }, (_, pageIndex) => (
                         <div 
                           key={pageIndex}
+                          className="w-full flex-shrink-0 flex justify-center"
                           style={{ 
-                            display: 'grid',
-                            gridTemplateRows: 'repeat(2, 3.357rem)',
-                            gridTemplateColumns: 'repeat(7, 4.571rem)',
-                            height: '7rem',
-                            gap: '0.286rem'
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            height: '7rem'
                           }}
                         >
-                          {images.slice(pageIndex * 14, (pageIndex + 1) * 14).map((img, idx) => (
-                            <img
-                              key={pageIndex * 14 + idx}
-                              src={img}
-                              alt={`サムネイル${pageIndex * 14 + idx + 1}`}
-                              className={`object-cover rounded cursor-pointer border-2 ${currentIndex === pageIndex * 14 + idx ? 'border-blue-600' : 'border-transparent'}`}
-                              style={{ 
-                                height: '3.357rem'
-                              }}
-                              onClick={() => handleThumbClick(pageIndex * 14 + idx)}
-                              onError={handleImageError}
-                            />
-                          ))}
+                          <div
+                            style={{ 
+                              display: 'grid',
+                              gridTemplateRows: 'repeat(2, 3.357rem)',
+                              gridTemplateColumns: 'repeat(6, 4.571rem)',
+                              height: '7rem',
+                              gap: '0.286rem'
+                            }}
+                          >
+                            {images.slice(pageIndex * 12, (pageIndex + 1) * 12).map((img, idx) => (
+                              <img
+                                key={pageIndex * 12 + idx}
+                                src={img}
+                                alt={`サムネイル${pageIndex * 12 + idx + 1}`}
+                                className={`object-cover rounded cursor-pointer border-2 ${currentIndex === pageIndex * 12 + idx ? 'border-blue-600' : 'border-transparent'}`}
+                                style={{ 
+                                  height: '3.357rem',
+                                  width: '4.571rem'
+                                }}
+                                onClick={() => handleThumbClick(pageIndex * 12 + idx)}
+                                onError={handleImageError}
+                              />
+                            ))}
+                          </div>
                         </div>
                       ))}
                     </div>
                     
-                    {/* カルーセルナビゲーション */}
-                    {Math.ceil(images.length / 14) > 1 && (
-                      <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-2">
-                        {Array.from({ length: Math.ceil(images.length / 14) }, (_, pageIndex) => (
+                    {/* 左右ナビゲーション矢印 */}
+                    {Math.ceil(images.length / 12) > 1 && (
+                      <>
+                        <button
+                          onClick={() => {
+                            const currentPage = Math.floor(currentIndex / 12);
+                            const prevPage = currentPage > 0 ? currentPage - 1 : Math.ceil(images.length / 12) - 1;
+                            setCurrentIndex(prevPage * 12);
+                          }}
+                          className="absolute left-2 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 rounded-full p-1 shadow hover:bg-opacity-100 z-10"
+                        >
+                          <ChevronLeft className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => {
+                            const currentPage = Math.floor(currentIndex / 12);
+                            const nextPage = currentPage < Math.ceil(images.length / 12) - 1 ? currentPage + 1 : 0;
+                            setCurrentIndex(nextPage * 12);
+                          }}
+                          className="absolute right-2 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 rounded-full p-1 shadow hover:bg-opacity-100 z-10"
+                        >
+                          <ChevronRight className="w-4 h-4" />
+                        </button>
+                      </>
+                    )}
+                    
+                    {/* カルーセルドットナビゲーション */}
+                    {Math.ceil(images.length / 12) > 1 && (
+                      <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 flex gap-2">
+                        {Array.from({ length: Math.ceil(images.length / 12) }, (_, pageIndex) => (
                           <button
                             key={pageIndex}
                             onClick={() => {
-                              const targetIndex = pageIndex * 14;
+                              const targetIndex = pageIndex * 12;
                               setCurrentIndex(targetIndex);
                             }}
                             className={`w-2 h-2 rounded-full transition-colors ${
-                              Math.floor(currentIndex / 14) === pageIndex
+                              Math.floor(currentIndex / 12) === pageIndex
                                 ? 'bg-blue-600'
                                 : 'bg-gray-300'
                             }`}
@@ -681,7 +750,7 @@ export default function VehicleDetailPage() {
          <div className="w-full max-w-[1000px] mx-auto gap-3 opacity-100 mb-6">
            <h2 className="text-xl font-bold mb-4">上物情報</h2>
            <div style={{height: 'auto'}}>
-             <div style={{display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gridTemplateRows: '3.142rem 3.142rem 3.142rem 6.2rem', gap: '0'}}>
+             <div style={{display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gridTemplateRows: '3.142rem 3.142rem 3.142rem auto', gap: '0'}}>
                {/* 1行目 */}
                <span className="font-medium px-3 flex items-center" style={{background: '#F2F2F2', height: '3.142rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>メーカー</span>
                <span className="px-3 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontSize: '1rem'}}>{vehicle.bodyMaker || "---"}</span>
@@ -698,8 +767,8 @@ export default function VehicleDetailPage() {
                <span className="font-medium px-3 flex items-center" style={{background: '#F2F2F2', height: '3.142rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>内寸（H）</span>
                <span className="px-3 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontSize: '1rem'}}>{vehicle.innerHeight ? `${formatNumberWithCommas(vehicle.innerHeight)}cm` : "---"}</span>
                {/* 4行目 */}
-               <span className="font-medium px-3 flex items-center" style={{background: '#F2F2F2', height: '6.2rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 1px 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>装備/仕様</span>
-               <span className="px-3 flex items-center col-span-3" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 1px 0', fontSize: '1rem', height: '6.2rem'}}>{vehicle.equipment || "---"}</span>
+               <span className="font-medium px-3 py-3 flex items-start" style={{background: '#F2F2F2', minHeight: '6.2rem', width: '100%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 1px 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>装備/仕様</span>
+               <span className="px-3 py-3 col-span-3" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 1px 0', fontSize: '1rem', minHeight: '6.2rem', wordWrap: 'break-word', overflowWrap: 'break-word', whiteSpace: 'normal'}}>{vehicle.equipment || "---"}</span>
              </div>
            </div>
          </div>
@@ -976,7 +1045,7 @@ export default function VehicleDetailPage() {
           </div>
           
           
-          {/* サンプルカード */}
+          {/* 関連車両カード */}
            <div 
              className="vehicle-detail-samples"
              style={{
@@ -985,10 +1054,10 @@ export default function VehicleDetailPage() {
                width: "100%"
              }}
            >
-             {/* 他の車両のサンプル表示 */}
-             {Array.from({ length: 3 }, (_, i) => (
+             {/* 関連車両の表示 */}
+             {relatedVehicles.map((relatedVehicle, i) => (
                <Card 
-                 key={i}
+                 key={relatedVehicle.id}
                  style={{
                    width: "32%",
                    gap: "0.86rem",
@@ -1028,7 +1097,7 @@ export default function VehicleDetailPage() {
                        textOverflow: "ellipsis",
                        whiteSpace: "nowrap"
                      }}>
-                       三菱 トラック
+                       {relatedVehicle.maker} {relatedVehicle.vehicleType || relatedVehicle.model}
                      </span>
                      <span style={{ 
                        height: "1.21rem",
@@ -1042,7 +1111,7 @@ export default function VehicleDetailPage() {
                        color: "#FFFFFF",
                        whiteSpace: "nowrap"
                      }}>
-                       FK4J23A
+                       {relatedVehicle.modelCode || relatedVehicle.model || "---"}
                      </span>
                    </div>
                    
@@ -1068,7 +1137,7 @@ export default function VehicleDetailPage() {
                        color: "#1A1A1A",
                        textAlign: "center"
                      }}>
-                       問合せ番号: N00000
+                       問合せ番号: {relatedVehicle.inquiryNumber || relatedVehicle.id}
                      </span>
                    </div>
 
@@ -1082,12 +1151,15 @@ export default function VehicleDetailPage() {
                      }}
                    >
                      <img
-                       src="/placeholder.jpg"
-                       alt="サンプル車両"
+                       src={(relatedVehicle.imageUrls && relatedVehicle.imageUrls[0]) || relatedVehicle.imageUrl || "/placeholder.jpg"}
+                       alt={`${relatedVehicle.maker} ${relatedVehicle.model}`}
                        style={{
                          width: "100%",
                          height: "100%",
                          objectFit: "cover"
+                       }}
+                       onError={(e) => {
+                         (e.target as HTMLImageElement).src = "/placeholder.jpg";
                        }}
                      />
                    </div>
@@ -1129,7 +1201,7 @@ export default function VehicleDetailPage() {
                            letterSpacing: "0%",
                            color: "#1A1A1A"
                          }}>
-                           トラック
+                           {relatedVehicle.bodyType || "トラック"}
                          </span>
                        </div>
                      </div>
@@ -1185,7 +1257,7 @@ export default function VehicleDetailPage() {
                              letterSpacing: "0%",
                              color: "#2B5EC5"
                            }}>
-                             150
+                             {Math.round((relatedVehicle.price || 0) / 10000)}
                            </span>
                            <span style={{
                              height: "1rem",
@@ -1252,7 +1324,12 @@ export default function VehicleDetailPage() {
                            letterSpacing: "0%",
                            color: "#1A1A1A"
                          }}>
-                           R6年9月
+                           {relatedVehicle.year && relatedVehicle.month 
+                             ? `${String(relatedVehicle.year).replace(/年$/, '')}年${String(relatedVehicle.month).replace(/月$/, '')}月` 
+                             : relatedVehicle.year 
+                               ? `${String(relatedVehicle.year).replace(/年$/, '')}年` 
+                               : "---"
+                           }
                          </span>
                        </div>
                      </div>
@@ -1307,7 +1384,7 @@ export default function VehicleDetailPage() {
                            letterSpacing: "0%",
                            color: "#1A1A1A"
                          }}>
-                           00,000km
+                           {formatNumberWithCommas(relatedVehicle.mileage)}km
                          </span>
                        </div>
                      </div>
@@ -1362,7 +1439,7 @@ export default function VehicleDetailPage() {
                            letterSpacing: "0%",
                            color: "#1A1A1A"
                          }}>
-                           4.0t
+                           {formatNumberWithCommas(relatedVehicle.loadingCapacity)}kg
                          </span>
                        </div>
                      </div>
@@ -1417,7 +1494,13 @@ export default function VehicleDetailPage() {
                            letterSpacing: "0%",
                            color: "#1A1A1A"
                          }}>
-                           抹消
+                           {relatedVehicle.inspectionDate ? (() => {
+                             const date = new Date(relatedVehicle.inspectionDate);
+                             if (isNaN(date.getTime())) {
+                               return relatedVehicle.inspectionDate;
+                             }
+                             return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+                           })() : relatedVehicle.inspectionStatus || "---"}
                          </span>
                        </div>
                      </div>
@@ -1431,7 +1514,8 @@ export default function VehicleDetailPage() {
                      justifyContent: "center",
                      background: "#FFFFFF"
                    }}>
-                     <Button 
+                     <Link href={`/vehicle/${relatedVehicle.id}`}>
+                       <Button 
                        style={{
                          height: "2.29rem",
                          gap: "0.57rem",
@@ -1493,7 +1577,8 @@ export default function VehicleDetailPage() {
                            strokeLinejoin="round"
                          />
                        </svg>
-                     </Button>
+                       </Button>
+                     </Link>
                    </div>
                  </CardContent>
                </Card>
