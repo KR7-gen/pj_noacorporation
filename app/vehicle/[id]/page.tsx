@@ -1889,15 +1889,15 @@ export default function VehicleDetailPage() {
             alignItems: "center",
             marginBottom: '2rem'
           }}>
-            <div style={{
+            <div className="body-type-cards-grid" style={{
               display: "grid",
               gridTemplateColumns: "repeat(6, 1fr)",
-              gap: "0.286rem", // 4px ÷ 14px = 0.286rem
+              gap: "0.386rem", // 4px ÷ 14px = 0.286rem
               width: "fit-content"
             }}>
             {[
               { id: 1, type: "クレーン", icon: "crane" },
-              { id: 2, type: "ダンプ・ローダーダンプ", icon: "dump" },
+              { id: 2, type: "ダンプ・\nローダーダンプ", icon: "dump" },
               { id: 3, type: "ミキサー車", icon: "mixer" },
               { id: 4, type: "アームロール", icon: "arm-roll" },
               { id: 5, type: "重機回送車", icon: "carrier" },
@@ -1914,7 +1914,7 @@ export default function VehicleDetailPage() {
                 href={`/inventory?type=${encodeURIComponent(icon.type)}`}
                 style={{
                   width: "12.571rem",
-                  height: "6.857rem",
+                  height: "7.857rem",
                   borderRadius: "0.286rem",
                   display: "flex",
                   flexDirection: "column",
@@ -1986,6 +1986,7 @@ export default function VehicleDetailPage() {
                     />
                   </div>
                   <span 
+                    className="body-type-card-text"
                     style={{
                       fontFamily: "'Noto Sans JP', sans-serif",
                       fontWeight: 700,
@@ -1995,7 +1996,7 @@ export default function VehicleDetailPage() {
                       letterSpacing: "0%",
                       textAlign: "center",
                       color: "#1A1A1A",
-                      whiteSpace: "nowrap",
+                      whiteSpace: "pre-line",
                       overflow: "hidden",
                       textOverflow: "ellipsis",
                       maxWidth: "11.429rem" // 160px ÷ 14px = 11.429rem
@@ -2017,13 +2018,14 @@ export default function VehicleDetailPage() {
             marginTop: '2rem',
             width: "100%"
           }}>
-            <Link href="/inventory" style={{width: "15.28vw"}}>
+            <Link href="/inventory" className="inventory-link" style={{width: "15.28vw"}}>
               <Button 
+                className="inventory-button"
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "center",
-                  gap: "1.429rem",
+                  justifyContent: "space-between",
+                  position: "relative",
                   width: "100%",
                   height: "2.857rem",
                   borderRadius: "0.286rem",
@@ -2038,7 +2040,8 @@ export default function VehicleDetailPage() {
                   letterSpacing: "0%",
                   cursor: "pointer",
                   transition: "all 0.3s ease",
-                  textDecoration: "none"
+                  textDecoration: "none",
+                  padding: "0 1rem"
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.opacity = "0.9";
@@ -2047,10 +2050,13 @@ export default function VehicleDetailPage() {
                   e.currentTarget.style.opacity = "1";
                 }}
               >
-                <span>在庫一覧へ</span>
+                <div style={{flex: 1, display: "flex", justifyContent: "center"}}>
+                  <span>在庫一覧へ</span>
+                </div>
                 <ChevronRight 
                   size={20} 
                   color="#FFFFFF"
+                  style={{position: "absolute", right: "1rem"}}
                 />
               </Button>
             </Link>
