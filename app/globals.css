@@ -70,6 +70,22 @@ body {
     .inventory-card .spec-value { font-size: 1rem !important; }
     .inventory-card .price-main { font-size: 2.29rem !important; }
     .inventory-card .price-unit { font-size: 0.86rem !important; }
+    
+  /* ホームページ白枠コンテンツの幅（PC版） */
+  .home-white-content {
+    width: min(100%, 67vw) !important;
+  }
+  
+  /* FAQセクションの幅（PC版） */
+  .faq-container {
+    width: 68% !important;
+    max-width: 68% !important;
+  }
+  
+  /* Shop Infoセクションの幅（PC版） */
+  .shop-info-container-width {
+    width: 55% !important;
+  }
   }
   
   /* スマホ版での車両グリッド2x2レイアウト */
@@ -284,6 +300,22 @@ body {
       font-size: 1rem !important;
       padding: 0 1rem !important;
     }
+    
+  /* ホームページ白枠コンテンツの幅（スマホ版） */
+  .home-white-content {
+    width: min(100%, 90vw) !important;
+  }
+  
+  /* FAQセクションの幅（スマホ版） */
+  .faq-container {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  /* Shop Infoセクションの幅（スマホ版） */
+  .shop-info-container-width {
+    width: 100% !important;
+  }
     
     /* スマホ版でのヘッダーバー2行表示 */
     .vehicle-card-header {

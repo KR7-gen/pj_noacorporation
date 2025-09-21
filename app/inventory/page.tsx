@@ -494,7 +494,6 @@ export default function InventoryPage() {
               gridTemplateColumns: "repeat(6, 1fr)",
               gap: "0.57rem",
               width: "77.08%",
-              maxWidth: "78.57rem",
               margin: "0 auto"
             }}
           >
@@ -613,7 +612,6 @@ export default function InventoryPage() {
           <div 
             style={{
               width: "77.08%",
-              maxWidth: "78.57rem",
               margin: "0 auto",
               height: "3.93rem",
               display: "flex",
@@ -1153,8 +1151,7 @@ export default function InventoryPage() {
 
        {/* 車両一覧 */}
         <div style={{ 
-          width: "76.38%", 
-          maxWidth: "78.57rem", 
+          width: "77.08%", 
           margin: "0 auto", 
           display: "flex", 
           flexDirection: "column", 

@@ -346,7 +346,6 @@ export default function HomePage() {
           <div 
             style={{
               width: "77.08%",
-              maxWidth: "1100px",
               margin: "0 auto",
               textAlign: "left"
             }}
@@ -473,7 +472,6 @@ export default function HomePage() {
               gridTemplateColumns: "repeat(6, 1fr)",
               gap: "0.57rem",
               width: "77.08%",
-              maxWidth: "78.57rem",
               margin: "0 auto"
             }}
           >
@@ -590,7 +588,6 @@ export default function HomePage() {
           <div 
             style={{
               width: "77.08%",
-              maxWidth: "1100px",
               margin: "0 auto",
               height: "3.93rem",
               display: "flex",
@@ -2758,7 +2755,6 @@ export default function HomePage() {
           <div 
             style={{
               width: "66.67vw",
-              maxWidth: "960px",
               margin: "2.857rem auto 1.14rem auto",
               display: "flex",
               justifyContent: "center"
@@ -2809,9 +2805,9 @@ export default function HomePage() {
           
           {/* 白枠コンテンツ */}
           <div
+            className="home-white-content"
             style={{
               width: "min(100%, 90vw)",
-              maxWidth: "960px",
               backgroundColor: "white",
               padding: "2.857rem 0.86rem",
               margin: "2.857rem auto",
@@ -3182,12 +3178,11 @@ export default function HomePage() {
           </div>
 
           <div 
+            className="faq-container"
             style={{
               display: "flex",
               flexDirection: "column",
               gap: "0.143rem",
-              width: "100%",
-              maxWidth: "57.143rem"
             }}
           >
             {faqs.map((faq, index) => (
@@ -3308,9 +3303,8 @@ export default function HomePage() {
 
       {/* Shop Info Section */}
       <section 
+        className="shop-info-container-width"
         style={{
-          width: "100%",
-          maxWidth: "820px",
           gap: "2.857rem",
           opacity: 1,
           paddingTop: "4.286rem",
