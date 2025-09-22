@@ -602,7 +602,7 @@ export default function HomePage() {
             {/* 左側の検索フィールド群 */}
             <div 
               style={{
-                width: "50.27%",
+                width: "57%",
                 display: "flex",
                 alignItems: "center"
               }}
@@ -610,7 +610,7 @@ export default function HomePage() {
               {/* 車両検索（ボディタイプ） */}
               <div 
                 style={{
-                  width: "38%",
+                  width: "40%",
                   margin: "0.29rem",
                   height: "2.14rem",
                   display: "flex",
@@ -770,7 +770,7 @@ export default function HomePage() {
             {/* 右側のフリーワードと検索ボタン */}
             <div 
               style={{
-                width: "45%",
+                width: "38.5%",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between"
@@ -814,7 +814,7 @@ export default function HomePage() {
                 >
                   <input
                     type="text"
-                    placeholder="問い合わせ番号、車体番号など"
+                    placeholder="問い合わせ番号など"
                     value={searchKeyword}
                     onChange={(e) => setSearchKeyword(e.target.value)}
                     style={{

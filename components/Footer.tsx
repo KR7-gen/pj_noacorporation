@@ -30,7 +30,7 @@ const footerLinks = {
 export function Footer() {
   return (
     <footer className="bg-gray-900 text-white">
-      <div className="px-4 py-12" style={{ width: '83%', maxWidth: '1200px', margin: '0 auto' }}>
+      <div className="px-4 py-12" style={{ width: '83%', margin: '0 auto' }}>
         {/* Company Info */}
         <div className="mb-8">
           <div className="flex items-center gap-4">
