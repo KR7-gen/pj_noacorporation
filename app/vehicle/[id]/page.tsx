@@ -428,7 +428,7 @@ export default function VehicleDetailPage() {
                <div style={{
                  display: 'grid',
                  gridTemplateColumns: '30% 70%',
-                 gridTemplateRows: '4rem 4rem',
+                 gridTemplateRows: '4rem',
                  border: '1px solid #CCCCCC',
                  borderRadius: '0.286rem'
                }}>
@@ -456,7 +456,6 @@ export default function VehicleDetailPage() {
                     justifyContent: 'flex-start',
                     alignItems: 'center',
                     height: '4rem',
-                    borderBottom: '1px solid #CCCCCC',
                     background: '#FFFFFF',
                     paddingLeft: '0.75rem'
                   }}>
@@ -481,15 +480,9 @@ export default function VehicleDetailPage() {
                   </span>
                 </div>
                 
-                {/* 左下：税込み価格（ラベル） */}
+                {/* 左下：税込み価格（ラベル） - 非表示 */}
                 <div style={{
-                  display: 'flex',
-                  justifyContent: 'flex-start',
-                  alignItems: 'center',
-                  height: '4rem',
-                  borderRight: '1px solid #CCCCCC',
-                  background: '#F2F2F2',
-                  paddingLeft: '0.75rem'
+                  display: 'none'
                 }}>
                   <span style={{
                     fontSize: '1rem',
@@ -498,14 +491,9 @@ export default function VehicleDetailPage() {
                   }}>税込価格</span>
                 </div>
                 
-                {/* 右下：支払い総額（金額） */}
+                {/* 右下：支払い総額（金額） - 非表示 */}
                 <div style={{
-                  display: 'flex',
-                  justifyContent: 'flex-start',
-                  alignItems: 'center',
-                  height: '3.71rem',
-                  background: '#FFFFFF',
-                  paddingLeft: '1rem'
+                  display: 'none'
                 }}>
                   <span style={{
                     color: '#1A1A1A'
@@ -535,11 +523,11 @@ export default function VehicleDetailPage() {
 
               {/* 3-3. 価格シュミレーション */}
               {shouldShowSimulation && (
-                <div style={{ marginTop: '1.429rem' }}>
+                <div style={{ marginTop: '1.5rem' }}>
                   {/* タイトル */}
                   <div style={{
                     textAlign: 'left',
-                    marginBottom: '1rem'
+                    marginBottom: '0'
                   }}>
                     <span style={{
                       fontFamily: 'Noto Sans JP',
@@ -637,6 +625,23 @@ export default function VehicleDetailPage() {
                        </span>
                      </div>
                    </div>
+
+                  {/* 補足テキスト */}
+                  <div style={{
+                    textAlign: 'left',
+                    marginTop: '0rem'
+                  }}>
+                    <span style={{
+                      fontFamily: 'Noto Sans JP',
+                      fontWeight: '400',
+                      fontStyle: 'normal',
+                      fontSize: '0.857rem',
+                      lineHeight: '100%',
+                      letterSpacing: '0%',
+                      color: '#666666',
+                      whiteSpace: 'nowrap'
+                    }}>※参考値 84回支払い時</span>
+                  </div>
                 </div>
               )}
             </div>
