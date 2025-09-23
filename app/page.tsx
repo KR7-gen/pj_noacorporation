@@ -121,7 +121,7 @@ const flowSteps = [
     number: "04",
     title: "ご契約・ご納車",
     description:
-      "お見積もり内容に納得いただけましたら、FAX/郵送での契約書ご署名、ご入金を経て、お引き渡しとなります。当社では、お客様とのお取引履歴をすべて社内システムで管理しております。下取りや新たなトラックの購入が必要になった際も、まずはご相談いただければ、スムーズにお話ができるかと思います。",
+      "最終お見積りをご確認いただきましたら、契約書ご用意いたします。契約書へのご署名、ご入金を経て、車両をお引渡しさせていただきます。また、新たな車両の入れ替えとなる下取りの対応も可能です。",
   },
 ]
 
@@ -1350,21 +1350,6 @@ export default function HomePage() {
             <div 
               style={{
                 fontFamily: "Noto Sans JP",
-                fontWeight: "400",
-                fontStyle: "Regular",
-                fontSize: "1rem",
-                lineHeight: "100%",
-                letterSpacing: "0%",
-                textAlign: "left",
-                color: "#2B5EC5",
-                marginBottom: "0.143rem",
-              }}
-            >
-              NEW TRUCK
-            </div>
-            <div 
-              style={{
-                fontFamily: "Noto Sans JP",
                 fontWeight: "700",
                 fontStyle: "Bold",
                 fontSize: "clamp(1.25rem, 6vw, 2.5rem)",
@@ -2160,21 +2145,6 @@ export default function HomePage() {
               <div 
                 style={{
                   fontFamily: "Noto Sans JP",
-                  fontWeight: "400",
-                  fontStyle: "Regular",
-                  fontSize: "1rem",
-                  lineHeight: "100%",
-                  letterSpacing: "0%",
-                  textAlign: "left",
-                  color: "#2B5EC5",
-                  marginBottom: "0.143rem",
-                }}
-              >
-                FEATURE
-              </div>
-              <div 
-                style={{
-                  fontFamily: "Noto Sans JP",
                   fontWeight: "700",
                   fontStyle: "Bold",
                   fontSize: "clamp(1.25rem, 6vw, 2.5rem)",
@@ -2243,8 +2213,9 @@ export default function HomePage() {
                           color: "#2B5EC5",
                           display: "flex",
                           alignItems: "center",
-                          justifyContent: "center"
-                        }}>reason</div>
+                          justifyContent: "center",
+                          whiteSpace: "nowrap"
+                        }}>ポイント</div>
                         <div className="reason-number" style={{
                           width: "auto",
                           height: "auto",
@@ -2330,10 +2301,11 @@ export default function HomePage() {
                             color: "#2B5EC5",
                             display: "flex",
                             alignItems: "center",
-                            justifyContent: "center"
+                            justifyContent: "center",
+                            whiteSpace: "nowrap"
                           }}
                         >
-                          reason
+                          ポイント
                         </div>
                         <div 
                           style={{
@@ -2398,10 +2370,11 @@ export default function HomePage() {
                             color: "#2B5EC5",
                             display: "flex",
                             alignItems: "center",
-                            justifyContent: "center"
+                            justifyContent: "center",
+                            whiteSpace: "nowrap"
                           }}
                         >
-                          reason
+                          ポイント
                         </div>
                         <div 
                           style={{
@@ -2488,8 +2461,9 @@ export default function HomePage() {
                           color: "#2B5EC5",
                           display: "flex",
                           alignItems: "center",
-                          justifyContent: "center"
-                        }}>reason</div>
+                          justifyContent: "center",
+                          whiteSpace: "nowrap"
+                        }}>ポイント</div>
                         <div className="reason-number" style={{
                           width: "auto",
                           height: "auto",
@@ -2535,8 +2509,9 @@ export default function HomePage() {
                           color: "#2B5EC5",
                           display: "flex",
                           alignItems: "center",
-                          justifyContent: "center"
-                        }}>reason</div>
+                          justifyContent: "center",
+                          whiteSpace: "nowrap"
+                        }}>ポイント</div>
                         <div className="reason-number" style={{
                           width: "auto",
                           height: "auto",
@@ -2622,10 +2597,11 @@ export default function HomePage() {
                             color: "#2B5EC5",
                             display: "flex",
                             alignItems: "center",
-                            justifyContent: "center"
+                            justifyContent: "center",
+                            whiteSpace: "nowrap"
                           }}
                         >
-                          reason
+                          ポイント
                         </div>
                         <div 
                           style={{
@@ -2770,21 +2746,6 @@ export default function HomePage() {
               <div 
                 style={{
                   fontFamily: "Noto Sans JP",
-                  fontWeight: "400",
-                  fontStyle: "Regular",
-                  fontSize: "1rem",
-                  lineHeight: "100%",
-                  letterSpacing: "0%",
-                  textAlign: "left",
-                  color: "#2B5EC5",
-                  marginBottom: "0.143rem",
-                }}
-              >
-                FLOW
-              </div>
-              <div 
-                style={{
-                  fontFamily: "Noto Sans JP",
                   fontWeight: "700",
                   fontStyle: "Bold",
                   fontSize: "clamp(1.25rem, 6vw, 2.5rem)",
@@ -2832,7 +2793,7 @@ export default function HomePage() {
                 margin: 0
               }}
             >
-              初回お問い合わせからご納車まで、わかりやすくスムーズなお取引を心がけております。<br/>中古トラックの購入がはじめての方も、どうぞお気軽にお問い合わせください。
+              初めての中古トラック購入の方も、下記をご参考にお気軽にお問い合わせください。
             </p>
             {flowSteps.map((step, index) => (
               <div key={index}>
@@ -2869,25 +2830,6 @@ export default function HomePage() {
                         marginRight: "clamp(0.5rem, 2vw, 1.71rem)"
                       }}
                     >
-                    <div 
-                      style={{
-                        width: "2.86rem",
-                        height: "1.43rem",
-                        opacity: 1,
-                        fontFamily: "Noto Sans JP",
-                        fontWeight: "700",
-                        fontStyle: "Bold",
-                        fontSize: "1rem",
-                        lineHeight: "100%",
-                        letterSpacing: "0%",
-                        color: "#2B5EC5",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center"
-                      }}
-                    >
-                      FLOW
-                    </div>
                     <div 
                       style={{
                         width: "3.07rem",
@@ -2981,25 +2923,6 @@ export default function HomePage() {
                         minHeight: "100%"
                       }}
                     >
-                    <div 
-                      style={{
-                        width: "2.86rem",
-                        height: "1.43rem",
-                        opacity: 1,
-                        fontFamily: "Noto Sans JP",
-                        fontWeight: "700",
-                        fontStyle: "Bold",
-                        fontSize: "1rem",
-                        lineHeight: "100%",
-                        letterSpacing: "0%",
-                        color: "#2B5EC5",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center"
-                      }}
-                    >
-                      FLOW
-                    </div>
                     <div 
                       style={{
                         width: "3.07rem",
@@ -3141,21 +3064,6 @@ export default function HomePage() {
                 alignItems: "flex-start",
               }}
             >
-              <div
-                style={{
-                  fontFamily: "Noto Sans JP",
-                  fontWeight: "400",
-                  fontStyle: "Regular",
-                  fontSize: "1rem",
-                  lineHeight: "100%",
-                  letterSpacing: "0%",
-                  textAlign: "left",
-                  color: "#2B5EC5",
-                  marginBottom: "0.143rem",
-                }}
-              >
-                QUESTION
-              </div>
               <div 
                 style={{
                   fontFamily: "Noto Sans JP",
@@ -3334,21 +3242,6 @@ export default function HomePage() {
                 alignItems: "flex-start",
               }}
             >
-              <div 
-                style={{
-                  fontFamily: "Noto Sans JP",
-                  fontWeight: "400",
-                  fontStyle: "Regular",
-                  fontSize: "1rem",
-                  lineHeight: "100%",
-                  letterSpacing: "0%",
-                  textAlign: "left",
-                  color: "#2B5EC5",
-                  marginBottom: "0.143rem",
-                }}
-              >
-                SHOP INFO
-              </div>
               <div 
                 style={{
                   fontFamily: "Noto Sans JP",
@@ -3693,7 +3586,7 @@ export default function HomePage() {
                           color: "#1A1A1A",
                           textAlign: "left",
                           whiteSpace: "nowrap"
-                        }}>年中無休</span>
+                        }}>なし</span>
                       </div>
                     </div>
                     {/* アクセス方法へボタン */}
@@ -3941,21 +3834,6 @@ export default function HomePage() {
                   alignItems: "flex-start",
                 }}
               >
-                <div 
-                  style={{
-                    fontFamily: "Noto Sans JP",
-                    fontWeight: "400",
-                    fontStyle: "Regular",
-                    fontSize: "1rem",
-                    lineHeight: "100%",
-                    letterSpacing: "0%",
-                    textAlign: "left",
-                    color: "#FFFFFF",
-                    marginBottom: "0.143rem",
-                  }}
-                >
-                  CONTACT
-                </div>
                 {/* ②お問い合わせ */}
                 <div 
                   style={{

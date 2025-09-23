@@ -1726,11 +1726,12 @@ export default function InventoryPage() {
 
                   {/* 詳細ボタン */}
                   <div style={{ 
-                    height: "4.29rem", 
+                    height: "2.5rem", 
                     display: "flex", 
                     alignItems: "center", 
                     justifyContent: "center",
-                    background: "#FFFFFF"
+                    background: "#FFFFFF",
+                    position: "relative"
                   }}>
                     <Link href={`/vehicle/${vehicle.id}`}>
                       <Button 
@@ -1750,7 +1751,10 @@ export default function InventoryPage() {
                           transition: "all 0.3s ease",
                           display: "flex",
                           alignItems: "center",
-                          justifyContent: "center"
+                          justifyContent: "center",
+                          position: "relative",
+                          top: "0.5rem",
+                          left: "0rem"
                         }}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.opacity = "0.9";
@@ -2007,21 +2011,6 @@ export default function InventoryPage() {
                   alignItems: "flex-start",
                 }}
               >
-                <div 
-                  style={{
-                    fontFamily: "Noto Sans JP",
-                    fontWeight: "400",
-                    fontStyle: "Regular",
-                    fontSize: "1rem",
-                    lineHeight: "100%",
-                    letterSpacing: "0%",
-                    textAlign: "left",
-                    color: "#FFFFFF",
-                    marginBottom: "0.5rem",
-                  }}
-                >
-                  CONTACT
-                </div>
                 {/* ②お問い合わせ */}
                 <div 
                   className="contact-title"

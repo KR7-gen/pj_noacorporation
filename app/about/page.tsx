@@ -153,24 +153,6 @@ export default function AboutPage() {
               <div 
                 style={{
                   fontFamily: "Noto Sans JP",
-                  fontWeight: "400",
-                  fontStyle: "Regular",
-                  fontSize: "1rem",
-                  lineHeight: "100%",
-                  letterSpacing: "0%",
-                  textAlign: "left",
-                  color: "#2B5EC5",
-                  borderRadius: "0.14rem",
-                  whiteSpace: "nowrap",
-                  paddingLeft: "0",
-                  marginBottom: "2px",
-                }}
-              >
-                INFORMATION
-              </div>
-              <div 
-                style={{
-                  fontFamily: "Noto Sans JP",
                   fontWeight: "700",
                   fontStyle: "Bold",
                   fontSize: "2.86rem",
@@ -491,24 +473,6 @@ export default function AboutPage() {
                   alignItems: "flex-start",
                 }}
               >
-                <div 
-                  style={{
-                    fontFamily: "Noto Sans JP",
-                    fontWeight: "400",
-                    fontStyle: "Regular",
-                    fontSize: "1rem",
-                    lineHeight: "100%",
-                    letterSpacing: "0%",
-                    textAlign: "left",
-                    color: "#2B5EC5",
-                    borderRadius: "0.14rem",
-                    whiteSpace: "nowrap",
-                    paddingLeft: "0",
-                    marginBottom: "2px",
-                  }}
-                >
-                  FEATURE
-                </div>
                 <div 
                   style={{
                     fontFamily: "Noto Sans JP",
@@ -1323,24 +1287,6 @@ export default function AboutPage() {
                <div 
                  style={{
                    fontFamily: "Noto Sans JP",
-                   fontWeight: "400",
-                   fontStyle: "Regular",
-                   fontSize: "1rem",
-                   lineHeight: "100%",
-                   letterSpacing: "0%",
-                   textAlign: "left",
-                   color: "#2B5EC5",
-                   borderRadius: "0.14rem",
-                   whiteSpace: "nowrap",
-                   paddingLeft: "0",
-                   marginBottom: "2px",
-                 }}
-               >
-                 MEMBER
-               </div>
-               <div 
-                 style={{
-                   fontFamily: "Noto Sans JP",
                    fontWeight: "700",
                    fontStyle: "Bold",
                    fontSize: "2.86rem",
@@ -1643,24 +1589,6 @@ export default function AboutPage() {
                <div 
                  style={{
                    fontFamily: "Noto Sans JP",
-                   fontWeight: "400",
-                   fontStyle: "Regular",
-                   fontSize: "1rem",
-                   lineHeight: "100%",
-                   letterSpacing: "0%",
-                   textAlign: "left",
-                   color: "#2B5EC5",
-                   borderRadius: "0.14rem",
-                   whiteSpace: "nowrap",
-                   paddingLeft: "0",
-                   marginBottom: "2px",
-                 }}
-               >
-                 ACCESS
-               </div>
-               <div 
-                 style={{
-                   fontFamily: "Noto Sans JP",
                    fontWeight: "700",
                    fontStyle: "Bold",
                    fontSize: "2.86rem",
@@ -1763,21 +1691,6 @@ export default function AboutPage() {
                alignItems: "flex-start",
              }}
            >
-             <div 
-               style={{
-                 fontFamily: "Noto Sans JP",
-                 fontWeight: "400",
-                 fontStyle: "Regular",
-                 fontSize: "1rem",
-                 lineHeight: "100%",
-                 letterSpacing: "0%",
-                 textAlign: "left",
-                 color: "#FFFFFF",
-                 marginBottom: "0.5rem",
-               }}
-             >
-               CONTACT
-             </div>
              {/* ②お問い合わせ */}
              <div 
                className="contact-title"

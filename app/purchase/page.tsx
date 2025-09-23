@@ -346,24 +346,6 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
             <div 
               style={{
                 fontFamily: "Noto Sans JP",
-                fontWeight: "400",
-                fontStyle: "Regular",
-                fontSize: "1rem",
-                lineHeight: "100%",
-                letterSpacing: "0%",
-                textAlign: "left",
-                color: "#2B5EC5",
-                borderRadius: "0.14rem",
-                whiteSpace: "nowrap",
-                paddingLeft: "0",
-                marginBottom: "2px",
-              }}
-            >
-              ACHIEVEMENT
-            </div>
-            <div 
-              style={{
-                fontFamily: "Noto Sans JP",
                 fontWeight: "700",
                 fontStyle: "Bold",
                 fontSize: "2.86rem",
@@ -650,24 +632,6 @@ const AssessmentRequestSection = () => (
              <div 
                style={{
                  fontFamily: "Noto Sans JP",
-                 fontWeight: "400",
-                 fontStyle: "Regular",
-                 fontSize: "1rem",
-                 lineHeight: "100%",
-                 letterSpacing: "0%",
-                 textAlign: "left",
-                 color: "#2B5EC5",
-                 borderRadius: "0.14rem",
-                 whiteSpace: "nowrap",
-                 paddingLeft: "0",
-                 marginBottom: "2px",
-               }}
-             >
-               CONTACT
-             </div>
-             <div 
-               style={{
-                 fontFamily: "Noto Sans JP",
                  fontWeight: "700",
                  fontStyle: "Bold",
                  fontSize: "2.86rem",
@@ -735,24 +699,6 @@ const AssessmentRequestSection = () => (
               alignItems: "flex-start",
             }}
           >
-            <div 
-              style={{
-                fontFamily: "Noto Sans JP",
-                fontWeight: "400",
-                fontStyle: "Regular",
-                fontSize: "1rem",
-                lineHeight: "100%",
-                letterSpacing: "0%",
-                textAlign: "left",
-                color: "#2B5EC5",
-                borderRadius: "0.14rem",
-                whiteSpace: "nowrap",
-                paddingLeft: "0",
-                marginBottom: "2px",
-              }}
-            >
-              REASON
-            </div>
             <div 
               style={{
                 fontFamily: "Noto Sans JP",
@@ -900,21 +846,6 @@ const FAQSection = () => (
             alignItems: "flex-start",
           }}
         >
-          <div
-            style={{
-              fontFamily: "Noto Sans JP",
-              fontWeight: "400",
-              fontStyle: "Regular",
-              fontSize: "1rem",
-              lineHeight: "100%",
-              letterSpacing: "0%",
-              textAlign: "left",
-              color: "#2B5EC5",
-              marginBottom: "0.143rem",
-            }}
-          >
-            QUESTION
-          </div>
           <div 
             style={{
               fontFamily: "Noto Sans JP",
@@ -1075,24 +1006,6 @@ const DocumentSection = () => (
           <div 
             style={{
               fontFamily: "Noto Sans JP",
-              fontWeight: "400",
-              fontStyle: "Regular",
-              fontSize: "1rem",
-              lineHeight: "100%",
-              letterSpacing: "0%",
-              textAlign: "left",
-              color: "#2B5EC5",
-              borderRadius: "0.14rem",
-              whiteSpace: "nowrap",
-              paddingLeft: "0",
-              marginBottom: "2px",
-            }}
-          >
-            DOCUMENT
-          </div>
-          <div 
-            style={{
-              fontFamily: "Noto Sans JP",
               fontWeight: "700",
               fontStyle: "Bold",
               fontSize: "2.86rem",
@@ -1238,21 +1151,6 @@ const ContactSection = () => (
               alignItems: "flex-start",
             }}
           >
-            <div 
-              style={{
-                fontFamily: "Noto Sans JP",
-                fontWeight: "400",
-                fontStyle: "Regular",
-                fontSize: "1rem",
-                lineHeight: "100%",
-                letterSpacing: "0%",
-                textAlign: "left",
-                color: "#FFFFFF",
-                marginBottom: "0.5rem",
-              }}
-            >
-              CONTACT
-            </div>
             {/* ②お問い合わせ */}
             <div 
               className="contact-title"
