@@ -119,10 +119,10 @@ const faqs = [
 
 // 1. キャッチコピーセクション
 const HeroSection = () => (
-  <section className="relative w-full h-[51.357rem]">
+  <section className="relative w-full h-[31rem] md:h-[51.357rem]">
     {/* 背景要素 */}
     <div className="absolute inset-0 flex">
-      {/* 1. 長方形 - 右から1番目 */}
+      {/* 1. 長方形 - 左から1番目 */}
       <div 
         className="w-1/4 h-full"
         style={{
@@ -130,7 +130,7 @@ const HeroSection = () => (
         }}
       />
       
-      {/* 2. 長方形 - 右から2番目 */}
+      {/* 2. 長方形 - 左から2番目 */}
       <div 
         className="w-[7%] h-full"
         style={{
@@ -138,7 +138,7 @@ const HeroSection = () => (
         }}
       />
       
-      {/* 3. 背景画像 - 右から3番目（68%） */}
+      {/* 3. 背景画像 - 左から3番目（68%） */}
       <div className="w-[68%] h-full relative">
         {/* 背景画像 */}
         <div 
@@ -157,8 +157,86 @@ const HeroSection = () => (
       </div>
     </div>
     
-    {/* コンテンツレイヤー */}
-    <div className="relative z-10 h-full flex">
+  {/* モバイル専用：縦並び（見出し → キャッチコピー → 買取の強み → 問い合わせ） */}
+  <div className="relative z-10 block md:hidden w-full px-4 pt-6 pb-4">
+    {/* 1. 見出し */}
+    <h1 
+      className="font-bold text-white w-full mb-4"
+      style={{
+        fontFamily: 'Noto Sans JP',
+        fontWeight: 700,
+        fontStyle: 'Bold',
+        fontSize: '1.75rem',
+        lineHeight: '120%'
+      }}
+    >
+      気軽に無料で買取依頼
+    </h1>
+
+    {/* 2. キャッチコピー */}
+    <div className="w-full bg-white/90 backdrop-blur-sm rounded mb-4 p-4 flex items-center justify-center">
+      <h2 
+        className="font-bold text-black text-center w-full"
+        style={{
+          fontFamily: 'Noto Sans JP',
+          fontWeight: 700,
+          fontStyle: 'Bold',
+          fontSize: '2rem',
+          lineHeight: '120%'
+        }}
+      >
+        LINEで即日査定!!
+      </h2>
+    </div>
+
+    {/* 3. 買取における強み（スマホのみテキストサイズに追従・縦並び） */}
+    <div className="w-full mb-4 flex flex-col items-start gap-3">
+      <div className="bg-blue-600 text-white rounded" style={{display:'inline-flex',alignItems:'center',padding:'0.6em 1em',width:'fit-content',borderRadius:'0.5em'}}>
+        <span className="font-bold" style={{fontFamily:'Noto Sans JP'}}>高価買取に挑戦。</span>
+      </div>
+      <div className="bg-blue-600 text-white rounded" style={{display:'inline-flex',alignItems:'center',padding:'0.6em 1em',width:'fit-content',borderRadius:'0.5em'}}>
+        <span className="font-bold" style={{fontFamily:'Noto Sans JP'}}>LINEでのスピード査定</span>
+      </div>
+      <div className="bg-blue-600 text-white rounded" style={{display:'inline-flex',alignItems:'center',padding:'0.6em 1em',width:'fit-content',borderRadius:'0.5em'}}>
+        <span className="font-bold" style={{fontFamily:'Noto Sans JP'}}>車両引上げ / 書類手続きはすべて代行</span>
+      </div>
+    </div>
+
+    {/* 4. 右側エリア（問い合わせフォーム） */}
+    <div className="w-full">
+      <div className="text-center w-full">
+        <div className="bg-white/90 backdrop-blur-sm inline-block w-full p-4">
+          <p 
+            className="text-black font-medium mb-4 w-full text-center"
+            style={{fontFamily:'Noto Sans JP'}}
+          >
+            \ LINEで簡単に査定額が分かります！ /
+          </p>
+          <Link href="/contact">
+            <Button 
+              className="text-white border-0 w-full"
+              style={{
+                fontFamily: 'Noto Sans JP',
+                fontWeight: 700,
+                fontStyle: 'Bold',
+                fontSize: '1.143rem',
+                lineHeight: '100%',
+                height: '3rem',
+                background: 'linear-gradient(180deg, #1154AF 0%, #053B65 100%)',
+                boxShadow: '0.143rem 0.143rem 0.143rem 0 #00000040',
+                backgroundColor: 'transparent'
+              }}
+            >
+              まずはお友達登録  &gt;
+            </Button>
+          </Link>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {/* コンテンツレイヤー（デスクトップ） */}
+  <div className="relative z-10 h-full hidden md:flex">
       {/* 左側エリア（見出しと強み） */}
       <div className="w-1/4 h-full flex flex-col justify-between text-white">
         {/* 1. 見出し */}
@@ -282,7 +360,7 @@ const HeroSection = () => (
       </div>
       
       {/* 右側エリア（問い合わせフォーム） */}
-              <div className="absolute" style={{ right: '14.64rem', bottom: '8.786rem' }}>
+              <div className="absolute hidden md:block" style={{ right: '14.64rem', bottom: '8.786rem' }}>
           <div className="text-center">
             <div className="bg-white/90 backdrop-blur-sm inline-block" style={{ padding: '1.429rem', height: '9.857rem' }}>
             <p 
@@ -344,11 +422,11 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
             }}
           >
             <div 
+              className="text-[2rem] md:text-[2.86rem]"
               style={{
                 fontFamily: "Noto Sans JP",
                 fontWeight: "700",
                 fontStyle: "Bold",
-                fontSize: "2.86rem",
                 lineHeight: "100%",
                 letterSpacing: "0%",
                 textAlign: "left",
@@ -362,11 +440,11 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
           </div>
         </div>
 
-          <div className="flex justify-center gap-1 mb-8" style={{ gap: '1.42rem' }}>
+          <div className="flex flex-col md:flex-row justify-center gap-1 mb-8 md:gap-[1.42rem] gap-12">
            {loading ? (
              // ローディング中はデフォルトの表示
              defaultAchievements.map((item, index) => (
-               <div key={index} className="text-center relative overflow-hidden" style={{ width: '20.8%', height: '27.643rem' }}>
+               <div key={index} className="text-center relative overflow-hidden w-full md:w-[20.8%]" style={{ height: '27.643rem' }}>
                  <div className="p-0 h-full">
                   {/* 1. 車両画像 */}
                   <div className="w-full bg-gray-200 flex items-center justify-center" style={{ height: '14.286rem' }}>
@@ -456,7 +534,7 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
               const vehicleName = `${vehicle.maker || ""} ${vehicle.vehicleType || ""}`.trim()
               
               return (
-                <div key={vehicle.id} className="text-center relative overflow-hidden" style={{ width: '20.8%', height: '27.643rem' }}>
+                <div key={vehicle.id} className="text-center relative overflow-hidden w-full md:w-[20.8%]" style={{ height: '27.643rem' }}>
                   <div className="p-0 h-full">
                     {/* 1. 車両画像 */}
                     <div className="w-full flex items-center justify-center overflow-hidden" style={{ height: '14.286rem' }}>
@@ -501,7 +579,7 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
                       </p>
                     </div>
                     
-                                               {/* 3. 買取価格 */}
+                      {/* 3. 買取価格 */}
                         <div className="absolute bottom-0 w-full" style={{ height: '3.929rem', background: '#E6E6E6' }}>
                           <div className="h-full flex items-center" style={{ padding: '0 0.857rem' }}>
                             <span className="text-2xl font-bold">
@@ -536,7 +614,7 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
           ) : (
             // データがない場合はデフォルト表示
             defaultAchievements.map((item, index) => (
-              <div key={index} className="text-center relative overflow-hidden" style={{ width: '20.8%', height: '27.643rem' }}>
+              <div key={index} className="text-center relative overflow-hidden w-full md:w-[20.8%]" style={{ height: '27.643rem' }}>
                 <div className="p-0 h-full">
                   {/* 1. 車両画像 */}
                   <div className="w-full bg-gray-200 flex items-center justify-center" style={{ height: '14.286rem' }}>
@@ -601,7 +679,7 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
         </div>
 
         <div className="text-center">
-          <p className="text-lg text-gray-700 mb-4 font-bold">
+          <p className="text-lg mb-4 font-bold">
             当社買取実績の一部です。年式が古い・状態が悪い車両でも買取価格に自信があります。
           </p>
           <p className="text-lg font-bold">お気軽に是非一度ご相談ください。</p>
@@ -614,14 +692,14 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
 // 3. 査定依頼セクション
 const AssessmentRequestSection = () => (
   <section 
-    className="h-[26.857rem] text-white"
+    className="md:h-[24rem] text-white"
     style={{ background: '#CCCCCC' }}
   >
-    <div className="container mx-auto px-4">
+    <div className="container mx-auto px-6 md:px-4">
         {/* 見出しと小見出しの横並び配置 */}
-       <div className="flex justify-center items-start" style={{ paddingTop: '7.143rem', gap: '9.35rem' }}>
+       <div className="flex flex-col md:flex-row justify-center items-start md:gap-[9.35rem] gap-6 pt-8 md:pt-[7.143rem]">
          {/* 見出し（左） */}
-         <div>
+         <div className="w-full md:w-auto text-left md:text-center">
            <div 
              style={{
                display: "flex",
@@ -630,11 +708,11 @@ const AssessmentRequestSection = () => (
              }}
            >
              <div 
+               className="text-[2rem] md:text-[2.86rem]"
                style={{
                  fontFamily: "Noto Sans JP",
                  fontWeight: "700",
                  fontStyle: "Bold",
-                 fontSize: "2.86rem",
                  lineHeight: "100%",
                  letterSpacing: "0%",
                  textAlign: "left",
@@ -649,29 +727,39 @@ const AssessmentRequestSection = () => (
          </div>
 
          {/* 小見出しと問い合わせ（右） */}
-         <div className="text-center">
-           <p className="text-[1.143rem] font-bold mb-[1.714rem] text-black">車両の査定 / 売却を検討されている方は、まずはLINEでお問い合わせください。</p>
+         <div className="text-left md:text-center w-full md:w-auto">
+           <p className="text-[1.143rem] font-bold mb-[1.714rem] text-black md:block hidden">車両の査定 / 売却を検討されている方は、まずはLINEでお問い合わせください。</p>
+           <p className="text-[1.143rem] font-bold mb-[1.714rem] text-black block md:hidden">車両の査定 / 売却を検討されている方は、<br />まずはLINEでお問い合わせください。</p>
            
-           <p className="text-[1.143rem] font-bold mb-[1.714rem] text-black">\ 車検証や車両画像で簡単に査定額が判明します /</p>
+           <p className="text-[1.143rem] font-bold mb-[1.714rem] text-black md:block hidden">\ 車検証や車両画像で簡単に査定額が判明します /</p>
+           <p className="text-[1.143rem] font-bold mb-[1.714rem] text-black block md:hidden">車検証や車両画像で<br />簡単に査定額が判明します</p>
            
            {/* 買取査定フォームと電話番号の横並び配置 */}
-           <div className="flex justify-center gap-[2.857rem]">
+            <div className="flex flex-col md:flex-row justify-center items-center md:items-start gap-4 md:gap-[2rem]">
              {/* 買取査定フォーム（左） */}
-             <Link href="/contact">
+             <Link href="/contact" className="w-auto md:w-auto">
                <div 
-                 className="h-[3.214rem] flex items-center justify-center rounded-lg px-6 whitespace-nowrap"
+                 className="h-[3.214rem] flex items-center justify-center rounded-lg px-4 md:px-6 whitespace-nowrap"
                  style={{
                    background: 'linear-gradient(180deg, #1154AF 0%, #053B65 100%)',
-                   boxShadow: '2px 2px 2px 0px #00000040'
+                   boxShadow: '2px 2px 2px 0px #00000040',
+                   width: '200px'
                  }}
                >
-                 <span className="text-[1.429rem] font-bold text-white">LINEで査定を依頼する</span>
-                 <span className="text-[1.429rem] font-bold text-white">&nbsp;&gt;</span>
+                 <style jsx>{`
+                   @media (min-width: 768px) {
+                     div {
+                       width: 100% !important;
+                     }
+                   }
+                 `}</style>
+                 <span className="text-[1rem] md:text-[1.429rem] font-bold text-white">LINEで査定を依頼する</span>
+                 <span className="text-[1rem] md:text-[1.429rem] font-bold text-white">&nbsp;&gt;</span>
                </div>
              </Link>
              
              {/* 電話番号セクション（右） */}
-             <div>
+             <div className="flex flex-col md:block items-center md:items-start">
                <div className="h-[3.214rem] flex items-center bg-white border-2 border-blue-600 rounded-lg px-6 mb-2 whitespace-nowrap">
                  <svg className="w-6 h-6 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
@@ -689,8 +777,8 @@ const AssessmentRequestSection = () => (
 
  // 4. 選ばれる理由セクション
  const ReasonSection = () => (
-   <section className="py-16" style={{ display: 'flex', justifyContent: 'center' }}>
-     <div style={{ width: '70%', maxWidth: '1000px', padding: 0 }}>
+   <section className="py-8 md:py-16" style={{ display: 'flex', justifyContent: 'center' }}>
+     <div className="w-full md:w-[70%] px-4 md:px-0" style={{ padding: 0 }}>
             <div style={{ marginBottom: "2.857rem", display: "flex", justifyContent: "center" }}>
           <div 
             style={{
@@ -700,28 +788,29 @@ const AssessmentRequestSection = () => (
             }}
           >
             <div 
+              className="text-[2rem] md:text-[2.86rem]"
               style={{
                 fontFamily: "Noto Sans JP",
                 fontWeight: "700",
                 fontStyle: "Bold",
-                fontSize: "2.86rem",
                 lineHeight: "100%",
                 letterSpacing: "0%",
                 textAlign: "left",
                 color: "#1A1A1A",
                 whiteSpace: "nowrap",
-                marginBottom: "0.57rem",
+                marginBottom: "0.17rem",
               }}
             >
-              ノアコーポレーションの買取査定の特徴
+              <span className="md:hidden">ノアコーポレーションの<br />買取査定の特徴</span>
+              <span className="hidden md:inline">ノアコーポレーションの買取査定の特徴</span>
             </div>
           </div>
         </div>
 
         {/* 強み1 */}
           <div className="w-full mb-12">
-           <div className="flex items-center" style={{ gap: '4.2%' }}>
-            <div className="w-[50%] self-stretch">
+           <div className="flex flex-col md:flex-row items-center" style={{ gap: '4.2%' }}>
+            <div className="w-full md:w-[50%] self-stretch">
               <div className="w-full h-full overflow-hidden" style={{ margin: 0 }}>
                 <Image
                   src="/1st_strengths.jpg"
@@ -733,37 +822,44 @@ const AssessmentRequestSection = () => (
                 />
               </div>
             </div>
-           <div className="w-[45.8%]">
+           <div className="w-full md:w-[45.8%]">
              <div className="text-center mb-4">
              </div>
              <div className="text-center mb-4">
-               <h3 className="text-[2.428rem] text-[#666666] font-bold">LINEですぐに金額判明</h3>
+               <h3 className="text-[1.7rem] md:text-[2.428rem] text-[#666666] font-bold">LINEですぐに金額判明</h3>
              </div>
-             <div className="text-center">
-               <p className="text-[1rem] text-[#666666] leading-relaxed">
-               当社ではLINEによるスピード買取に挑戦しております。<br />既存のお問い合わせ→日程調整→現社確認→査定額提示という手順を<br />すべてLINEで行う事により、<br />どこよりも早く査定金額を知ることができます。
-               </p>
-             </div>
+              <div className="text-center">
+                <p className="text-[1rem] text-[#666666] leading-relaxed">
+                  <span className="md:hidden">当社ではLINEによるスピード買取に挑戦しております。既存のお問い合わせ→日程調整→現社確認→査定額提示という手順をすべてLINEで行う事により、どこよりも早く査定金額を知ることができます。</span>
+                  <span className="hidden md:inline">当社ではLINEによるスピード買取に挑戦しております。<br />既存のお問い合わせ→日程調整→現社確認→査定額提示という手順を<br />すべてLINEで行う事により、<br />どこよりも早く査定金額を知ることができます。</span>
+                </p>
+              </div>
            </div>
          </div>
        </div>
 
         {/* 強み2 */}
           <div className="w-full mb-12">
-           <div className="flex items-center" style={{ gap: '4.2%' }}>
-            <div className="w-[45.8%]">
+           <div className="flex flex-col md:flex-row items-center" style={{ gap: '4.2%' }}>
+            {/* スマホ版：画像が上、パソコン版：テキストが左 */}
+            <div className="w-full md:w-[45.8%] order-2 md:order-1">
               <div className="text-center mb-4">
               </div>
               <div className="text-center mb-4">
-                <h3 className="text-[2.428rem] text-[#666666] font-bold">全国どこでもOK!!<br />不動車 / 事故車でも買取OK!!</h3>
+                <h3 className="text-[1.7rem] md:text-[2.428rem] text-[#666666] font-bold">
+                  <span className="md:hidden">全国どこでもOK!! 不動車 / 事故車でも買取OK!!</span>
+                  <span className="hidden md:inline">全国どこでもOK!!<br />不動車 / 事故車でも買取OK!!</span>
+                </h3>
               </div>
               <div className="text-center">
                 <p className="text-[1rem] text-[#666666] leading-relaxed">
-                ノアコーポレーションではLINEでの買取を行っておりますので、<br />全国どこでも、どんな状態の車両でも買取させていただきます。<br />買取実施には、まずはLINEよりお気軽にお問い合わせくださいませ。
+                  <span className="md:hidden">ノアコーポレーションではLINEでの買取を行っておりますので、全国どこでも、どんな状態の車両でも買取させていただきます。買取実施には、まずはLINEよりお気軽にお問い合わせくださいませ。</span>
+                  <span className="hidden md:inline">ノアコーポレーションではLINEでの買取を行っておりますので、<br />全国どこでも、どんな状態の車両でも買取させていただきます。<br />買取実施には、まずはLINEよりお気軽にお問い合わせくださいませ。</span>
                 </p>
               </div>
             </div>
-               <div className="w-[50%] self-stretch" style={{ margin: 0 }}>
+            {/* スマホ版：画像が上、パソコン版：画像が右 */}
+               <div className="w-full md:w-[50%] self-stretch order-1 md:order-2" style={{ margin: 0 }}>
                 <div className="w-full h-full overflow-hidden" style={{ margin: 0 }}>
                   <Image
                     src="/2nd_strengths.jpg"
@@ -780,8 +876,8 @@ const AssessmentRequestSection = () => (
 
         {/* 強み3 */}
           <div className="w-full mb-12">
-          <div className="flex items-center" style={{ gap: '4.2%' }}>
-                      <div className="w-[50%] self-stretch">
+          <div className="flex flex-col md:flex-row items-center" style={{ gap: '4.2%' }}>
+                <div className="w-full md:w-[50%] self-stretch">
               <div className="w-full h-full overflow-hidden" style={{ margin: 0 }}>
                 <Image
                   src="/3rd_strengths.jpg"
@@ -793,15 +889,19 @@ const AssessmentRequestSection = () => (
                 />
               </div>
             </div>
-                      <div className="w-[45.8%]">
+              <div className="w-full md:w-[45.8%]">
               <div className="text-center mb-4">
               </div>
               <div className="text-center mb-4">
-                <h3 className="text-[2.428rem] text-[#666666] font-bold">当社に決めていただければ<br />面倒な手続きは一切なし。</h3>
+                <h3 className="text-[1.7rem] md:text-[2.428rem] text-[#666666] font-bold">
+                  <span className="md:hidden">当社に決めていただければ 面倒な手続きは一切なし。</span>
+                  <span className="hidden md:inline">当社に決めていただければ<br />面倒な手続きは一切なし。</span>
+                </h3>
               </div>
               <div className="text-center">
                 <p className="text-[1rem] text-[#666666] leading-relaxed">
-                当社ノアコーポレーションに売却を決めていただけましたら、<br />引上げ及びその後の書類手続きなど<br />すべて弊社で代行させていただきます。また、会社名や会社カラーなども当社の責任をもって対応させいただきます。
+                  <span className="md:hidden">当社ノアコーポレーションに売却を決めていただけましたら、引上げ及びその後の書類手続きなどすべて弊社で代行させていただきます。また、会社名や会社カラーなども当社の責任をもって対応させいただきます。</span>
+                  <span className="hidden md:inline">当社ノアコーポレーションに売却を決めていただけましたら、<br />引上げ及びその後の書類手続きなど<br />すべて弊社で代行させていただきます。また、会社名や会社カラーなども当社の責任をもって対応させいただきます。</span>
                 </p>
               </div>
             </div>
@@ -827,18 +927,15 @@ const FAQSection = () => (
     }}
   >
     <div 
+      className="py-4 md:py-[1.857rem] flex flex-col items-center"
       style={{
         width: "100%",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "flex-start",
-        alignItems: "center",
-        padding: "0 1.429rem",
-        paddingTop: "2.857rem"
+        paddingLeft: "1.429rem",
+        paddingRight: "1.429rem"
       }}
     >
       {/* QUESTIONセクション */}
-      <div style={{ marginBottom: "3.429rem", display: "flex", justifyContent: "center" }}>
+      <div style={{ marginBottom: "1rem", display: "flex", justifyContent: "center" }}>
         <div 
           style={{
             display: "flex",
@@ -847,11 +944,11 @@ const FAQSection = () => (
           }}
         >
           <div 
+            className="text-[2rem] md:text-[2.857rem]"
             style={{
               fontFamily: "Noto Sans JP",
               fontWeight: "700",
               fontStyle: "Bold",
-              fontSize: "2.857rem",
               lineHeight: "100%",
               letterSpacing: "0%",
               textAlign: "left",
@@ -860,19 +957,18 @@ const FAQSection = () => (
               marginBottom: "1.143rem",
             }}
           >
-            LINEで査定のよくあるご質問
+            <span className="md:hidden">LINEで査定の<br />よくあるご質問</span>
+            <span className="hidden md:inline">LINEで査定のよくあるご質問</span>
           </div>
         </div>
       </div>
 
       <div 
-        className="contact-header"
+        className="contact-header w-full md:w-[65%] mx-auto"
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "0.143rem",
-          width: "100%",
-          maxWidth: "57.143rem"
+          gap: "0.143rem"
         }}
       >
         {faqs.map((faq, index) => (
@@ -889,16 +985,15 @@ const FAQSection = () => (
           >
             <CardContent className="!p-0" style={{ padding: 0 }}>
               {/* Q部分デザイン */}
-              <div style={{
-                width: "58.571rem",
-                height: "3.214rem",
+              <div className="w-full" style={{
+                minHeight: "3.214rem",
                 opacity: 1,
                 padding: "0.286rem 0.857rem",
                 borderRadius: "0.286rem",
                 background: "#F2F2F2",
                 display: "flex",
                 alignItems: "center",
-                gap: "1.143rem"
+                gap: "0.557rem"
               }}>
                 <span style={{
                   width: "1.857rem",
@@ -918,25 +1013,29 @@ const FAQSection = () => (
                 }}>
                   Q.
                 </span>
-                <span style={{
+                <span className="text-[1.1rem] md:text-[1.429rem]" style={{
                   flex: 1,
                   fontFamily: "Noto Sans JP, sans-serif",
                   fontWeight: 700,
                   fontStyle: "bold",
-                  fontSize: "1.429rem",
                   lineHeight: "100%",
                   letterSpacing: "0%",
                   color: "#1A1A1A",
                   display: "flex",
-                  alignItems: "center"
+                  alignItems: "center",
+                  whiteSpace: "nowrap"
                 }}>
-                  {faq.question}
+                  {index === 3 ? (
+                    <span className="md:hidden whitespace-normal">ノアコーポレションで購入も買取もした事がないけど利用できますか？</span>
+                  ) : (
+                    <span>{faq.question}</span>
+                  )}
+                  <span className="hidden md:inline">{faq.question}</span>
                 </span>
               </div>
               {/* A部分デザイン */}
-               <div style={{
-                 width: "58.571rem",
-                 height: "5.714rem",
+               <div className="w-full" style={{
+                 minHeight: "5.714rem",
                  opacity: 1,
                  padding: "0.571rem 0.857rem",
                  display: "flex",
@@ -962,21 +1061,19 @@ const FAQSection = () => (
                  >
                    A.
                  </span>
-                 <span style={{
-                   width: "51.571rem",
-                   height: "4rem",
+                 <span className="w-full text-[0.9rem] md:text-[1.143rem]" style={{
+                   minHeight: "4rem",
                    fontFamily: "Noto Sans JP, sans-serif",
                    fontWeight: 700,
                    fontStyle: "bold",
-                   fontSize: "1.143rem",
                    lineHeight: "2rem",
                    letterSpacing: "0%",
                    color: "#1A1A1A",
                    display: "flex",
                    alignItems: "flex-start",
                    whiteSpace: "pre-line",
-                   overflow: "hidden",
-                   textOverflow: "ellipsis"
+                   overflow: "visible",
+                   textOverflow: "unset"
                  }}>
                    {faq.answer}
                  </span>
@@ -1004,11 +1101,11 @@ const DocumentSection = () => (
           }}
         >
           <div 
+            className="text-[2rem] md:text-[2.86rem]"
             style={{
               fontFamily: "Noto Sans JP",
               fontWeight: "700",
               fontStyle: "Bold",
-              fontSize: "2.86rem",
               lineHeight: "100%",
               letterSpacing: "0%",
               textAlign: "left",
@@ -1024,11 +1121,11 @@ const DocumentSection = () => (
 
       <div className="w-[69.4%] max-w-[1000px] mx-auto">
         <div className="text-center mb-6">
-          <p className="text-[1.143rem] font-bold mb-4">ダウンロードはこちら</p>
+          <p className="text-[1rem] font-bold mb-4">ダウンロードはこちら</p>
           <div className="flex justify-center gap-[2.286rem]">
                          <Button 
                variant="outline"
-               className="text-[1.143rem] font-bold text-white"
+               className="text-[1rem] font-bold text-white"
                style={{
                  background: '#666666',
                  width: '200px',
@@ -1062,7 +1159,7 @@ const DocumentSection = () => (
              </Button>
                          <Button 
                variant="outline"
-               className="text-[1.143rem] font-bold text-white"
+               className="text-[1rem] font-bold text-white"
                style={{
                  background: '#666666',
                  width: '200px',
