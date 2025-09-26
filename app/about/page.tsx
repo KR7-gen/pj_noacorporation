@@ -8,7 +8,6 @@ import { useRouter } from "next/navigation"
 
 const companyInfo = {
   name: "株式会社 Noa Corporation",
-  representative: "代表取締役：谷口和平",
   established: "2009年",
   capital: "000万円",
   address: "〒329-1326　栃木県さくら市向河原3994-1",
@@ -63,7 +62,7 @@ export default function AboutPage() {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-white" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+    <div className="about-page min-h-screen bg-white" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
       {/* About Us Hero Section */}
       <section 
         style={{
@@ -120,14 +119,59 @@ export default function AboutPage() {
         </h1>
       </section>
 
+      {/* Responsive overrides for smartphone */}
+      <style jsx>{`
+        .sp-only-br { display: none; }
+        @media (max-width: 640px) {
+          .about-page > section { margin-top: 0 !important; padding-left: 1.143rem !important; padding-right: 1.143rem !important; }
+          .about-page > section + section { margin-top: 1.5rem !important; }
+          .company-section { padding-left: 1.143rem !important; padding-right: 1.143rem !important; padding-top: 1.5rem !important; padding-bottom: 1.5rem !important; }
+          .company-title { font-size: 2rem !important; }
+          .company-card { width: 100% !important; max-width: 100% !important; height: auto !important; margin: 0 auto !important; }
+          .company-card > div > div { flex-direction: column !important; align-items: flex-start !important; }
+          .company-card > div > div > span:first-child { width: 100% !important; margin: 0 0 0.571rem 0 !important; }
+          .company-card > div > div > span:last-child { margin-left: 0 !important; width: 100% !important; white-space: normal !important; }
+          .features-section { padding-top: 1.5rem !important; padding-bottom: 1.5rem !important; padding-left: 1.143rem !important; padding-right: 1.143rem !important; }
+          .features-title { font-size: 2rem !important; white-space: normal !important; }
+          .features-container { width: 100% !important; max-width: 100% !important; }
+          .feature-heading { white-space: nowrap !important; }
+          .example-row { flex-direction: column !important; margin-left: -2rem !important; margin-right: -2rem !important; width: calc(100% + 4rem) !important; }
+          .example-row > div:not(.example-arrow) { width: 100% !important; }
+          .example-arrow { width: 2rem !important; height: 2rem !important; flex: 0 0 auto !important; align-self: center; }
+          .example-arrow svg { transform: rotate(90deg); }
+          .sp-only-br { display: inline; }
+          .feature-card { width: 100% !important; overflow: hidden; }
+          .feature-card p { overflow-wrap: anywhere; word-break: break-word; }
+          .members-section { padding-top: 1.5rem !important; padding-bottom: 1.5rem !important; }
+          .members-section { width: 100% !important; max-width: 100% !important; padding-left: 1.143rem !important; padding-right: 1.143rem !important; }
+          .members-title { font-size: 2rem !important; white-space: normal !important; }
+          .member-row { flex-direction: column !important; height: auto !important; gap: 1rem !important; }
+          .member-row .member-photo { order: 1; width: 100% !important; height: auto !important; min-height: 12rem; }
+          .member-row .member-text { order: 2; width: 100% !important; }
+          .employees-grid { flex-direction: column !important; align-items: stretch !important; position: static !important; gap: 1rem !important; width: 100% !important; }
+          :global(.member-employee-card) { width: 100% !important; position: static !important; left: auto !important; transform: none !important; display: block !important; }
+          .access-section { padding-top: 1.5rem !important; padding-bottom: 1.5rem !important; }
+          .contact-section { padding-top: 1.5rem !important; padding-bottom: 1.5rem !important; }
+          .about-page > .contact-section { padding-left: 0 !important; padding-right: 0 !important; }
+          .contact-inner { padding-left: 1.143rem !important; padding-right: 1.143rem !important; }
+          .access-title { font-size: 2rem !important; white-space: normal !important; }
+          /* widen contact cards on mobile */
+          .contact-cards-container { grid-template-columns: 1fr !important; width: 100% !important; max-width: 100% !important; }
+          .contact-phone-card, .contact-form-card, .contact-purchase-card { width: 100% !important; }
+          .contact-purchase-container { width: 100% !important; }
+        }
+      `}</style>
+
       {/* Company Info */}
       <section 
+        className="company-section"
         style={{
           width: "100%",
           maxWidth: "100vw",
           gap: "2.857rem",
           opacity: 1,
-          paddingTop: "7.143rem",
+          paddingTop: "2rem",
+          paddingBottom: "2rem",
           background: "#FFFFFF",
           margin: "0 auto"
         }}
@@ -150,7 +194,7 @@ export default function AboutPage() {
                 alignItems: "flex-start",
               }}
             >
-              <div 
+              <div className="company-title"
                 style={{
                   fontFamily: "Noto Sans JP",
                   fontWeight: "700",
@@ -170,7 +214,7 @@ export default function AboutPage() {
           </div>
 
           {/* カードの枠を削除し、内容だけ表示 */}
-          <div style={{ width: "57.143rem", height: "44.714rem", opacity: 1, maxWidth: "57.143rem", margin: "0 auto" }}>
+          <div className="company-card" style={{ width: "57.143rem", height: "44.714rem", opacity: 1, maxWidth: "57.143rem", margin: "0 auto" }}>
             <div 
               style={{
                 display: "flex",
@@ -215,27 +259,7 @@ export default function AboutPage() {
                    marginLeft: "14rem"
                  }}>{companyInfo.name}</span>
                </div>
-                             <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "0.571rem" }}>
-                 <span style={{
-                   width: "14rem",
-                   height: "1.643rem",
-                   color: "#1a1a1a",
-                   fontFamily: "'Noto Sans JP', sans-serif",
-                   fontWeight: 700,
-                   fontStyle: "bold",
-                   fontSize: "1.143rem",
-                   lineHeight: "100%",
-                   letterSpacing: 0,
-                   opacity: 1,
-                   display: "flex",
-                   alignItems: "center",
-                   justifyContent: "flex-start",
-                   borderRadius: "0.286rem",
-                   textAlign: "left"
-                 }}>代表</span>
-                 <span style={{ marginLeft: "14rem" }}>{companyInfo.representative}</span>
-               </div>
-                             <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "0.571rem" }}>
+                <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "0.571rem" }}>
                  <span style={{
                    width: "14rem",
                    height: "1.643rem",
@@ -442,14 +466,15 @@ export default function AboutPage() {
 
       {/* ノアの特徴４選*/}
        <section 
+         className="features-section"
          style={{
            width: "100%",
            maxWidth: "100vw",
            gap: "2.857rem",
            opacity: 1,
-           paddingTop: "5.714rem",
+            paddingTop: "2rem",
            paddingRight: "2.857rem",
-           paddingBottom: "5.714rem",
+            paddingBottom: "2rem",
            paddingLeft: "2.857rem",
            background: "#FFFFFF",
            margin: "0 auto"
@@ -474,6 +499,7 @@ export default function AboutPage() {
                 }}
               >
                 <div 
+                  className="features-title"
                   style={{
                     fontFamily: "Noto Sans JP",
                     fontWeight: "700",
@@ -487,12 +513,12 @@ export default function AboutPage() {
                     marginBottom: "0.57rem",
                   }}
                 >
-                  ノアコーポレーションの特徴　4点
+                  ノアコーポレーションの<span className="sp-only-br"><br/></span>特徴4点
                 </div>
               </div>
             </div>
 
-            <div style={{
+           <div className="features-container" style={{
               width: "58.571rem",
               opacity: 1,
               fontFamily: "'Noto Sans JP', sans-serif",
@@ -507,14 +533,14 @@ export default function AboutPage() {
             }}>
 
               {/* 特徴1 */}
-               <div style={{ 
+               <div className="feature-card" style={{ 
                  marginBottom: "2.857rem",
                  padding: "2rem",
                  border: "1px solid #e5e7eb",
                  borderRadius: "0.571rem",
                  backgroundColor: "#fafafa"
                }}>
-                 <h3 style={{
+                <h3 className="feature-heading" style={{
                    fontSize: "1.429rem",
                    fontWeight: "700",
                    color: "#1a1a1a",
@@ -548,14 +574,14 @@ export default function AboutPage() {
               </div>
 
               {/* 特徴2 */}
-               <div style={{ 
+               <div className="feature-card" style={{ 
                  marginBottom: "2.857rem",
                  padding: "2rem",
                  border: "1px solid #e5e7eb",
                  borderRadius: "0.571rem",
                  backgroundColor: "#fafafa"
                }}>
-                 <h3 style={{
+                <h3 className="feature-heading" style={{
                    fontSize: "1.429rem",
                    fontWeight: "700",
                    color: "#1a1a1a",
@@ -611,7 +637,7 @@ export default function AboutPage() {
                     }}>
                       塗装事例 1
                     </h4>
-                    <div style={{
+                    <div className="example-row" style={{
                       display: "flex",
                       gap: "1rem",
                       justifyContent: "center",
@@ -660,7 +686,7 @@ export default function AboutPage() {
                       </div>
                       
                       {/* 矢印 */}
-                      <div style={{
+                      <div className="example-arrow" style={{
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
@@ -751,7 +777,7 @@ export default function AboutPage() {
                     }}>
                       塗装事例 2
                     </h4>
-                    <div style={{
+                    <div className="example-row" style={{
                       display: "flex",
                       gap: "1rem",
                       justifyContent: "center",
@@ -800,7 +826,7 @@ export default function AboutPage() {
                       </div>
                       
                       {/* 矢印 */}
-                      <div style={{
+                      <div className="example-arrow" style={{
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
@@ -878,14 +904,14 @@ export default function AboutPage() {
               </div>
 
               {/* 特徴3 */}
-               <div style={{ 
+               <div className="feature-card" style={{ 
                  marginBottom: "2.857rem",
                  padding: "2rem",
                  border: "1px solid #e5e7eb",
                  borderRadius: "0.571rem",
                  backgroundColor: "#fafafa"
                }}>
-                 <h3 style={{
+                <h3 className="feature-heading" style={{
                    fontSize: "1.429rem",
                    fontWeight: "700",
                    color: "#1a1a1a",
@@ -941,7 +967,7 @@ export default function AboutPage() {
                     }}>
                       載せ替え事例 1
                     </h4>
-                    <div style={{
+                    <div className="example-row" style={{
                       display: "flex",
                       gap: "1rem",
                       justifyContent: "center",
@@ -990,7 +1016,7 @@ export default function AboutPage() {
                       </div>
                       
                       {/* 矢印 */}
-                      <div style={{
+                      <div className="example-arrow" style={{
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
@@ -1081,7 +1107,7 @@ export default function AboutPage() {
                     }}>
                       載せ替え事例 2
                     </h4>
-                    <div style={{
+                    <div className="example-row" style={{
                       display: "flex",
                       gap: "1rem",
                       justifyContent: "center",
@@ -1130,7 +1156,7 @@ export default function AboutPage() {
                       </div>
                       
                       {/* 矢印 */}
-                      <div style={{
+                      <div className="example-arrow" style={{
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
@@ -1208,14 +1234,14 @@ export default function AboutPage() {
               </div>
 
               {/* 特徴4 */}
-               <div style={{ 
+               <div className="feature-card" style={{ 
                  marginBottom: "2.857rem",
                  padding: "2rem",
                  border: "1px solid #e5e7eb",
                  borderRadius: "0.571rem",
                  backgroundColor: "#fafafa"
                }}>
-                 <h3 style={{
+                <h3 className="feature-heading" style={{
                    fontSize: "1.429rem",
                    fontWeight: "700",
                    color: "#1a1a1a",
@@ -1255,13 +1281,13 @@ export default function AboutPage() {
 
       {/* Member Section */}
       <section 
+        className="members-section"
         style={{
           width: "56.53%",
-          height: "1563px",
           gap: "60px",
           opacity: 1,
-          paddingTop: "80px",
-          paddingBottom: "80px",
+          paddingTop: "2rem",
+          paddingBottom: "2rem",
           background: "#FFFFFF",
           margin: "0 auto"
         }}
@@ -1284,7 +1310,8 @@ export default function AboutPage() {
                  alignItems: "flex-start",
                }}
              >
-               <div 
+              <div 
+                className="members-title"
                  style={{
                    fontFamily: "Noto Sans JP",
                    fontWeight: "700",
@@ -1303,7 +1330,7 @@ export default function AboutPage() {
              </div>
            </div>
 
-          <div 
+            <div 
             style={{
               display: "flex",
               flexDirection: "column",
@@ -1332,6 +1359,7 @@ export default function AboutPage() {
               >
                 {memberGroups.representative.map((member, index) => (
                   <div 
+                    className="member-row"
                     key={index} 
                     style={{
                       width: "100%",
@@ -1343,7 +1371,7 @@ export default function AboutPage() {
                     }}
                   >
                     {/* 名前と説明（左の70.5%） */}
-                    <div style={{
+                    <div className="member-text" style={{
                       width: "70.5%",
                       display: "flex",
                       flexDirection: "column",
@@ -1375,6 +1403,7 @@ export default function AboutPage() {
                     
                     {/* 写真（右の29.5%） */}
                     <div 
+                      className="member-photo"
                       style={{
                         width: "29.5%",
                         height: "22.86rem",
@@ -1414,6 +1443,7 @@ export default function AboutPage() {
               >
                 {memberGroups.director.map((member, index) => (
                   <div 
+                    className="member-row"
                     key={index} 
                     style={{
                       width: "100%",
@@ -1425,7 +1455,7 @@ export default function AboutPage() {
                     }}
                   >
                     {/* 名前と説明（左の70.5%） */}
-                    <div style={{
+                    <div className="member-text" style={{
                       width: "70.5%",
                       display: "flex",
                       flexDirection: "column",
@@ -1457,6 +1487,7 @@ export default function AboutPage() {
                     
                     {/* 写真（右の29.5%） */}
                     <div 
+                      className="member-photo"
                       style={{
                         width: "29.5%",
                         height: "22.86rem",
@@ -1487,6 +1518,7 @@ export default function AboutPage() {
               }}>
               </h3>
               <div 
+                className="employees-grid"
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
@@ -1497,6 +1529,7 @@ export default function AboutPage() {
               >
                 {memberGroups.employees.map((member, index) => (
                   <Card 
+                    className="member-employee-card"
                     key={index} 
                     style={{
                       backgroundColor: "white",
@@ -1566,8 +1599,8 @@ export default function AboutPage() {
         id="access" 
         style={{
           width: "100%",
-          paddingTop: "60px",
-          paddingBottom: "60px",
+          paddingTop: "2rem",
+          paddingBottom: "2rem",
           background: "#FFFFFF"
         }}
       >
@@ -1586,7 +1619,8 @@ export default function AboutPage() {
                  alignItems: "flex-start",
                }}
              >
-               <div 
+              <div 
+                className="access-title"
                  style={{
                    fontFamily: "Noto Sans JP",
                    fontWeight: "700",
@@ -1643,12 +1677,13 @@ export default function AboutPage() {
 
       {/* Contact Section */}
        <section 
+        className="contact-section"
          style={{
            width: "100%",
            maxWidth: "100vw",
            opacity: 1,
-           paddingTop: "4.286rem",
-           paddingBottom: "4.286rem",
+           paddingTop: "2rem",
+           paddingBottom: "2rem",
            background: "#666666",
            color: "white",
            margin: "0 auto",
@@ -1657,7 +1692,8 @@ export default function AboutPage() {
            alignItems: "center"
          }}
        >
-         <div 
+        <div 
+          className="contact-inner"
            style={{
              width: "100%",
              height: "100%",
