@@ -7,8 +7,8 @@ const footerLinks = {
     "ダンプ・ローダーダンプ",
     "ミキサー車",
     "アームロール",
-    "重機回送車",
-    "車両運搬車",
+    "重機回送車・セルフクレーン",
+    "キャリアカー・車両運搬車",
     "高所作業車",
     "塵芥車",
     "平ボディ",
@@ -63,12 +63,35 @@ export function Footer() {
               <h4 className="font-medium mb-3 border-b border-white pb-1">ボディタイプで中古トラックを探す</h4>
               <ul className="grid grid-cols-2 md:grid-cols-1 gap-x-6 gap-y-2 text-sm">
                 {footerLinks.bodyTypes.map((type, index) => (
-                  <li key={index}>
+                  <li key={index} className={
+                    type === "重機回送車・セルフクレーン" || type === "キャリアカー・車両運搬車" 
+                      ? "md:min-h-0 min-h-[3rem]" 
+                      : ""
+                  }>
                     <Link 
                       href={`/inventory?type=${encodeURIComponent(type)}`}
-                      className="text-gray-400 hover:text-white transition-colors whitespace-nowrap"
+                      className={`text-gray-400 hover:text-white transition-colors ${
+                        type === "重機回送車・セルフクレーン" || type === "キャリアカー・車両運搬車"
+                          ? "md:whitespace-nowrap whitespace-pre-line" 
+                          : "whitespace-nowrap"
+                      }`}
                     >
-                      ー　{type}
+                      {type === "重機回送車・セルフクレーン" 
+                        ? (
+                          <>
+                            <span className="hidden md:inline">ー　重機回送車・セルフクレーン</span>
+                            <span className="md:hidden">ー　重機回送車・{'\n'}　　セルフクレーン</span>
+                          </>
+                        )
+                        : type === "キャリアカー・車両運搬車"
+                        ? (
+                          <>
+                            <span className="hidden md:inline">ー　キャリアカー・車両運搬車</span>
+                            <span className="md:hidden">ー　キャリアカー・{'\n'}　　車両運搬車</span>
+                          </>
+                        )
+                        : `ー　${type}`
+                      }
                     </Link>
                   </li>
                 ))}

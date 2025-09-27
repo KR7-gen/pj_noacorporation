@@ -17,18 +17,18 @@ import type { Vehicle } from "@/types"
 const vehicleTypeIcons = [
   // 1行目
   { id: 1, type: "クレーン", icon: "/icons/crane.png" },
-  { id: 2, type: "ダンプ・ローダーダンプ", icon: "/icons/dump.png" },
+  { id: 2, type: "ダンプ・ローダーダンプ", typeMobile: "ダンプ・\nローダー\nダンプ", icon: "/icons/dump.png" },
   { id: 3, type: "ミキサー車", icon: "/icons/mixer.png" },
   { id: 4, type: "アームロール", icon: "/icons/arm-roll.png" },
-  { id: 5, type: "重機回送車", icon: "/icons/carrier.png" },
-  { id: 6, type: "車両運搬車", icon: "/icons/car-carrier.png" },
+  { id: 5, type: "重機回送車・セルフクレーン", typeMobile: "重機回送車・\nセルフ\nクレーン", icon: "/icons/carrier.png" },
+  { id: 6, type: "キャリアカー・車両運搬車", typeMobile: "キャリアカー\n・車両運搬車", icon: "/icons/car-carrier.png" },
   // 2行目
   { id: 7, type: "高所作業車", icon: "/icons/aerial.png" },
   { id: 8, type: "塵芥車", icon: "/icons/garbage.png" },
   { id: 9, type: "平ボディ", icon: "/icons/flatbed.png" },
-  { id: 10, type: "バン・ウイング", icon: "/icons/van.png" },
+  { id: 10, type: "バン・ウイング", typeMobile: "バン・\nウイング", icon: "/icons/van.png" },
   { id: 11, type: "冷蔵冷凍車", icon: "/refrigerated_car.jpg" },
-  { id: 12, type: "特装車・その他", icon: "/icons/special.png" },
+  { id: 12, type: "特装車・その他", typeMobile: "特装車・\nその他", icon: "/icons/special.png" },
 ]
 
 // プルダウンの選択肢
@@ -37,8 +37,8 @@ const bodyTypes = [
   "ダンプ・ローダーダンプ",
   "ミキサー車",
   "アームロール",
-  "重機回送車",
-  "車両運搬車",
+  "重機回送車・セルフクレーン",
+  "キャリアカー・車両運搬車",
   "高所作業車",
   "塵芥車",
   "平ボディ",
@@ -119,8 +119,8 @@ export default function InventoryPage() {
           "ダンプ・ローダーダンプ",
           "ミキサー車",
           "アームロール",
-          "重機回送車",
-          "車両運搬車",
+          "重機回送車・セルフクレーン",
+          "キャリアカー・車両運搬車",
           "高所作業車",
           "塵芥車",
           "平ボディ",
@@ -174,9 +174,9 @@ export default function InventoryPage() {
     const s = (t || "").trim();
     if (!s) return "";
     if (s === "ダンプ") return "ダンプ・ローダーダンプ";
-    if (s === "車輌運搬車" || s === "キャリアカー") return "車両運搬車";
+    if (s === "車輌運搬車" || s === "キャリアカー") return "キャリアカー・車両運搬車";
     if (s === "アルミウィング" || s === "アルミバン") return "バン・ウイング";
-    if (s === "重機運搬車") return "重機回送車";
+    if (s === "重機運搬車") return "重機回送車・セルフクレーン";
     return s;
   };
 
@@ -553,8 +553,8 @@ export default function InventoryPage() {
                         icon.type === "ダンプ・ローダーダンプ" ? "/dump.jpg" :
                         icon.type === "ミキサー車" ? "/mixer.jpg" :
                         icon.type === "アームロール" ? "/arm-roll.png" :
-                        icon.type === "重機回送車" ? "/carrier.jpg" :
-                        icon.type === "車両運搬車" ? "/car_carrier.png" :
+                        icon.type === "重機回送車・セルフクレーン" ? "/carrier.jpg" :
+                        icon.type === "キャリアカー・車両運搬車" ? "/car_carrier.png" :
                         icon.type === "高所作業車" ? "/aerial.jpg" :
                         icon.type === "塵芥車" ? "/garbage.jpg" :
                         icon.type === "平ボディ" ? "/flatbed.png" :
@@ -589,7 +589,9 @@ export default function InventoryPage() {
                       marginTop: icon.type === "ダンプ・ローダーダンプ" ? "0.2rem" : "0"
                     }}
                   >
-                    {icon.type === "ダンプ・ローダーダンプ" ? "ダンプ・\nローダーダンプ" : icon.type}
+                    {icon.type === "ダンプ・ローダーダンプ" ? "ダンプ・\nローダーダンプ" : 
+                     icon.type === "重機回送車・セルフクレーン" ? "重機回送車・\nセルフクレーン" :
+                     icon.type === "キャリアカー・車両運搬車" ? "キャリアカー・\n車両運搬車" : icon.type}
                   </span>
                 </div>
               </div>
@@ -628,7 +630,7 @@ export default function InventoryPage() {
             <div 
               className="inventory-search-left"
               style={{
-                width: "52%",
+                width: "60%",
                 display: "flex",
                 alignItems: "center"
               }}
@@ -637,7 +639,7 @@ export default function InventoryPage() {
               <div 
                 className="inventory-search-type"
                 style={{
-                  width: "44%",
+                  width: "50%",
                   margin: "0.43rem",
                   height: "2.29rem",
                   display: "flex",
