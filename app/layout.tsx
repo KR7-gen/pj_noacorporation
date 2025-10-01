@@ -1,10 +1,10 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Noto_Sans_JP } from "next/font/google"
 import "./globals.css"
 import ClientLayout from "./components/ClientLayout"
 
-const inter = Inter({ subsets: ["latin"] })
+const notoSansJp = Noto_Sans_JP({ subsets: ["latin"], weight: ["400", "500", "700"] })
 
 export const metadata: Metadata = {
   title: "中古トラック販売 - ノアコーポレーション",
@@ -24,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="ja" className={inter.className}>
+    <html lang="ja" className={notoSansJp.className}>
       <body>
         <ClientLayout>
           {children}
