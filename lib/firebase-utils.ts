@@ -328,6 +328,7 @@ export const getSoldOutVehicles = async (limit: number = 3) => {
       const soldOutQuery = query(
         vehiclesCollection,
         where("isSoldOut", "==", true),
+        where("reflectInPurchaseAchievements", "==", true),
         orderBy("updatedAt", "desc")
       );
       
@@ -373,9 +374,9 @@ export const getSoldOutVehicles = async (limit: number = 3) => {
         };
       }) as Vehicle[];
       
-      // SOLD OUT車両をフィルタリングし、updatedAtでソート
+      // SOLD OUTかつ反映フラグONの車両をフィルタリングし、updatedAtでソート
       const soldOutVehicles = allVehicles
-        .filter(vehicle => vehicle.isSoldOut === true)
+        .filter(vehicle => vehicle.isSoldOut === true && (vehicle as any).reflectInPurchaseAchievements === true)
         .sort((a, b) => {
           const dateA = a.updatedAt instanceof Date ? a.updatedAt : new Date(a.updatedAt);
           const dateB = b.updatedAt instanceof Date ? b.updatedAt : new Date(b.updatedAt);

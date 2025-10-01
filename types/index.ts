@@ -68,6 +68,8 @@ export interface Vehicle {
   isSoldOut?: boolean;
   isPrivate?: boolean;
   isTemporarySave?: boolean; // 一時保存状態
+  // 買取実績表示フラグ
+  reflectInPurchaseAchievements?: boolean;
   // 支払額シミュレーション
   simulation2Year?: string;
   simulation3Year?: string;

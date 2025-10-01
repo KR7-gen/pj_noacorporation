@@ -479,7 +479,11 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
                   {/* 3. 買取価格 */}
                     <div className="absolute bottom-0 w-full" style={{ height: '3.929rem', background: '#E6E6E6' }}>
                       <div className="h-full flex items-center" style={{ padding: '0 0.857rem' }}>
-                        <span className="text-2xl font-bold">当社買取額：{item.price}万円</span>
+                        <span className="font-bold" style={{ fontSize: '1rem', color: '#1A1A1A', marginRight: '0.25rem' }}>当社買取額：</span>
+                        <span className="inline-flex items-end" style={{ lineHeight: 1 }}>
+                          <span className="font-bold" style={{ fontSize: '2.57rem', color: '#2B5EC5', lineHeight: 1 }}>{item.price}</span>
+                          <span className="font-bold" style={{ fontSize: '1rem', color: '#2B5EC5', lineHeight: 1, marginLeft: '0.15rem', transform: 'translateY(0.2rem)' }}>万円</span>
+                        </span>
                       </div>
                     </div>
                   
@@ -497,7 +501,7 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
                        zIndex: 10,
                        fontSize: '1.428rem',
                        textAlign: 'center',
-                                            lineHeight: '1.2'
+                       lineHeight: '1.2'
                    }}
                  >
                    高価<br />買取
@@ -582,9 +586,9 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
                       {/* 3. 買取価格 */}
                         <div className="absolute bottom-0 w-full" style={{ height: '3.929rem', background: '#E6E6E6' }}>
                           <div className="h-full flex items-center" style={{ padding: '0 0.857rem' }}>
-                            <span className="text-2xl font-bold">
-                              当社買取額：{Math.floor(purchasePrice / 10000)}万円
-                            </span>
+                            <span className="font-bold" style={{ fontSize: '1rem', color: '#1A1A1A' }}>当社買取額：</span>
+                            <span className="font-bold" style={{ fontSize: '2.57rem', color: '#2B5EC5' }}>{Math.floor(purchasePrice / 10000)}</span>
+                            <span className="font-bold" style={{ fontSize: '1rem', color: '#2B5EC5', transform: 'translateY(0.2rem)' }}>万円</span>
                           </div>
                         </div>
                        
@@ -649,7 +653,9 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
                    {/* 3. 買取価格 */}
                    <div className="absolute bottom-0 w-full" style={{ height: '3.929rem', background: '#E6E6E6' }}>
                      <div className="h-full flex items-center" style={{ padding: '0 0.857rem' }}>
-                       <span className="text-2xl font-bold">当社買取額：{item.price}万円</span>
+                       <span className="font-bold" style={{ fontSize: '1rem', color: '#1A1A1A' }}>当社買取額：</span>
+                       <span className="font-bold" style={{ fontSize: '2.57rem', color: '#2B5EC5' }}>{item.price}</span>
+                       <span className="font-bold" style={{ fontSize: '1rem', color: '#2B5EC5', transform: 'translateY(0.2rem)' }}>万円</span>
                      </div>
                    </div>
                    

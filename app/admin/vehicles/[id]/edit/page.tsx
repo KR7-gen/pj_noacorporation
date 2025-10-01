@@ -172,6 +172,7 @@ export default function VehicleEditPage() {
     isSoldOut: false,
     isPrivate: false,
     isTemporarySave: false,
+    reflectInPurchaseAchievements: false,
     negotiationDeadline: "",
     salesRepresentative: "",
     customerName: "",
@@ -261,6 +262,7 @@ export default function VehicleEditPage() {
             isSoldOut: fetchedVehicle.isSoldOut || false,
             isPrivate: fetchedVehicle.isPrivate || false,
             isTemporarySave: fetchedVehicle.isTemporarySave || false,
+            reflectInPurchaseAchievements: fetchedVehicle.reflectInPurchaseAchievements || false,
             negotiationDeadline: fetchedVehicle.negotiationDeadline || "",
             salesRepresentative: fetchedVehicle.salesRepresentative || "",
             customerName: fetchedVehicle.customerName || "",
@@ -677,7 +679,7 @@ export default function VehicleEditPage() {
                 <div></div>
               </div>
               
-              {/* 3行目：SOLD OUTスイッチ + 非公開スイッチ + 空欄 + 空欄 + 空欄 */}
+              {/* 3行目：SOLD OUTスイッチ + 非公開スイッチ + 実績反映 + 空欄 + 空欄 */}
               <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                 {/* SOLD OUTスイッチ */}
                 <div className="flex items-center justify-between">
@@ -700,7 +702,16 @@ export default function VehicleEditPage() {
                     className="data-[state=checked]:bg-gray-500"
                   />
                 </div>
-                <div></div>
+                {/* 実績反映スイッチ */}
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="reflectInPurchaseAchievements" className="text-base">買取実績ページに反映させる</Label>
+                  <Switch
+                    id="reflectInPurchaseAchievements"
+                    checked={formData.reflectInPurchaseAchievements || false}
+                    onCheckedChange={(checked) => handleNegotiationChange('reflectInPurchaseAchievements', checked)}
+                    className="data-[state=checked]:bg-blue-600"
+                  />
+                </div>
                 <div></div>
                 <div></div>
               </div>

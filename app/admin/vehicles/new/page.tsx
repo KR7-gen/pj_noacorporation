@@ -223,6 +223,7 @@ export default function VehicleNewPage() {
     isSoldOut: false,
     isPrivate: false,
     isTemporarySave: false, // 一時保存状態
+    reflectInPurchaseAchievements: false,
     negotiationDeadline: "",
     salesRepresentative: "",
     customerName: "",
@@ -531,6 +532,7 @@ export default function VehicleNewPage() {
         isNegotiating: formData.isNegotiating || false,
         isSoldOut: formData.isSoldOut || false,
         isPrivate: formData.isPrivate || false,
+        reflectInPurchaseAchievements: formData.reflectInPurchaseAchievements || false,
         isTemporarySave: true, // 一時保存としてマーク
         negotiationDeadline: formData.negotiationDeadline || "",
         salesRepresentative: formData.salesRepresentative || "",
@@ -621,6 +623,7 @@ export default function VehicleNewPage() {
         isNegotiating: formData.isNegotiating || false,
         isSoldOut: formData.isSoldOut || false,
         isPrivate: formData.isPrivate || false,
+        reflectInPurchaseAchievements: formData.reflectInPurchaseAchievements || false,
         isTemporarySave: false, // 通常保存としてマーク
         negotiationDeadline: formData.negotiationDeadline || "",
         salesRepresentative: formData.salesRepresentative || "",
@@ -839,7 +842,7 @@ export default function VehicleNewPage() {
                 <div></div>
               </div>
               
-              {/* 3行目：SOLD OUTスイッチ + 非公開スイッチ + 空欄 + 空欄 + 空欄 */}
+              {/* 3行目：SOLD OUTスイッチ + 非公開スイッチ + 実績反映 + 空欄 + 空欄 */}
               <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                 {/* SOLD OUTスイッチ */}
                 <div className="flex items-center justify-between">
@@ -862,7 +865,16 @@ export default function VehicleNewPage() {
                     className="data-[state=checked]:bg-gray-500"
                   />
                 </div>
-                <div></div>
+                {/* 実績反映スイッチ */}
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="reflectInPurchaseAchievements" className="text-base">買取実績ページに反映させる</Label>
+                  <Switch
+                    id="reflectInPurchaseAchievements"
+                    checked={formData.reflectInPurchaseAchievements || false}
+                    onCheckedChange={(checked) => handleNegotiationChange('reflectInPurchaseAchievements', checked)}
+                    className="data-[state=checked]:bg-blue-600"
+                  />
+                </div>
                 <div></div>
                 <div></div>
               </div>
