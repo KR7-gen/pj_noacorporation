@@ -4,6 +4,7 @@
 
 body {
   font-family: Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
 }
 
 @layer utilities {
@@ -366,6 +367,18 @@ body {
     
     .desktop-layout {
       display: flex !important;
+    }
+  }
+
+  /* 大画面での重複防止 */
+  @media (min-width: 1920px) {
+    .vehicle-detail-section {
+      max-width: 1200px !important;
+    }
+    
+    /* モニター画面での車両情報セクション以降のマージン調整 */
+    .vehicle-detail-section.vehicle-main-info {
+      margin-top: 2rem !important;
     }
   }
 

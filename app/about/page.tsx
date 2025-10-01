@@ -214,7 +214,7 @@ export default function AboutPage() {
           </div>
 
           {/* カードの枠を削除し、内容だけ表示 */}
-          <div className="company-card" style={{ width: "57.143rem", height: "44.714rem", opacity: 1, maxWidth: "57.143rem", margin: "0 auto" }}>
+          <div className="company-card" style={{ width: "55%",  opacity: 1, margin: "0 auto",marginBottom:"5rem", }}>
             <div 
               style={{
                 display: "flex",
@@ -224,7 +224,7 @@ export default function AboutPage() {
             >
                <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "0.571rem" }}>
                  <span style={{
-                   width: "14rem",
+                   width: "10%",
                    height: "1.643rem",
                    color: "#1a1a1a",
                    fontFamily: "'Noto Sans JP', sans-serif",
@@ -238,7 +238,8 @@ export default function AboutPage() {
                    alignItems: "center",
                    justifyContent: "flex-start",
                    borderRadius: "0.286rem",
-                   textAlign: "left"
+                   textAlign: "left",
+                   whiteSpace: "nowrap"
                  }}>会社名</span>
                  <span style={{
                    width: "auto",
@@ -261,7 +262,7 @@ export default function AboutPage() {
                </div>
                 <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "0.571rem" }}>
                  <span style={{
-                   width: "14rem",
+                   width: "10%",
                    height: "1.643rem",
                    color: "#1a1a1a",
                    fontFamily: "'Noto Sans JP', sans-serif",
@@ -275,13 +276,14 @@ export default function AboutPage() {
                    alignItems: "center",
                    justifyContent: "flex-start",
                    borderRadius: "0.286rem",
-                   textAlign: "left"
+                   textAlign: "left",
+                   whiteSpace: "nowrap"
                  }}>設立年月</span>
                  <span style={{ marginLeft: "14rem" }}>{companyInfo.established}</span>
                </div>
                <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "0.571rem" }}>
                  <span style={{
-                   width: "14rem",
+                   width: "10%",
                    height: "1.643rem",
                    color: "#1a1a1a",
                    fontFamily: "'Noto Sans JP', sans-serif",
@@ -295,13 +297,14 @@ export default function AboutPage() {
                    alignItems: "center",
                    justifyContent: "flex-start",
                    borderRadius: "0.286rem",
-                   textAlign: "left"
+                   textAlign: "left",
+                   whiteSpace: "nowrap"
                  }}>資本金</span>
                  <span style={{ marginLeft: "14rem" }}>{companyInfo.capital}</span>
                </div>
                <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "0.571rem" }}>
                  <span style={{
-                   width: "14rem",
+                   width: "10%",
                    height: "1.643rem",
                    color: "#1a1a1a",
                    fontFamily: "'Noto Sans JP', sans-serif",
@@ -315,13 +318,14 @@ export default function AboutPage() {
                    alignItems: "center",
                    justifyContent: "flex-start",
                    borderRadius: "0.286rem",
-                   textAlign: "left"
+                   textAlign: "left",
+                   whiteSpace: "nowrap"
                  }}>所在地</span>
                  <span style={{ marginLeft: "14rem" }}>{companyInfo.address}</span>
                </div>
                <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "0.571rem" }}>
                  <span style={{
-                   width: "14rem",
+                   width: "10%",
                    height: "1.643rem",
                    color: "#1a1a1a",
                    fontFamily: "'Noto Sans JP', sans-serif",
@@ -335,13 +339,14 @@ export default function AboutPage() {
                    alignItems: "center",
                    justifyContent: "flex-start",
                    borderRadius: "0.286rem",
-                   textAlign: "left"
+                   textAlign: "left",
+                   whiteSpace: "nowrap"
                  }}>電話番号</span>
                  <span style={{ marginLeft: "14rem" }}>{companyInfo.phone}</span>
                </div>
                <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "0.571rem" }}>
                  <span style={{
-                   width: "14rem",
+                   width: "10%",
                    height: "1.643rem",
                    color: "#1a1a1a",
                    fontFamily: "'Noto Sans JP', sans-serif",
@@ -355,13 +360,14 @@ export default function AboutPage() {
                    alignItems: "center",
                    justifyContent: "flex-start",
                    borderRadius: "0.286rem",
-                   textAlign: "left"
+                   textAlign: "left",
+                   whiteSpace: "nowrap"
                  }}>FAX番号</span>
                  <span style={{ marginLeft: "14rem" }}>{companyInfo.fax}</span>
                </div>
                <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "0.571rem" }}>
                  <span style={{
-                   width: "14rem",
+                   width: "10%",
                    height: "1.643rem",
                    color: "#1a1a1a",
                    fontFamily: "'Noto Sans JP', sans-serif",
@@ -375,13 +381,14 @@ export default function AboutPage() {
                    alignItems: "center",
                    justifyContent: "flex-start",
                    borderRadius: "0.286rem",
-                   textAlign: "left"
+                   textAlign: "left",
+                   whiteSpace: "nowrap"
                  }}>営業時間</span>
                  <span style={{ marginLeft: "14rem" }}>{companyInfo.hours}</span>
                </div>
                <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "0.571rem" }}>
                  <span style={{
-                   width: "14rem",
+                   width: "10%",
                    height: "1.643rem",
                    color: "#1a1a1a",
                    fontFamily: "'Noto Sans JP', sans-serif",
@@ -395,13 +402,14 @@ export default function AboutPage() {
                    alignItems: "center",
                    justifyContent: "flex-start",
                    borderRadius: "0.286rem",
-                   textAlign: "left"
+                   textAlign: "left",
+                   whiteSpace: "nowrap"
                  }}>事業内容</span>
                  <span style={{ marginLeft: "14rem" }}>{companyInfo.business}</span>
                </div>
                <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "0.571rem" }}>
                  <span style={{
-                   width: "14rem",
+                   width: "10%",
                    height: "1.643rem",
                    color: "#1a1a1a",
                    fontFamily: "'Noto Sans JP', sans-serif",
@@ -415,13 +423,14 @@ export default function AboutPage() {
                    alignItems: "center",
                    justifyContent: "flex-start",
                    borderRadius: "0.286rem",
-                   textAlign: "left"
+                   textAlign: "left",
+                   whiteSpace: "nowrap"
                  }}>古物法に基づく表示</span>
                  <span style={{ marginLeft: "14rem" }}>{companyInfo.license}</span>
                </div>
-                <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "0.571rem" }}>
+                <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "1.142rem" }}>
                  <span style={{
-                   width: "14rem",
+                   width: "10%",
                    height: "1.643rem",
                    color: "#1a1a1a",
                    fontFamily: "'Noto Sans JP', sans-serif",
@@ -435,13 +444,14 @@ export default function AboutPage() {
                    alignItems: "center",
                    justifyContent: "flex-start",
                    borderRadius: "0.286rem",
-                   textAlign: "left"
-                 }}>適格請求書（インボイス）発行事業者登録番号</span>
+                   textAlign: "left",
+                   whiteSpace: "nowrap"
+                 }}>適格請求書（インボイス）<br/>発行事業者登録番号</span>
                  <span style={{ marginLeft: "14rem" }}>T5060001025151</span>
                </div>
                 <div style={{ display: "flex", justifyContent: "flex-start", borderBottom: "1px solid #e5e7eb", paddingBottom: "0.571rem" }}>
                  <span style={{
-                   width: "14rem",
+                   width: "10%",
                    height: "1.643rem",
                    color: "#1a1a1a",
                    fontFamily: "'Noto Sans JP', sans-serif",
@@ -455,7 +465,8 @@ export default function AboutPage() {
                    alignItems: "center",
                    justifyContent: "flex-start",
                    borderRadius: "0.286rem",
-                   textAlign: "left"
+                   textAlign: "left",
+                   whiteSpace: "nowrap"
                  }}>加盟協会</span>
                  <span style={{ marginLeft: "14rem" }}>JU・日本中古自動車販売協会連合会 / 自動車公正取引協議会</span>
                </div>
@@ -519,7 +530,7 @@ export default function AboutPage() {
             </div>
 
            <div className="features-container" style={{
-              width: "58.571rem",
+              width: "60%",
               opacity: 1,
               fontFamily: "'Noto Sans JP', sans-serif",
               fontWeight: 400,
@@ -655,7 +666,7 @@ export default function AboutPage() {
                         <div style={{
                           position: "relative",
                           width: "100%",
-                          height: "18rem",
+                          aspectRatio: "4/3",
                           borderRadius: "0.5rem",
                           overflow: "hidden",
                           border: "2px solid #666666"
@@ -666,7 +677,8 @@ export default function AboutPage() {
                             style={{
                               width: "100%",
                               height: "100%",
-                              objectFit: "cover"
+                              objectFit: "cover",
+                              objectPosition: "center"
                             }}
                           />
                           <div style={{
@@ -727,7 +739,7 @@ export default function AboutPage() {
                         <div style={{
                           position: "relative",
                           width: "100%",
-                          height: "18rem",
+                          aspectRatio: "4/3",
                           borderRadius: "0.5rem",
                           overflow: "hidden",
                           border: "2px solid #1154AF",
@@ -740,7 +752,8 @@ export default function AboutPage() {
                             style={{
                               width: "100%",
                               height: "100%",
-                              objectFit: "cover"
+                              objectFit: "cover",
+                              objectPosition: "bottom"
                             }}
                           />
                           <div style={{
@@ -795,7 +808,7 @@ export default function AboutPage() {
                         <div style={{
                           position: "relative",
                           width: "100%",
-                          height: "18rem",
+                          aspectRatio: "4/3",
                           borderRadius: "0.5rem",
                           overflow: "hidden",
                           border: "2px solid #666666"
@@ -806,7 +819,8 @@ export default function AboutPage() {
                             style={{
                               width: "100%",
                               height: "100%",
-                              objectFit: "cover"
+                              objectFit: "cover",
+                              objectPosition: "center"
                             }}
                           />
                           <div style={{
@@ -867,7 +881,7 @@ export default function AboutPage() {
                         <div style={{
                           position: "relative",
                           width: "100%",
-                          height: "18rem",
+                          aspectRatio: "4/3",
                           borderRadius: "0.5rem",
                           overflow: "hidden",
                           border: "2px solid #1154AF",
@@ -880,7 +894,8 @@ export default function AboutPage() {
                             style={{
                               width: "100%",
                               height: "100%",
-                              objectFit: "cover"
+                              objectFit: "cover",
+                              objectPosition: "center"
                             }}
                           />
                           <div style={{
@@ -985,7 +1000,7 @@ export default function AboutPage() {
                         <div style={{
                           position: "relative",
                           width: "100%",
-                          height: "18rem",
+                          aspectRatio: "4/3",
                           borderRadius: "0.5rem",
                           overflow: "hidden",
                           border: "2px solid #666666"
@@ -996,7 +1011,8 @@ export default function AboutPage() {
                             style={{
                               width: "100%",
                               height: "100%",
-                              objectFit: "cover"
+                              objectFit: "cover",
+                              objectPosition: "center"
                             }}
                           />
                           <div style={{
@@ -1057,7 +1073,7 @@ export default function AboutPage() {
                         <div style={{
                           position: "relative",
                           width: "100%",
-                          height: "18rem",
+                          aspectRatio: "4/3",
                           borderRadius: "0.5rem",
                           overflow: "hidden",
                           border: "2px solid #1154AF",
@@ -1070,7 +1086,8 @@ export default function AboutPage() {
                             style={{
                               width: "100%",
                               height: "100%",
-                              objectFit: "cover"
+                              objectFit: "cover",
+                              objectPosition: "bottom"
                             }}
                           />
                           <div style={{
@@ -1125,7 +1142,7 @@ export default function AboutPage() {
                         <div style={{
                           position: "relative",
                           width: "100%",
-                          height: "18rem",
+                          aspectRatio: "4/3",
                           borderRadius: "0.5rem",
                           overflow: "hidden",
                           border: "2px solid #666666"
@@ -1136,7 +1153,8 @@ export default function AboutPage() {
                             style={{
                               width: "100%",
                               height: "100%",
-                              objectFit: "cover"
+                              objectFit: "cover",
+                              objectPosition: "bottom"
                             }}
                           />
                           <div style={{
@@ -1197,7 +1215,7 @@ export default function AboutPage() {
                         <div style={{
                           position: "relative",
                           width: "100%",
-                          height: "18rem",
+                          aspectRatio: "4/3",
                           borderRadius: "0.5rem",
                           overflow: "hidden",
                           border: "2px solid #1154AF",
@@ -1210,7 +1228,8 @@ export default function AboutPage() {
                             style={{
                               width: "100%",
                               height: "100%",
-                              objectFit: "cover"
+                              objectFit: "cover",
+                              objectPosition: "bottom"
                             }}
                           />
                           <div style={{
@@ -1606,8 +1625,7 @@ export default function AboutPage() {
       >
         <div 
           style={{
-            width: "100%",
-            maxWidth: "1000px",
+            width: "56%",
             margin: "0 auto"
           }}
         >
