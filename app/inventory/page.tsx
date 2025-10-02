@@ -1727,7 +1727,7 @@ export default function InventoryPage() {
                   </div>
 
                   {/* 詳細ボタン */}
-                  <div style={{ 
+                  <div className="card-detail-button-container" style={{ 
                     height: "2.5rem", 
                     display: "flex", 
                     alignItems: "center", 
@@ -1737,6 +1737,7 @@ export default function InventoryPage() {
                   }}>
                     <Link href={`/vehicle/${vehicle.id}`}>
                       <Button 
+                        className="card-detail-button"
                         style={{
                           height: "2.29rem",
                           gap: "0.57rem",
@@ -1745,6 +1746,7 @@ export default function InventoryPage() {
                           paddingRight: "0.57rem",
                           paddingBottom: "0.29rem",
                           paddingLeft: "0.57rem",
+                          marginTop: "1rem",
                           borderRadius: "0.29rem",
                           border: "0.07rem solid #333333",
                           background: "#FFFFFF",
@@ -1754,9 +1756,7 @@ export default function InventoryPage() {
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
-                          position: "relative",
-                          top: "0.5rem",
-                          left: "0rem"
+                          position: "relative"
                         }}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.opacity = "0.9";
@@ -1776,8 +1776,7 @@ export default function InventoryPage() {
                           letterSpacing: "0%",
                           color: "#333333",
                           display: "flex",
-                          alignItems: "center",
-                          transform: "translateY(-0.07rem)"
+                          alignItems: "center"
                         }}>
                           詳細はこちら
                         </span>

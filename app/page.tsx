@@ -1964,7 +1964,7 @@ export default function HomePage() {
                   </div>
 
                   {/* 詳細ボタン */}
-                  <div style={{ 
+                  <div className="card-detail-button-container" style={{ 
                     height: "4.29rem", 
                     display: "flex", 
                     alignItems: "center", 
@@ -1973,6 +1973,7 @@ export default function HomePage() {
                   }}>
                     <Link href={`/vehicle/${vehicle.id}`}>
                       <Button 
+                        className="card-detail-button"
                         style={{
                           height: "2.29rem",
                           gap: "0.57rem",

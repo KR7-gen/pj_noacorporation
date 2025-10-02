@@ -210,11 +210,45 @@ body {
       margin-left: calc(-50vw + 50% + 1rem) !important;
       margin-right: calc(-50vw + 50% + 1rem) !important;
     }
+    /* 在庫カード：詳細はこちらボタン背景の灰色に見える箇所を解消 */
+    .inventory-card .card-detail-button-container {
+      background: #FFFFFF !important;
+    }
+    .inventory-card .card-detail-button {
+      background: #FFFFFF !important;
+      box-shadow: 0.14rem 0.14rem 0.14rem 0px #00000040 !important;
+      border-color: #333333 !important;
+    }
+    /* 在庫カード：ボタンを白背景内で上下中央に（スマホ時） */
+    .inventory-card .card-detail-button-container {
+      height: 3rem !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+    .inventory-card .card-detail-button {
+      height: 2.4rem !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+    }
+    .inventory-card .card-detail-button span {
+      line-height: 1 !important;
+    }
+    .inventory-card .card-detail-button svg {
+      height: 1rem !important;
+    }
     
     /* ホームページの新着車輌グリッド */
     .home-vehicle-grid {
       grid-template-columns: repeat(2, 1fr) !important;
       gap: 1rem !important;
+    }
+    /* 新着カード：ボタンと車検期限の重なり解消 */
+    .home-vehicle-grid .card-detail-button-container {
+      height: 3.5rem !important;
+    }
+    .home-vehicle-grid .card-detail-button {
+      margin-top: 0.25rem !important;
     }
     
     /* 車両詳細ページのサンプルカード */

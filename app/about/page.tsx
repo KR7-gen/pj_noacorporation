@@ -151,6 +151,7 @@ export default function AboutPage() {
           .employees-grid { flex-direction: column !important; align-items: stretch !important; position: static !important; gap: 1rem !important; width: 100% !important; }
           :global(.member-employee-card) { width: 100% !important; position: static !important; left: auto !important; transform: none !important; display: block !important; }
           .access-section { padding-top: 1.5rem !important; padding-bottom: 1.5rem !important; }
+          .access-section .access-inner { width: 100% !important; max-width: 100% !important; }
           .contact-section { padding-top: 1.5rem !important; padding-bottom: 1.5rem !important; }
           .about-page > .contact-section { padding-left: 0 !important; padding-right: 0 !important; }
           .contact-inner { padding-left: 1.143rem !important; padding-right: 1.143rem !important; }
@@ -1616,6 +1617,7 @@ export default function AboutPage() {
       {/* Access Section */}
       <section 
         id="access" 
+        className="access-section"
         style={{
           width: "100%",
           paddingTop: "2rem",
@@ -1624,6 +1626,7 @@ export default function AboutPage() {
         }}
       >
         <div 
+          className="access-inner"
           style={{
             width: "56%",
             margin: "0 auto"
