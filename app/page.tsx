@@ -1567,7 +1567,7 @@ export default function HomePage() {
                   <div 
                     className="vehicle-detail-table"
                     style={{
-                      height: "19.5rem",
+                      height: window.innerWidth <= 1023 ? "18rem" : "19.5rem",
                       display: "flex",
                       flexDirection: "column",
                       justifyContent: "space-between"
@@ -1576,7 +1576,7 @@ export default function HomePage() {
                     {/* ボディタイプ */}
                     <div 
                       style={{
-                        height: "calc(19.5rem / 6)",
+                        height: window.innerWidth <= 1023 ? "calc(18rem / 6)" : "calc(19.5rem / 6)",
                         display: "flex",
                         alignItems: "center",
                         background: "#FFFFFF",
@@ -1611,7 +1611,7 @@ export default function HomePage() {
                     {/* 本体価格 */}
                     <div 
                       style={{
-                        height: "calc(19.5rem / 6)",
+                        height: window.innerWidth <= 1023 ? "calc(18rem / 6)" : "calc(19.5rem / 6)",
                         display: "flex",
                         alignItems: "center",
                         fontSize: "0.79rem",
@@ -1680,7 +1680,7 @@ export default function HomePage() {
                     {/* 年式 */}
                     <div 
                       style={{
-                        height: "calc(19.5rem / 6)",
+                        height: window.innerWidth <= 1023 ? "calc(18rem / 6)" : "calc(19.5rem / 6)",
                         display: "flex",
                         alignItems: "center",
                         fontSize: "0.79rem",
@@ -1737,7 +1737,7 @@ export default function HomePage() {
                     {/* 走行距離 */}
                     <div 
                       style={{
-                        height: "calc(19.5rem / 6)",
+                        height: window.innerWidth <= 1023 ? "calc(18rem / 6)" : "calc(19.5rem / 6)",
                         display: "flex",
                         alignItems: "center",
                         fontSize: "0.79rem",
@@ -1794,7 +1794,7 @@ export default function HomePage() {
                     {/* 積載量 */}
                     <div 
                       style={{
-                        height: "calc(19.5rem / 6)",
+                        height: window.innerWidth <= 1023 ? "calc(18rem / 6)" : "calc(19.5rem / 6)",
                         display: "flex",
                         alignItems: "center",
                         fontSize: "0.79rem",
@@ -1851,7 +1851,7 @@ export default function HomePage() {
                     {/* シフト */}
                     <div 
                       style={{
-                        height: "calc(19.5rem / 6)",
+                        height: window.innerWidth <= 1023 ? "calc(18rem / 6)" : "calc(19.5rem / 6)",
                         display: "flex",
                         alignItems: "center",
                         fontSize: "0.79rem",
@@ -1908,7 +1908,7 @@ export default function HomePage() {
                     {/* 車検期限 */}
                     <div 
                       style={{
-                        height: "calc(19.5rem / 6)",
+                        height: window.innerWidth <= 1023 ? "calc(18rem / 6)" : "calc(19.5rem / 6)",
                         display: "flex",
                         alignItems: "center",
                         fontSize: "0.79rem",

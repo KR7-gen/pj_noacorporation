@@ -1357,7 +1357,7 @@ export default function InventoryPage() {
                   {/* ボディタイプ + 詳細テーブル */}
                   <div 
                     style={{
-                      height: "19.5rem",
+                      height: window.innerWidth <= 1023 ? "18rem" : "19.5rem",
                       display: "flex",
                       flexDirection: "column",
                       justifyContent: "space-between"
@@ -1366,7 +1366,7 @@ export default function InventoryPage() {
                     {/* ボディタイプ */}
                     <div 
                       style={{
-                        height: "calc(19.5rem / 6)",
+                        height: window.innerWidth <= 1023 ? "calc(18rem / 6)" : "calc(19.5rem / 6)",
                         display: "flex",
                         alignItems: "center",
                         background: "#FFFFFF",
@@ -1398,7 +1398,7 @@ export default function InventoryPage() {
                     {/* 本体価格 */}
                     <div 
                       style={{
-                        height: "calc(19.5rem / 6)",
+                        height: window.innerWidth <= 1023 ? "calc(18rem / 6)" : "calc(19.5rem / 6)",
                         display: "flex",
                         alignItems: "center",
                         fontSize: "0.79rem",
@@ -1463,7 +1463,7 @@ export default function InventoryPage() {
                     {/* 年式 */}
                     <div 
                       style={{
-                        height: "calc(19.5rem / 6)",
+                        height: window.innerWidth <= 1023 ? "calc(18rem / 6)" : "calc(19.5rem / 6)",
                         display: "flex",
                         alignItems: "center",
                         fontSize: "0.79rem",
@@ -1516,7 +1516,7 @@ export default function InventoryPage() {
                     {/* 走行距離 */}
                     <div 
                       style={{
-                        height: "calc(19.5rem / 6)",
+                        height: window.innerWidth <= 1023 ? "calc(18rem / 6)" : "calc(19.5rem / 6)",
                         display: "flex",
                         alignItems: "center",
                         fontSize: "0.79rem",
@@ -1569,7 +1569,7 @@ export default function InventoryPage() {
                     {/* 積載量 */}
                     <div 
                       style={{
-                        height: "calc(19.5rem / 6)",
+                        height: window.innerWidth <= 1023 ? "calc(18rem / 6)" : "calc(19.5rem / 6)",
                         display: "flex",
                         alignItems: "center",
                         fontSize: "0.79rem",
@@ -1622,7 +1622,7 @@ export default function InventoryPage() {
                     {/* シフト */}
                     <div 
                       style={{
-                        height: "calc(19.5rem / 6)",
+                        height: window.innerWidth <= 1023 ? "calc(18rem / 6)" : "calc(19.5rem / 6)",
                         display: "flex",
                         alignItems: "center",
                         fontSize: "0.79rem",
@@ -1675,7 +1675,7 @@ export default function InventoryPage() {
                     {/* 車検期限 */}
                     <div 
                       style={{
-                        height: "calc(19.5rem / 6)",
+                        height: window.innerWidth <= 1023 ? "calc(18rem / 6)" : "calc(19.5rem / 6)",
                         display: "flex",
                         alignItems: "center",
                         fontSize: "0.79rem",
