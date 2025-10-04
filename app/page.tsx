@@ -1964,13 +1964,19 @@ export default function HomePage() {
                   </div>
 
                   {/* 詳細ボタン */}
-                  <div className="card-detail-button-container" style={{ 
-                    height: "4.29rem", 
+                  <div className="card-detail-button-container" style={{
                     display: "flex", 
                     alignItems: "center", 
                     justifyContent: "center",
                     background: "#FFFFFF",
-                    marginTop: window.innerWidth <= 1023 ? "1rem" : "0"
+                    ...(window.innerWidth >= 1024 && {
+                      height: "100%",
+                      minHeight: "4rem",
+                      ...(typeof window !== 'undefined' && window.location.hostname !== 'localhost' && {
+                        paddingTop: "0.5rem",
+                        paddingBottom: "0.5rem"
+                      })
+                    })
                   }}>
                     <Link href={`/vehicle/${vehicle.id}`}>
                       <Button 
