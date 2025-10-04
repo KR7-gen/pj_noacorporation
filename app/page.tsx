@@ -1969,7 +1969,8 @@ export default function HomePage() {
                     display: "flex", 
                     alignItems: "center", 
                     justifyContent: "center",
-                    background: "#FFFFFF"
+                    background: "#FFFFFF",
+                    marginTop: window.innerWidth <= 1023 ? "1rem" : "0"
                   }}>
                     <Link href={`/vehicle/${vehicle.id}`}>
                       <Button 

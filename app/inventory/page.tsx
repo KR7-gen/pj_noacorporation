@@ -1680,7 +1680,11 @@ export default function InventoryPage() {
                         alignItems: "center",
                         fontSize: "0.79rem",
                         color: "#374151",
-                        borderBottom: "0.07rem solid #F2F2F2"
+                        borderBottom: "0.07rem solid #F2F2F2",
+                        visibility: "visible",
+                        opacity: 1,
+                        position: "relative",
+                        zIndex: 1
                       }}
                     >
                       <div style={{
@@ -1699,7 +1703,9 @@ export default function InventoryPage() {
                           fontStyle: "Bold",
                           lineHeight: "100%",
                           letterSpacing: "0%",
-                          color: "#1A1A1A"
+                          color: "#1A1A1A",
+                          visibility: "visible",
+                          display: "block"
                         }}>車検期限</span>
                       </div>
                       <div style={{ 
@@ -1718,7 +1724,9 @@ export default function InventoryPage() {
                           fontStyle: "Regular",
                           lineHeight: "100%",
                           letterSpacing: "0%",
-                          color: "#1A1A1A"
+                          color: "#1A1A1A",
+                          visibility: "visible",
+                          display: "block"
                         }}>
                           {vehicle.inspectionStatus || "抹消"}
                         </span>
