@@ -1405,11 +1405,9 @@ export default function HomePage() {
                 key={vehicle.id}
                 style={{
                   width: "100%",
-                  height: "41.93rem",
                   gap: "0.86rem",
                   opacity: 1,
                   borderRadius: "0",
-                  paddingBottom: "1.14rem",
                   borderWidth: "0.07rem",
                   background: "#FFFFFF",
                   border: "0.07rem solid #F2F2F2",
@@ -1422,7 +1420,6 @@ export default function HomePage() {
                   <div 
                     className="vehicle-card-header"
                     style={{
-                      height: "2.79rem",
                       background: "#1A1A1A",
                       padding: "0.57rem 0.86rem",
                       display: "flex",
@@ -1431,7 +1428,6 @@ export default function HomePage() {
                     }}
                   >
                     <span style={{ 
-                      height: "1.64rem",
                       opacity: 1,
                       fontFamily: "Noto Sans JP",
                       fontWeight: "700",
@@ -1451,7 +1447,6 @@ export default function HomePage() {
                       })()}
                     </span>
                     <span style={{ 
-                      height: "1.21rem",
                       opacity: 1,
                       fontFamily: "Noto Sans JP",
                       fontWeight: "400",
@@ -1470,15 +1465,15 @@ export default function HomePage() {
                   <div 
                     className="vehicle-inquiry-number"
                     style={{
-                      height: "2.5rem",
                       background: "#FFFFFF",
                       display: "flex",
                       alignItems: "center",
-                      justifyContent: "center"
+                      justifyContent: "center",
+                      paddingTop: "0.5rem",
+                      paddingBottom: "0.5rem"
                     }}
                   >
                         <span style={{
-                          height: "1.36rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "400",
@@ -1498,7 +1493,6 @@ export default function HomePage() {
                     style={{
                       position: "relative",
                       width: "100%",
-                      height: "12.86rem",
                       overflow: "hidden"
                     }}
                   >
@@ -1539,15 +1533,15 @@ export default function HomePage() {
                           top: "0",
                           left: "0",
                           width: "100%",
-                          height: "2.79rem",
                           backgroundColor: vehicle.isSoldOut ? "#EA1313" : "#666666",
                           display: "flex",
                           alignItems: "center",
-                          justifyContent: "center"
+                          justifyContent: "center",
+                          paddingTop: "0.5rem",
+                          paddingBottom: "0.5rem"
                         }}
                       >
                         <span style={{
-                          height: "1.64rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
@@ -1567,7 +1561,6 @@ export default function HomePage() {
                   <div 
                     className="vehicle-detail-table"
                     style={{
-                      height: window.innerWidth <= 1023 ? "18rem" : "19.5rem",
                       display: "flex",
                       flexDirection: "column",
                       justifyContent: "space-between"
@@ -1576,11 +1569,12 @@ export default function HomePage() {
                     {/* ボディタイプ */}
                     <div 
                       style={{
-                        height: window.innerWidth <= 1023 ? "calc(18rem / 6)" : "calc(19.5rem / 6)",
                         display: "flex",
                         alignItems: "center",
                         background: "#FFFFFF",
-                        borderBottom: "0.07rem solid #F2F2F2"
+                        borderBottom: "0.07rem solid #F2F2F2",
+                        paddingTop: "0.7rem",
+                        paddingBottom: "0.7rem"
                       }}
                     >
                       <div style={{
@@ -1592,7 +1586,6 @@ export default function HomePage() {
                         justifyContent: "center"
                       }}>
                         <span style={{
-                          height: "1.21rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "400",
@@ -1628,7 +1621,6 @@ export default function HomePage() {
                         justifyContent: "center"
                       }}>
                         <span style={{
-                          height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
@@ -1650,7 +1642,6 @@ export default function HomePage() {
                       }}>
                         <div style={{ whiteSpace: "nowrap" }}>
                         <span style={{
-                          height: "1.64rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
@@ -1663,7 +1654,6 @@ export default function HomePage() {
                           {vehicle.price ? Math.floor(vehicle.price / 10000) : "000"}
                         </span>
                         <span style={{
-                          height: "1rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "400",
@@ -1697,7 +1687,6 @@ export default function HomePage() {
                         justifyContent: "center"
                       }}>
                         <span style={{
-                          height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
@@ -1754,7 +1743,6 @@ export default function HomePage() {
                         justifyContent: "center"
                       }}>
                         <span style={{
-                          height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
@@ -1775,7 +1763,6 @@ export default function HomePage() {
                         paddingLeft: "0.86rem"
                       }}>
                         <span style={{
-                          height: "1.21rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "400",
@@ -1811,7 +1798,6 @@ export default function HomePage() {
                         justifyContent: "center"
                       }}>
                         <span style={{
-                          height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
@@ -1832,7 +1818,6 @@ export default function HomePage() {
                         paddingLeft: "0.86rem"
                       }}>
                         <span style={{
-                          height: "1.21rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "400",
@@ -1868,7 +1853,6 @@ export default function HomePage() {
                         justifyContent: "center"
                       }}>
                         <span style={{
-                          height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
@@ -1889,7 +1873,6 @@ export default function HomePage() {
                         paddingLeft: "0.86rem"
                       }}>
                         <span style={{
-                          height: "1.21rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "400",
@@ -1925,7 +1908,6 @@ export default function HomePage() {
                         justifyContent: "center"
                       }}>
                         <span style={{
-                          height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
@@ -1946,7 +1928,6 @@ export default function HomePage() {
                         paddingLeft: "0.86rem"
                       }}>
                         <span style={{
-                          height: "1.21rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "400",
@@ -1966,15 +1947,12 @@ export default function HomePage() {
                   {/* 詳細ボタン */}
                   <div className="card-detail-button-container" style={{
                     display: "flex", 
-                    alignItems: "center", 
                     justifyContent: "center",
-                    background: "#FFFFFF",
+                    paddingTop: "0.5rem",
+                    paddingBottom: "0.5rem",
                     ...(window.innerWidth >= 1024 && {
                       height: "100%",
-                      minHeight: "4rem",
                       ...(typeof window !== 'undefined' && window.location.hostname !== 'localhost' && {
-                        paddingTop: "0.5rem",
-                        paddingBottom: "0.5rem"
                       })
                     })
                   }}>
@@ -1982,14 +1960,8 @@ export default function HomePage() {
                       <Button 
                         className="card-detail-button"
                         style={{
-                          height: "2.29rem",
                           gap: "0.57rem",
                           opacity: 1,
-                          paddingTop: "0.29rem",
-                          paddingRight: "0.57rem",
-                          paddingBottom: "0.29rem",
-                          paddingLeft: "0.57rem",
-                          borderRadius: "0.29rem",
                           border: "0.07rem solid #333333",
                           background: "#FFFFFF",
                           boxShadow: "0.14rem 0.14rem 0.14rem 0px #00000040",
@@ -2007,13 +1979,11 @@ export default function HomePage() {
                         }}
                       >
                         <span style={{
-                          height: "1.43rem",
                           opacity: 1,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
                           fontSize: "1rem",
-                          lineHeight: "1.43rem",
                           letterSpacing: "0%",
                           color: "#333333",
                           display: "flex",
@@ -2023,13 +1993,11 @@ export default function HomePage() {
                           詳細はこちら
                         </span>
                         <svg
-                          height="12"
                           viewBox="0 0 24 24"
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
                           style={{
                             color: "#333333",
-                            height: "1.43rem",
                             display: "flex",
                             alignItems: "center"
                           }}
