@@ -1352,7 +1352,7 @@ export default function InventoryPage() {
                   {/* ボディタイプ + 詳細テーブル */}
                   <div 
                     style={{
-                      height: window.innerWidth <= 1023 ? "18rem" : "19.5rem",
+                      height: window.innerWidth <= 1023 ? "auto" : "19.5rem",
                       display: "flex",
                       flexDirection: "column",
                       justifyContent: "space-between"

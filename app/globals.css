@@ -237,8 +237,9 @@ body {
       line-height: 1 !important;
       font-size: 0.85rem !important;
     }
-    .inventory-card .card-detail-button svg 
-    
+    .inventory-card .card-detail-button svg {
+      height: 0.85rem !important;
+    }
     
     /* ホームページの新着車輌グリッド */
     .home-vehicle-grid {
