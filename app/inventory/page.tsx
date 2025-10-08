@@ -100,6 +100,9 @@ export default function InventoryPage() {
     setFormMaker(maker);
     setFormSize(size);
     setFormKeyword(keyword);
+    
+    // URLパラメータが変更されたらページトップにスクロール
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [searchParams]);
 
   // Firestoreからデータを取得
@@ -1237,7 +1240,7 @@ export default function InventoryPage() {
                     }}>
                       {(() => {
                         const makerLabel = (vehicle.maker === "三菱ふそう" ? "三菱" : vehicle.maker) || "";
-                        const typeLabel = (vehicle.vehicleType || vehicle.model || "").trim();
+                        const typeLabel = (vehicle.vehicleType?.trim() || vehicle.model?.trim() || "");
                         return `${makerLabel}${typeLabel ? ` ${typeLabel}` : ""}`.trim();
                       })()}
                     </span>
@@ -1251,7 +1254,7 @@ export default function InventoryPage() {
                       color: "#FFFFFF",
                       whiteSpace: "nowrap"
                     }}>
-                      {vehicle.modelCode || vehicle.model}
+                      {vehicle.modelCode?.trim() || ""}
                     </span>
                   </div>
                   
