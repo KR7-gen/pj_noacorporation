@@ -221,22 +221,24 @@ body {
     }
     /* 在庫カード：ボタンを白背景内で上下中央に（スマホ時） */
     .inventory-card .card-detail-button-container {
-      height: 3rem !important;
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
+      padding-top: 0.5rem !important;
+      padding-bottom: 0.5rem !important;
     }
     .inventory-card .card-detail-button {
-      height: 2.4rem !important;
       padding-top: 0 !important;
       padding-bottom: 0 !important;
+      padding-left: 0.5rem !important;
+      padding-right: 0.5rem !important;
     }
     .inventory-card .card-detail-button span {
       line-height: 1 !important;
+      font-size: 0.85rem !important;
     }
-    .inventory-card .card-detail-button svg {
-      height: 1rem !important;
-    }
+    .inventory-card .card-detail-button svg 
+    
     
     /* ホームページの新着車輌グリッド */
     .home-vehicle-grid {
