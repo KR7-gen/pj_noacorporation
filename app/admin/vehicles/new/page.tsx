@@ -485,7 +485,7 @@ export default function VehicleNewPage() {
       const vehicleData: any = {
         name: formData.name || "",
         maker: formData.maker || "",
-        model: formData.model || "",
+        model: formData.modelCode || "", // 型式をmodelに設定
         modelCode: formData.modelCode || "", // 追加
         year: formData.year || "",
         month: formData.month || "",
@@ -578,7 +578,7 @@ export default function VehicleNewPage() {
       const vehicleData = {
         name: formData.name || "",
         maker: formData.maker || "",
-        model: formData.model || "",
+        model: formData.modelCode || "", // 型式をmodelに設定
         modelCode: formData.modelCode || "",
         year: formData.year || "",
         month: formData.month || "",
