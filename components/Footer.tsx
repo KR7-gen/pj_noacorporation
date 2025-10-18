@@ -136,7 +136,7 @@ export function Footer() {
 
         {/* Copyright */}
         <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
-          <p>&copy; 2025 会社名. All rights reserved.</p>
+          <p>&copy; 株式会社Noa Corporation. All rights reserved.</p>
         </div>
       </div>
     </footer>
