@@ -20,34 +20,22 @@ const companyInfo = {
 
 const members = [
   {
-    name: "代表取締役　名前",
+    name: "代表取締役　谷口",
     role: "代表取締役",
     description:
-      '中古トラックオークションでの買い付け "だけ" に10年以上従事していた経験を持つ、トラック仕入れのプロ中のプロ。お客様に喜んでいただける車輛の見極めと、どこよりも安く落札するスキルには、他者の追随を許さない自信があります。プライベートでは、クラシックカーが好き。',
+      '見た目は今どき？！中身は職人その名も代表谷口‼️\nやってみないとお客さんと対等に話せないと思い、小さい頃から働く車が大大大好き過ぎて仕事でダンプ屋さんもレッカー屋さんもやっちゃいました笑\n触れた車は数知れず売った車も数知れず\n座右の銘はお馴染みの名台詞\n「私失敗しないので」\nを掲げて失敗しない車選びを全力でサポート致します🫡\nちなみに365日24時間熱い漢です‼️‼️',
   },
   {
-    name: "取締役　名前",
+    name: "山田",
     role: "取締役",
     description:
-      "様々な職種を経験し、持ち前の思考力とセンスで、他の人では考えつかないような切り口から事業を広げるファンタジスタでありながら、縁の下の力持ち。中古車の仕入においても、幅広い人脈と独自の感性から、トラックを探し出す。趣味は釣り。",
+      "困った時の必殺技は４次元ポケット\nトラック界のドラえもん🐖\nその名も山田大輔‼️\nしょうがないな〜のび太くんばりにお客様の要望をすぐ解決🤞\n社長と一緒にダンプ屋さんもレッカー屋さんもやって働く車に触れてきました😀\n心も身体も熱い漢、山田大輔を宜しくお願いします😀",
   },
   {
-    name: "名前",
+    name: "中村",
     role: "入庫検査担当",
     description:
-      "車両のあらゆる部位の状態から、過去の車の使われ方を推測し、トラックの全体像を把握する「検査の匠」。すべての販売車両に対して、ノアコーポレーション独自の車輌状態レポートを作成し、その車輌の本当の価値をお客さんにお伝えしている",
-  },
-  {
-    name: "名前",
-    role: "営業担当",
-    description:
-      "トラック業界歴15年。トラック市場を知り尽くし、お客様満足に命をかける営業マン。状況によっては「購入はもう少し待った方が良いかもしれません」など、会社の売上よりもお客様を優先してしまうこともしばしば。",
-  },
-  {
-    name: "名前",
-    role: "システム担当",
-    description:
-      "全くの異業種からトラック業界に飛び込み、IT化や効率化が進まない業態に風穴を開けているシステム担当。販売プロセスにおけるコストカットを徹底することで、お客様への最終的なご提供価格の引き下げに貢献している。",
+      "お客様の欲しいトラックを見抜く、\n見た目は子供、頭脳はトラックマイスター\n\nその名も名探偵中村\n\n真実はいつもひとつ！\nお客様のお探しの車両を探偵の様にお探しして事件と同じく解決しちゃいます",
   },
 ]
 
@@ -60,6 +48,15 @@ const memberGroups = {
 
 export default function AboutPage() {
   const router = useRouter();
+  const renderWithLineBreaks = (text: string) => {
+    const parts = String(text).split("\n");
+    return parts.map((part, index) => (
+      <span key={index}>
+        {part}
+        {index < parts.length - 1 ? <br /> : null}
+      </span>
+    ));
+  };
 
   return (
     <div className="about-page min-h-screen bg-white" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -1383,7 +1380,6 @@ export default function AboutPage() {
                     key={index} 
                     style={{
                       width: "100%",
-                      height: "320px",
                       margin: "0",
                       display: "flex",
                       justifyContent: "space-between",
@@ -1417,7 +1413,7 @@ export default function AboutPage() {
                         marginRight: "0",
                         fontWeight: "400"
                       }}>
-                        {member.description}
+                        {renderWithLineBreaks(member.description)}
                       </p>
                     </div>
                     
@@ -1426,7 +1422,7 @@ export default function AboutPage() {
                       className="member-photo"
                       style={{
                         width: "29.5%",
-                        height: "22.86rem",
+                        height: "100%",
                         backgroundColor: "#808080",
                         display: "flex",
                         alignItems: "center",
@@ -1436,7 +1432,16 @@ export default function AboutPage() {
                         margin: "0"
                       }}
                     >
-                      ダミー画像
+                      <img 
+                        src="/member_ceo.jpg"
+                        alt="代表取締役の写真"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          objectPosition: "center"
+                        }}
+                      />
                     </div>
                   </div>
                 ))}
@@ -1467,7 +1472,6 @@ export default function AboutPage() {
                     key={index} 
                     style={{
                       width: "100%",
-                      height: "320px",
                       margin: "0",
                       display: "flex",
                       justifyContent: "space-between",
@@ -1501,7 +1505,7 @@ export default function AboutPage() {
                         marginRight: "0",
                         fontWeight: "400"
                       }}>
-                        {member.description}
+                        {renderWithLineBreaks(member.description)}
                       </p>
                     </div>
                     
@@ -1510,7 +1514,7 @@ export default function AboutPage() {
                       className="member-photo"
                       style={{
                         width: "29.5%",
-                        height: "22.86rem",
+                        height: "100%",
                         backgroundColor: "#808080",
                         display: "flex",
                         alignItems: "center",
@@ -1520,7 +1524,16 @@ export default function AboutPage() {
                         margin: "0"
                       }}
                     >
-                      ダミー画像
+                      <img 
+                        src="/member_2nd.jpg"
+                        alt="取締役の写真"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          objectPosition: "center"
+                        }}
+                      />
                     </div>
                   </div>
                 ))}
@@ -1538,75 +1551,83 @@ export default function AboutPage() {
               }}>
               </h3>
               <div 
-                className="employees-grid"
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "flex-start",
-                  width: "100%",
-                  position: "relative"
+                  width: "100%"
                 }}
               >
                 {memberGroups.employees.map((member, index) => (
-                  <Card 
-                    className="member-employee-card"
+                  <div 
+                    className="member-row"
                     key={index} 
                     style={{
-                      backgroundColor: "white",
-                      border: "1px solid #e5e7eb",
-                      borderRadius: "8px",
-                      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-                      height: "100%",
+                      width: "100%",
+                      margin: "0",
                       display: "flex",
-                      flexDirection: "column",
-                      width: "25.8%",
-                      position: index === 1 ? "absolute" : "relative",
-                      left: index === 1 ? "50%" : "auto",
-                      transform: index === 1 ? "translateX(-50%)" : "none"
+                      justifyContent: "space-between",
+                      alignItems: "flex-start"
                     }}
                   >
-                    <CardContent style={{ padding: "0", textAlign: "center", display: "flex", flexDirection: "column", height: "100%" }}>
-                      {/* 写真（最上部） */}
-                      <div 
+                    {/* 名前と説明（左の70.5%） */}
+                    <div className="member-text" style={{
+                      width: "70.5%",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "flex-start",
+                      textAlign: "left",
+                      padding: "0"
+                    }}>
+                      <h3 style={{ 
+                        fontWeight: "bold", 
+                        fontSize: "1.14rem", 
+                        marginBottom: "0.57rem",
+                        color: "#1a1a1a",
+                        marginLeft: "0",
+                        marginRight: "0"
+                      }}>
+                        {member.name}
+                      </h3>
+                      <p style={{ 
+                        fontSize: "1.14rem", 
+                        color: "#1a1a1a", 
+                        lineHeight: "1.6",
+                        marginLeft: "0",
+                        marginRight: "0",
+                        fontWeight: "400"
+                      }}>
+                        {renderWithLineBreaks(member.description)}
+                      </p>
+                    </div>
+                    
+                    {/* 写真（右の29.5%） */}
+                    <div 
+                      className="member-photo"
+                      style={{
+                        width: "29.5%",
+                        height: "100%",
+                        backgroundColor: "#808080",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: "white",
+                        fontSize: "1rem",
+                        margin: "0"
+                      }}
+                    >
+                      <img 
+                        src="/member_3rd.png"
+                        alt="入庫検査担当の写真"
                         style={{
                           width: "100%",
-                          height: "15rem",
-                          backgroundColor: "#808080",
-                          margin: "0",
-                          marginBottom: "1.14rem",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          color: "white",
-                          fontSize: "1rem"
+                          height: "100%",
+                          objectFit: "cover",
+                          objectPosition: "center"
                         }}
-                      >
-                        ダミー画像
-                      </div>
-                      
-                      {/* 名前と説明文（写真の下） */}
-                      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "flex-start" }}>
-                        <h3 style={{ 
-                          fontWeight: "bold", 
-                          fontSize: "1.14rem", 
-                          marginBottom: "8px",
-                          color: "#1a1a1a"
-                        }}>{member.name}</h3>
-                        <p style={{ 
-                          color: "#1a1a1a", 
-                          fontWeight: "500", 
-                          marginBottom: "8px",
-                          fontSize: "1rem"
-                        }}>{member.role}</p>
-                        <p style={{ 
-                          fontSize: "1.14rem", 
-                          color: "#1a1a1a", 
-                          lineHeight: "1.6",
-                          fontWeight: "400"
-                        }}>{member.description}</p>
-                      </div>
-                    </CardContent>
-                  </Card>
+                      />
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
