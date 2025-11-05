@@ -101,8 +101,28 @@ export default function InventoryPage() {
     setFormSize(size);
     setFormKeyword(keyword);
     
-    // URLパラメータが変更されたらページトップにスクロール
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // ハッシュ(#type-icons / #search-section)がある場合はその要素の先頭へ、無ければトップへ
+    if (typeof window !== 'undefined') {
+      const { hash } = window.location;
+      if (hash) {
+        // 要素が描画されるまでリトライしてからスクロール（最大10回/100ms）
+        let attempts = 0;
+        const tryScroll = () => {
+          const target = document.querySelector(hash);
+          if (target) {
+            (target as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'start' });
+            return;
+          }
+          if (attempts < 10) {
+            attempts += 1;
+            setTimeout(tryScroll, 100);
+          }
+        };
+        setTimeout(tryScroll, 0);
+        return;
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }, [searchParams]);
 
   // Firestoreからデータを取得
@@ -485,8 +505,9 @@ export default function InventoryPage() {
 
         {/* 車両タイプアイコン */}
         <div 
+          id="type-icons"
           style={{
-            padding: "3.43rem 1.43rem 0 1.43rem",
+            padding: "5.43rem 1.43rem 0 1.43rem",
             flex: "1"
           }}
         >
@@ -604,6 +625,7 @@ export default function InventoryPage() {
 
         {/* Search Section */}
         <div 
+          id="search-section"
           className="search-section"
           style={{
             padding: "0.857rem 1.43rem 2.86rem 1.43rem",

@@ -69,7 +69,7 @@ export function Footer() {
                       : ""
                   }>
                     <Link 
-                      href={`/inventory?type=${encodeURIComponent(type)}`}
+                      href={`/inventory?type=${encodeURIComponent(type)}#type-icons`}
                       className={`text-gray-400 hover:text-white transition-colors ${
                         type === "重機回送車・セルフクレーン" || type === "キャリアカー・車両運搬車"
                           ? "md:whitespace-nowrap whitespace-pre-line" 
@@ -105,7 +105,7 @@ export function Footer() {
                 {footerLinks.makers.map((maker, index) => (
                   <li key={index}>
                     <Link 
-                      href={`/inventory?maker=${encodeURIComponent(maker)}`}
+                      href={`/inventory?maker=${encodeURIComponent(maker)}#type-icons`}
                       className="text-gray-400 hover:text-white transition-colors whitespace-nowrap"
                     >
                       ー　{maker}
@@ -122,7 +122,7 @@ export function Footer() {
                 {footerLinks.sizes.map((size, index) => (
                   <li key={index}>
                     <Link 
-                      href={`/inventory?size=${encodeURIComponent(size)}`}
+                      href={`/inventory?size=${encodeURIComponent(size)}#type-icons`}
                       className="text-gray-400 hover:text-white transition-colors whitespace-nowrap"
                     >
                       ー　{size}
