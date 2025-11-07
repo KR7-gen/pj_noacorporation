@@ -2331,7 +2331,7 @@ export default function InventoryPage() {
                 height: "100%"
               }}>
                 {/* ⑤トラック買取をご希望の方はこちら */}
-                <Link href="/contact" style={{ textDecoration: "none" }}>
+                <Link href="https://line.me/R/ti/p/@285skrcv" style={{ textDecoration: "none" }}>
                   <div 
                     style={{
                       width: "25.714rem",

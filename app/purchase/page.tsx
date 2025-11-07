@@ -212,7 +212,7 @@ const HeroSection = () => (
           >
             \ LINEで簡単に査定額が分かります！ /
           </p>
-          <Link href="/contact">
+          <Link href="https://line.me/R/ti/p/@285skrcv">
             <Button 
               className="text-white border-0 w-full"
               style={{
@@ -360,7 +360,7 @@ const HeroSection = () => (
       </div>
       
       {/* 右側エリア（問い合わせフォーム） */}
-              <div className="absolute hidden md:block" style={{ right: '14.64rem', bottom: '8.786rem' }}>
+        <div className="absolute hidden md:block" style={{ right: '14.64rem', bottom: '8.786rem' }}>
           <div className="text-center">
             <div className="bg-white/90 backdrop-blur-sm inline-block" style={{ padding: '1.429rem', height: '9.857rem' }}>
             <p 
@@ -376,7 +376,7 @@ const HeroSection = () => (
             >
               \ LINEで簡単に査定額が分かります！ /
             </p>
-            <Link href="/contact">
+            <Link href="https://line.me/R/ti/p/@285skrcv">
               <Button 
                 className="text-white border-0"
                 style={{
@@ -743,7 +743,7 @@ const AssessmentRequestSection = () => (
            {/* 買取査定フォームと電話番号の横並び配置 */}
             <div className="flex flex-col md:flex-row justify-center items-center md:items-start gap-4 md:gap-[2rem]">
              {/* 買取査定フォーム（左） */}
-             <Link href="/contact" className="w-auto md:w-auto">
+             <Link href="https://line.me/R/ti/p/@285skrcv" className="w-auto md:w-auto">
                <div 
                  className="h-[3.214rem] flex items-center justify-center rounded-lg px-4 md:px-6 whitespace-nowrap"
                  style={{
@@ -1129,7 +1129,7 @@ const DocumentSection = () => (
         <div className="text-center mb-6">
           <p className="text-[1rem] font-bold mb-4">ダウンロードはこちら</p>
           <div className="flex justify-center gap-[2.286rem]">
-                         <Button 
+              <Button 
                variant="outline"
                className="text-[1rem] font-bold text-white"
                style={{
@@ -1565,7 +1565,7 @@ const ContactSection = () => (
             height: "100%"
           }}>
             {/* ⑤トラック買取をご希望の方はこちら */}
-            <Link href="/contact" style={{ textDecoration: "none" }}>
+            <Link href="https://line.me/R/ti/p/@285skrcv" style={{ textDecoration: "none" }}>
               <div 
                 style={{
                   width: "25.714rem",
