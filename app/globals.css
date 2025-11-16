@@ -12,6 +12,48 @@ body {
     text-wrap: balance;
   }
   
+  /* Header: lg(1024-1279px)での調整 */
+  @media (min-width: 1024px) and (max-width: 1279px) {
+    /* アイコンを非表示（lgのみ） */
+    .desktop-icons {
+      display: none !important;
+    }
+
+    /* ロゴ（デスクトップ表示側） */
+    .desktop-header img.hidden.lg\:block,
+    .desktop-header .desktop-logo {
+      height: 3.25rem !important;
+      max-width: 80px !important;
+      min-width: 80px !important;
+    }
+
+    /* PCナビゲーションの文字サイズ */
+    .desktop-nav a {
+      font-size: 0.98rem !important;
+    }
+
+    /* 電話番号の文字サイズ */
+    .desktop-phone .phone-number {
+      font-size: 1.15rem !important;
+    }
+    .desktop-phone .phone-note {
+      font-size: 0.72rem !important;
+      line-height: 1.2 !important;
+    }
+
+    /* 問い合わせフォームボタンの文字サイズ */
+    .desktop-contact .desktop-contact-button {
+      font-size: 1rem !important;
+      padding: 0.45rem 0.6rem !important;
+    }
+
+    /* アイコンを小さく */
+    .desktop-icons img {
+      width: 85% !important;
+      height: auto !important;
+    }
+  }
+  
   .desktop-only {
     display: none !important;
   }

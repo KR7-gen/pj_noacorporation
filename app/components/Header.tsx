@@ -38,60 +38,63 @@ export function Header() {
            <img src="/logo.png" alt="NOA CORPORATION" className="block lg:hidden" style={{ width: "20vw", maxWidth: "90px", height: "4rem", opacity: 1, transform: "rotate(0deg)", margin: "0" }} />
          </a>
 
-        {/* スマホ版電話番号（TEL + 電話記号） */}
-        <div className="flex items-center justify-center">
-          <a 
-            href="tel:028-612-1474" 
-            className="flex items-center justify-center px-3 py-2 rounded-lg hover:opacity-80 transition-opacity"
-            style={{
-              background: "#666666",
-              color: "white",
-              fontFamily: "Noto Sans JP, sans-serif",
-              fontWeight: 600,
-              fontSize: "0.875rem"
-            }}
-            aria-label="電話をかける"
-          >
-            <span className="mr-2">TEL</span>
-            <img src="/call.svg" alt="電話" style={{ width: "1.25rem", height: "1.25rem", filter: "brightness(0) invert(1)" }} />
-          </a>
-        </div>
+        {/* 右側（TEL + MAIL + ハンバーガー） */}
+        <div className="flex items-center justify-end" style={{ gap: "0.5rem", margin: "0" }}>
+          {/* スマホ版電話番号（TEL + 電話記号） */}
+          <div className="flex items-center justify-center">
+            <a 
+              href="tel:028-612-1474" 
+              className="flex items-center justify-center px-3 py-2 rounded-lg hover:opacity-80 transition-opacity"
+              style={{
+                background: "#666666",
+                color: "white",
+                fontFamily: "Noto Sans JP, sans-serif",
+                fontWeight: 600,
+                fontSize: "0.875rem"
+              }}
+              aria-label="電話をかける"
+            >
+              <span className="mr-2">TEL</span>
+              <img src="/call.svg" alt="電話" style={{ width: "1.25rem", height: "1.25rem", filter: "brightness(0) invert(1)" }} />
+            </a>
+          </div>
 
-        {/* スマホ版問い合わせフォーム（MAIL + メール記号） */}
-        <div className="flex items-center justify-center">
-          <a 
-            href="/contact" 
-            className="flex items-center justify-center px-3 py-2 rounded-lg hover:opacity-80 transition-opacity"
-            style={{
-              background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
-              color: "white",
-              fontFamily: "Noto Sans JP, sans-serif",
-              fontWeight: 600,
-              fontSize: "0.875rem"
-            }}
-            aria-label="お問い合わせ"
-          >
-            <span className="mr-2">MAIL</span>
-            <img src="/mail.svg" alt="メール" style={{ width: "1.25rem", height: "1.25rem", filter: "brightness(0) invert(1)" }} />
-          </a>
-        </div>
+          {/* スマホ版問い合わせフォーム（MAIL + メール記号） */}
+          <div className="flex items-center justify-center">
+            <a 
+              href="/contact" 
+              className="flex items-center justify-center px-3 py-2 rounded-lg hover:opacity-80 transition-opacity"
+              style={{
+                background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
+                color: "white",
+                fontFamily: "Noto Sans JP, sans-serif",
+                fontWeight: 600,
+                fontSize: "0.875rem"
+              }}
+              aria-label="お問い合わせ"
+            >
+              <span className="mr-2">MAIL</span>
+              <img src="/mail.svg" alt="メール" style={{ width: "1.25rem", height: "1.25rem", filter: "brightness(0) invert(1)" }} />
+            </a>
+          </div>
 
-        {/* スマホ・タブレット用ハンバーガー */}
-         <div className="flex items-center" style={{ margin: "0" }}>
-          <button
-            type="button"
-            className="p-2 rounded bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 border border-blue-300 cursor-pointer"
-            onClick={handleMenuClick}
-            style={{ margin: "0" }}
-            aria-label="メニューを開く"
-          >
-            <Menu className="w-6 h-6 text-blue-600" />
-          </button>
+          {/* スマホ・タブレット用ハンバーガー */}
+          <div className="flex items-center" style={{ margin: "0" }}>
+            <button
+              type="button"
+              className="p-2 rounded bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 border border-blue-300 cursor-pointer"
+              onClick={handleMenuClick}
+              style={{ margin: "0" }}
+              aria-label="メニューを開く"
+            >
+              <Menu className="w-6 h-6 text-blue-600" />
+            </button>
+          </div>
         </div>
       </div>
 
       {/* PC版（新しい構成：ロゴ + その他の要素） */}
-      <div className="hidden lg:flex items-center justify-between" style={{ height: "5rem", padding: "0 0.6rem", margin: "0" }}>
+      <div className="hidden lg:flex items-center justify-between desktop-header" style={{ height: "5rem", padding: "0 0.6rem", margin: "0" }}>
         {/* ロゴ */}
          <a href="/" className="flex items-center" style={{ 
            margin: "0",
@@ -103,7 +106,7 @@ export function Header() {
         {/* その他の要素（PCナビゲーション、電話番号、問い合わせフォーム、アイコン） */}
         <div className="flex items-center" style={{ gap: "1.4rem", flexShrink: 0 }}>
           {/* PCナビゲーション */}
-           <nav className="flex items-center justify-center" style={{ 
+          <nav className="flex items-center justify-center desktop-nav" style={{ 
              height: "3.36rem",
              whiteSpace: "nowrap",
              overflow: "hidden",
@@ -235,7 +238,7 @@ export function Header() {
           </nav>
 
           {/* 電話番号 */}
-           <div className="flex items-center justify-center flex-1 min-w-[100px] lg:flex-none"
+          <div className="flex items-center justify-center flex-1 min-w-[100px] lg:flex-none desktop-phone"
              style={{
                minWidth: "14rem",
                height: "3.36rem",
@@ -248,7 +251,7 @@ export function Header() {
                flexShrink: 0
              }}
            >
-            <div
+            <div className="phone-number"
               style={{
                 margin: "0",
                 width: "auto",
@@ -276,7 +279,7 @@ export function Header() {
               </span>
              028-612-1474
             </div>
-            <div
+            <div className="phone-note"
              style={{
                margin: "0",
                width: "100%",
@@ -302,7 +305,7 @@ export function Header() {
           </div>
 
           {/* 問い合わせフォーム */}
-          <form action="/contact" method="get" className="flex items-center justify-center m-0 p-0 flex-1 min-w-[100px] lg:flex-none" style={{ 
+          <form action="/contact" method="get" className="flex items-center justify-center m-0 p-0 flex-1 min-w-[100px] lg:flex-none desktop-contact" style={{ 
             height: "3rem",
             margin: "0",
             flexShrink: 0
@@ -323,7 +326,7 @@ export function Header() {
               }}
               className="hidden lg:block"
             >
-              <button 
+              <button className="desktop-contact-button"
                 type="submit"
                 style={{
                   margin: "0",
@@ -350,7 +353,7 @@ export function Header() {
           </form>
 
           {/* アイコン */}
-          <div className="hidden md:block" style={{
+          <div className="hidden md:block desktop-icons" style={{
             height: "4.41rem",
             margin: "0",
             flexShrink: 0
