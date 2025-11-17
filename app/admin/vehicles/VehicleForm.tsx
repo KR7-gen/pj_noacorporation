@@ -48,6 +48,7 @@ const vehicleSchema = z.object({
     (a) => parseInt(z.string().parse(a), 10),
     z.number().optional()
   ),
+  mileageStatus: z.string().optional(),
   bodyType: z.string().optional(),
   size: z.string().optional(),
   description: z.string().optional(),
@@ -75,6 +76,7 @@ const bodyTypes = [
 ];
 const makers = ["日野", "いすゞ", "三菱ふそう", "UD", "その他"];
 const sizes = ["大型", "増トン", "中型", "小型"];
+const mileageStatuses = ["実走行", "メーター改ざん", "メーター交換", "不明"];
 
 interface VehicleFormProps {
   initialData?: Vehicle | null;
@@ -103,6 +105,7 @@ export default function VehicleForm({
       model: initialData?.model || "",
       year: initialData?.year?.toString() || "",
       mileage: initialData?.mileage?.toString() || "",
+      mileageStatus: initialData?.mileageStatus || "実走行",
       bodyType: initialData?.bodyType || "",
       size: initialData?.size || "",
       description: initialData?.description || "",
@@ -203,6 +206,27 @@ export default function VehicleForm({
             type="number"
             {...register("mileage")}
             placeholder="100000"
+          />
+        </div>
+        <div>
+          <Label htmlFor="mileageStatus">実走行かどうか</Label>
+          <Controller
+            name="mileageStatus"
+            control={control}
+            render={({ field }) => (
+              <Select onValueChange={field.onChange} defaultValue={field.value || "実走行"}>
+                <SelectTrigger>
+                  <SelectValue placeholder="実走行かどうかを選択" />
+                </SelectTrigger>
+                <SelectContent>
+                  {mileageStatuses.map((status) => (
+                    <SelectItem key={status} value={status}>
+                      {status}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
           />
         </div>
 

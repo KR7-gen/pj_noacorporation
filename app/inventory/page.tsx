@@ -1564,16 +1564,26 @@ export default function InventoryPage() {
                         justifyContent: "flex-start",
                         paddingLeft: "0.86rem"
                       }}>
-                        <span className="spec-value" style={{
-                          opacity: 1,
-                          fontFamily: "Noto Sans JP",
-                          fontWeight: "400",
-                          fontStyle: "Regular",
-                          lineHeight: "100%",
-                          letterSpacing: "0%",
-                          color: "#1A1A1A"
-                        }}>
+                        <span
+                          className="spec-value"
+                          style={{
+                            opacity: 1,
+                            fontFamily: "Noto Sans JP",
+                            fontWeight: "400",
+                            fontStyle: "Regular",
+                            lineHeight: "100%",
+                            letterSpacing: "0%",
+                            color: "#1A1A1A"
+                          }}
+                        >
                           {vehicle.mileage ? `${vehicle.mileage.toLocaleString()}km` : "00,000km"}
+                          {vehicle.mileageStatus && vehicle.mileageStatus !== "実走行" && (
+                            <span
+                              className="text-[6px] text-gray-600 block sm:inline md:inline lg:block xl:inline sm:ml-1 md:ml-1 lg:ml-0 xl:ml-1"
+                            >
+                              （{vehicle.mileageStatus}）
+                            </span>
+                          )}
                         </span>
                       </div>
                     </div>

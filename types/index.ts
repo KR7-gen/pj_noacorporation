@@ -7,6 +7,7 @@ export interface Vehicle {
   year: string;
   month?: string; // 月を追加
   mileage: number;
+  mileageStatus?: string;
   price: number;
   totalPrice?: number;
   description: string;

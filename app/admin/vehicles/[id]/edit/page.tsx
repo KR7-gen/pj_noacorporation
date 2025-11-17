@@ -145,6 +145,13 @@ const shifts = [
   "AT・SAT"
 ]
 
+const mileageStatuses = [
+  "実走行",
+  "メーター改ざん",
+  "メーター交換",
+  "不明"
+]
+
 // 営業担当の選択肢
 const salesRepresentatives = ["営業A", "営業B", "営業C"]
 
@@ -164,6 +171,7 @@ export default function VehicleEditPage() {
     price: "",
     wholesalePrice: "",
     totalPayment: "",
+    mileageStatus: "実走行",
     // 店舗関連フィールド
     storeName: "",
     storeId: undefined,
@@ -233,6 +241,7 @@ export default function VehicleEditPage() {
             wholesalePrice: formatNumberWithCommas(fetchedVehicle.wholesalePrice) || "",
             totalPayment: formatNumberWithCommas(fetchedVehicle.totalPayment) || "",
             mileage: formatNumberWithCommas(fetchedVehicle.mileage) || "",
+            mileageStatus: fetchedVehicle.mileageStatus || "実走行",
             loadingCapacity: formatNumberWithCommas(fetchedVehicle.loadingCapacity) || "",
             outerLength: formatNumberWithCommas(fetchedVehicle.outerLength) || "",
             outerWidth: formatNumberWithCommas(fetchedVehicle.outerWidth) || "",
@@ -1092,7 +1101,7 @@ export default function VehicleEditPage() {
                 <div></div>
               </div>
 
-              {/* 6行目：走行距離 + シフト + 馬力 + 過給機 + 空欄 */}
+              {/* 6行目：走行距離 + 実走行かどうか + シフト + 馬力 + 過給機 */}
               <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">走行距離</label>
@@ -1105,6 +1114,21 @@ export default function VehicleEditPage() {
                     placeholder="100,000"
                     style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                   />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">実走行かどうか</label>
+                  <select
+                    name="mileageStatus"
+                    value={formData.mileageStatus || "実走行"}
+                    onChange={handleChange}
+                    className="w-full border rounded px-2 py-1"
+                  >
+                    {mileageStatuses.map((status) => (
+                      <option key={status} value={status}>
+                        {status}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">シフト</label>
@@ -1145,7 +1169,6 @@ export default function VehicleEditPage() {
                     <option value="無">無</option>
                   </select>
                 </div>
-                <div></div>
               </div>
             </div>
           </div>

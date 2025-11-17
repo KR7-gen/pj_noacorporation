@@ -156,6 +156,13 @@ const shifts = [
   "AT・SAT"
 ]
 
+const mileageStatuses = [
+  "実走行",
+  "メーター改ざん",
+  "メーター交換",
+  "不明"
+]
+
 const vehicleStatuses = [
   "車検付き",
   "車検切れ",
@@ -188,6 +195,7 @@ export default function VehicleNewPage() {
     year: "",
     month: "",
     mileage: "",
+    mileageStatus: "実走行",
     loadingCapacity: "",
     shift: "",
     mission: "",
@@ -502,6 +510,7 @@ export default function VehicleNewPage() {
         vehicleType: formData.vehicleType || "",
         chassisNumber: formData.chassisNumber || "",
         shift: formData.shift || "",
+        mileageStatus: formData.mileageStatus || "実走行",
         turbo: formData.turbo || "", // 追加
         inspectionStatus: formData.inspectionStatus || "",
         loadingCapacity: formData.loadingCapacity ? Number(formData.loadingCapacity.toString().replace(/,/g, '')) : undefined,
@@ -596,6 +605,7 @@ export default function VehicleNewPage() {
         vehicleType: formData.vehicleType || "",
         chassisNumber: formData.chassisNumber || "",
         shift: formData.shift || "",
+        mileageStatus: formData.mileageStatus || "実走行",
         turbo: formData.turbo || "",
         inspectionStatus: formData.inspectionStatus || "",
         outerLength: formData.outerLength ? Number(formData.outerLength.toString().replace(/,/g, '')) : undefined,
@@ -1229,7 +1239,7 @@ export default function VehicleNewPage() {
                 <div></div>
               </div>
 
-              {/* 6行目：走行距離 + シフト + 馬力 + 過給機 + 空欄 */}
+              {/* 6行目：走行距離 + 実走行かどうか + シフト + 馬力 + 過給機 */}
               <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">走行距離</label>
@@ -1242,6 +1252,21 @@ export default function VehicleNewPage() {
                     placeholder="100,000"
                     style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                   />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">実走行かどうか</label>
+                  <select
+                    name="mileageStatus"
+                    value={formData.mileageStatus || "実走行"}
+                    onChange={handleChange}
+                    className="w-full border rounded px-2 py-1"
+                  >
+                    {mileageStatuses.map((status) => (
+                      <option key={status} value={status}>
+                        {status}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-medium">シフト</label>
@@ -1282,7 +1307,6 @@ export default function VehicleNewPage() {
                     <option value="無">無</option>
                   </select>
                 </div>
-                <div></div>
               </div>
             </div>
           </div>
@@ -1331,7 +1355,6 @@ export default function VehicleNewPage() {
                     ))}
                   </select>
                 </div>
-                <div></div>
                 <div></div>
               </div>
 

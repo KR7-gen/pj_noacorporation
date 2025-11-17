@@ -673,7 +673,14 @@ export default function VehicleDetailPage() {
                 <span className="px-3 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '0 0 1px 0', fontSize: '0.875rem', height: '3.142rem'}}>{vehicle.year && vehicle.month ? `${vehicle.year}年${vehicle.month.toString().replace('月', '')}月` : vehicle.year ? `${vehicle.year}年` : ""}</span>
                 {/* 5行目：走行距離 */}
                 <span className="font-medium px-3 flex items-center" style={{background: '#F2F2F2', height: '3.142rem',  borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '0 1px 1px 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>走行距離</span>
-                <span className="px-3 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '0 0 1px 0', fontSize: '0.875rem', height: '3.142rem'}}>{formatNumberWithCommas(vehicle.mileage)}km</span>
+                <span className="px-3 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '0 0 1px 0', fontSize: '0.875rem', height: '3.142rem'}}>
+                  {formatNumberWithCommas(vehicle.mileage)}km
+                  {vehicle.mileageStatus && vehicle.mileageStatus !== "実走行" && (
+                    <span className="text-[6px] text-gray-600 block sm:inline md:inline lg:block xl:inline sm:ml-1 md:ml-1 lg:ml-0 xl:ml-1">
+                      （{vehicle.mileageStatus}）
+                    </span>
+                  )}
+                </span>
                 {/* 6行目：最大積載量 */}
                 <span className="font-medium px-3 flex items-center" style={{background: '#F2F2F2', height: '3.142rem',  borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '0 1px 1px 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>最大積載量</span>
                 <span className="px-3 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '0 0 1px 0', fontSize: '0.875rem', height: '3.142rem'}}>{formatNumberWithCommas(vehicle.loadingCapacity)}kg</span>
@@ -740,7 +747,14 @@ export default function VehicleDetailPage() {
               <span className="px-3 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontSize: '0.875rem'}}>{formatNumberWithCommas(vehicle.horsepower)}ps</span>
               {/* 5行目 */}
               <span className="font-medium px-3 flex items-center" style={{background: '#F2F2F2', height: '3.142rem',  borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>走行距離</span>
-              <span className="px-3 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontSize: '0.875rem'}}>{formatNumberWithCommas(vehicle.mileage)}km</span>
+              <span className="px-3 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontSize: '0.875rem'}}>
+                {formatNumberWithCommas(vehicle.mileage)}km
+                {vehicle.mileageStatus && vehicle.mileageStatus !== "実走行" && (
+                  <span className="text-[6px] text-gray-600 block sm:inline md:inline lg:block xl:inline sm:ml-1 md:ml-1 lg:ml-0 xl:ml-1">
+                    （{vehicle.mileageStatus}）
+                  </span>
+                )}
+              </span>
               <span className="font-medium px-3 flex items-center" style={{background: '#F2F2F2', height: '3.142rem',  borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>過給機</span>
               <span className="px-3 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontSize: '0.875rem'}}>{vehicle.turbo || "---"}</span>
               {/* 6行目 */}
@@ -1035,7 +1049,7 @@ export default function VehicleDetailPage() {
                         letterSpacing: '0%',
                         color: '#1f2937',
                         whiteSpace: 'nowrap'
-                      }}>028-612-1472</p>
+                      }}>028-612-1474</p>
                     </div>
                   </div>
                   
