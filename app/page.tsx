@@ -322,160 +322,176 @@ export default function HomePage() {
           transform: "translateX(-50%)",
           display: "flex",
           flexDirection: "column",
-          background: `
-            linear-gradient(90deg, rgba(0, 0, 0, 0.4) 43.5%, rgba(255, 255, 255, 0) 100%),
-            url('/store_photos.jpg'),
-            url('/1_after_painting_examples.JPG'),
-            url('/2_after_painting_examples.JPG')
-          `,
-          backgroundSize: "cover, 33.33% 75%, 33.33% 75%, 33.33% 75%",
-          backgroundPosition: "center, left, center, right",
-          backgroundRepeat: "no-repeat, no-repeat, no-repeat, no-repeat",
           position: "absolute",
           zIndex: 1,
+          overflow: "hidden",
         }}
       >
-        {/* Hero Section */}
-        <div 
+        <div className="absolute inset-0 flex w-full items-center" style={{ zIndex: 0 }}>
+          {[
+            {src: "/store_photos.jpg", alt: "店舗外観"},
+            {src: "/1_after_painting_examples.JPG", alt: "塗装後の車両例1"},
+            {src: "/2_after_painting_examples.JPG", alt: "塗装後の車両例2"}
+          ].map((image) => (
+            <div key={image.src} className="w-1/3 aspect-[4/3]">
+              <img
+                src={image.src}
+                alt={image.alt}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          ))}
+        </div>
+        <div
+          className="absolute top-0 left-0 w-full h-full"
           style={{
-            color: "white",
-            padding: "4.57rem 1.43rem",
-            flex: "1"
+            background: "linear-gradient(90deg, rgba(0, 0, 0, 0.4) 43.5%, rgba(255, 255, 255, 0) 100%)",
+            zIndex: 1,
+            pointerEvents: "none"
           }}
-        >
+        />
+        <div style={{ position: "relative", zIndex: 2, display: "flex", flexDirection: "column" }}>
+          {/* Hero Section */}
           <div 
             style={{
-              width: "77.08%",
-              margin: "0 auto",
-              textAlign: "left"
+              color: "white",
+              padding: "1rem 1.43rem",
+              flex: "1"
             }}
           >
-            <h1 
+            <div 
               style={{
-                opacity: 1,
-                fontFamily: "Noto Sans JP",
-                fontWeight: 700,
-                fontStyle: "Bold",
-                fontSize: "3.43rem",
-                lineHeight: "100%",
-                letterSpacing: "0%",
-                color: "#FFFFFF",
-                textShadow: "0.29rem 0.29rem 0.29rem 0px #0000004D",
-                margin: "0 0 0 0",
+                width: "77.08%",
+                margin: "0 auto",
                 textAlign: "left"
               }}
-              className="hidden lg:block"
             >
-              豊富な在庫!!挑戦価格‼<br/>　　　ノアコーポレーション
-            </h1>
-            <div 
-              style={{
-                height: "8.57rem",
-                opacity: 1,
-                fontFamily: "Noto Sans JP",
-                fontWeight: 700,
-                fontStyle: "Bold",
-                fontSize: "1.71rem",
-                lineHeight: "2.86rem",
-                letterSpacing: "0%",
-                color: "#FFFFFF",
-                textShadow: "0.14rem 0.14rem 0.14rem rgba(0, 0, 0, 0.3)",
-                margin: "0",
-                textAlign: "left",
-                whiteSpace: "nowrap"
-              }}
-              className="hidden lg:block"
-            >
-              豊富な在庫車両数から、お探しの1台に出会える
-              <br />
-              栃木の中古トラック販売店です。
-              <br />
-              お気軽にお問合せ、現車確認にお越しください。
+              <h1 
+                style={{
+                  opacity: 1,
+                  fontFamily: "Noto Sans JP",
+                  fontWeight: 700,
+                  fontStyle: "Bold",
+                  fontSize: "3.43rem",
+                  lineHeight: "100%",
+                  letterSpacing: "0%",
+                  color: "#FFFFFF",
+                  textShadow: "0.29rem 0.29rem 0.29rem 0px #0000004D",
+                  margin: "0 0 0 0",
+                  textAlign: "left"
+                }}
+                className="hidden lg:block"
+              >
+                豊富な在庫!!挑戦価格‼<br/>　　　ノアコーポレーション
+              </h1>
+              <div 
+                style={{
+                  height: "8.57rem",
+                  opacity: 1,
+                  fontFamily: "Noto Sans JP",
+                  fontWeight: 700,
+                  fontStyle: "Bold",
+                  fontSize: "1.71rem",
+                  lineHeight: "2.86rem",
+                  letterSpacing: "0%",
+                  color: "#FFFFFF",
+                  textShadow: "0.14rem 0.14rem 0.14rem rgba(0, 0, 0, 0.3)",
+                  margin: "0",
+                  textAlign: "left",
+                  whiteSpace: "nowrap"
+                }}
+                className="hidden lg:block"
+              >
+                豊富な在庫車両数から、お探しの1台に出会える
+                <br />
+                栃木の中古トラック販売店です。
+                <br />
+                お気軽にお問合せ、現車確認にお越しください。
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Hero Section (Mobile only) */}
-        <div 
-          className="block lg:hidden"
-          style={{
-            color: "white",
-            height: "auto",
-            background: "linear-gradient(90deg, rgba(0, 0, 0, 0.4) 43.5%, rgba(255, 255, 255, 0) 100%), url('/background.png')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat"
-          }}
-        >
+          {/* Hero Section (Mobile only) */}
           <div 
+            className="block lg:hidden"
             style={{
-              width: "77.08%",
-              maxWidth: "1100px",
-              textAlign: "left"
+              color: "white",
+              height: "auto",
+              background: "linear-gradient(90deg, rgba(0, 0, 0, 0.4) 43.5%, rgba(255, 255, 255, 0) 100%), url('/background.png')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat"
             }}
           >
-            <h1 
-              style={{
-                opacity: 1,
-                fontFamily: "Noto Sans JP",
-                fontWeight: 700,
-                fontStyle: "Bold",
-                fontSize: "18px",
-                lineHeight: "140%",
-                letterSpacing: "0%",
-                color: "#FFFFFF",
-                textShadow: "0.29rem 0.29rem 0.29rem 0px #0000004D",
-                margin: "0 0 1rem 1rem",
-                textAlign: "left",
-                whiteSpace: "nowrap"
-              }}
-            >
-              豊富な在庫!!<br/>挑戦価格!!<br/>ノアコーポレーション
-            </h1>
             <div 
               style={{
-                height: "auto",
-                opacity: 1,
-                fontFamily: "Noto Sans JP",
-                fontWeight: 700,
-                fontSize: "12px",
-                lineHeight: "1.6",
-                letterSpacing: "0%",
-                color: "#FFFFFF",
-                textShadow: "0.14rem 0.14rem 0.14rem rgba(0, 0, 0, 0.3)",
-                margin: "0 0 1rem 1rem",
-                textAlign: "left",
-                whiteSpace: "nowrap"
+                width: "77.08%",
+                maxWidth: "1100px",
+                textAlign: "left"
               }}
             >
-              豊富な在庫車両数から、お探しの1台に出会える
-              <br />
-              栃木の中古トラック販売店です。
-              <br />
-              お気軽にお問合せ、現車確認にお越しください。
+              <h1 
+                style={{
+                  opacity: 1,
+                  fontFamily: "Noto Sans JP",
+                  fontWeight: 700,
+                  fontStyle: "Bold",
+                  fontSize: "18px",
+                  lineHeight: "140%",
+                  letterSpacing: "0%",
+                  color: "#FFFFFF",
+                  textShadow: "0.29rem 0.29rem 0.29rem 0px #0000004D",
+                  margin: "0 0 1rem 1rem",
+                  textAlign: "left",
+                  whiteSpace: "nowrap"
+                }}
+              >
+                豊富な在庫!!<br/>挑戦価格!!<br/>ノアコーポレーション
+              </h1>
+              <div 
+                style={{
+                  height: "auto",
+                  opacity: 1,
+                  fontFamily: "Noto Sans JP",
+                  fontWeight: 700,
+                  fontSize: "12px",
+                  lineHeight: "1.6",
+                  letterSpacing: "0%",
+                  color: "#FFFFFF",
+                  textShadow: "0.14rem 0.14rem 0.14rem rgba(0, 0, 0, 0.3)",
+                  margin: "0 0 1rem 1rem",
+                  textAlign: "left",
+                  whiteSpace: "nowrap"
+                }}
+              >
+                豊富な在庫車両数から、お探しの1台に出会える
+                <br />
+                栃木の中古トラック販売店です。
+                <br />
+                お気軽にお問合せ、現車確認にお越しください。
+              </div>
             </div>
           </div>
-        </div>
 
 
-        {/* Truck Type Grid */}
-        <div 
-          className="hidden lg:block"
-          style={{
-            padding: "0rem 1.43rem 0 1.43rem",
-            flex: "1"
-          }}
-        >
+          {/* Truck Type Grid */}
           <div 
+            className="hidden lg:block"
             style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(6, 1fr)",
-              gap: "0.57rem",
-              width: "77.08%",
-              margin: "0 auto"
+              padding: "0rem 1.43rem 0 1.43rem",
+              flex: "1"
             }}
           >
-            {vehicleTypeIcons.map((icon) => (
+            <div 
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(6, 1fr)",
+                gap: "0.57rem",
+                width: "77.08%",
+                margin: "0 auto"
+              }}
+            >
+              {vehicleTypeIcons.map((icon) => (
               <Link
                 key={icon.id}
                 href={`/inventory?type=${encodeURIComponent(icon.type)}`}
@@ -551,11 +567,11 @@ export default function HomePage() {
                     />
                   </div>
                   <span 
+                    className="text-[1.14rem] lg:text-[10px] xl:text-[1.14rem]"
                     style={{
                       fontFamily: "'Noto Sans JP', sans-serif",
                       fontWeight: 700,
                       fontStyle: "bold",
-                      fontSize: "1.14rem",
                       lineHeight: "120%",
                       letterSpacing: "0%",
                       textAlign: "center",
@@ -626,11 +642,11 @@ export default function HomePage() {
                 }}
               >
                   <select
+                    className="text-[0.9rem] lg:text-[10px] xl:text-[0.9rem]"
                     style={{
                       width: "100%",
                       border: "none",
                       background: "transparent",
-                      fontSize: "0.9rem",
                       fontFamily: "Noto Sans JP",
                       fontWeight: "400",
                       color: "#1A1A1A",
@@ -679,11 +695,11 @@ export default function HomePage() {
                 }}
               >
                   <select
+                    className="text-[0.9rem] lg:text-[10px] xl:text-[0.9rem]"
                     style={{
                       width: "100%",
                       border: "none",
                       background: "transparent",
-                      fontSize: "0.9rem",
                       fontFamily: "Noto Sans JP",
                       fontWeight: "400",
                       color: "#1A1A1A",
@@ -732,11 +748,11 @@ export default function HomePage() {
                 }}
               >
                   <select
+                    className="text-[0.9rem] lg:text-[10px] xl:text-[0.9rem]"
                     style={{
                       width: "100%",
                       border: "none",
                       background: "transparent",
-                      fontSize: "0.9rem",
                       fontFamily: "Noto Sans JP",
                       fontWeight: "400",
                       color: "#1A1A1A",
@@ -789,10 +805,10 @@ export default function HomePage() {
                 }}
               >
                 <span 
+                  className="text-[0.9rem] lg:text-[10px] xl:text-[0.9rem]"
                   style={{
                     fontFamily: "Noto Sans JP",
                     fontWeight: "400",
-                    fontSize: "0.9rem",
                     lineHeight: "100%",
                     letterSpacing: "0%",
                     color: "#1A1A1A",
@@ -820,11 +836,11 @@ export default function HomePage() {
                     placeholder="問い合わせ番号など"
                     value={searchKeyword}
                     onChange={(e) => setSearchKeyword(e.target.value)}
+                    className="text-[0.9rem] lg:text-[10px] xl:text-[0.9rem] lg:placeholder:opacity-0"
                     style={{
                       width: "100%",
                       border: "none",
                       background: "transparent",
-                      fontSize: "0.9rem",
                       fontFamily: "Noto Sans JP",
                       fontWeight: "400",
                       color: "#1A1A1A",
@@ -861,10 +877,10 @@ export default function HomePage() {
                 }}
               >
                 <span 
+                  className="text-[1.14rem] lg:text-[10px] xl:text-[1.14rem]"
                   style={{
                     fontFamily: "Noto Sans JP",
                     fontWeight: "700",
-                    fontSize: "1.14rem",
                     lineHeight: "100%",
                     letterSpacing: "0%",
                     textAlign: "center",
@@ -878,10 +894,11 @@ export default function HomePage() {
             </div>
           </div>
         </div>
+        </div>
       </section>
       
       {/* Spacer to account for absolute positioned Hero Section - PC版のみ */}
-      <div className="hidden lg:block" style={{ height: "55rem" }}></div>
+      <div className="hidden lg:block" style={{ height: "50rem" }}></div>
 
       {/* スマホ版 Hero Section */}
       <section 
@@ -1034,17 +1051,17 @@ export default function HomePage() {
                 >
                   <img 
                     src={`/${icon.type === "クレーン" ? "crane" : 
-                         icon.type === "ダンプ・ローダーダンプ" ? "dump" :
-                         icon.type === "平ボディ" ? "flatbed" :
-                         icon.type === "重機回送車・セルフクレーン" ? "carrier" :
-                         icon.type === "ミキサー車" ? "mixer" :
-                         icon.type === "アルミバン" ? "van" :
-                         icon.type === "高所作業車" ? "aerial" :
-                         icon.type === "アルミウィング" ? "wing" :
-                         icon.type === "キャリアカー・車両運搬車" ? "car_carrier" :
-                         icon.type === "塵芥車" ? "garbage" :
-                         icon.type === "アームロール" ? "arm-roll" :
-                         "special"}.${icon.type === "平ボディ" || icon.type === "アームロール" || icon.type === "キャリアカー・車両運搬車" ? "png" : "jpg"}`}
+                        icon.type === "ダンプ・ローダーダンプ" ? "dump" :
+                        icon.type === "平ボディ" ? "flatbed" :
+                        icon.type === "重機回送車・セルフクレーン" ? "carrier" :
+                        icon.type === "ミキサー車" ? "mixer" :
+                        icon.type === "アルミバン" ? "van" :
+                        icon.type === "高所作業車" ? "aerial" :
+                        icon.type === "アルミウィング" ? "wing" :
+                        icon.type === "キャリアカー・車両運搬車" ? "car_carrier" :
+                        icon.type === "塵芥車" ? "garbage" :
+                        icon.type === "アームロール" ? "arm-roll" :
+                        "special"}.${icon.type === "平ボディ" || icon.type === "アームロール" || icon.type === "キャリアカー・車両運搬車" ? "png" : "jpg"}`}
                     alt={icon.type}
                     style={{
                       maxWidth: "100%",
@@ -1421,25 +1438,21 @@ export default function HomePage() {
                     className="vehicle-card-header"
                     style={{
                       background: "#1A1A1A",
-                      padding: "0.57rem 0.86rem",
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center"
+                      display: "flex"
                     }}
                   >
-                    <span style={{ 
-                      opacity: 1,
-                      fontFamily: "Noto Sans JP",
-                      fontWeight: "700",
-                      fontStyle: "Bold",
-                      fontSize: "1.14rem",
-                      lineHeight: "100%",
-                      letterSpacing: "0%",
-                      color: "#FFFFFF",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap"
-                    }}>
+                    <span 
+                      className="text-[1.14rem] lg:text-[1.1rem] xl:text-[1.14rem]"
+                      style={{ 
+                        opacity: 1,
+                        fontFamily: "Noto Sans JP",
+                        fontWeight: "700",
+                        fontStyle: "Bold",
+                        lineHeight: "100%",
+                        letterSpacing: "0%",
+                        color: "#FFFFFF"
+                      }}
+                    >
                       {(() => {
                         const makerLabel = (vehicle.maker === "三菱ふそう" ? "三菱" : vehicle.maker) || "";
                         const typeLabel = (vehicle.vehicleType || vehicle.model || "").trim();
@@ -1454,8 +1467,7 @@ export default function HomePage() {
                       fontSize: "1rem",
                       lineHeight: "100%",
                       letterSpacing: "0%",
-                      color: "#FFFFFF",
-                      whiteSpace: "nowrap"
+                      color: "#FFFFFF"
                     }}>
                       {vehicle.modelCode || vehicle.model}
                     </span>
@@ -1620,17 +1632,18 @@ export default function HomePage() {
                         alignItems: "center",
                         justifyContent: "center"
                       }}>
-                        <span style={{
-                          opacity: 1,
-                          fontFamily: "Noto Sans JP",
-                          fontWeight: "700",
-                          fontStyle: "Bold",
-                          fontSize: "1rem",
-                          lineHeight: "100%",
-                          letterSpacing: "0%",
-                          color: "#1A1A1A",
-                          whiteSpace: "nowrap"
-                        }}>本体価格</span>
+                        <span 
+                          className="text-[1rem] lg:text-[0.8rem] xl:text-[1rem]"
+                          style={{
+                            opacity: 1,
+                            fontFamily: "Noto Sans JP",
+                            fontWeight: "700",
+                            fontStyle: "Bold",
+                            lineHeight: "100%",
+                            letterSpacing: "0%",
+                            color: "#1A1A1A",
+                            whiteSpace: "nowrap"
+                          }}>本体価格</span>
                       </div>
                       <div style={{ 
                         height: "100%",
@@ -1641,28 +1654,31 @@ export default function HomePage() {
                         paddingLeft: "0.86rem"
                       }}>
                         <div style={{ whiteSpace: "nowrap" }}>
-                        <span style={{
-                          opacity: 1,
-                          fontFamily: "Noto Sans JP",
-                          fontWeight: "700",
-                          fontStyle: "Bold",
-                          fontSize: "2.29rem",
-                          lineHeight: "100%",
-                          letterSpacing: "0%",
-                          color: "#2B5EC5"
-                        }} className="price-text">
+                        <span 
+                          className="price-text text-[2.29rem] lg:text-[1.5rem] xl:text-[2.29rem]"
+                          style={{
+                            opacity: 1,
+                            fontFamily: "Noto Sans JP",
+                            fontWeight: "700",
+                            fontStyle: "Bold",
+                            lineHeight: "100%",
+                            letterSpacing: "0%",
+                            color: "#2B5EC5"
+                          }}
+                        >
                           {vehicle.price ? Math.floor(vehicle.price / 10000) : "000"}
                         </span>
-                        <span style={{
-                          opacity: 1,
-                          fontFamily: "Noto Sans JP",
-                          fontWeight: "400",
-                          fontStyle: "Regular",
-                          fontSize: "0.86rem",
-                          lineHeight: "100%",
-                          letterSpacing: "0%",
-                          color: "#2B5EC5"
-                        }}>万円(税別)</span>
+                        <span 
+                          className="text-[0.86rem] lg:text-[0.75rem] xl:text-[0.86rem]"
+                          style={{
+                            opacity: 1,
+                            fontFamily: "Noto Sans JP",
+                            fontWeight: "400",
+                            fontStyle: "Regular",
+                            lineHeight: "100%",
+                            letterSpacing: "0%",
+                            color: "#2B5EC5"
+                          }}>万円(税別)</span>
                         </div>
                       </div>
                     </div>
@@ -1686,17 +1702,18 @@ export default function HomePage() {
                         alignItems: "center",
                         justifyContent: "center"
                       }}>
-                        <span style={{
-                          opacity: 1,
-                          fontFamily: "Noto Sans JP",
-                          fontWeight: "700",
-                          fontStyle: "Bold",
-                          fontSize: "1rem",
-                          lineHeight: "100%",
-                          letterSpacing: "0%",
-                          color: "#1A1A1A",
-                          whiteSpace: "nowrap"
-                        }}>年式</span>
+                        <span 
+                          className="text-[1rem] lg:text-[0.8rem] xl:text-[1rem]"
+                          style={{
+                            opacity: 1,
+                            fontFamily: "Noto Sans JP",
+                            fontWeight: "700",
+                            fontStyle: "Bold",
+                            lineHeight: "100%",
+                            letterSpacing: "0%",
+                            color: "#1A1A1A",
+                            whiteSpace: "nowrap"
+                          }}>年式</span>
                       </div>
                       <div style={{ 
                         height: "100%",
@@ -1742,17 +1759,18 @@ export default function HomePage() {
                         alignItems: "center",
                         justifyContent: "center"
                       }}>
-                        <span style={{
-                          opacity: 1,
-                          fontFamily: "Noto Sans JP",
-                          fontWeight: "700",
-                          fontStyle: "Bold",
-                          fontSize: "1rem",
-                          lineHeight: "100%",
-                          letterSpacing: "0%",
-                          color: "#1A1A1A",
-                          whiteSpace: "nowrap"
-                        }}>走行距離</span>
+                        <span 
+                          className="text-[1rem] lg:text-[0.8rem] xl:text-[1rem]"
+                          style={{
+                            opacity: 1,
+                            fontFamily: "Noto Sans JP",
+                            fontWeight: "700",
+                            fontStyle: "Bold",
+                            lineHeight: "100%",
+                            letterSpacing: "0%",
+                            color: "#1A1A1A",
+                            whiteSpace: "nowrap"
+                          }}>走行距離</span>
                       </div>
                       <div style={{ 
                         height: "100%",
@@ -1806,17 +1824,18 @@ export default function HomePage() {
                         alignItems: "center",
                         justifyContent: "center"
                       }}>
-                        <span style={{
-                          opacity: 1,
-                          fontFamily: "Noto Sans JP",
-                          fontWeight: "700",
-                          fontStyle: "Bold",
-                          fontSize: "1rem",
-                          lineHeight: "100%",
-                          letterSpacing: "0%",
-                          color: "#1A1A1A",
-                          whiteSpace: "nowrap"
-                        }}>積載量</span>
+                        <span 
+                          className="text-[1rem] lg:text-[0.8rem] xl:text-[1rem]"
+                          style={{
+                            opacity: 1,
+                            fontFamily: "Noto Sans JP",
+                            fontWeight: "700",
+                            fontStyle: "Bold",
+                            lineHeight: "100%",
+                            letterSpacing: "0%",
+                            color: "#1A1A1A",
+                            whiteSpace: "nowrap"
+                          }}>積載量</span>
                       </div>
                       <div style={{ 
                         height: "100%",
@@ -1861,17 +1880,18 @@ export default function HomePage() {
                         alignItems: "center",
                         justifyContent: "center"
                       }}>
-                        <span style={{
-                          opacity: 1,
-                          fontFamily: "Noto Sans JP",
-                          fontWeight: "700",
-                          fontStyle: "Bold",
-                          fontSize: "1rem",
-                          lineHeight: "100%",
-                          letterSpacing: "0%",
-                          color: "#1A1A1A",
-                          whiteSpace: "nowrap"
-                        }}>シフト</span>
+                        <span 
+                          className="text-[1rem] lg:text-[0.8rem] xl:text-[1rem]"
+                          style={{
+                            opacity: 1,
+                            fontFamily: "Noto Sans JP",
+                            fontWeight: "700",
+                            fontStyle: "Bold",
+                            lineHeight: "100%",
+                            letterSpacing: "0%",
+                            color: "#1A1A1A",
+                            whiteSpace: "nowrap"
+                          }}>シフト</span>
                       </div>
                       <div style={{ 
                         height: "100%",
@@ -1916,17 +1936,18 @@ export default function HomePage() {
                         alignItems: "center",
                         justifyContent: "center"
                       }}>
-                        <span style={{
-                          opacity: 1,
-                          fontFamily: "Noto Sans JP",
-                          fontWeight: "700",
-                          fontStyle: "Bold",
-                          fontSize: "1rem",
-                          lineHeight: "100%",
-                          letterSpacing: "0%",
-                          color: "#1A1A1A",
-                          whiteSpace: "nowrap"
-                        }}>車検期限</span>
+                        <span 
+                          className="text-[1rem] lg:text-[0.8rem] xl:text-[1rem]"
+                          style={{
+                            opacity: 1,
+                            fontFamily: "Noto Sans JP",
+                            fontWeight: "700",
+                            fontStyle: "Bold",
+                            lineHeight: "100%",
+                            letterSpacing: "0%",
+                            color: "#1A1A1A",
+                            whiteSpace: "nowrap"
+                          }}>車検期限</span>
                       </div>
                       <div style={{ 
                         height: "100%",
@@ -3030,6 +3051,7 @@ export default function HomePage() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          paddingTop: "2rem",
         }}
       >
         <div 
