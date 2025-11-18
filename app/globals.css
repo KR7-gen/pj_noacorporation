@@ -63,6 +63,66 @@ body {
     .search-section * {
       font-size: 10px !important;
     }
+    .inventory-search-input::placeholder,
+    .inventory-search-input::-webkit-input-placeholder,
+    .inventory-search-input::-moz-placeholder,
+    .inventory-search-input:-ms-input-placeholder,
+    .inventory-search-input::-ms-input-placeholder {
+      color: #1A1A1A !important;
+      opacity: 1 !important;
+    }
+
+    /* inventory: Search Section 2行レイアウト（lgのみ） */
+    .inventory-search-container {
+      display: grid !important;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      column-gap: 0.57rem;
+      row-gap: 0.57rem;
+      height: auto !important;
+    }
+    .inventory-search-left {
+      width: 100% !important;
+      display: contents !important;
+    }
+    .inventory-search-type,
+    .inventory-search-maker,
+    .inventory-search-size,
+    .inventory-search-sold {
+      width: 100% !important;
+      margin: 0 !important;
+    }
+    .inventory-search-sold {
+      flex-direction: row !important;
+      justify-content: flex-start !important;
+      align-items: center !important;
+      padding: 0.29rem 0.57rem !important;
+      gap: 0.29rem !important;
+    }
+    .inventory-search-right {
+      grid-column: 1 / -1;
+      width: 100% !important;
+      justify-content: flex-start !important;
+    }
+    .inventory-search-bottom-row {
+      width: 50% !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 0.57rem !important;
+    }
+    .inventory-search-keyword {
+      width: 50% !important;
+      justify-content: flex-start !important;
+    }
+    .inventory-search-keyword-field {
+      width: 100% !important;
+      margin: 0 !important;
+    }
+    .inventory-search-button {
+      width: 50% !important;
+      min-width: auto !important;
+      margin-right: 0 !important;
+    }
   }
   
   .desktop-only {
@@ -103,18 +163,12 @@ body {
     }
   }
   
-  @media (min-width: 1024px) {
+  @media (min-width: 1280px) {
     .vehicle-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 1.43rem;
     }
-    /* inventory: デスクトップではフリーワードのプレースホルダーを非表示 */
-    .inventory-search-input::placeholder { color: transparent !important; }
-    .inventory-search-input::-webkit-input-placeholder { color: transparent !important; }
-    .inventory-search-input::-moz-placeholder { color: transparent !important; }
-    .inventory-search-input:-ms-input-placeholder { color: transparent !important; }
-    .inventory-search-input::-ms-input-placeholder { color: transparent !important; }
     /* inventory: 車両カードのデスクトップ版フォントをHOMEと統一 */
     .inventory-card .card-title-maker { font-size: 1.14rem !important; }
     .inventory-card .card-title-modelcode { font-size: 1rem !important; }
@@ -217,8 +271,6 @@ body {
       justify-content: flex-start !important;
       width: 100% !important;
     }
-    /* キーワードのラベルを非表示（プレースホルダーへ移行） */
-    .inventory-search-keyword-label { display: none !important; }
     /* キーワードと検索ボタンを横並び */
     .inventory-search-right { flex-direction: row !important; gap: 0.5rem !important; align-items: stretch !important; }
     .inventory-search-keyword { width: 100% !important; justify-content: flex-start !important; flex: 1 1 0 !important; margin: 0 !important; }

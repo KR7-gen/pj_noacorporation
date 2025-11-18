@@ -927,106 +927,102 @@ export default function InventoryPage() {
                 justifyContent: "space-between"
               }}
             >
-              {/* 車両検索（フリーワード） */}
               <div 
-                className="inventory-search-keyword"
+                className="inventory-search-bottom-row"
                 style={{
+                  width: "100%",
                   display: "flex",
                   alignItems: "center",
-                  width: "80%",
-                  justifyContent: "flex-end"
+                  justifyContent: "space-between"
                 }}
               >
-                <span 
-                  className="inventory-search-keyword-label"
-                  style={{
-                    fontFamily: "Noto Sans JP",
-                    fontWeight: "400",
-                    fontSize: "0.9rem",
-                    lineHeight: "100%",
-                    letterSpacing: "0%",
-                    color: "#1A1A1A",
-                    whiteSpace: "nowrap",
-                    marginRight: "0.5rem"
-                  }}
-                >
-                  フリーワード
-                </span>
+                {/* 車両検索（フリーワード） */}
                 <div 
+                  className="inventory-search-keyword"
                   style={{
-                    width: "65%",
-                    margin: "0.43rem",
-                    height: "2.29rem",
                     display: "flex",
                     alignItems: "center",
+                    width: "80%",
+                    justifyContent: "flex-end"
+                  }}
+                >
+                  <div 
+                    className="inventory-search-keyword-field"
+                    style={{
+                      width: "65%",
+                      margin: "0.43rem",
+                      height: "2.29rem",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.71rem",
+                      borderRadius: "0.29rem",
+                      padding: "0.29rem 0.57rem",
+                      background: "#FFFFFF"
+                    }}
+                  >
+                    <input
+                      type="text"
+                      value={formKeyword}
+                      onChange={(e) => setFormKeyword(e.target.value)}
+                      placeholder="フリーワード検索"
+                      className="inventory-search-input"
+                      style={{
+                        width: "100%",
+                        border: "none",
+                        background: "transparent",
+                        fontSize: "0.7rem",
+                        fontFamily: "Noto Sans JP",
+                        fontWeight: "400",
+                        color: "#1A1A1A",
+                        outline: "none"
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* 検索するボタン */}
+                <button 
+                  className="inventory-search-button"
+                  onClick={handleSearch}
+                  style={{
+                    minWidth: "7rem",
+                    width: "15%",
+                    height: "2.79rem",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                     gap: "0.71rem",
                     borderRadius: "0.29rem",
-                    padding: "0.29rem 0.57rem",
-                    background: "#FFFFFF"
+                    padding: "0.57rem",
+                    background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
+                    border: "none",
+                    cursor: "pointer",
+                    transition: "opacity 0.3s ease",
+                    marginRight: "0.5rem"
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.opacity = "0.8";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.opacity = "1";
                   }}
                 >
-                  <input
-                    type="text"
-                    value={formKeyword}
-                    onChange={(e) => setFormKeyword(e.target.value)}
-                    placeholder="フリーワード"
-                    className="inventory-search-input"
+                  <span 
                     style={{
-                      width: "100%",
-                      border: "none",
-                      background: "transparent",
-                      fontSize: "1.14rem",
                       fontFamily: "Noto Sans JP",
-                      fontWeight: "400",
-                      color: "#1A1A1A",
-                      outline: "none"
+                      fontWeight: "700",
+                      fontSize: "1.14rem",
+                      lineHeight: "100%",
+                      letterSpacing: "0%",
+                      textAlign: "center",
+                      color: "#FFFFFF",
+                      whiteSpace: "nowrap"
                     }}
-                  />
-                </div>
+                  >
+                    検索する
+                  </span>
+                </button>
               </div>
-
-              {/* 検索するボタン */}
-              <button 
-                className="inventory-search-button"
-                onClick={handleSearch}
-                style={{
-                  minWidth: "7rem",
-                  width: "15%",
-                  height: "2.79rem",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "0.71rem",
-                  borderRadius: "0.29rem",
-                  padding: "0.57rem",
-                  background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
-                  border: "none",
-                  cursor: "pointer",
-                  transition: "opacity 0.3s ease",
-                  marginRight: "0.5rem"
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.opacity = "0.8";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.opacity = "1";
-                }}
-              >
-                <span 
-                  style={{
-                    fontFamily: "Noto Sans JP",
-                    fontWeight: "700",
-                    fontSize: "1.14rem",
-                    lineHeight: "100%",
-                    letterSpacing: "0%",
-                    textAlign: "center",
-                    color: "#FFFFFF",
-                    whiteSpace: "nowrap"
-                  }}
-                >
-                  検索する
-                </span>
-              </button>
             </div>
           </div>
         </div>
@@ -1452,7 +1448,7 @@ export default function InventoryPage() {
                         paddingLeft: "0.86rem"
                       }}>
                         <div>
-                          <span className="price-main spec-value" style={{
+                          <span className="price-main spec-value text-[2.29rem] lg:text-[1.5rem] xl:text-[2.29rem]" style={{
                             opacity: 1,
                             fontFamily: "Noto Sans JP",
                             fontWeight: "700",
@@ -1463,7 +1459,7 @@ export default function InventoryPage() {
                           }}>
                             {vehicle.price ? Math.floor(vehicle.price / 10000) : "000"}
                           </span>
-                          <span className="price-unit spec-value" style={{
+                          <span className="price-unit spec-value text-[0.86rem] lg:text-[0.75rem] xl:text-[0.86rem]" style={{
                             opacity: 1,
                             fontFamily: "Noto Sans JP",
                             fontWeight: "400",
@@ -1756,7 +1752,7 @@ export default function InventoryPage() {
                     alignItems: "center", 
                     justifyContent: "center",
                     paddingTop: "0.5rem",
-                    background: "#004864",
+                    background: "#FFFFFF",
                     paddingBottom: "0.5rem",
                     position: "relative"
                   }}>
@@ -1768,7 +1764,7 @@ export default function InventoryPage() {
                           opacity: 1,
                           borderRadius: "0.29rem",
                           border: "0.07rem solid #333333",
-                          background: "#FF0000",
+                          background: "#FFFFFF",
                           boxShadow: "0.14rem 0.14rem 0.14rem 0px #00000040",
                           cursor: "pointer",
                           transition: "all 0.3s ease",
