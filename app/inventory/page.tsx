@@ -1756,6 +1756,7 @@ export default function InventoryPage() {
                     alignItems: "center", 
                     justifyContent: "center",
                     paddingTop: "0.5rem",
+                    background: "#004864",
                     paddingBottom: "0.5rem",
                     position: "relative"
                   }}>
@@ -1767,7 +1768,7 @@ export default function InventoryPage() {
                           opacity: 1,
                           borderRadius: "0.29rem",
                           border: "0.07rem solid #333333",
-                          background: "#FFFFFF",
+                          background: "#FF0000",
                           boxShadow: "0.14rem 0.14rem 0.14rem 0px #00000040",
                           cursor: "pointer",
                           transition: "all 0.3s ease",

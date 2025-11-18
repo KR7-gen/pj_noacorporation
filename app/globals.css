@@ -52,6 +52,17 @@ body {
       width: 85% !important;
       height: auto !important;
     }
+
+    /* inventory: 車両タイプアイコンのテキストサイズ（lgのみ） */
+    .inventory-type-icons span {
+      font-size: 10px !important;
+    }
+
+    /* inventory: Search Section テキストサイズ（lgのみ） */
+    .search-section,
+    .search-section * {
+      font-size: 10px !important;
+    }
   }
   
   .desktop-only {
@@ -165,6 +176,13 @@ body {
       margin-right: calc(-50vw + 50% + 1rem) !important;
       border-radius: 0 !important;
     }
+    .inventory-search-top-row,
+    .inventory-search-bottom-row {
+      width: 100% !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 0.5rem !important;
+    }
     .inventory-search-left,
     .inventory-search-right {
       width: 100% !important;
@@ -210,7 +228,7 @@ body {
     .inventory-search-input { height: 100% !important; }
     /* inventory: 車両タイプアイコンのテキストサイズ（スマホ） */
     .inventory-type-icons span {
-      font-size: 0.85rem !important;
+      font-size: 10px !important;
     }
     /* inventory: 車両タイプアイコン 3列×4行（12件表示） */
     .inventory-type-icons {

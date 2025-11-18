@@ -913,7 +913,7 @@ export default function HomePage() {
         <div 
           style={{
             color: "white",
-            height: "210px",
+            height: "25rem",
             background: `
               linear-gradient(90deg, rgba(0, 0, 0, 0.4) 43.5%, rgba(255, 255, 255, 0) 100%),
               url('/store_photos.jpg'),
@@ -2251,6 +2251,7 @@ export default function HomePage() {
                       }}
                     >
                       <h3 
+                        className="text-[1.43rem] md:text-[1.3rem] sm:text-[1.1rem] lg:text-[1.43rem]"
                         style={{
                           width: "24rem",
                           height: "auto",
@@ -2258,7 +2259,6 @@ export default function HomePage() {
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
-                          fontSize: "1.43rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           textAlign: "center",
@@ -2421,6 +2421,7 @@ export default function HomePage() {
                       }}
                     >
                       <h3 
+                        className="text-[1.43rem] md:text-[1.2rem] sm:text-[1.1rem] lg:text-[1.43rem]"
                         style={{
                           height: "auto",
                           width: "100%",
@@ -2428,7 +2429,6 @@ export default function HomePage() {
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
-                          fontSize: "1.43rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           textAlign: "center",
@@ -2547,6 +2547,7 @@ export default function HomePage() {
                       }}
                     >
                       <h3 
+                        className="text-[1.43rem] md:text-[1.2rem] sm:text-[1.1rem] lg:text-[1.43rem]"
                         style={{
                           width: "100%",
                           height: "auto",
@@ -2554,7 +2555,6 @@ export default function HomePage() {
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
-                          fontSize: "1.43rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
                           textAlign: "center",
