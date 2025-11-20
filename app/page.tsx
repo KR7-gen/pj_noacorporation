@@ -3763,7 +3763,7 @@ export default function HomePage() {
 
           {/* 3. GoogleMapフレーム */}
           <a
-            href="https://www.google.com/maps/place/%E6%A0%83%E6%9C%A8%E7%9C%8C%E3%81%95%E3%81%8F%E3%82%89%E5%B8%82%E5%90%91%E6%B2%B3%E5%8E%9F3994-1/"
+            href="https://www.google.com/maps/place/%E6%A0%83%E6%9C%A8%E7%9C%8C%E5%AE%87%E9%83%BD%E5%AE%AE%E5%B8%82%E5%AE%AE%E5%B1%B1%E7%94%B0%E7%94%BA406-4/"
             target="_blank"
             rel="noopener noreferrer"
             style={{
@@ -3780,7 +3780,7 @@ export default function HomePage() {
           >
             <iframe
               title="Google Map"
-              src="https://www.google.com/maps?q=%E6%A0%83%E6%9C%A8%E7%9C%8C%E3%81%95%E3%81%8F%E3%82%89%E5%B8%82%E5%90%91%E6%B2%B3%E5%8E%9F3994-1&output=embed"
+              src="https://www.google.com/maps?q=%E6%A0%83%E6%9C%A8%E7%9C%8C%E5%AE%87%E9%83%BD%E5%AE%AE%E5%B8%82%E5%AE%AE%E5%B1%B1%E7%94%B0%E7%94%BA406-4&output=embed"
               width="820"
               height="18.333rem"
               style={{ border: 0, width: "100%", height: "100%", pointerEvents: "none" }}

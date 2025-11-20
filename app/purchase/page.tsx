@@ -441,12 +441,15 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
            {loading ? (
              // ローディング中はデフォルトの表示
              defaultAchievements.map((item, index) => (
-               <div key={index} className="text-center relative overflow-hidden w-full md:w-[20.8%]" style={{ height: '27.643rem' }}>
-                 <div className="p-0 h-full">
-                  {/* 1. 車両画像 */}
-                  <div className="w-full bg-gray-200 flex items-center justify-center" style={{ height: '14.286rem' }}>
-                    <div className="text-gray-400">車両画像</div>
-                  </div>
+              <div key={index} className="text-center relative overflow-hidden w-full md:w-[20.8%]">
+                <div className="p-0 h-full">
+                 {/* 1. 車両画像 */}
+                 <div
+                   className="w-full bg-gray-200 flex items-center justify-center overflow-hidden"
+                   style={{ aspectRatio: '4 / 3' }}
+                 >
+                   <div className="text-gray-400">車両画像</div>
+                 </div>
                   
                   {/* 2. 車名・年式 */}
                   <div className="px-3" style={{ height: '7.714rem', padding: '0 0.857rem' }}>
@@ -538,10 +541,13 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
               const vehicleName = `${vehicle.maker || ""} ${vehicle.vehicleType || ""}`.trim()
               
               return (
-                <div key={vehicle.id} className="text-center relative overflow-hidden w-full md:w-[20.8%]" style={{ height: '27.643rem' }}>
+                <div key={vehicle.id} className="text-center relative overflow-hidden w-full md:w-[20.8%]">
                   <div className="p-0 h-full">
                     {/* 1. 車両画像 */}
-                    <div className="w-full flex items-center justify-center overflow-hidden" style={{ height: '14.286rem' }}>
+                    <div
+                      className="w-full flex items-center justify-center overflow-hidden"
+                      style={{ aspectRatio: '4 / 3' }}
+                    >
                       {vehicle.imageUrls && vehicle.imageUrls.length > 0 ? (
                         <Image
                           src={vehicle.imageUrls[0]}

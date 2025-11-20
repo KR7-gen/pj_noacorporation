@@ -30,7 +30,7 @@ export default function RentalPage() {
                 fontFamily: "Noto Sans JP",
                 fontWeight: "700",
                 fontStyle: "Bold",
-                fontSize: "2.86rem",
+                fontSize: "1.8rem",
                 lineHeight: "100%",
                 letterSpacing: "0%",
                 textAlign: "left",
