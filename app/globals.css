@@ -7,6 +7,96 @@ body {
   overflow-x: hidden;
 }
 
+:root {
+  --header-icon-size-mobile: 1.25rem;
+  --header-icon-size-desktop: 1.29rem;
+  --header-icon-scale-phone: 1;
+  --header-icon-scale-mail: 1;
+  --header-cta-padding-x: 0.75rem;
+  --header-cta-padding-y: 0.5rem;
+  --header-cta-min-width: auto;
+  --header-cta-min-height: 2.5rem;
+}
+
+.header-icon {
+  display: inline-flex;
+  width: var(--header-icon-size-mobile);
+  height: var(--header-icon-size-mobile);
+  transform-origin: center;
+  transition: transform 0.2s ease;
+}
+
+.header-icon--invert {
+  filter: brightness(0) invert(1);
+}
+
+.header-icon--phone {
+  transform: scaleX(var(--header-icon-scale-phone));
+}
+
+.header-icon--mail {
+  transform: scaleX(var(--header-icon-scale-mail));
+}
+
+.desktop-phone .header-icon {
+  width: var(--header-icon-size-desktop);
+  height: var(--header-icon-size-desktop);
+  filter: none;
+}
+
+@media (max-width: 639px) {
+  :root {
+    --header-icon-scale-phone: 1;
+    --header-icon-scale-mail: 1;
+    --header-cta-padding-x: 0.75rem;
+    --header-cta-padding-y: 0.5rem;
+    --header-cta-min-width: auto;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 767px) {
+  :root {
+    --header-icon-scale-phone: 1.12;
+    --header-icon-scale-mail: 1.12;
+    --header-cta-padding-x: 1rem;
+    --header-cta-padding-y: 0.6rem;
+    --header-cta-min-width: 9rem;
+    --header-cta-min-height: 2.75rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  :root {
+    --header-icon-scale-phone: 1.18;
+    --header-icon-scale-mail: 1.18;
+    --header-cta-padding-x: 1.35rem;
+    --header-cta-padding-y: 0.65rem;
+    --header-cta-min-width: 10rem;
+    --header-cta-min-height: 3rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --header-icon-scale-phone: 1;
+    --header-icon-scale-mail: 1;
+    --header-cta-padding-x: 0.75rem;
+    --header-cta-padding-y: 0.5rem;
+    --header-cta-min-width: auto;
+    --header-cta-min-height: 2.5rem;
+  }
+}
+
+.header-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--header-cta-padding-y) var(--header-cta-padding-x);
+  min-width: var(--header-cta-min-width);
+  min-height: var(--header-cta-min-height);
+  width: auto;
+}
+
 /* 車両詳細：ボディタイプカード（mdのみ） */
 @media (min-width: 768px) and (max-width: 1023px) {
   .body-type-cards-grid a > div {

@@ -44,7 +44,7 @@ export function Header() {
           <div className="flex items-center justify-center">
             <a 
               href="tel:028-612-1474" 
-              className="flex items-center justify-center px-3 py-2 rounded-lg hover:opacity-80 transition-opacity"
+              className="flex items-center justify-center rounded-lg hover:opacity-80 transition-opacity header-cta header-cta--phone"
               style={{
                 background: "#666666",
                 color: "white",
@@ -55,7 +55,11 @@ export function Header() {
               aria-label="電話をかける"
             >
               <span className="mr-2">TEL</span>
-              <img src="/call.svg" alt="電話" style={{ width: "1.25rem", height: "1.25rem", filter: "brightness(0) invert(1)" }} />
+              <img
+                src="/call.svg"
+                alt="電話"
+                className="header-icon header-icon--phone header-icon--invert"
+              />
             </a>
           </div>
 
@@ -63,7 +67,7 @@ export function Header() {
           <div className="flex items-center justify-center">
             <a 
               href="/contact" 
-              className="flex items-center justify-center px-3 py-2 rounded-lg hover:opacity-80 transition-opacity"
+              className="flex items-center justify-center rounded-lg hover:opacity-80 transition-opacity header-cta header-cta--mail"
               style={{
                 background: "linear-gradient(180deg, #1154AF 0%, #053B65 100%)",
                 color: "white",
@@ -74,7 +78,11 @@ export function Header() {
               aria-label="お問い合わせ"
             >
               <span className="mr-2">MAIL</span>
-              <img src="/mail.svg" alt="メール" style={{ width: "1.25rem", height: "1.25rem", filter: "brightness(0) invert(1)" }} />
+              <img
+                src="/mail.svg"
+                alt="メール"
+                className="header-icon header-icon--mail header-icon--invert"
+              />
             </a>
           </div>
 
@@ -275,7 +283,11 @@ export function Header() {
               }}
             >
               <span style={{ display: "flex", alignItems: "center", marginRight: "0.57rem", position: "relative", top: "0.21rem", left: "0.21rem" }}>
-                <img src="/call.svg" alt="電話" style={{ width: "1.29rem", height: "1.29rem" }} />
+                <img
+                  src="/call.svg"
+                  alt="電話"
+                  className="header-icon header-icon--phone"
+                />
               </span>
              028-612-1474
             </div>

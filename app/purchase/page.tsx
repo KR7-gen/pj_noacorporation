@@ -20,19 +20,22 @@ import Image from "next/image"
 // デフォルトの買取実績（データがない場合のフォールバック）
 const defaultAchievements = [
   {
-    maker: "日野レンジャー",
+    maker: "日野",
+    model: "レンジャー",
     year: "平成00年",
     price: "000",
     status: "高価買取",
   },
   {
-    maker: "いすゞ エルフ",
+    maker: "いすゞ",
+    model: "エルフ",
     year: "平成00年",
     price: "000",
     status: "高価買取",
   },
   {
-    maker: "UD クオン",
+    maker: "UD",
+    model: "クオン",
     year: "平成00年",
     price: "000",
     status: "高価買取",
@@ -271,12 +274,11 @@ const HeroSection = () => (
           }}
         >
           <h2 
-            className="font-bold text-black"
+            className="font-bold text-black text-[4.571rem] md:text-[3.3rem] lg:text-[3.3rem] xl:text-[4.571rem] 2xl:text-[4.571rem]"
             style={{
               fontFamily: 'Noto Sans JP',
               fontWeight: 700,
               fontStyle: 'Bold',
-              fontSize: '4.571rem',
               lineHeight: '100%',
               letterSpacing: '0%',
               transform: 'skewX(20deg)'
@@ -287,7 +289,7 @@ const HeroSection = () => (
         </div>
         
         {/* 2. 買取における強み */}
-        <div className="absolute" style={{ left: '14.286rem', top: '28.429rem' }}>
+        <div className="absolute left-[14.286rem] md:left-[1rem] lg:left-[5rem] xl:left-[14.286rem] 2xl:left-[14.286rem]" style={{ top: '28.429rem' }}>
           <div 
             className="bg-blue-600 text-white rounded"
             style={{
@@ -298,12 +300,11 @@ const HeroSection = () => (
             }}
           >
             <span 
-              className="font-medium"
+              className="font-medium text-[1.714rem] md:text-[1.3rem] lg:text-[1.3rem] xl:text-[1.714rem] 2xl:text-[1.714rem]"
               style={{
                 fontFamily: 'Noto Sans JP',
                 fontWeight: 700,
                 fontStyle: 'Bold',
-                fontSize: '1.714rem',
                 lineHeight: '100%',
                 letterSpacing: '0%'
               }}
@@ -321,12 +322,11 @@ const HeroSection = () => (
             }}
           >
             <span 
-              className="font-medium"
+              className="font-medium text-[1.714rem] md:text-[1.3rem] lg:text-[1.3rem] xl:text-[1.714rem] 2xl:text-[1.714rem]"
               style={{
                 fontFamily: 'Noto Sans JP',
                 fontWeight: 700,
                 fontStyle: 'Bold',
-                fontSize: '1.714rem',
                 lineHeight: '100%',
                 letterSpacing: '0%'
               }}
@@ -343,12 +343,11 @@ const HeroSection = () => (
             }}
           >
             <span 
-              className="font-medium"
+              className="font-medium text-[1.714rem] md:text-[1.3rem] lg:text-[1.3rem] xl:text-[1.714rem] 2xl:text-[1.714rem]"
               style={{
                 fontFamily: 'Noto Sans JP',
                 fontWeight: 700,
                 fontStyle: 'Bold',
-                fontSize: '1.714rem',
                 lineHeight: '100%',
                 letterSpacing: '0%'
               }}
@@ -360,16 +359,15 @@ const HeroSection = () => (
       </div>
       
       {/* 右側エリア（問い合わせフォーム） */}
-        <div className="absolute hidden md:block" style={{ right: '14.64rem', bottom: '8.786rem' }}>
+        <div className="absolute hidden md:block right-[14.64rem] md:right-[1rem] lg:right-[5rem] xl:right-[14.64rem] 2xl:right-[14.64rem]" style={{ bottom: '8.786rem' }}>
           <div className="text-center">
             <div className="bg-white/90 backdrop-blur-sm inline-block" style={{ padding: '1.429rem', height: '9.857rem' }}>
             <p 
-              className="text-black font-medium mb-4 whitespace-nowrap"
+              className="text-black font-medium mb-4 whitespace-nowrap text-[1.428rem] md:text-[1.3rem] lg:text-[1.3rem] xl:text-[1.428rem] 2xl:text-[1.428rem]"
               style={{
                 fontFamily: 'Noto Sans JP',
                 fontWeight: 700,
                 fontStyle: 'Bold',
-                fontSize: '1.428rem',
                 lineHeight: '100%',
                 letterSpacing: '0%'
               }}
@@ -378,12 +376,11 @@ const HeroSection = () => (
             </p>
             <Link href="https://line.me/R/ti/p/@285skrcv">
               <Button 
-                className="text-white border-0"
+                className="text-white border-0 text-[1.428rem] md:text-[1.2rem] lg:text-[1.2rem] xl:text-[1.428rem] 2xl:text-[1.428rem]"
                 style={{
                   fontFamily: 'Noto Sans JP',
                   fontWeight: 700,
                   fontStyle: 'Bold',
-                  fontSize: '1.428rem',
                   lineHeight: '100%',
                   letterSpacing: '0%',
                   height: '3.214rem',
@@ -454,19 +451,20 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
                   {/* 2. 車名・年式 */}
                   <div className="px-3" style={{ height: '7.714rem', padding: '0 0.857rem' }}>
                     <h3 
-                      className="font-bold mb-2" 
+                      className="font-bold mb-2 text-[1.2rem] md:text-[1.2rem] lg:text-[1.429rem] xl:text-[1.429rem] 2xl:text-[1.429rem]"
                       style={{ 
-                        fontSize: '1.429rem', 
                         padding: '1.143rem',
                         borderBottom: '0.071rem solid #CCCCCC'
                       }}
                     >
-                      {item.maker}
+                      <span className="inline md:block lg:inline">{item.maker}</span>
+                      {item.model && (
+                        <span className="inline md:block lg:inline md:mt-1 lg:mt-0">{item.model}</span>
+                      )}
                     </h3>
                     <p 
-                      className="mb-4 font-bold" 
+                      className="mb-4 font-bold text-[1.143rem] md:text-[1rem] lg:text-[1rem] xl:text-[1.143rem] 2xl:text-[1.143rem]" 
                       style={{ 
-                        fontSize: '1.143rem', 
                         padding: '0.857rem',
                         borderBottom: '0.071rem solid #CCCCCC',
                         color: '#1a1a1a'
@@ -479,27 +477,29 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
                   {/* 3. 買取価格 */}
                     <div className="absolute bottom-0 w-full" style={{ height: '3.929rem', background: '#E6E6E6' }}>
                       <div className="h-full flex items-center" style={{ padding: '0 0.857rem' }}>
-                        <span className="font-bold" style={{ fontSize: '1rem', color: '#1A1A1A', marginRight: '0.25rem' }}>当社買取額：</span>
+                        <span className="font-bold" style={{ fontSize: '1rem', color: '#1A1A1A', marginRight: '0.25rem' }}>
+                          <span className="inline md:block lg:inline">当社</span>
+                          <span className="inline md:block lg:inline">
+                            買取額<span className="inline-block">：</span>
+                          </span>
+                        </span>
                         <span className="inline-flex items-end" style={{ lineHeight: 1 }}>
-                          <span className="font-bold" style={{ fontSize: '2.57rem', color: '#2B5EC5', lineHeight: 1 }}>{item.price}</span>
-                          <span className="font-bold" style={{ fontSize: '1rem', color: '#2B5EC5', lineHeight: 1, marginLeft: '0.15rem', transform: 'translateY(0.2rem)' }}>万円</span>
+                          <span className="font-bold text-[2.57rem] md:text-[2rem] lg:text-[2rem] xl:text-[2.57rem] 2xl:text-[2.57rem]" style={{ color: '#2B5EC5', lineHeight: 1 }}>{item.price}</span>
+                          <span className="font-bold text-[1rem] md:text-[0.8rem] lg:text-[0.8rem] xl:text-[1rem] 2xl:text-[1rem]" style={{ color: '#2B5EC5', lineHeight: 1, marginLeft: '0.15rem', transform: 'translateY(0.2rem)' }}>万円</span>
                         </span>
                       </div>
                     </div>
                   
                   {/* 4. 高価買取マーク */}
                    <div 
-                     className="absolute text-white text-sm font-bold flex items-center justify-center"
+                     className="absolute text-white font-bold flex items-center justify-center w-[5.143rem] h-[5.143rem] md:w-[4rem] md:h-[4rem] lg:w-[4rem] lg:h-[4rem] text-[1.428rem] md:text-[1.2rem] lg:text-[1.2rem]"
                      style={{
-                       width: '5.143rem',
-                       height: '5.143rem',
                        bottom: '0.857rem',
                        right: '0',
                        background: '#EA1313',
                        border: '0.143rem solid #666666',
                        borderRadius: '50%',
                        zIndex: 10,
-                       fontSize: '1.428rem',
                        textAlign: 'center',
                        lineHeight: '1.2'
                    }}
@@ -560,20 +560,22 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
                     
                     {/* 2. 車名・年式 */}
                     <div className="px-3" style={{ height: '7.714rem', padding: '0 0.857rem' }}>
-                      <h3 
-                        className="font-bold mb-2" 
-                        style={{ 
-                          fontSize: '1.429rem', 
-                          padding: '1.143rem',
-                          borderBottom: '0.071rem solid #CCCCCC'
-                        }}
-                      >
-                        {vehicleName}
-                      </h3>
+                    <h3 
+                      className="font-bold mb-2 text-[1.429rem] md:text-[0.8rem] lg:text-[0.8rem] xl:text-[1.1rem]" 
+                      style={{ 
+                        padding: '1.143rem',
+                        borderBottom: '0.071rem solid #CCCCCC'
+                      }}
+                    >
+                      <span className="inline md:block lg:inline">{vehicle.maker || ""}</span>
+                      <span className="inline md:block lg:inline md:mt-1 lg:mt-0">
+                        {vehicle.vehicleType || ""}
+                      </span>
+                    </h3>
                       <p 
-                        className="mb-4 font-bold" 
+                        className="font-bold mb-2 text-[1.429rem] md:text-[0.8rem] lg:text-[0.8rem] xl:text-[1.1rem]" 
                         style={{ 
-                          fontSize: '1.143rem', 
+                        
                           padding: '0.857rem',
                           borderBottom: '0.071rem solid #CCCCCC',
                           color: '#1a1a1a'
@@ -586,31 +588,36 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
                       {/* 3. 買取価格 */}
                         <div className="absolute bottom-0 w-full" style={{ height: '3.929rem', background: '#E6E6E6' }}>
                           <div className="h-full flex items-center" style={{ padding: '0 0.857rem' }}>
-                            <span className="font-bold" style={{ fontSize: '1rem', color: '#1A1A1A' }}>当社買取額：</span>
-                            <span className="font-bold" style={{ fontSize: '2.57rem', color: '#2B5EC5' }}>{Math.floor(purchasePrice / 10000)}</span>
-                            <span className="font-bold" style={{ fontSize: '1rem', color: '#2B5EC5', transform: 'translateY(0.2rem)' }}>万円</span>
+                            <span
+                              className="font-bold text-[1.429rem] md:text-[0.7rem] lg:text-[0.8rem] xl:text-[1.1rem] whitespace-nowrap md:whitespace-normal lg:whitespace-nowrap"
+                              style={{ color: '#1A1A1A' }}
+                            >
+                              <span className="inline md:block lg:inline">当社</span>
+                              <span className="inline md:block lg:inline">
+                                買取額<span className="inline-block">：</span>
+                              </span>
+                            </span>
+                            <span className="font-bold text-[2.57rem] md:text-[1.8rem] lg:text-[1.9rem] xl:text-[2.5rem] 2xl:text-[2.57rem]" style={{ color: '#2B5EC5' }}>{Math.floor(purchasePrice / 10000)}</span>
+                            <span className="font-bold text-[1rem] md:text-[0.8rem] lg:text-[0.8rem] xl:text-[1rem] 2xl:text-[1rem]" style={{ color: '#2B5EC5', transform: 'translateY(0.2rem)' }}>万円</span>
                           </div>
                         </div>
                        
-                       {/* 4. 高価買取マーク */}
-                       <div 
-                         className="absolute text-white font-bold flex items-center justify-center"
-                         style={{
-                           width: '5.143rem',
-                           height: '5.143rem',
-                           bottom: '0.857rem',
-                           right: '0',
-                           background: '#EA1313',
-                           border: '0.143rem solid #666666',
-                           borderRadius: '50%',
-                           zIndex: 10,
-                           fontSize: '1.428rem',
-                           textAlign: 'center',
-                           lineHeight: '1.2'
-                         }}
-                       >
-                         高価<br />買取
-                       </div>
+                      {/* 4. 高価買取マーク */}
+                      <div 
+                        className="absolute text-white font-bold flex items-center justify-center w-[5.143rem] h-[5.143rem] md:w-[3.5rem] md:h-[3.5rem] lg:w-[4rem] lg:h-[4rem] text-[1.428rem] md:text-[1.2rem] lg:text-[1.2rem]"
+                        style={{
+                          bottom: '0.857rem',
+                          right: '0',
+                          background: '#EA1313',
+                          border: '0.143rem solid #666666',
+                          borderRadius: '50%',
+                          zIndex: 10,
+                          textAlign: 'center',
+                          lineHeight: '1.2'
+                        }}
+                      >
+                        高価<br />買取
+                      </div>
                   </div>
                 </div>
               )
@@ -628,14 +635,16 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
                   {/* 2. 車名・年式 */}
                   <div className="px-3" style={{ height: '7.714rem', padding: '0 0.857rem' }}>
                     <h3 
-                      className="font-bold mb-2" 
+                      className="font-bold mb-2 text-[1.429rem] md:text-[2.2rem] lg:text-[1.429rem] xl:text-[1.429rem] 2xl:text-[1.429rem]" 
                       style={{ 
-                        fontSize: '1.429rem', 
                         padding: '1.143rem',
                         borderBottom: '0.071rem solid #CCCCCC'
                       }}
                     >
-                      {item.maker}
+                      <span className="inline md:block lg:inline">{item.maker}</span>
+                      {item.model && (
+                        <span className="inline md:block lg:inline md:mt-1 lg:mt-0">{item.model}</span>
+                      )}
                     </h3>
                     <p 
                       className="mb-4 font-bold" 
@@ -653,31 +662,33 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
                    {/* 3. 買取価格 */}
                    <div className="absolute bottom-0 w-full" style={{ height: '3.929rem', background: '#E6E6E6' }}>
                      <div className="h-full flex items-center" style={{ padding: '0 0.857rem' }}>
-                       <span className="font-bold" style={{ fontSize: '1rem', color: '#1A1A1A' }}>当社買取額：</span>
-                       <span className="font-bold" style={{ fontSize: '2.57rem', color: '#2B5EC5' }}>{item.price}</span>
-                       <span className="font-bold" style={{ fontSize: '1rem', color: '#2B5EC5', transform: 'translateY(0.2rem)' }}>万円</span>
+                       <span className="font-bold" style={{ fontSize: '1rem', color: '#1A1A1A' }}>
+                         <span className="inline md:block lg:inline">当社</span>
+                         <span className="inline md:block lg:inline">
+                           買取額<span className="inline-block">：</span>
+                         </span>
+                       </span>
+                       <span className="font-bold text-[2.57rem] md:text-[2rem] lg:text-[2rem] xl:text-[2.57rem] 2xl:text-[2.57rem]" style={{ color: '#2B5EC5' }}>{item.price}</span>
+                       <span className="font-bold text-[1rem] md:text-[0.8rem] lg:text-[0.8rem] xl:text-[1rem] 2xl:text-[1rem]" style={{ color: '#2B5EC5', transform: 'translateY(0.2rem)' }}>万円</span>
                      </div>
                    </div>
                    
-                   {/* 4. 高価買取マーク */}
-                   <div 
-                     className="absolute text-white font-bold flex items-center justify-center"
-                     style={{
-                       width: '5.143rem',
-                       height: '5.143rem',
-                       bottom: '0.857rem',
-                       right: '0',
-                       background: '#EA1313',
-                       border: '0.143rem solid #666666',
-                       borderRadius: '50%',
-                       zIndex: 10,
-                       fontSize: '1.428rem',
-                       textAlign: 'center',
-                       lineHeight: '1.2'
-                     }}
-                   >
-                     高価<br />買取
-                   </div>
+                  {/* 4. 高価買取マーク */}
+                  <div 
+                    className="absolute text-white font-bold flex items-center justify-center w-[5.143rem] h-[5.143rem] md:w-[4rem] md:h-[4rem] lg:w-[4rem] lg:h-[4rem] text-[1.428rem] md:text-[1.2rem] lg:text-[1.2rem]"
+                    style={{
+                      bottom: '0.857rem',
+                      right: '0',
+                      background: '#EA1313',
+                      border: '0.143rem solid #666666',
+                      borderRadius: '50%',
+                      zIndex: 10,
+                      textAlign: 'center',
+                      lineHeight: '1.2'
+                    }}
+                  >
+                    高価<br />買取
+                  </div>
                 </div>
               </div>
             ))
@@ -698,14 +709,14 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
 // 3. 査定依頼セクション
 const AssessmentRequestSection = () => (
   <section 
-    className="md:h-[24rem] text-white"
+    className="md:h-[27rem] text-white"
     style={{ background: '#CCCCCC' }}
   >
     <div className="container mx-auto px-6 md:px-4">
         {/* 見出しと小見出しの横並び配置 */}
-       <div className="flex flex-col md:flex-row justify-center items-start md:gap-[9.35rem] gap-6 pt-8 md:pt-[7.143rem]">
+      <div className="flex flex-col lg:flex-row justify-center items-start gap-6 md:gap-8 lg:gap-[9.35rem] pt-8 md:pt-[7.143rem]">
          {/* 見出し（左） */}
-         <div className="w-full md:w-auto text-left md:text-center">
+        <div className="w-full lg:w-auto text-left lg:text-center">
            <div 
              style={{
                display: "flex",
@@ -732,8 +743,8 @@ const AssessmentRequestSection = () => (
            </div>
          </div>
 
-         {/* 小見出しと問い合わせ（右） */}
-         <div className="text-left md:text-center w-full md:w-auto">
+        {/* 小見出しと問い合わせ（右） */}
+        <div className="text-left lg:text-center w-full lg:w-auto">
            <p className="text-[1.143rem] font-bold mb-[1.714rem] text-black md:block hidden">車両の査定 / 売却を検討されている方は、まずはLINEでお問い合わせください。</p>
            <p className="text-[1.143rem] font-bold mb-[1.714rem] text-black block md:hidden">車両の査定 / 売却を検討されている方は、<br />まずはLINEでお問い合わせください。</p>
            
@@ -832,7 +843,7 @@ const AssessmentRequestSection = () => (
              <div className="text-center mb-4">
              </div>
              <div className="text-center mb-4">
-               <h3 className="text-[1.7rem] md:text-[2.428rem] text-[#666666] font-bold">LINEですぐに金額判明</h3>
+               <h3 className="text-[1.7rem] md:text-[2rem] text-[#666666] font-bold">LINEですぐに金額判明</h3>
              </div>
               <div className="text-center">
                 <p className="text-[1rem] text-[#666666] leading-relaxed">
@@ -852,7 +863,7 @@ const AssessmentRequestSection = () => (
               <div className="text-center mb-4">
               </div>
               <div className="text-center mb-4">
-                <h3 className="text-[1.7rem] md:text-[2.428rem] text-[#666666] font-bold">
+                <h3 className="text-[1.7rem] md:text-[2rem] text-[#666666] font-bold">
                   <span className="md:hidden">全国どこでもOK!! 不動車 / 事故車でも買取OK!!</span>
                   <span className="hidden md:inline">全国どこでもOK!!<br />不動車 / 事故車でも買取OK!!</span>
                 </h3>
@@ -899,7 +910,7 @@ const AssessmentRequestSection = () => (
               <div className="text-center mb-4">
               </div>
               <div className="text-center mb-4">
-                <h3 className="text-[1.7rem] md:text-[2.428rem] text-[#666666] font-bold">
+                <h3 className="text-[1.7rem] md:text-[2rem] text-[#666666] font-bold">
                   <span className="md:hidden">当社に決めていただければ 面倒な手続きは一切なし。</span>
                   <span className="hidden md:inline">当社に決めていただければ<br />面倒な手続きは一切なし。</span>
                 </h3>
@@ -1032,7 +1043,7 @@ const FAQSection = () => (
                   whiteSpace: "nowrap"
                 }}>
                   {index === 3 ? (
-                    <span className="md:hidden whitespace-normal">ノアコーポレションで購入も買取もした事がないけど利用できますか？</span>
+                    <span className="md:hidden whitespace-normal">ノアコーポレーションで購入も買取もした事がないけど利用できますか？</span>
                   ) : (
                     <span>{faq.question}</span>
                   )}

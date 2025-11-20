@@ -43,11 +43,11 @@ export function Footer() {
         {/* Sitemap */}
         <div className="mb-8">
           {/* スマホ: 縦並び、各セクションは2列、PC: 横並び4カラム */}
-          <div className="flex flex-col gap-8 md:flex-row md:justify-between md:flex-nowrap">
+          <div className="flex flex-col gap-8 lg:flex-row lg:justify-between lg:flex-nowrap">
             {/* Pages */}
-            <div className="w-full md:w-[21.66%]">
+            <div className="w-full lg:w-[21.66%]">
               <h4 className="font-medium mb-3 border-b border-white pb-1">サイトマップ</h4>
-              <ul className="grid grid-cols-2 md:grid-cols-1 gap-x-6 gap-y-2 text-sm">
+              <ul className="grid grid-cols-2 lg:grid-cols-1 gap-x-6 gap-y-2 text-sm">
                 {footerLinks.pages.map((page, index) => (
                   <li key={index}>
                     <Link href={page.href} className="text-gray-400 hover:text-white transition-colors whitespace-nowrap">
@@ -59,35 +59,35 @@ export function Footer() {
             </div>
 
             {/* Body Types */}
-            <div className="w-full md:w-[22.66%]">
+            <div className="w-full lg:w-[22.66%]">
               <h4 className="font-medium mb-3 border-b border-white pb-1">ボディタイプで中古トラックを探す</h4>
-              <ul className="grid grid-cols-2 md:grid-cols-1 gap-x-6 gap-y-2 text-sm">
+              <ul className="grid grid-cols-2 lg:grid-cols-1 gap-x-6 gap-y-2 text-sm">
                 {footerLinks.bodyTypes.map((type, index) => (
                   <li key={index} className={
                     type === "重機回送車・セルフクレーン" || type === "キャリアカー・車両運搬車" 
-                      ? "md:min-h-0 min-h-[3rem]" 
+                      ? "lg:min-h-0 min-h-[3rem]" 
                       : ""
                   }>
                     <Link 
                       href={`/inventory?type=${encodeURIComponent(type)}#type-icons`}
                       className={`text-gray-400 hover:text-white transition-colors ${
                         type === "重機回送車・セルフクレーン" || type === "キャリアカー・車両運搬車"
-                          ? "md:whitespace-nowrap whitespace-pre-line" 
+                          ? "lg:whitespace-nowrap whitespace-pre-line" 
                           : "whitespace-nowrap"
                       }`}
                     >
                       {type === "重機回送車・セルフクレーン" 
                         ? (
                           <>
-                            <span className="hidden md:inline">ー　重機回送車・セルフクレーン</span>
-                            <span className="md:hidden">ー　重機回送車・{'\n'}　　セルフクレーン</span>
+                            <span className="hidden lg:inline">ー　重機回送車・セルフクレーン</span>
+                            <span className="lg:hidden">ー　重機回送車・{'\n'}　　セルフクレーン</span>
                           </>
                         )
                         : type === "キャリアカー・車両運搬車"
                         ? (
                           <>
-                            <span className="hidden md:inline">ー　キャリアカー・車両運搬車</span>
-                            <span className="md:hidden">ー　キャリアカー・{'\n'}　　車両運搬車</span>
+                            <span className="hidden lg:inline">ー　キャリアカー・車両運搬車</span>
+                            <span className="lg:hidden">ー　キャリアカー・{'\n'}　　車両運搬車</span>
                           </>
                         )
                         : `ー　${type}`
@@ -99,9 +99,9 @@ export function Footer() {
             </div>
 
             {/* Makers */}
-            <div className="w-full md:w-[21.66%]">
+            <div className="w-full lg:w-[21.66%]">
               <h4 className="font-medium mb-3 border-b border-white pb-1">メーカーで中古トラックを探す</h4>
-              <ul className="grid grid-cols-2 md:grid-cols-1 gap-x-6 gap-y-2 text-sm">
+              <ul className="grid grid-cols-2 lg:grid-cols-1 gap-x-6 gap-y-2 text-sm">
                 {footerLinks.makers.map((maker, index) => (
                   <li key={index}>
                     <Link 
@@ -116,9 +116,9 @@ export function Footer() {
             </div>
 
             {/* Sizes */}
-            <div className="w-full md:w-[21.66%]">
+            <div className="w-full lg:w-[21.66%]">
               <h4 className="font-medium mb-3 border-b border-white pb-1">大きさで中古トラックを探す</h4>
-              <ul className="grid grid-cols-2 md:grid-cols-1 gap-x-6 gap-y-2 text-sm">
+              <ul className="grid grid-cols-2 lg:grid-cols-1 gap-x-6 gap-y-2 text-sm">
                 {footerLinks.sizes.map((size, index) => (
                   <li key={index}>
                     <Link 
