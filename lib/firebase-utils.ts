@@ -54,75 +54,26 @@ export const convertYearToJapaneseEra = (year: string | number): string => {
   }
 };
 
-// 問い合わせ番号の自動生成関数
-const generateInquiryNumber = async (): Promise<string> => {
-  try {
-    console.log("問い合わせ番号生成開始...");
-    
-    // 既存の車両から最大の問い合わせ番号を取得
-    const vehiclesCollection = collection(db, "vehicles");
-    const querySnapshot = await getDocs(vehiclesCollection);
-    
-    console.log("既存車両数:", querySnapshot.docs.length);
-    
-    let maxNumber = 10000; // 10001からスタートするため、初期値は10000
-    
-    querySnapshot.docs.forEach(doc => {
-      const data = doc.data();
-      console.log("車両データ:", doc.id, data.inquiryNumber);
-      if (data.inquiryNumber) {
-        // "N"プレフィックスを除去して数値部分のみを取得
-        const numberPart = data.inquiryNumber.replace(/^N/, '');
-        const number = parseInt(numberPart, 10);
-        console.log("解析された番号:", numberPart, "→", number);
-        if (!isNaN(number) && number > maxNumber) {
-          maxNumber = number;
-          console.log("新しい最大値:", maxNumber);
-        }
-      }
-    });
-    
-    // 次の番号を生成（N + 5桁以上）
-    const nextNumber = maxNumber + 1;
-    const generatedNumber = `N${nextNumber.toString()}`;
-    console.log("生成された問い合わせ番号:", generatedNumber);
-    
-    return generatedNumber;
-  } catch (error) {
-    console.error("問い合わせ番号生成エラー:", error);
-    // エラーの場合は現在のタイムスタンプベースで生成
-    const timestamp = Date.now();
-    const fallbackNumber = `N${timestamp}`;
-    console.log("フォールバック番号生成:", fallbackNumber);
-    return fallbackNumber;
-  }
-};
-
 // 車両関連の操作
 export const addVehicle = async (vehicle: Omit<Vehicle, 'id' | 'createdAt' | 'updatedAt'>) => {
   try {
     console.log("車両追加開始...");
     console.log("入力データ:", vehicle);
     
-    // 問い合わせ番号を自動生成
-    const inquiryNumber = await generateInquiryNumber();
-    console.log("生成された問い合わせ番号:", inquiryNumber);
-    
     // undefinedフィールドを除外
     const cleanedVehicle = Object.fromEntries(
       Object.entries(vehicle).filter(([_, value]) => value !== undefined)
     );
     
-    const vehicleDataWithInquiry = {
+    const vehicleData = {
       ...cleanedVehicle,
-      inquiryNumber, // 自動生成された問い合わせ番号を追加
       createdAt: new Date(),
       updatedAt: new Date()
     };
     
-    console.log("保存する車両データ（問い合わせ番号含む）:", vehicleDataWithInquiry);
+    console.log("保存する車両データ:", vehicleData);
     
-    const docRef = await addDoc(collection(db, "vehicles"), vehicleDataWithInquiry);
+    const docRef = await addDoc(collection(db, "vehicles"), vehicleData);
     console.log("車両保存成功、ドキュメントID:", docRef.id);
     
     return docRef.id;

@@ -452,12 +452,17 @@ export default function VehicleEditPage() {
 
     try {
       setSaving(true)
-      // 問い合わせ番号を除外して更新データを作成
-      const { inquiryNumber, ...updateData } = formData;
+      
+      // 問合せ番号の必須チェック
+      if (!formData.inquiryNumber || formData.inquiryNumber.trim() === "") {
+        alert("問合せ番号は必須項目です")
+        setSaving(false)
+        return
+      }
       
       // undefinedのフィールドを除外
       const cleanedUpdateData = Object.fromEntries(
-        Object.entries(updateData).filter(([_, value]) => value !== undefined)
+        Object.entries(formData).filter(([_, value]) => value !== undefined)
       );
 
       // 型式・店舗情報は空文字で既存値を潰さない（空文字なら送らない）
@@ -500,6 +505,7 @@ export default function VehicleEditPage() {
         ...(formData.chassisNumber !== undefined && formData.chassisNumber !== "" ? { chassisNumber: formData.chassisNumber } : {}),
         ...(formData.month !== undefined && formData.month !== "" ? { month: formData.month } : {}),
         ...(formData.turbo !== undefined && formData.turbo !== "" ? { turbo: formData.turbo } : {}),
+        ...(formData.inquiryNumber !== undefined && formData.inquiryNumber !== "" ? { inquiryNumber: formData.inquiryNumber } : {}),
         isTemporarySave: true, // 一時保存としてマーク
         updatedAt: new Date(),
       }
@@ -529,12 +535,17 @@ export default function VehicleEditPage() {
 
     try {
       setSaving(true)
-      // 問い合わせ番号を除外して更新データを作成
-      const { inquiryNumber, ...updateData } = formData;
+      
+      // 問合せ番号の必須チェック
+      if (!formData.inquiryNumber || formData.inquiryNumber.trim() === "") {
+        alert("問合せ番号は必須項目です")
+        setSaving(false)
+        return
+      }
       
       // undefinedのフィールドを除外して更新データを作成
       const cleanedUpdateData = Object.fromEntries(
-        Object.entries(updateData).filter(([_, value]) => value !== undefined)
+        Object.entries(formData).filter(([_, value]) => value !== undefined)
       );
       
        // 画像URLからダミー写真と一時的なURLを除外
@@ -568,6 +579,7 @@ export default function VehicleEditPage() {
         ...(formData.turbo !== undefined && formData.turbo !== "" ? { turbo: formData.turbo } : {}),
         // エンジン情報
         ...(formData.engineModel !== undefined && formData.engineModel !== "" ? { engineModel: formData.engineModel } : {}),
+        ...(formData.inquiryNumber !== undefined && formData.inquiryNumber !== "" ? { inquiryNumber: formData.inquiryNumber } : {}),
         isTemporarySave: false, // 通常保存としてマーク
         updatedAt: new Date(),
       }
@@ -734,14 +746,17 @@ export default function VehicleEditPage() {
             {/* 1行目：問い合わせ番号 */}
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
               <div className="space-y-2">
-                <label className="block text-sm font-medium">問い合わせ番号</label>
+                <label className="block text-sm font-medium">
+                  問い合わせ番号 <span className="text-red-500">*</span>
+                </label>
                 <input
                   type="text"
                   name="inquiryNumber"
                   value={formData.inquiryNumber || ""}
-                  className="w-full border rounded px-2 py-1 bg-gray-100 text-gray-700"
-                  disabled
-                  readOnly
+                  onChange={handleChange}
+                  className="w-full border rounded px-2 py-1"
+                  placeholder="問い合わせ番号を入力"
+                  required
                 />
               </div>
               <div></div>

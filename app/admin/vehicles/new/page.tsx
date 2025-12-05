@@ -214,6 +214,7 @@ export default function VehicleNewPage() {
     imageUrls: [],
     equipment: "",
     chassisNumber: "",
+    inquiryNumber: "",
     // 上物情報
     bodyMaker: "",
     bodyModel: "",
@@ -236,7 +237,6 @@ export default function VehicleNewPage() {
     salesRepresentative: "",
     customerName: "",
   })
-  const [generatedInquiryNumber, setGeneratedInquiryNumber] = useState<string>("生成中...")
   const [stores, setStores] = useState<Store[]>([])
   const [loadingStores, setLoadingStores] = useState(true)
   
@@ -276,44 +276,6 @@ export default function VehicleNewPage() {
     }
 
     fetchStores()
-  }, [])
-
-  // ページ読み込み時に問い合わせ番号を生成
-  useEffect(() => {
-    const generateInquiryNumber = async () => {
-      try {
-        // 既存の車両から最大の問い合わせ番号を取得
-        const { collection, getDocs } = await import("firebase/firestore")
-        const { db } = await import("@/lib/firebase")
-        
-        const vehiclesCollection = collection(db, "vehicles")
-        const querySnapshot = await getDocs(vehiclesCollection)
-        
-        let maxNumber = 10000 // 10001からスタートするため、初期値は10000
-        
-        querySnapshot.docs.forEach(doc => {
-          const data = doc.data()
-          if (data.inquiryNumber) {
-            // "N"プレフィックスを除去して数値部分のみを取得
-            const numberPart = data.inquiryNumber.replace(/^N/, '')
-            const number = parseInt(numberPart, 10)
-            if (!isNaN(number) && number > maxNumber) {
-              maxNumber = number
-            }
-          }
-        })
-        
-        // 次の番号を生成（N + 5桁以上）
-        const nextNumber = maxNumber + 1
-        const generatedNumber = `N${nextNumber.toString()}`
-        setGeneratedInquiryNumber(generatedNumber)
-      } catch (error) {
-        console.error("問い合わせ番号生成エラー:", error)
-        setGeneratedInquiryNumber("エラー")
-      }
-    }
-
-    generateInquiryNumber()
   }, [])
 
   // トラック名の自動反映
@@ -573,6 +535,13 @@ export default function VehicleNewPage() {
     setIsSubmitting(true)
 
     try {
+      // 問合せ番号の必須チェック
+      if (!formData.inquiryNumber || formData.inquiryNumber.trim() === "") {
+        alert("問合せ番号は必須項目です")
+        setIsSubmitting(false)
+        return
+      }
+
       // 一時的な画像URLを除外して有効な画像URLのみを取得
       const validImageUrls = formData.imageUrls?.filter(url => 
         url && 
@@ -638,6 +607,8 @@ export default function VehicleNewPage() {
         negotiationDeadline: formData.negotiationDeadline || "",
         salesRepresentative: formData.salesRepresentative || "",
         customerName: formData.customerName || "",
+        // 問合せ番号
+        inquiryNumber: formData.inquiryNumber || "",
       }
 
       console.log("保存する車両データ:", vehicleData)
@@ -677,17 +648,17 @@ export default function VehicleNewPage() {
             {/* 1行目：問い合わせ番号 */}
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
               <div className="space-y-2">
-                <label className="block text-sm font-medium">問い合わせ番号</label>
+                <label className="block text-sm font-medium">
+                  問い合わせ番号 <span className="text-red-500">*</span>
+                </label>
                 <input
                   type="text"
-                  value={generatedInquiryNumber}
-                  className={`w-full border rounded px-2 py-1 ${
-                    generatedInquiryNumber === "生成中..." || generatedInquiryNumber === "エラー"
-                      ? "bg-gray-100 text-gray-500"
-                      : "bg-blue-50 text-blue-700 font-medium"
-                  }`}
-                  disabled
-                  readOnly
+                  name="inquiryNumber"
+                  value={formData.inquiryNumber || ""}
+                  onChange={handleChange}
+                  className="w-full border rounded px-2 py-1"
+                  placeholder="問い合わせ番号を入力"
+                  required
                 />
               </div>
               <div></div>
