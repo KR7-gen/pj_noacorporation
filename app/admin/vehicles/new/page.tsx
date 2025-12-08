@@ -430,6 +430,13 @@ export default function VehicleNewPage() {
   const handleTemporarySave = async (e: React.FormEvent) => {
     e.preventDefault()
     if (isSubmitting) return // 多重送信防止
+    
+    // 問合せ番号の必須チェック
+    if (!formData.inquiryNumber || formData.inquiryNumber.trim() === "") {
+      alert("問合せ番号は必須項目です")
+      return
+    }
+    
     setIsSubmitting(true)
 
     try {
@@ -508,6 +515,8 @@ export default function VehicleNewPage() {
         negotiationDeadline: formData.negotiationDeadline || "",
         salesRepresentative: formData.salesRepresentative || "",
         customerName: formData.customerName || "",
+        // 問合せ番号
+        inquiryNumber: formData.inquiryNumber || "",
       }
 
       console.log("一時保存する車両データ:", vehicleData)

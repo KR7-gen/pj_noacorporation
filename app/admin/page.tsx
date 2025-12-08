@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { getVehicles, deleteVehicle, updateVehicle, testFirebaseConnection } from "@/lib/firebase-utils"
+import { getAllVehicles, deleteVehicle, updateVehicle, testFirebaseConnection } from "@/lib/firebase-utils"
 import type { Vehicle } from "@/types"
 import { Button } from "@/components/ui/button"
 import AdminVehiclesPage from "./vehicles/page"

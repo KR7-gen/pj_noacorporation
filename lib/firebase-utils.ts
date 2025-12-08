@@ -173,7 +173,9 @@ export const getLatestVehicles = async (limit: number = 4): Promise<Vehicle[]> =
         createdAt: convertTimestamp(data.createdAt),
         updatedAt: convertTimestamp(data.updatedAt)
       } as Vehicle;
-    });
+    })
+    // 一時保存の車両を除外
+    .filter(v => !v.isTemporarySave);
     
     // 作成日時でソートして最新の4台を返す
     const sortedVehicles = vehicles
@@ -189,6 +191,7 @@ export const getLatestVehicles = async (limit: number = 4): Promise<Vehicle[]> =
       console.log("インデックス構築中のため、全件取得でフォールバック...");
       const allVehicles = await getVehicles();
       const sortedVehicles = allVehicles
+        .filter(v => !v.isTemporarySave) // 一時保存の車両を除外
         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
         .slice(0, limit);
       console.log("フォールバック成功:", sortedVehicles.length, "台");
@@ -200,7 +203,48 @@ export const getLatestVehicles = async (limit: number = 4): Promise<Vehicle[]> =
   }
 };
 
-// 車両データ取得時の画像URL処理を改善
+// 管理画面用：全車両を取得（一時保存も含む）
+export const getAllVehicles = async () => {
+  try {
+    console.log("Firebaseから全車両データを取得中（管理画面用）...")
+    console.log("Firestore db オブジェクト:", db)
+    
+    const vehiclesCollection = collection(db, "vehicles");
+    console.log("vehiclesコレクション参照:", vehiclesCollection)
+    
+    const querySnapshot = await getDocs(vehiclesCollection);
+    console.log("Firestoreクエリ結果:", querySnapshot.docs.length, "件のドキュメント")
+    
+    const vehicles = querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      console.log("ドキュメントデータ:", doc.id, data);
+      
+      // 画像URLを正規化
+      const normalizedImageUrls = normalizeImageUrls(data);
+      
+      return {
+        id: doc.id,
+        ...data,
+        imageUrls: normalizedImageUrls, // 正規化された画像URLを設定
+        createdAt: convertTimestamp(data.createdAt),
+        updatedAt: convertTimestamp(data.updatedAt)
+      };
+    }) as Vehicle[];
+    
+    console.log("変換後の車両データ:", vehicles)
+    return vehicles;
+  } catch (error) {
+    console.error("Error getting all vehicles: ", error);
+    console.error("エラーの詳細:", {
+      name: error instanceof Error ? error.name : 'Unknown',
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined
+    });
+    throw error;
+  }
+};
+
+// 車両データ取得時の画像URL処理を改善（ユーザー画面用：一時保存を除外）
 export const getVehicles = async () => {
   try {
     console.log("Firebaseから車両データを取得中...")
@@ -226,7 +270,9 @@ export const getVehicles = async () => {
         createdAt: convertTimestamp(data.createdAt),
         updatedAt: convertTimestamp(data.updatedAt)
       };
-    }) as Vehicle[];
+    })
+    // 一時保存の車両を除外
+    .filter(v => !v.isTemporarySave) as Vehicle[];
     
     console.log("変換後の車両データ:", vehicles)
     return vehicles;
@@ -299,7 +345,9 @@ export const getSoldOutVehicles = async (limit: number = 3) => {
           createdAt: convertTimestamp(data.createdAt),
           updatedAt: convertTimestamp(data.updatedAt)
         };
-      }) as Vehicle[];
+      })
+      // 一時保存の車両を除外
+      .filter(v => !v.isTemporarySave) as Vehicle[];
       
       // 最新の3台を返す
       return vehicles.slice(0, limit);
@@ -325,8 +373,9 @@ export const getSoldOutVehicles = async (limit: number = 3) => {
         };
       }) as Vehicle[];
       
-      // SOLD OUTかつ反映フラグONの車両をフィルタリングし、updatedAtでソート
+      // SOLD OUTかつ反映フラグONの車両をフィルタリングし、updatedAtでソート（一時保存を除外）
       const soldOutVehicles = allVehicles
+        .filter(vehicle => !vehicle.isTemporarySave) // 一時保存を除外
         .filter(vehicle => vehicle.isSoldOut === true && (vehicle as any).reflectInPurchaseAchievements === true)
         .sort((a, b) => {
           const dateA = a.updatedAt instanceof Date ? a.updatedAt : new Date(a.updatedAt);
@@ -377,7 +426,9 @@ export const getNewlyRegisteredVehicles = async (limitCount: number = 4): Promis
           createdAt: convertTimestamp(data.createdAt),
           updatedAt: convertTimestamp(data.updatedAt)
         } as Vehicle;
-      });
+      })
+      // 一時保存の車両を除外
+      .filter(v => !v.isTemporarySave);
       
       console.log("新規登録車両取得完了:", vehicles.length, "台");
       return vehicles;
@@ -403,8 +454,9 @@ export const getNewlyRegisteredVehicles = async (limitCount: number = 4): Promis
         };
       }) as Vehicle[];
       
-      // 作成日時でソートして最新の車両を返す
+      // 作成日時でソートして最新の車両を返す（一時保存を除外）
       const sortedVehicles = allVehicles
+        .filter(v => !v.isTemporarySave) // 一時保存を除外
         .sort((a, b) => {
           const dateA = a.createdAt instanceof Date ? a.createdAt : new Date(a.createdAt);
           const dateB = b.createdAt instanceof Date ? b.createdAt : new Date(b.createdAt);

@@ -488,6 +488,7 @@ export default function VehicleEditPage() {
       const updatedVehicle: Partial<Vehicle> = {
         ...cleanedUpdateDataNoEmpty,
         imageUrls: filteredImageUrls,
+        inquiryNumber: formData.inquiryNumber || "", // 問合せ番号を明示的に含める
         ...(formData.price !== undefined && formData.price !== "" ? { price: Number(formData.price.toString().replace(/,/g, '')) } : {}),
         ...(formData.wholesalePrice !== undefined && formData.wholesalePrice !== "" ? { wholesalePrice: Number(formData.wholesalePrice.toString().replace(/,/g, '')) } : {}),
         ...(formData.totalPayment !== undefined && formData.totalPayment !== "" ? { totalPayment: Number(formData.totalPayment.toString().replace(/,/g, '')) } : {}),
@@ -505,7 +506,6 @@ export default function VehicleEditPage() {
         ...(formData.chassisNumber !== undefined && formData.chassisNumber !== "" ? { chassisNumber: formData.chassisNumber } : {}),
         ...(formData.month !== undefined && formData.month !== "" ? { month: formData.month } : {}),
         ...(formData.turbo !== undefined && formData.turbo !== "" ? { turbo: formData.turbo } : {}),
-        ...(formData.inquiryNumber !== undefined && formData.inquiryNumber !== "" ? { inquiryNumber: formData.inquiryNumber } : {}),
         isTemporarySave: true, // 一時保存としてマーク
         updatedAt: new Date(),
       }

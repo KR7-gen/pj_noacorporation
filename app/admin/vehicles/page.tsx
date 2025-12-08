@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { getVehicles, deleteVehicle, updateVehicle, testFirebaseConnection } from "@/lib/firebase-utils"
+import { getAllVehicles, deleteVehicle, updateVehicle, testFirebaseConnection } from "@/lib/firebase-utils"
 import type { Vehicle } from "@/types"
 import { Button } from "@/components/ui/button"
 import {
@@ -99,7 +99,7 @@ export default function AdminVehiclesPage() {
           throw new Error("Firebase接続に失敗しました")
         }
         
-        const fetchedVehicles = await getVehicles()
+        const fetchedVehicles = await getAllVehicles()
         console.log("取得した車両数:", fetchedVehicles.length)
         setVehicles(fetchedVehicles)
         setFilteredVehicles(fetchedVehicles)

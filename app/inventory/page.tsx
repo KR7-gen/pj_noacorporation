@@ -135,7 +135,9 @@ export default function InventoryPage() {
         const fetchedVehicles = querySnapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data()
-        })) as Vehicle[];
+        }))
+        // 一時保存の車両を除外
+        .filter(v => !v.isTemporarySave) as Vehicle[];
         // ダミー車両を110台生成（灰色プレースホルダー表示のため imageUrls は空）
         const bodyTypeCycle = [
           "クレーン",
