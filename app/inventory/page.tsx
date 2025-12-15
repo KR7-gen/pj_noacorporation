@@ -166,6 +166,14 @@ export default function InventoryPage() {
   useEffect(() => {
     let filtered = vehicles;
 
+    // 非公開車両と一時保存車両を除外
+    filtered = filtered.filter(vehicle => !vehicle.isPrivate && !vehicle.isTemporarySave);
+
+    // SOLD/商談中の車両を除外（チェックが外れている場合）
+    if (!showSoldNegotiating) {
+      filtered = filtered.filter(vehicle => !vehicle.isSoldOut && !vehicle.isNegotiating);
+    }
+
     // ボディタイプでフィルタリング（bodyType が未設定の場合は vehicleType を参照）
     if (formType && formType !== "all") {
       filtered = filtered.filter(vehicle => {
@@ -197,7 +205,7 @@ export default function InventoryPage() {
 
     setFilteredVehicles(filtered);
     setCurrentPage(1); // 検索時にページを1に戻す
-  }, [vehicles, formType, formMaker, formSize, formKeyword]);
+  }, [vehicles, formType, formMaker, formSize, formKeyword, showSoldNegotiating]);
 
   // フィルタリング処理
   useEffect(() => {

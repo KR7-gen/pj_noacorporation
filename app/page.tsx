@@ -288,9 +288,10 @@ export default function HomePage() {
       console.error("最新車両データ取得エラー:", error);
     });
 
-    // 総車両数を取得（在庫数表示用）: SOLD OUTを除外
+    // 総車両数を取得（在庫数表示用）
+    // `/inventory` に公開されている車両のみをカウントする
     getVehicles().then((allVehicles) => {
-      const availableCount = allVehicles.filter(v => !(v as any).isSoldOut).length;
+      const availableCount = allVehicles.filter((v:any) => !v.isPrivate && !v.isTemporarySave).length;
       setTotalVehicles(availableCount);
     }).catch((error) => {
       console.error("総車両数取得エラー:", error);
