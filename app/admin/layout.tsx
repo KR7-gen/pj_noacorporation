@@ -93,11 +93,6 @@ function AdminLayoutContent({
                 ログイン
               </button>
             </div>
-
-            <div className="text-sm text-center text-gray-600">
-              <p>ID: admin@gmail.com</p>
-              <p>PW: password</p>
-            </div>
           </form>
         </div>
       </div>

@@ -132,59 +132,16 @@ export default function InventoryPage() {
         setLoading(true);
         const vehiclesRef = collection(db, "vehicles");
         const querySnapshot = await getDocs(vehiclesRef);
-        const fetchedVehicles = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }))
+        const fetchedVehicles = querySnapshot.docs
+          .map(doc => ({
+            id: doc.id,
+            ...doc.data(),
+          })) as Vehicle[];
         // 一時保存の車両を除外
-        .filter(v => !v.isTemporarySave) as Vehicle[];
-        // ダミー車両を110台生成（灰色プレースホルダー表示のため imageUrls は空）
-        const bodyTypeCycle = [
-          "クレーン",
-          "ダンプ・ローダーダンプ",
-          "ミキサー車",
-          "アームロール",
-          "重機回送車・セルフクレーン",
-          "キャリアカー・車両運搬車",
-          "高所作業車",
-          "塵芥車",
-          "平ボディ",
-          "バン・ウイング",
-          "冷蔵冷凍車",
-          "特装車・その他",
-        ];
-        const makerCycle = ["日野", "いすゞ", "三菱ふそう", "UD", "トヨタ", "日産", "マツダ", "その他"];
-        const sizeCycle = ["大型", "増トン", "中型", "小型"];
-        const dummyVehicles: Vehicle[] = Array.from({length: 110}, (_, i) => {
-          const idx = i + 1;
-          return {
-            id: `DUMMY-${idx}`,
-            name: `ダミー車両 ${idx}`,
-            maker: makerCycle[i % makerCycle.length],
-            model: `D-${idx}`,
-            modelCode: `DM${idx}`,
-            bodyType: bodyTypeCycle[i % bodyTypeCycle.length],
-            vehicleType: bodyTypeCycle[i % bodyTypeCycle.length],
-            size: sizeCycle[i % sizeCycle.length],
-            price: undefined,
-            year: undefined,
-            month: undefined,
-            mileage: undefined,
-            loadingCapacity: undefined,
-            mission: undefined,
-            shift: undefined,
-            inspectionStatus: undefined,
-            inquiryNumber: `N${String(idx).padStart(5, '0')}`,
-            imageUrls: [],
-            isPrivate: false,
-            isTemporarySave: false,
-            isSoldOut: false,
-            isNegotiating: false,
-          } as unknown as Vehicle;
-        });
-        const combined = [...dummyVehicles, ...fetchedVehicles];
-        setVehicles(combined);
-        setFilteredVehicles(combined);
+        const visibleVehicles = fetchedVehicles.filter(v => !v.isTemporarySave);
+
+        setVehicles(visibleVehicles);
+        setFilteredVehicles(visibleVehicles);
       } catch (error) {
         console.error("Error fetching vehicles:", error);
       } finally {
