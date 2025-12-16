@@ -15,7 +15,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string, password: string): Promise<boolean> => {
     // ハードコードされた認証情報
-    if (email === "admin@gmail.com" && password === "password") {
+    if (email === "epi9009@yahoo.co.jp" && password === "noa39941") {
       setIsAuthenticated(true)
       return true
     }
