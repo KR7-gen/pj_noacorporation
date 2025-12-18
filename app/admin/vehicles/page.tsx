@@ -172,17 +172,32 @@ export default function AdminVehiclesPage() {
     if (freeWordSearch.trim()) {
       const query = freeWordSearch.toLowerCase()
       filtered = filtered.filter(vehicle => {
-        const inquiryNumber = vehicle.inquiryNumber?.toLowerCase() || ""
-        const chassisNumber = vehicle.chassisNumber?.toLowerCase() || ""
-        const name = vehicle.name?.toLowerCase() || ""
-        const maker = vehicle.maker?.toLowerCase() || ""
-        const model = vehicle.model?.toLowerCase() || ""
+        const inquiryNumber = (vehicle.inquiryNumber ? String(vehicle.inquiryNumber).toLowerCase() : "") || ""
+        const chassisNumber = (vehicle.chassisNumber ? String(vehicle.chassisNumber).toLowerCase() : "") || ""
+        const name = (vehicle.name ? String(vehicle.name).toLowerCase() : "") || ""
+        const maker = (vehicle.maker ? String(vehicle.maker).toLowerCase() : "") || ""
+        const model = (vehicle.model ? String(vehicle.model).toLowerCase() : "") || ""
+        const description = (vehicle.description ? String(vehicle.description).toLowerCase() : "") || ""
+        const bodyType = (vehicle.bodyType ? String(vehicle.bodyType).toLowerCase() : "") || ""
+        const bodyMaker = (vehicle.bodyMaker ? String(vehicle.bodyMaker).toLowerCase() : "") || ""
+        const bodyModel = (vehicle.bodyModel ? String(vehicle.bodyModel).toLowerCase() : "") || ""
+        const bodyYear = (vehicle.bodyYear ? String(vehicle.bodyYear).toLowerCase() : "") || ""
+        const equipment = (vehicle.equipment ? String(vehicle.equipment).toLowerCase() : "") || ""
         
         return inquiryNumber.includes(query) || 
                chassisNumber.includes(query) || 
                name.includes(query) ||
                maker.includes(query) ||
-               model.includes(query)
+               model.includes(query) ||
+               description.includes(query) ||
+               bodyType.includes(query) ||
+               bodyMaker.includes(query) ||
+               bodyModel.includes(query) ||
+               bodyYear.includes(query) ||
+               (vehicle.innerLength && String(vehicle.innerLength).includes(query)) ||
+               (vehicle.innerWidth && String(vehicle.innerWidth).includes(query)) ||
+               (vehicle.innerHeight && String(vehicle.innerHeight).includes(query)) ||
+               equipment.includes(query)
       })
     }
     

@@ -199,7 +199,16 @@ export default function InventoryPage() {
         vehicle.inquiryNumber?.toLowerCase().includes(keyword) ||
         vehicle.maker?.toLowerCase().includes(keyword) ||
         vehicle.model?.toLowerCase().includes(keyword) ||
-        vehicle.bodyType?.toLowerCase().includes(keyword)
+        vehicle.bodyType?.toLowerCase().includes(keyword) ||
+        vehicle.name?.toLowerCase().includes(keyword) ||
+        vehicle.description?.toLowerCase().includes(keyword) ||
+        vehicle.bodyMaker?.toLowerCase().includes(keyword) ||
+        vehicle.bodyModel?.toLowerCase().includes(keyword) ||
+        vehicle.bodyYear?.toLowerCase().includes(keyword) ||
+        (vehicle.innerLength && String(vehicle.innerLength).includes(keyword)) ||
+        (vehicle.innerWidth && String(vehicle.innerWidth).includes(keyword)) ||
+        (vehicle.innerHeight && String(vehicle.innerHeight).includes(keyword)) ||
+        vehicle.equipment?.toLowerCase().includes(keyword)
       );
     }
 
@@ -245,7 +254,15 @@ export default function InventoryPage() {
         (vehicle.maker && vehicle.maker.toLowerCase().includes(keyword)) ||
         (vehicle.model && vehicle.model.toLowerCase().includes(keyword)) ||
         (vehicle.description && vehicle.description.toLowerCase().includes(keyword)) ||
-        (vehicle.inquiryNumber && vehicle.inquiryNumber.toLowerCase().includes(keyword))
+        (vehicle.inquiryNumber && vehicle.inquiryNumber.toLowerCase().includes(keyword)) ||
+        (vehicle.bodyType && vehicle.bodyType.toLowerCase().includes(keyword)) ||
+        (vehicle.bodyMaker && vehicle.bodyMaker.toLowerCase().includes(keyword)) ||
+        (vehicle.bodyModel && vehicle.bodyModel.toLowerCase().includes(keyword)) ||
+        (vehicle.bodyYear && vehicle.bodyYear.toLowerCase().includes(keyword)) ||
+        (vehicle.innerLength && String(vehicle.innerLength).includes(keyword)) ||
+        (vehicle.innerWidth && String(vehicle.innerWidth).includes(keyword)) ||
+        (vehicle.innerHeight && String(vehicle.innerHeight).includes(keyword)) ||
+        (vehicle.equipment && vehicle.equipment.toLowerCase().includes(keyword))
       );
     }
 
