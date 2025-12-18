@@ -183,6 +183,22 @@ export default function AdminVehiclesPage() {
         const bodyModel = (vehicle.bodyModel ? String(vehicle.bodyModel).toLowerCase() : "") || ""
         const bodyYear = (vehicle.bodyYear ? String(vehicle.bodyYear).toLowerCase() : "") || ""
         const equipment = (vehicle.equipment ? String(vehicle.equipment).toLowerCase() : "") || ""
+        const inspectionStatus = (vehicle.inspectionStatus ? String(vehicle.inspectionStatus).toLowerCase() : "") || ""
+        const inspectionDate = vehicle.inspectionDate ? (() => {
+          try {
+            const date = new Date(vehicle.inspectionDate)
+            if (!isNaN(date.getTime())) {
+              // 日付を複数の形式で検索可能にする
+              const year = date.getFullYear()
+              const month = date.getMonth() + 1
+              const day = date.getDate()
+              return `${year}年${month}月${day}日 ${year}/${month}/${day} ${year}-${month}-${day} ${String(vehicle.inspectionDate).toLowerCase()}`
+            }
+            return String(vehicle.inspectionDate).toLowerCase()
+          } catch {
+            return String(vehicle.inspectionDate).toLowerCase()
+          }
+        })() : ""
         
         return inquiryNumber.includes(query) || 
                chassisNumber.includes(query) || 
@@ -197,7 +213,9 @@ export default function AdminVehiclesPage() {
                (vehicle.innerLength && String(vehicle.innerLength).includes(query)) ||
                (vehicle.innerWidth && String(vehicle.innerWidth).includes(query)) ||
                (vehicle.innerHeight && String(vehicle.innerHeight).includes(query)) ||
-               equipment.includes(query)
+               equipment.includes(query) ||
+               inspectionStatus.includes(query) ||
+               inspectionDate.includes(query)
       })
     }
     
