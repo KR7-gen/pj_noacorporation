@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Search, Phone, ChevronRight, ChevronDown, ArrowUpDown } from "lucide-react"
 import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { formatInspectionDateToJapaneseEra } from "@/lib/utils";
 import type { Vehicle } from "@/types"
 
 // 車両タイプのアイコンデータ（2行×6列の並び順に合わせる）
@@ -1724,7 +1725,12 @@ export default function InventoryPage() {
                           visibility: "visible",
                           display: "block"
                         }}>
-                          {vehicle.inspectionStatus || "抹消"}
+                          {(() => {
+                            if ((vehicle.inspectionStatus === "車検付き" || vehicle.inspectionStatus === "予備検査") && vehicle.inspectionDate) {
+                              return formatInspectionDateToJapaneseEra(vehicle.inspectionDate);
+                            }
+                            return vehicle.inspectionStatus || "抹消";
+                          })()}
                         </span>
                       </div>
                     </div>

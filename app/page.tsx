@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Phone, Search, ChevronDown, PhoneCall, ChevronRight } from "lucide-react"
 import { news } from "./news/newsData"
 import { getAnnouncements, getNewlyRegisteredVehicles, getVehicles } from "@/lib/firebase-utils"
+import { formatInspectionDateToJapaneseEra } from "@/lib/utils"
 import type { Announcement, Vehicle } from "@/types"
 
 const truckTypes = [
@@ -1969,7 +1970,12 @@ export default function HomePage() {
                           color: "#1A1A1A",
                           whiteSpace: "nowrap"
                         }}>
-                          {vehicle.inspectionStatus || "抹消"}
+                          {(() => {
+                            if ((vehicle.inspectionStatus === "車検付き" || vehicle.inspectionStatus === "予備検査") && vehicle.inspectionDate) {
+                              return formatInspectionDateToJapaneseEra(vehicle.inspectionDate);
+                            }
+                            return vehicle.inspectionStatus || "抹消";
+                          })()}
                         </span>
                       </div>
                     </div>

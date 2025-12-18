@@ -721,7 +721,7 @@ export default function VehicleDetailPage() {
                     return vehicle.inspectionDate;
                   }
                   return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
-                })() : "---"}</span>
+                })() : (vehicle.inspectionStatus === "抹消" ? "抹消" : "---")}</span>
                 {/* 9行目：車体寸法（cm） */}
                 <span className="font-medium px-3 flex items-center" style={{background: '#F2F2F2', height: '3.142rem',  borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '0 1px 1px 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>車体寸法（cm）</span>
                 <span className="px-3 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '0 0 1px 0', fontSize: '0.875rem', height: '3.142rem'}}>L{formatNumberWithCommas(vehicle.outerLength)}cm × W{formatNumberWithCommas(vehicle.outerWidth)}cm × H{formatNumberWithCommas(vehicle.outerHeight)}cm</span>
@@ -801,7 +801,7 @@ export default function VehicleDetailPage() {
                   return vehicle.inspectionDate;
                 }
                 return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
-              })() : "---"}</span>
+              })() : (vehicle.inspectionStatus === "抹消" ? "抹消" : "---")}</span>
               <span className="font-medium px-3 flex items-center" style={{background: '#F2F2F2', height: '3.142rem',  borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 1px 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>お問合せ番号</span>
               <span className="px-3 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 1px 0', fontSize: '0.875rem'}}>{vehicle.inquiryNumber || vehicle.id}</span>
             </div>
