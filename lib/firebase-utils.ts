@@ -269,10 +269,10 @@ export const getVehicles = async () => {
         imageUrls: normalizedImageUrls, // 正規化された画像URLを設定
         createdAt: convertTimestamp(data.createdAt),
         updatedAt: convertTimestamp(data.updatedAt)
-      };
+      } as Vehicle;
     })
     // 一時保存の車両を除外
-    .filter(v => !v.isTemporarySave) as Vehicle[];
+    .filter(v => !v.isTemporarySave);
     
     console.log("変換後の車両データ:", vehicles)
     return vehicles;
@@ -313,7 +313,7 @@ export const getVehicle = async (id: string) => {
 };
 
 // SOLD OUTの車両を取得する関数
-export const getSoldOutVehicles = async (limit: number = 3) => {
+export const getSoldOutVehicles = async (limit?: number) => {
   try {
     console.log("SOLD OUT車両データを取得中...");
     
@@ -344,13 +344,13 @@ export const getSoldOutVehicles = async (limit: number = 3) => {
           imageUrls: normalizedImageUrls,
           createdAt: convertTimestamp(data.createdAt),
           updatedAt: convertTimestamp(data.updatedAt)
-        };
+        } as Vehicle;
       })
       // 一時保存の車両を除外
-      .filter(v => !v.isTemporarySave) as Vehicle[];
+      .filter(v => !v.isTemporarySave);
       
-      // 最新の3台を返す
-      return vehicles.slice(0, limit);
+      // limitが指定されている場合はその数だけ返す、なければすべて返す
+      return limit ? vehicles.slice(0, limit) : vehicles;
     } catch (indexError) {
       console.log("インデックスがまだ構築中です。フォールバック処理を実行します。");
       
@@ -381,11 +381,12 @@ export const getSoldOutVehicles = async (limit: number = 3) => {
           const dateA = a.updatedAt instanceof Date ? a.updatedAt : new Date(a.updatedAt);
           const dateB = b.updatedAt instanceof Date ? b.updatedAt : new Date(b.updatedAt);
           return dateB.getTime() - dateA.getTime();
-        })
-        .slice(0, limit);
+        });
       
-      console.log("フォールバック処理でSOLD OUT車両数:", soldOutVehicles.length);
-      return soldOutVehicles;
+      // limitが指定されている場合はその数だけ返す、なければすべて返す
+      const result = limit ? soldOutVehicles.slice(0, limit) : soldOutVehicles;
+      console.log("フォールバック処理でSOLD OUT車両数:", result.length);
+      return result;
     }
   } catch (error) {
     console.error("Error getting sold out vehicles: ", error);

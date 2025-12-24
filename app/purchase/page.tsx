@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Phone, Upload, Download, PhoneCall, ChevronRight } from "lucide-react"
+import { Phone, Upload, Download, PhoneCall, ChevronRight, ChevronLeft } from "lucide-react"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import ContactForm from "../components/ContactForm"
@@ -402,10 +402,68 @@ const HeroSection = () => (
 
 // 2. 買取実績セクション
 const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[], loading: boolean }) => {
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
+  const [currentPageIndex, setCurrentPageIndex] = useState(0)
+  
   // 買取価格を計算（車両価格（税込）から30万円を引く）
   const calculatePurchasePrice = (totalPayment: number): number => {
     return Math.max(0, totalPayment - 300000)
   }
+
+  // 3枚ずつのグループに分ける
+  const itemsPerSlide = 3
+  const totalSlides = Math.ceil(achievements.length / itemsPerSlide)
+  const showNavigation = achievements.length > itemsPerSlide
+  const totalPages = Math.ceil(achievements.length / itemsPerSlide)
+
+  // 現在のスライドに表示する車両を取得（デスクトップ用）
+  const getCurrentSlideVehicles = (): (Vehicle | typeof defaultAchievements[0])[] => {
+    if (loading) {
+      return defaultAchievements.slice(0, 3)
+    }
+    if (achievements.length === 0) {
+      return defaultAchievements.slice(0, 3)
+    }
+    const startIndex = currentSlideIndex * itemsPerSlide
+    const vehicles = achievements.slice(startIndex, startIndex + itemsPerSlide)
+    // 3枚に満たない場合は空のスロットを埋める
+    while (vehicles.length < itemsPerSlide) {
+      vehicles.push(defaultAchievements[0] as any)
+    }
+    return vehicles
+  }
+
+  // 現在のページに表示する車両を取得（スマホ・sm画面用）
+  const getCurrentPageVehicles = (): Vehicle[] => {
+    if (loading || achievements.length === 0) {
+      return []
+    }
+    const startIndex = currentPageIndex * itemsPerSlide
+    return achievements.slice(startIndex, startIndex + itemsPerSlide)
+  }
+
+  const handlePrevSlide = () => {
+    setCurrentSlideIndex((prev) => (prev > 0 ? prev - 1 : totalSlides - 1))
+  }
+
+  const handleNextSlide = () => {
+    setCurrentSlideIndex((prev) => (prev < totalSlides - 1 ? prev + 1 : 0))
+  }
+
+  const handlePrevPage = () => {
+    setCurrentPageIndex((prev) => (prev > 0 ? prev - 1 : totalPages - 1))
+  }
+
+  const handleNextPage = () => {
+    setCurrentPageIndex((prev) => (prev < totalPages - 1 ? prev + 1 : 0))
+  }
+
+  const handlePageClick = (page: number) => {
+    setCurrentPageIndex(page)
+  }
+
+  const currentVehicles = getCurrentSlideVehicles()
+  const currentPageVehicles = getCurrentPageVehicles()
 
   return (
     <section className="py-16">
@@ -437,10 +495,372 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
           </div>
         </div>
 
-          <div className="flex flex-col md:flex-row justify-center gap-1 mb-8 md:gap-[1.42rem] gap-12">
+        {/* スマホ・sm画面用：ページネーション機能付き */}
+        <div className="md:hidden mb-8">
+          <div className="flex flex-col gap-12">
+           {loading ? (
+             // ローディング中はデフォルトの表示（3枚）
+             defaultAchievements.slice(0, 3).map((item, index) => (
+              <div key={index} className="text-center relative overflow-hidden w-full" style={{ minHeight: '27.643rem' }}>
+                <div className="p-0 h-full">
+                 {/* 1. 車両画像 */}
+                 <div className="w-full bg-gray-200 flex items-center justify-center overflow-hidden" style={{ aspectRatio: '4 / 3' }}>
+                   <div className="text-gray-400">車両画像</div>
+                 </div>
+                  
+                  {/* 2. 車名・年式 */}
+                  <div className="px-3" style={{ height: '7.714rem', padding: '0 0.857rem' }}>
+                    <h3 
+                      className="font-bold mb-2 text-[1.2rem]"
+                      style={{ 
+                        padding: '1.143rem',
+                        borderBottom: '0.071rem solid #CCCCCC'
+                      }}
+                    >
+                      <span className="inline">{item.maker}</span>
+                      {item.model && (
+                        <span className="inline">{item.model}</span>
+                      )}
+                    </h3>
+                    <p 
+                      className="mb-4 font-bold text-[1.143rem]" 
+                      style={{ 
+                        padding: '0.857rem',
+                        borderBottom: '0.071rem solid #CCCCCC',
+                        color: '#1a1a1a'
+                      }}
+                    >
+                      年式: {item.year}
+                    </p>
+                  </div>
+                  
+                  {/* 3. 買取価格 */}
+                    <div className="absolute bottom-0 w-full" style={{ height: '3.929rem', background: '#E6E6E6' }}>
+                      <div className="h-full flex items-center" style={{ padding: '0 0.857rem' }}>
+                        <span className="font-bold" style={{ fontSize: '1rem', color: '#1A1A1A', marginRight: '0.25rem' }}>
+                          <span className="inline">当社</span>
+                          <span className="inline">
+                            買取額<span className="inline-block">：</span>
+                          </span>
+                        </span>
+                        <span className="inline-flex items-end" style={{ lineHeight: 1 }}>
+                          <span className="font-bold text-[2.57rem]" style={{ color: '#2B5EC5', lineHeight: 1 }}>{item.price}</span>
+                          <span className="font-bold text-[1rem]" style={{ color: '#2B5EC5', lineHeight: 1, marginLeft: '0.15rem', transform: 'translateY(0.2rem)' }}>万円</span>
+                        </span>
+                      </div>
+                    </div>
+                  
+                  {/* 4. 高価買取マーク */}
+                   <div 
+                     className="absolute text-white font-bold flex items-center justify-center w-[5.143rem] h-[5.143rem] text-[1.428rem]"
+                     style={{
+                       bottom: '0.857rem',
+                       right: '0',
+                       background: '#EA1313',
+                       border: '0.143rem solid #666666',
+                       borderRadius: '50%',
+                       zIndex: 10,
+                       textAlign: 'center',
+                       lineHeight: '1.2'
+                   }}
+                 >
+                   高価<br />買取
+                 </div>
+                </div>
+              </div>
+            ))
+          ) : achievements.length > 0 ? (
+            // 実際のSOLD OUT車両データを表示（現在のページの3枚のみ）
+            currentPageVehicles.map((vehicle) => {
+              const purchasePrice = calculatePurchasePrice(vehicle.totalPayment || 0)
+              const parseYearNumber = (year: any) => {
+                if (!year) return 0
+                if (typeof year === 'string') {
+                  const digits = parseInt(year.replace(/[^0-9]/g, ''))
+                  if (year.startsWith('R') || year.startsWith('令和')) {
+                    return 2018 + (isNaN(digits) ? 0 : digits)
+                  }
+                  if (year.startsWith('H') || year.startsWith('平成')) {
+                    return 1988 + (isNaN(digits) ? 0 : digits)
+                  }
+                  if (year.startsWith('S') || year.startsWith('昭和')) {
+                    return 1925 + (isNaN(digits) ? 0 : digits)
+                  }
+                  return isNaN(digits) ? 0 : digits
+                }
+                const n = parseInt(year)
+                return isNaN(n) ? 0 : n
+              }
+              const yearNum = parseYearNumber(vehicle.year)
+              const japaneseYear = yearNum ? convertYearToJapaneseEra(yearNum) : ''
+              const vehicleName = `${vehicle.maker || ""} ${vehicle.vehicleType || ""}`.trim()
+              
+              return (
+                <div key={vehicle.id} className="text-center relative overflow-hidden w-full" style={{ minHeight: '27.643rem' }}>
+                  <div className="p-0 h-full">
+                    {/* 1. 車両画像 */}
+                    <div className="w-full flex items-center justify-center overflow-hidden" style={{ aspectRatio: '4 / 3' }}>
+                      {vehicle.imageUrls && vehicle.imageUrls.length > 0 ? (
+                        <Image
+                          src={vehicle.imageUrls[0]}
+                          alt={vehicleName}
+                          width={200}
+                          height={150}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.currentTarget.src = "/placeholder.jpg"
+                          }}
+                        />
+                      ) : (
+                        <div className="text-gray-400">車両画像</div>
+                      )}
+                    </div>
+                    
+                    {/* 2. 車名・年式 */}
+                    <div className="px-3" style={{ height: '7.714rem', padding: '0 0.857rem' }}>
+                    <h3 
+                      className="font-bold mb-2 text-[1.2rem]" 
+                      style={{ 
+                        padding: '1.143rem',
+                        borderBottom: '0.071rem solid #CCCCCC'
+                      }}
+                    >
+                      <span className="inline">{vehicle.maker || ""}</span>
+                      <span className="inline">
+                        {vehicle.vehicleType || ""}
+                      </span>
+                    </h3>
+                      <p 
+                        className="mb-4 font-bold text-[1.143rem]" 
+                        style={{ 
+                          padding: '0.857rem',
+                          borderBottom: '0.071rem solid #CCCCCC',
+                          color: '#1a1a1a'
+                        }}
+                      >
+                        年式: {japaneseYear}
+                      </p>
+                    </div>
+                    
+                      {/* 3. 買取価格 */}
+                        <div className="absolute bottom-0 w-full" style={{ height: '3.929rem', background: '#E6E6E6' }}>
+                          <div className="h-full flex items-center" style={{ padding: '0 0.857rem' }}>
+                            <span className="font-bold" style={{ fontSize: '1rem', color: '#1A1A1A', marginRight: '0.25rem' }}>
+                              <span className="inline">当社</span>
+                              <span className="inline">
+                                買取額<span className="inline-block">：</span>
+                              </span>
+                            </span>
+                            <span className="inline-flex items-end" style={{ lineHeight: 1 }}>
+                              <span className="font-bold text-[2.57rem]" style={{ color: '#2B5EC5', lineHeight: 1 }}>{Math.floor(purchasePrice / 10000)}</span>
+                              <span className="font-bold text-[1rem]" style={{ color: '#2B5EC5', lineHeight: 1, marginLeft: '0.15rem', transform: 'translateY(0.2rem)' }}>万円</span>
+                            </span>
+                          </div>
+                        </div>
+                       
+                      {/* 4. 高価買取マーク */}
+                      <div 
+                        className="absolute text-white font-bold flex items-center justify-center w-[5.143rem] h-[5.143rem] text-[1.428rem]"
+                        style={{
+                          bottom: '0.857rem',
+                          right: '0',
+                          background: '#EA1313',
+                          border: '0.143rem solid #666666',
+                          borderRadius: '50%',
+                          zIndex: 10,
+                          textAlign: 'center',
+                          lineHeight: '1.2'
+                        }}
+                      >
+                        高価<br />買取
+                      </div>
+                  </div>
+                </div>
+              )
+            })
+          ) : (
+            // データがない場合はデフォルト表示（3枚）
+            defaultAchievements.slice(0, 3).map((item, index) => (
+              <div key={index} className="text-center relative overflow-hidden w-full" style={{ minHeight: '27.643rem' }}>
+                <div className="p-0 h-full">
+                  {/* 1. 車両画像 */}
+                  <div className="w-full bg-gray-200 flex items-center justify-center overflow-hidden" style={{ aspectRatio: '4 / 3' }}>
+                    <div className="text-gray-400">車両画像</div>
+                  </div>
+                  
+                  {/* 2. 車名・年式 */}
+                  <div className="px-3" style={{ height: '7.714rem', padding: '0 0.857rem' }}>
+                    <h3 
+                      className="font-bold mb-2 text-[1.2rem]"
+                      style={{ 
+                        padding: '1.143rem',
+                        borderBottom: '0.071rem solid #CCCCCC'
+                      }}
+                    >
+                      <span className="inline">{item.maker}</span>
+                      {item.model && (
+                        <span className="inline">{item.model}</span>
+                      )}
+                    </h3>
+                    <p 
+                      className="mb-4 font-bold text-[1.143rem]" 
+                      style={{ 
+                        padding: '0.857rem',
+                        borderBottom: '0.071rem solid #CCCCCC',
+                        color: '#1a1a1a'
+                      }}
+                    >
+                      年式: {item.year}
+                    </p>
+                  </div>
+                  
+                   {/* 3. 買取価格 */}
+                   <div className="absolute bottom-0 w-full" style={{ height: '3.929rem', background: '#E6E6E6' }}>
+                     <div className="h-full flex items-center" style={{ padding: '0 0.857rem' }}>
+                       <span className="font-bold" style={{ fontSize: '1rem', color: '#1A1A1A', marginRight: '0.25rem' }}>
+                         <span className="inline">当社</span>
+                         <span className="inline">
+                           買取額<span className="inline-block">：</span>
+                         </span>
+                       </span>
+                       <span className="inline-flex items-end" style={{ lineHeight: 1 }}>
+                         <span className="font-bold text-[2.57rem]" style={{ color: '#2B5EC5', lineHeight: 1 }}>{item.price}</span>
+                         <span className="font-bold text-[1rem]" style={{ color: '#2B5EC5', lineHeight: 1, marginLeft: '0.15rem', transform: 'translateY(0.2rem)' }}>万円</span>
+                       </span>
+                     </div>
+                   </div>
+                   
+                  {/* 4. 高価買取マーク */}
+                  <div 
+                    className="absolute text-white font-bold flex items-center justify-center w-[5.143rem] h-[5.143rem] text-[1.428rem]"
+                    style={{
+                      bottom: '0.857rem',
+                      right: '0',
+                      background: '#EA1313',
+                      border: '0.143rem solid #666666',
+                      borderRadius: '50%',
+                      zIndex: 10,
+                      textAlign: 'center',
+                      lineHeight: '1.2'
+                    }}
+                  >
+                    高価<br />買取
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+          </div>
+          
+          {/* ページネーションボタン */}
+          {!loading && achievements.length > itemsPerSlide && (
+            <div className="flex justify-center items-center gap-4 mt-8">
+              <button
+                onClick={handlePrevPage}
+                className="p-2 transition-opacity"
+                style={{
+                  width: "3rem",
+                  height: "3rem",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  background: "transparent",
+                  border: "none",
+                  cursor: "pointer"
+                }}
+                aria-label="前のページ"
+              >
+                <ChevronLeft size={24} style={{ color: "#1A1A1A" }} />
+              </button>
+              
+              <div className="flex gap-2">
+                {Array.from({ length: totalPages }, (_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => handlePageClick(i)}
+                    className="px-3 py-1 rounded transition-colors"
+                    style={{
+                      backgroundColor: currentPageIndex === i ? '#2B5EC5' : 'transparent',
+                      color: currentPageIndex === i ? '#FFFFFF' : '#1A1A1A',
+                      border: currentPageIndex === i ? 'none' : '1px solid #CCCCCC',
+                      cursor: "pointer",
+                      minWidth: "2.5rem"
+                    }}
+                    aria-label={`ページ ${i + 1}`}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+              </div>
+              
+              <button
+                onClick={handleNextPage}
+                className="p-2 transition-opacity"
+                style={{
+                  width: "3rem",
+                  height: "3rem",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  background: "transparent",
+                  border: "none",
+                  cursor: "pointer"
+                }}
+                aria-label="次のページ"
+              >
+                <ChevronRight size={24} style={{ color: "#1A1A1A" }} />
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* デスクトップ用：スライドショーで3枚ずつ表示 */}
+        <div className="hidden md:block relative mb-8">
+          <div className="flex flex-row justify-center gap-[1.42rem] overflow-hidden relative">
+            {/* 左矢印ボタン - 最初のカードの左端から10px左 */}
+            {showNavigation && (
+              <button
+                onClick={handlePrevSlide}
+                className="absolute top-1/2 -translate-y-1/2 z-10 p-2 transition-opacity"
+                style={{
+                  width: "3rem",
+                  height: "3rem",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  left: "calc(50% - 31.2% - 1.42rem - 2.5rem)",
+                  background: "transparent",
+                  border: "none"
+                }}
+                aria-label="前のスライド"
+              >
+                <ChevronLeft size={24} style={{ color: "#1A1A1A" }} />
+              </button>
+            )}
+
+            {/* 右矢印ボタン - 最後のカードの右端から10px右 */}
+            {showNavigation && (
+              <button
+                onClick={handleNextSlide}
+                className="absolute top-1/2 -translate-y-1/2 z-10 p-2 transition-opacity"
+                style={{
+                  width: "3rem",
+                  height: "3rem",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  right: "calc(50% - 31.2% - 1.42rem - 2.5rem)",
+                  background: "transparent",
+                  border: "none"
+                }}
+                aria-label="次のスライド"
+              >
+                <ChevronRight size={24} style={{ color: "#1A1A1A" }} />
+              </button>
+            )}
            {loading ? (
              // ローディング中はデフォルトの表示
-             defaultAchievements.map((item, index) => (
+             defaultAchievements.slice(0, 3).map((item, index) => (
               <div key={index} className="text-center relative overflow-hidden w-full md:w-[20.8%]">
                 <div className="p-0 h-full">
                  {/* 1. 車両画像 */}
@@ -513,8 +933,90 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
               </div>
             ))
           ) : achievements.length > 0 ? (
-            // 実際のSOLD OUT車両データを表示
-            achievements.map((vehicle, index) => {
+            // 実際のSOLD OUT車両データを表示（現在のスライドの3枚のみ）
+            currentVehicles.map((item, index) => {
+              // Vehicle型かどうかを判定
+              const isVehicle = 'id' in item && 'totalPayment' in item
+              const vehicle = isVehicle ? item as Vehicle : null
+              
+              if (!vehicle) {
+                // デフォルトデータの場合
+                const defaultItem = item as typeof defaultAchievements[0]
+                return (
+                  <div key={`default-${index}`} className="text-center relative overflow-hidden w-full md:w-[20.8%]">
+                    <div className="p-0 h-full">
+                     {/* 1. 車両画像 */}
+                     <div
+                       className="w-full bg-gray-200 flex items-center justify-center overflow-hidden"
+                       style={{ aspectRatio: '4 / 3' }}
+                     >
+                       <div className="text-gray-400">車両画像</div>
+                     </div>
+                       
+                      {/* 2. 車名・年式 */}
+                      <div className="px-3" style={{ height: '7.714rem', padding: '0 0.857rem' }}>
+                        <h3 
+                          className="font-bold mb-2 text-[1.2rem] md:text-[1.2rem] lg:text-[1.429rem] xl:text-[1.429rem] 2xl:text-[1.429rem]"
+                          style={{ 
+                            padding: '1.143rem',
+                            borderBottom: '0.071rem solid #CCCCCC'
+                          }}
+                        >
+                          <span className="inline md:block lg:inline">{defaultItem.maker}</span>
+                          {defaultItem.model && (
+                            <span className="inline md:block lg:inline md:mt-1 lg:mt-0">{defaultItem.model}</span>
+                          )}
+                        </h3>
+                        <p 
+                          className="mb-4 font-bold text-[1.143rem] md:text-[1rem] lg:text-[1rem] xl:text-[1.143rem] 2xl:text-[1.143rem]" 
+                          style={{ 
+                            padding: '0.857rem',
+                            borderBottom: '0.071rem solid #CCCCCC',
+                            color: '#1a1a1a'
+                          }}
+                        >
+                          年式: {defaultItem.year}
+                        </p>
+                      </div>
+                      
+                      {/* 3. 買取価格 */}
+                        <div className="absolute bottom-0 w-full" style={{ height: '3.929rem', background: '#E6E6E6' }}>
+                          <div className="h-full flex items-center" style={{ padding: '0 0.857rem' }}>
+                            <span className="font-bold" style={{ fontSize: '1rem', color: '#1A1A1A', marginRight: '0.25rem' }}>
+                              <span className="inline md:block lg:inline">当社</span>
+                              <span className="inline md:block lg:inline">
+                                買取額<span className="inline-block">：</span>
+                              </span>
+                            </span>
+                            <span className="inline-flex items-end" style={{ lineHeight: 1 }}>
+                              <span className="font-bold text-[2.57rem] md:text-[2rem] lg:text-[2rem] xl:text-[2.57rem] 2xl:text-[2.57rem]" style={{ color: '#2B5EC5', lineHeight: 1 }}>{defaultItem.price}</span>
+                              <span className="font-bold text-[1rem] md:text-[0.8rem] lg:text-[0.8rem] xl:text-[1rem] 2xl:text-[1rem]" style={{ color: '#2B5EC5', lineHeight: 1, marginLeft: '0.15rem', transform: 'translateY(0.2rem)' }}>万円</span>
+                            </span>
+                          </div>
+                        </div>
+                      
+                      {/* 4. 高価買取マーク */}
+                       <div 
+                         className="absolute text-white font-bold flex items-center justify-center w-[5.143rem] h-[5.143rem] md:w-[4rem] md:h-[4rem] lg:w-[4rem] lg:h-[4rem] text-[1.428rem] md:text-[1.2rem] lg:text-[1.2rem]"
+                         style={{
+                           bottom: '0.857rem',
+                           right: '0',
+                           background: '#EA1313',
+                           border: '0.143rem solid #666666',
+                           borderRadius: '50%',
+                           zIndex: 10,
+                           textAlign: 'center',
+                           lineHeight: '1.2'
+                       }}
+                     >
+                       高価<br />買取
+                     </div>
+                    </div>
+                  </div>
+                )
+              }
+              
+              // 実際の車両データの場合
               const purchasePrice = calculatePurchasePrice(vehicle.totalPayment || 0)
               const parseYearNumber = (year: any) => {
                 if (!year) return 0
@@ -699,6 +1201,7 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
               </div>
             ))
           )}
+        </div>
         </div>
 
         <div className="text-center">
@@ -1691,12 +2194,12 @@ export default function PurchasePage() {
     }
   }
 
-  // SOLD OUT車両を取得して買取実績として表示
+  // SOLD OUT車両を取得して買取実績として表示（すべて取得）
   useEffect(() => {
     const fetchSoldOutVehicles = async () => {
       try {
         setLoading(true)
-        const soldOutVehicles = await getSoldOutVehicles(3)
+        const soldOutVehicles = await getSoldOutVehicles() // limitを指定しないですべて取得
         setAchievements(soldOutVehicles)
       } catch (error) {
         console.error("SOLD OUT車両の取得に失敗:", error)
