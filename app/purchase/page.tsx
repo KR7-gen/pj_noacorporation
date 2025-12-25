@@ -1203,13 +1203,6 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
           )}
         </div>
         </div>
-
-        <div className="text-center">
-          <p className="text-lg mb-4 font-bold">
-            当社買取実績の一部です。年式が古い・状態が悪い車両でも買取価格に自信があります。
-          </p>
-          <p className="text-lg font-bold">お気軽に是非一度ご相談ください。</p>
-        </div>
       </div>
     </section>
   )
