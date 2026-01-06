@@ -1407,7 +1407,7 @@ export default function VehicleNewPage() {
                 name="equipment"
                 value={formData.equipment || ""}
                 onChange={handleChange}
-                className="w-full border rounded px-2 py-1 h-20"
+                className="w-full border rounded px-2 py-1 min-h-40 resize-y"
                 placeholder="その他の装備や仕様を入力してください..."
               />
             </div>

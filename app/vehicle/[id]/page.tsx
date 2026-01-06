@@ -888,7 +888,7 @@ export default function VehicleDetailPage() {
                  {/* 7行目：装備/仕様 */}
                  <div className="flex">
                    <span className="font-medium px-3 py-3 flex items-start" style={{background: '#F2F2F2', minHeight: '6.2rem', width: '35%', borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '0 1px 1px 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>装備/仕様</span>
-                   <span className="px-3 py-3" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '0 0 1px 0', fontSize: '1rem', minHeight: '6.2rem', wordWrap: 'break-word', overflowWrap: 'break-word', whiteSpace: 'normal', width: '65%'}}>{vehicle.equipment || "---"}</span>
+                   <span className="px-3 py-3" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '0 0 1px 0', fontSize: '1rem', minHeight: '6.2rem', wordWrap: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', width: '65%'}}>{vehicle.equipment || "---"}</span>
                  </div>
                </div>
              </div>
@@ -913,7 +913,7 @@ export default function VehicleDetailPage() {
                  <span className="px-3 flex items-center" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 0 0', fontSize: '1rem'}}>{vehicle.innerHeight ? `${formatNumberWithCommas(vehicle.innerHeight)}cm` : "---"}</span>
                  {/* 4行目 */}
                  <span className="font-medium px-3 py-3 flex items-start" style={{background: '#F2F2F2', minHeight: '6.2rem',  borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 1px 0', fontFamily: 'Noto Sans JP', fontWeight: 700, fontStyle: 'normal', fontSize: '1rem', lineHeight: '100%', letterSpacing: '0%'}}>装備/仕様</span>
-                 <span className="px-3 py-3 col-span-3" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 1px 0', fontSize: '1rem', minHeight: '6.2rem', wordWrap: 'break-word', overflowWrap: 'break-word', whiteSpace: 'normal'}}>{vehicle.equipment || "---"}</span>
+                 <span className="px-3 py-3 col-span-3" style={{borderStyle: 'solid', borderColor: '#CCCCCC', borderWidth: '1px 1px 1px 0', fontSize: '1rem', minHeight: '6.2rem', wordWrap: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap'}}>{vehicle.equipment || "---"}</span>
                </div>
              </div>
            </div>

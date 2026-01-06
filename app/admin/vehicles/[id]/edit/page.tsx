@@ -279,6 +279,10 @@ export default function VehicleEditPage() {
             turbo: fetchedVehicle.turbo || "",
             // エンジン情報
             engineModel: fetchedVehicle.engineModel || "",
+            // 装備/仕様（配列の場合は文字列に変換）
+            equipment: Array.isArray(fetchedVehicle.equipment) 
+              ? fetchedVehicle.equipment.join('\n') 
+              : (fetchedVehicle.equipment || ""),
             // 店舗関連フィールド
             storeName: fetchedVehicle.storeName || "",
             storeId: fetchedVehicle.storeId || undefined,
@@ -522,6 +526,8 @@ export default function VehicleEditPage() {
         ...(formData.chassisNumber !== undefined && formData.chassisNumber !== "" ? { chassisNumber: formData.chassisNumber } : {}),
         ...(formData.month !== undefined && formData.month !== "" ? { month: formData.month } : {}),
         ...(formData.turbo !== undefined && formData.turbo !== "" ? { turbo: formData.turbo } : {}),
+        // 装備/仕様
+        ...(formData.equipment !== undefined ? { equipment: formData.equipment } : {}),
         isTemporarySave: true, // 一時保存としてマーク
         updatedAt: new Date(),
       }
@@ -596,6 +602,8 @@ export default function VehicleEditPage() {
         // エンジン情報
         ...(formData.engineModel !== undefined && formData.engineModel !== "" ? { engineModel: formData.engineModel } : {}),
         ...(formData.inquiryNumber !== undefined && formData.inquiryNumber !== "" ? { inquiryNumber: formData.inquiryNumber } : {}),
+        // 装備/仕様
+        ...(formData.equipment !== undefined ? { equipment: formData.equipment } : {}),
         isTemporarySave: false, // 通常保存としてマーク
         updatedAt: new Date(),
       }
@@ -1378,7 +1386,7 @@ export default function VehicleEditPage() {
                  name="equipment"
                  value={formData.equipment || ""}
                  onChange={handleChange}
-                 className="w-full border rounded px-2 py-1 h-20"
+                 className="w-full border rounded px-2 py-1 min-h-40 resize-y"
                  placeholder="その他の装備や仕様を入力してください..."
                />
              </div>
