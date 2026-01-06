@@ -138,34 +138,6 @@ const generateYears = () => {
 
 const years = generateYears();
 
-const mileages = [
-  "上限なし",
-  "10万km",
-  "20万km",
-  "30万km",
-  "40万km",
-  "50万km",
-  "60万km",
-  "70万km",
-  "80万km",
-  "90万km",
-  "100万km"
-]
-
-const loadCapacities = [
-  "1.0t",
-  "1.5t",
-  "2.0t",
-  "2.5t",
-  "3.0t",
-  "3.5t",
-  "4.0t",
-  "4.5t",
-  "5.0t",
-  "5.5t",
-  "6.0t"
-]
-
 const vehicleStatuses = [
   "車検付き",
   "車検切れ",
@@ -176,6 +148,17 @@ const vehicleStatuses = [
 const shifts = [
   "MT",
   "AT・SAT"
+]
+
+const fuels = [
+  "軽油",
+  "ガソリン",
+  "ハイブリッド",
+  "CNG",
+  "LNG",
+  "LPG",
+  "電気",
+  "その他"
 ]
 
 const mileageStatuses = [
@@ -1073,9 +1056,9 @@ export default function VehicleEditPage() {
                     className="w-full border rounded px-2 py-1"
                   >
                     <option value="">選択</option>
-                    <option value="軽油">軽油</option>
-                    <option value="ハイブリッド">ハイブリッド</option>
-                    <option value="その他">その他</option>
+                    {fuels.map((fuel) => (
+                      <option key={fuel} value={fuel}>{fuel}</option>
+                    ))}
                   </select>
                 </div>
                 <div className="space-y-2">
