@@ -58,9 +58,8 @@ export interface Vehicle {
   dpf?: boolean;
   pmMuffler?: boolean;
   centralDoorLock?: boolean;
-  // 車検証と状態表の画像
+  // 車検証の画像
   inspectionImageUrl?: string;
-  conditionImageUrl?: string;
   // 商談関連フィールド
   negotiationDeadline?: string;
   salesRepresentative?: string;

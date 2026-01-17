@@ -18,7 +18,7 @@ import ImageUploader from "@/components/ImageUploader"
 import { formatNumberWithCommas, formatInputWithCommas } from "@/lib/utils"
 import type { Vehicle } from "@/types"
 import { storage } from "@/lib/firebase"
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
+import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage"
 import { Store } from "@/types"
 
 // プルダウンの選択肢
@@ -209,9 +209,7 @@ export default function VehicleEditPage() {
   
   // ファイルアップロード用のref
   const inspectionFileRef = useRef<HTMLInputElement>(null)
-  const conditionFileRef = useRef<HTMLInputElement>(null)
   const [uploadingInspection, setUploadingInspection] = useState(false)
-  const [uploadingCondition, setUploadingCondition] = useState(false)
 
   // 店舗データを取得
   useEffect(() => {
@@ -405,23 +403,22 @@ export default function VehicleEditPage() {
     }
   }
 
-  // 状態表画像アップロード
-  const handleConditionImageUpload = async (file: File) => {
+  const handleInspectionImageDelete = async () => {
+    if (!formData.inspectionImageUrl) return
+    if (!window.confirm('車検証画像を削除しますか？')) return
     try {
-      setUploadingCondition(true)
-      const storageRef = ref(storage, `vehicles/${vehicleId}/condition/${file.name}`)
-      const snapshot = await uploadBytes(storageRef, file)
-      const downloadURL = await getDownloadURL(snapshot.ref)
-      
+      const fileRef = ref(storage, formData.inspectionImageUrl as string)
+      await deleteObject(fileRef)
       setFormData((prev: any) => ({
         ...prev,
-        conditionImageUrl: downloadURL
+        inspectionImageUrl: "",
       }))
+      if (inspectionFileRef.current) {
+        inspectionFileRef.current.value = ""
+      }
     } catch (err) {
-      console.error('状態表画像のアップロードに失敗しました:', err)
-      setError('状態表画像のアップロードに失敗しました')
-    } finally {
-      setUploadingCondition(false)
+      console.error('車検証画像の削除に失敗しました:', err)
+      setError('車検証画像の削除に失敗しました')
     }
   }
 
@@ -1256,6 +1253,14 @@ export default function VehicleEditPage() {
                        >
                          車検証を表示
                        </a>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={handleInspectionImageDelete}
+                        className="ml-auto text-red-600 border-red-200 hover:bg-red-50"
+                      >
+                        削除
+                      </Button>
                      </div>
                      <div className="mt-2">
                        <img 
