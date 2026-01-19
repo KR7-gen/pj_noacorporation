@@ -565,7 +565,7 @@ export default function VehicleDetailPage() {
                   {/* Simulation Table */}
                    <div style={{
                      display: 'grid',
-                     gridTemplateColumns: '28.7% 71.3%',
+                     gridTemplateColumns: '30% 70%',
                      gridTemplateRows: '4rem',
                      border: '1px solid #CCCCCC',
                      borderRadius: '0.286rem'
@@ -668,6 +668,53 @@ export default function VehicleDetailPage() {
                       whiteSpace: 'nowrap'
                     }}>※参考値 84回支払い時</span>
                   </div>
+                {vehicle?.storeName && (
+                  <div style={{marginTop: '1.5rem'}}>
+                    <div style={{
+                      display: 'grid',
+                      gridTemplateColumns: '30% 70%',
+                      gridTemplateRows: '4rem',
+                      border: '1px solid #CCCCCC',
+                      borderRadius: '0.286rem'
+                    }}>
+                      <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: '4rem',
+                        borderRight: '1px solid #CCCCCC',
+                        background: '#F2F2F2'
+                      }}>
+                        <span style={{
+                          fontSize: '1rem',
+                          fontWeight: 'bold',
+                          color: '#1A1A1A',
+                          textAlign: 'center',
+                          whiteSpace: 'nowrap'
+                        }}>在庫場所</span>
+                      </div>
+                      <div style={{
+                        display: 'flex',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        height: '4rem',
+                        background: '#FFFFFF',
+                        paddingLeft: '0.75rem'
+                      }}>
+                        <span style={{
+                          fontFamily: 'Noto Sans JP',
+                          fontWeight: '400',
+                          fontStyle: 'normal',
+                          fontSize: '1rem',
+                          lineHeight: '100%',
+                          letterSpacing: '0%',
+                          color: '#1a1a1a',
+                          whiteSpace: 'nowrap'
+                        }}>{vehicle.storeName}</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
                 </div>
               )}
             </div>
