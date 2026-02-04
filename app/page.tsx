@@ -291,7 +291,7 @@ export default function HomePage() {
       setNewsList(list.sort((a, b) => (b.createdAt as any) - (a.createdAt as any)).slice(0, 3));
     });
 
-    // 最新車両データを取得（公開中かつ売り切れでない上位4台）
+    // 最新車両データと総車両数を一度に取得
     // 全車両を取得して、フィルタ・ソート・スライスして確実に4台表示
     getVehicles().then((allVehicles) => {
       const filtered = allVehicles
@@ -303,32 +303,25 @@ export default function HomePage() {
           return dateB.getTime() - dateA.getTime();
         })
         .slice(0, 4);
+      const availableCount = allVehicles.filter((v:any) => !v.isPrivate).length;
       
       console.log("新着車両取得:", {
         全車両数: allVehicles.length,
         フィルタ後: filtered.length,
         表示車両: filtered.map(v => ({id: v.id, maker: v.maker, model: v.model}))
       });
-      
-      setLatestVehicles(filtered);
-    }).catch((error) => {
-      console.error("最新車両データ取得エラー:", error);
-      setLatestVehicles([]);
-    });
-
-    // 総車両数を取得（在庫数表示用）
-    // `/inventory` に公開されている車両のみをカウントする
-    // getVehicles()は既にisTemporarySaveでフィルタしているので、isPrivateのみでフィルタ
-    getVehicles().then((allVehicles) => {
-      const availableCount = allVehicles.filter((v:any) => !v.isPrivate).length;
       console.log("在庫数計算:", {
         全車両数: allVehicles.length,
         非公開車両数: allVehicles.filter((v:any) => v.isPrivate).length,
         最終在庫数: availableCount
       });
+      
+      setLatestVehicles(filtered);
       setTotalVehicles(availableCount);
     }).catch((error) => {
-      console.error("総車両数取得エラー:", error);
+      console.error("最新車両データ取得エラー:", error);
+      setLatestVehicles([]);
+      setTotalVehicles(0);
     });
   }, []);
 

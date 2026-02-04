@@ -16,6 +16,13 @@ import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage
 import { db, storage } from "./firebase";
 import { Vehicle, Store, Inquiry, Announcement } from "@/types";
 
+let skipIndexedVehicleQueries = false;
+
+const isFirestoreIndexError = (error: unknown) => {
+  const message = error instanceof Error ? error.message : String(error);
+  return message.includes("FAILED_PRECONDITION") || message.includes("index");
+};
+
 // Firebase接続テスト関数
 export const testFirebaseConnection = async () => {
   try {
@@ -148,6 +155,15 @@ export const normalizeImageUrls = (vehicle: any): string[] => {
 export const getLatestVehicles = async (limit: number = 4): Promise<Vehicle[]> => {
   try {
     console.log(`最新${limit}台の車両を取得中...`);
+    if (skipIndexedVehicleQueries) {
+      console.log("インデックスエラー履歴のため、全件取得で処理します。");
+      const allVehicles = await getVehicles();
+      const sortedVehicles = allVehicles
+        .filter(v => !v.isTemporarySave) // 一時保存の車両を除外
+        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+        .slice(0, limit);
+      return sortedVehicles;
+    }
     
     const vehiclesCollection = collection(db, "vehicles");
     const q = query(
@@ -188,6 +204,9 @@ export const getLatestVehicles = async (limit: number = 4): Promise<Vehicle[]> =
     console.error("最新車両取得エラー:", error);
     // インデックスが構築中の場合は、全件取得してソート
     try {
+      if (isFirestoreIndexError(error)) {
+        skipIndexedVehicleQueries = true;
+      }
       console.log("インデックス構築中のため、全件取得でフォールバック...");
       const allVehicles = await getVehicles();
       const sortedVehicles = allVehicles
@@ -312,6 +331,76 @@ export const getVehicle = async (id: string) => {
   }
 };
 
+export const getVehiclesByField = async (
+  field: keyof Vehicle,
+  value: string | number | boolean,
+  fetchLimit: number = 8
+): Promise<Vehicle[]> => {
+  try {
+    if (value === undefined || value === null || value === "") {
+      return [];
+    }
+
+    const vehiclesCollection = collection(db, "vehicles");
+    const q = query(
+      vehiclesCollection,
+      where(field as string, "==", value),
+      limit(fetchLimit)
+    );
+    const querySnapshot = await getDocs(q);
+
+    const vehicles = querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      const normalizedImageUrls = normalizeImageUrls(data);
+
+      return {
+        id: doc.id,
+        ...data,
+        imageUrls: normalizedImageUrls,
+        createdAt: convertTimestamp(data.createdAt),
+        updatedAt: convertTimestamp(data.updatedAt)
+      } as Vehicle;
+    })
+    .filter(v => !v.isTemporarySave);
+
+    return vehicles;
+  } catch (error) {
+    console.error("Error getting vehicles by field: ", error);
+    throw error;
+  }
+};
+
+export const getRecentVehicles = async (fetchLimit: number = 10): Promise<Vehicle[]> => {
+  try {
+    const vehiclesCollection = collection(db, "vehicles");
+    const q = query(
+      vehiclesCollection,
+      orderBy("createdAt", "desc"),
+      limit(fetchLimit)
+    );
+    const querySnapshot = await getDocs(q);
+
+    const vehicles = querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      const normalizedImageUrls = normalizeImageUrls(data);
+
+      return {
+        id: doc.id,
+        ...data,
+        imageUrls: normalizedImageUrls,
+        createdAt: convertTimestamp(data.createdAt),
+        updatedAt: convertTimestamp(data.updatedAt)
+      } as Vehicle;
+    })
+    .filter(v => !v.isTemporarySave);
+
+    return vehicles;
+  } catch (error) {
+    console.error("Error getting recent vehicles: ", error);
+    throw error;
+  }
+};
+
 // SOLD OUTの車両を取得する関数
 export const getSoldOutVehicles = async (limit?: number) => {
   try {
@@ -321,6 +410,9 @@ export const getSoldOutVehicles = async (limit?: number) => {
     
     // インデックスが構築中の場合のフォールバック処理
     try {
+      if (skipIndexedVehicleQueries) {
+        throw new Error("SKIP_INDEXED_QUERY");
+      }
       // まず、インデックス付きクエリを試行
       const soldOutQuery = query(
         vehiclesCollection,
@@ -353,25 +445,12 @@ export const getSoldOutVehicles = async (limit?: number) => {
       return limit ? vehicles.slice(0, limit) : vehicles;
     } catch (indexError) {
       console.log("インデックスがまだ構築中です。フォールバック処理を実行します。");
+      if (isFirestoreIndexError(indexError)) {
+        skipIndexedVehicleQueries = true;
+      }
       
       // インデックスなしで全車両を取得し、クライアント側でフィルタリング
-      const allVehiclesQuery = query(vehiclesCollection);
-      const querySnapshot = await getDocs(allVehiclesQuery);
-      
-      const allVehicles = querySnapshot.docs.map(doc => {
-        const data = doc.data();
-        
-        // 画像URLを正規化
-        const normalizedImageUrls = normalizeImageUrls(data);
-        
-        return {
-          id: doc.id,
-          ...data,
-          imageUrls: normalizedImageUrls,
-          createdAt: convertTimestamp(data.createdAt),
-          updatedAt: convertTimestamp(data.updatedAt)
-        };
-      }) as Vehicle[];
+      const allVehicles = await getVehicles();
       
       // SOLD OUTかつ反映フラグONの車両をフィルタリングし、updatedAtでソート（一時保存を除外）
       const soldOutVehicles = allVehicles
@@ -403,6 +482,9 @@ export const getNewlyRegisteredVehicles = async (limitCount: number = 4): Promis
     
     // インデックスが構築中の場合のフォールバック処理
     try {
+      if (skipIndexedVehicleQueries) {
+        throw new Error("SKIP_INDEXED_QUERY");
+      }
       // まず、インデックス付きクエリを試行（作成日時で降順ソート）
       const newVehiclesQuery = query(
         vehiclesCollection,
@@ -435,25 +517,12 @@ export const getNewlyRegisteredVehicles = async (limitCount: number = 4): Promis
       return vehicles;
     } catch (indexError) {
       console.log("インデックスがまだ構築中です。フォールバック処理を実行します。");
+      if (isFirestoreIndexError(indexError)) {
+        skipIndexedVehicleQueries = true;
+      }
       
       // インデックスなしで全車両を取得し、クライアント側でソート
-      const allVehiclesQuery = query(vehiclesCollection);
-      const querySnapshot = await getDocs(allVehiclesQuery);
-      
-      const allVehicles = querySnapshot.docs.map(doc => {
-        const data = doc.data();
-        
-        // 画像URLを正規化
-        const normalizedImageUrls = normalizeImageUrls(data);
-        
-        return {
-          id: doc.id,
-          ...data,
-          imageUrls: normalizedImageUrls,
-          createdAt: convertTimestamp(data.createdAt),
-          updatedAt: convertTimestamp(data.updatedAt)
-        };
-      }) as Vehicle[];
+      const allVehicles = await getVehicles();
       
       // 作成日時でソートして最新の車両を返す（一時保存を除外）
       const sortedVehicles = allVehicles

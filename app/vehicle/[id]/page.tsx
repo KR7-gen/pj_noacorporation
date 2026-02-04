@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { FileText, Camera, Phone, ChevronLeft, ChevronRight, Mail } from "lucide-react"
-import { getVehicle, getVehicles } from "@/lib/firebase-utils"
+import { getVehicle, getRecentVehicles, getVehiclesByField } from "@/lib/firebase-utils"
 import { formatNumberWithCommas } from "@/lib/utils"
 import type { Vehicle } from "@/types"
 
@@ -34,48 +34,50 @@ export default function VehicleDetailPage() {
           }
           
           setVehicle(fetchedVehicle)
-          const allVehicles = await getVehicles()
-          
-          // 商談中・売り切れ車両を除外
-          const availableVehicles = allVehicles
-            .filter(v => v.id !== vehicleId)
-            .filter(v => !v.isPrivate && !v.isTemporarySave)
-            .filter(v => !v.isNegotiating && !v.isSoldOut)
-          
-          // 優先条件に基づいて関連車両を選択
-          const related: Vehicle[] = []
-          
+          const isAvailable = (v: Vehicle) =>
+            v.id !== vehicleId &&
+            !v.isPrivate &&
+            !v.isTemporarySave &&
+            !v.isNegotiating &&
+            !v.isSoldOut;
+
+          const related: Vehicle[] = [];
+          const pushUnique = (items: Vehicle[]) => {
+            items.forEach(item => {
+              if (!item?.id) return;
+              if (related.some(r => r.id === item.id)) return;
+              related.push(item);
+            });
+          };
+
           // 第1優先：同じボディタイプ
-          const sameBodyType = availableVehicles.filter(v => v.bodyType === fetchedVehicle.bodyType)
-          related.push(...sameBodyType.slice(0, 3))
-          
+          if (fetchedVehicle.bodyType) {
+            const sameBodyType = await getVehiclesByField("bodyType", fetchedVehicle.bodyType, 8);
+            pushUnique(sameBodyType.filter(isAvailable));
+          }
+
           // 第2優先：同じメーカー（まだ3台未満の場合）
-          if (related.length < 3) {
-            const sameMaker = availableVehicles
-              .filter(v => v.maker === fetchedVehicle.maker)
-              .filter(v => !related.some(r => r.id === v.id))
-            related.push(...sameMaker.slice(0, 3 - related.length))
+          if (related.length < 3 && fetchedVehicle.maker) {
+            const sameMaker = await getVehiclesByField("maker", fetchedVehicle.maker, 8);
+            pushUnique(sameMaker.filter(isAvailable));
           }
-          
+
           // 第3優先：同じサイズ（まだ3台未満の場合）
-          if (related.length < 3) {
-            const sameSize = availableVehicles
-              .filter(v => 
-                v.outerLength === fetchedVehicle.outerLength && 
-                v.outerWidth === fetchedVehicle.outerWidth
-              )
-              .filter(v => !related.some(r => r.id === v.id))
-            related.push(...sameSize.slice(0, 3 - related.length))
+          if (related.length < 3 && fetchedVehicle.outerLength) {
+            const sameLength = await getVehiclesByField("outerLength", fetchedVehicle.outerLength, 8);
+            const sameSize = sameLength.filter(
+              v => v.outerWidth === fetchedVehicle.outerWidth
+            );
+            pushUnique(sameSize.filter(isAvailable));
           }
-          
-          // 第4優先：その他の車両（まだ3台未満の場合）
+
+          // 第4優先：最近の車両（まだ3台未満の場合）
           if (related.length < 3) {
-            const others = availableVehicles
-              .filter(v => !related.some(r => r.id === v.id))
-            related.push(...others.slice(0, 3 - related.length))
+            const recentVehicles = await getRecentVehicles(10);
+            pushUnique(recentVehicles.filter(isAvailable));
           }
-          
-          setRelatedVehicles(related.slice(0, 3))
+
+          setRelatedVehicles(related.slice(0, 3));
         } else {
           setError("車両が見つかりませんでした")
         }

@@ -9,8 +9,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Search, Phone, ChevronRight, ChevronDown, ArrowUpDown } from "lucide-react"
-import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { getVehicles } from "@/lib/firebase-utils";
 import { formatInspectionDateToJapaneseEra } from "@/lib/utils";
 import type { Vehicle } from "@/types"
 
@@ -86,6 +85,7 @@ export default function InventoryPage() {
   const isMobile = useIsMobile()
   const router = useRouter()
   const searchParams = useSearchParams()
+  const [maxPageButtons, setMaxPageButtons] = useState(10)
   
   // 検索条件の状態管理
   const [selectedType, setSelectedType] = useState(searchParams.get("type") || "all")
@@ -147,18 +147,9 @@ export default function InventoryPage() {
     const fetchVehicles = async () => {
       try {
         setLoading(true);
-        const vehiclesRef = collection(db, "vehicles");
-        const querySnapshot = await getDocs(vehiclesRef);
-        const fetchedVehicles = querySnapshot.docs
-          .map(doc => ({
-            id: doc.id,
-            ...doc.data(),
-          })) as Vehicle[];
-        // 一時保存の車両を除外
-        const visibleVehicles = fetchedVehicles.filter(v => !v.isTemporarySave);
-
-        setVehicles(visibleVehicles);
-        setFilteredVehicles(visibleVehicles);
+        const fetchedVehicles = await getVehicles();
+        setVehicles(fetchedVehicles);
+        setFilteredVehicles(fetchedVehicles);
       } catch (error) {
         console.error("Error fetching vehicles:", error);
       } finally {
@@ -168,6 +159,31 @@ export default function InventoryPage() {
 
     fetchVehicles();
   }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    const mobileMql = window.matchMedia("(max-width: 639px)")
+    const smMql = window.matchMedia("(min-width: 640px) and (max-width: 767px)")
+
+    const updatePaginationMax = () => {
+      if (mobileMql.matches) {
+        setMaxPageButtons(4)
+      } else if (smMql.matches) {
+        setMaxPageButtons(6)
+      } else {
+        setMaxPageButtons(10)
+      }
+    }
+
+    updatePaginationMax()
+    mobileMql.addEventListener("change", updatePaginationMax)
+    smMql.addEventListener("change", updatePaginationMax)
+
+    return () => {
+      mobileMql.removeEventListener("change", updatePaginationMax)
+      smMql.removeEventListener("change", updatePaginationMax)
+    }
+  }, [])
 
   const normalizeType = (t: string) => {
     const s = (t || "").trim();
@@ -428,6 +444,19 @@ export default function InventoryPage() {
   const startIndex = (currentPage - 1) * vehiclesPerPage
   const endIndex = startIndex + vehiclesPerPage
   const currentVehicles = sortedVehicles.slice(startIndex, endIndex)
+  let visiblePages: number[] = []
+  if (totalPages <= maxPageButtons) {
+    visiblePages = Array.from({ length: totalPages }, (_, i) => i + 1)
+  } else {
+    const half = Math.floor(maxPageButtons / 2)
+    let start = Math.max(1, currentPage - half)
+    let end = start + maxPageButtons - 1
+    if (end > totalPages) {
+      end = totalPages
+      start = end - maxPageButtons + 1
+    }
+    visiblePages = Array.from({ length: end - start + 1 }, (_, i) => start + i)
+  }
 
   // ページ変更ハンドラー
   const handlePageChange = (page: number) => {
@@ -1828,7 +1857,7 @@ export default function InventoryPage() {
               </div>
 
             {/* ページネーション */}
-            {totalPages >= 1 && (
+            {totalPages >= 1 && visiblePages.length >= 1 && (
               <div 
                 style={{
                   display: "flex",
@@ -1870,49 +1899,7 @@ export default function InventoryPage() {
                 )}
 
                 {/* ページ番号 */}
-                {Array.from({ length: totalPages }, (_, i) => i + 1)
-                  .filter((page) => {
-                    if (!isMobile) return true
-                    if (currentPage === 1) {
-                      // 1ページ目特例: 1,2,3,最後のみ
-                      return page === 1 || page === 2 || page === 3 || page === totalPages
-                    }
-                    // 通常: 現在の前後1ページ＋最初・最後
-                    const near = page >= currentPage - 1 && page <= currentPage + 1
-                    const edge = page === 1 || page === totalPages
-                    return near || edge
-                  })
-                  .map((page, idx, arr) => {
-                  // 現在のページの前後2ページと最初・最後のページを表示
-                  const shouldShow = true
-                  
-                  if (!shouldShow) {
-                    // 省略記号を表示
-                    // モバイル・デスクトップともに省略記号はフィルタ後の隙間に応じて表示
-                    const prev = arr[idx - 1]
-                    if (prev && page - prev > 1) {
-                      return (
-                        <span 
-                          key={page}
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            width: "3.43rem",
-                            height: "3.43rem",
-                            color: "#CCCCCC",
-                            fontFamily: "Noto Sans JP",
-                            fontSize: "1rem"
-                          }}
-                        >
-                          ...
-                        </span>
-                      )
-                    }
-                    return null
-                  }
-
-                  return (
+                {visiblePages.map((page) => (
                     <button
                       key={page}
                       onClick={() => handlePageChange(page)}
@@ -1941,8 +1928,7 @@ export default function InventoryPage() {
                     >
                       {page}
                     </button>
-                  )
-                })}
+                  ))}
 
                 {/* 次へボタン */}
                 {currentPage < totalPages && (
