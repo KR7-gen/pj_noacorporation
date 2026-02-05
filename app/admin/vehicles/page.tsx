@@ -1,8 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo, useRef } from "react"
 import { useRouter } from "next/navigation"
-import { getAllVehicles, deleteVehicle, updateVehicle } from "@/lib/firebase-utils"
+import { getAllVehicles, getAllVehiclesCount, getAllVehiclesPage, deleteVehicle, updateVehicle } from "@/lib/firebase-utils"
 import type { Vehicle } from "@/types"
 import { Button } from "@/components/ui/button"
 import {
@@ -32,7 +32,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 export default function AdminVehiclesPage() {
   const router = useRouter()
   const [vehicles, setVehicles] = useState<Vehicle[]>([])
-  const [filteredVehicles, setFilteredVehicles] = useState<Vehicle[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null)
@@ -43,6 +42,12 @@ export default function AdminVehiclesPage() {
   const [selectedSize, setSelectedSize] = useState<string>("all")
   const [selectedStatus, setSelectedStatus] = useState<string>("all")
   const [freeWordSearch, setFreeWordSearch] = useState<string>("")
+  const [debouncedFreeWordSearch, setDebouncedFreeWordSearch] = useState<string>("")
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalCount, setTotalCount] = useState(0)
+  const [pageCursors, setPageCursors] = useState<Record<number, any>>({})
+  const [isPageLoading, setIsPageLoading] = useState(false)
+  const vehiclesPerPage = 50
   
   // インライン編集用の状態
   const [editingValues, setEditingValues] = useState<{
@@ -84,45 +89,103 @@ export default function AdminVehiclesPage() {
     "冷蔵冷凍車",
     "特装車・その他",
   ]
+  const fixedSizes = ["大型", "増トン", "中型", "小型"]
+
+  const filters = useMemo(() => ({
+    maker: selectedMaker,
+    bodyType: selectedBodyType,
+    size: selectedSize,
+    status: selectedStatus
+  }), [selectedMaker, selectedBodyType, selectedSize, selectedStatus])
+
+  const useServerPaging = debouncedFreeWordSearch.trim() === ""
+  const pageCursorsRef = useRef<Record<number, any>>({})
 
   useEffect(() => {
-    const fetchVehicles = async () => {
+    pageCursorsRef.current = pageCursors
+  }, [pageCursors])
+
+  useEffect(() => {
+    if (!useServerPaging) return
+    let isActive = true
+    const fetchPage = async () => {
       try {
         setLoading(true)
-        console.log("車両データ取得開始...")
-        
-        const fetchedVehicles = await getAllVehicles()
-        console.log("取得した車両数:", fetchedVehicles.length)
-        setVehicles(fetchedVehicles)
-        setFilteredVehicles(fetchedVehicles)
-        
-        // 初期編集値を設定
-        const initialEditingValues: { [key: string]: { wholesalePrice: string; price: string; totalPayment: string } } = {}
-        fetchedVehicles.forEach(vehicle => {
-          if (vehicle.id) {
-            initialEditingValues[vehicle.id] = {
-              wholesalePrice: vehicle.wholesalePrice ? formatNumberWithCommas(vehicle.wholesalePrice) : '',
-              price: vehicle.price ? formatNumberWithCommas(vehicle.price) : '',
-              totalPayment: vehicle.totalPayment ? formatNumberWithCommas(vehicle.totalPayment) : ''
-            }
-          }
-        })
-        setEditingValues(initialEditingValues)
-        
         setError(null)
+        setPageCursors({})
+        pageCursorsRef.current = {}
+        const [count, pageResult] = await Promise.all([
+          getAllVehiclesCount(filters),
+          getAllVehiclesPage({
+            pageSize: vehiclesPerPage,
+            filters,
+            sortField,
+            sortDirection
+          })
+        ])
+        if (!isActive) return
+        setTotalCount(count)
+        setVehicles(pageResult.vehicles)
+        setCurrentPage(1)
+        setPageCursors({ 1: pageResult.lastDoc })
+        pageCursorsRef.current = { 1: pageResult.lastDoc }
       } catch (err) {
         console.error("車両取得エラーの詳細:", err)
+        if (!isActive) return
         setError(`車両の読み込みに失敗しました: ${err instanceof Error ? err.message : '不明なエラー'}`)
       } finally {
-        setLoading(false)
+        if (isActive) {
+          setLoading(false)
+        }
       }
     }
 
-    fetchVehicles()
-  }, [])
+    fetchPage()
+    return () => {
+      isActive = false
+    }
+  }, [useServerPaging, filters, sortField, sortDirection])
+
+  useEffect(() => {
+    if (useServerPaging) return
+    let isActive = true
+    const fetchAll = async () => {
+      try {
+        setLoading(true)
+        setError(null)
+        const fetchedVehicles = await getAllVehicles()
+        if (!isActive) return
+        setVehicles(fetchedVehicles)
+        setTotalCount(fetchedVehicles.length)
+        setCurrentPage(1)
+        setPageCursors({})
+        pageCursorsRef.current = {}
+      } catch (err) {
+        console.error("車両取得エラーの詳細:", err)
+        if (!isActive) return
+        setError(`車両の読み込みに失敗しました: ${err instanceof Error ? err.message : '不明なエラー'}`)
+      } finally {
+        if (isActive) {
+          setLoading(false)
+        }
+      }
+    }
+
+    fetchAll()
+    return () => {
+      isActive = false
+    }
+  }, [useServerPaging])
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedFreeWordSearch(freeWordSearch)
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [freeWordSearch])
 
   // 検索フィルタリング
-  useEffect(() => {
+  const filteredVehicles = useMemo(() => {
     let filtered = vehicles
 
     // メーカーフィルター
@@ -161,8 +224,8 @@ export default function AdminVehiclesPage() {
     }
 
     // フリーワード検索
-    if (freeWordSearch.trim()) {
-      const query = freeWordSearch.toLowerCase()
+    if (debouncedFreeWordSearch.trim()) {
+      const query = debouncedFreeWordSearch.toLowerCase()
       filtered = filtered.filter(vehicle => {
         const inquiryNumber = (vehicle.inquiryNumber ? String(vehicle.inquiryNumber).toLowerCase() : "") || ""
         const chassisNumber = (vehicle.chassisNumber ? String(vehicle.chassisNumber).toLowerCase() : "") || ""
@@ -211,13 +274,9 @@ export default function AdminVehiclesPage() {
       })
     }
     
-    setFilteredVehicles(filtered)
-  }, [selectedMaker, selectedBodyType, selectedSize, selectedStatus, freeWordSearch, vehicles])
+    return filtered
+  }, [selectedMaker, selectedBodyType, selectedSize, selectedStatus, debouncedFreeWordSearch, vehicles])
 
-  // 検索フィルター用のオプションを生成
-  const getUniqueValues = (key: keyof Vehicle) => {
-    return Array.from(new Set(vehicles.map(vehicle => vehicle[key]).filter((value): value is string => typeof value === 'string' && value !== ''))).sort()
-  }
 
   const handleDelete = (vehicle: Vehicle) => {
     setSelectedVehicle(vehicle)
@@ -338,7 +397,7 @@ export default function AdminVehiclesPage() {
   }
 
   // ソートされた車両リストを取得
-  const getSortedVehicles = () => {
+  const sortedVehicles = useMemo(() => {
     if (!sortField) {
       // デフォルトは作成日時の降順（最新が上）
       return [...filteredVehicles].sort((a, b) => {
@@ -366,7 +425,114 @@ export default function AdminVehiclesPage() {
         return bValue.localeCompare(aValue)
       }
     })
+  }, [filteredVehicles, sortField, sortDirection])
+
+  const totalItems = useServerPaging ? totalCount : sortedVehicles.length
+  const totalPages = Math.max(1, Math.ceil(totalItems / vehiclesPerPage))
+  const startIndex = (currentPage - 1) * vehiclesPerPage
+  const endIndex = startIndex + vehiclesPerPage
+  const paginatedVehicles = useServerPaging
+    ? sortedVehicles
+    : sortedVehicles.slice(startIndex, endIndex)
+
+  useEffect(() => {
+    if (useServerPaging) return
+    if (currentPage !== 1) {
+      setCurrentPage(1)
+    }
+  }, [useServerPaging, selectedMaker, selectedBodyType, selectedSize, selectedStatus, debouncedFreeWordSearch, sortField, sortDirection, currentPage])
+
+  const visiblePages = useMemo(() => {
+    const maxPageButtons = 10
+    if (totalPages <= maxPageButtons) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1)
+    }
+    const half = Math.floor(maxPageButtons / 2)
+    let start = Math.max(1, currentPage - half)
+    let end = start + maxPageButtons - 1
+    if (end > totalPages) {
+      end = totalPages
+      start = end - maxPageButtons + 1
+    }
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i)
+  }, [currentPage, totalPages])
+
+  const handlePageChange = async (page: number) => {
+    if (!useServerPaging) {
+      setCurrentPage(page)
+      return
+    }
+    if (page < 1 || page > totalPages) return
+    if (isPageLoading) return
+    setIsPageLoading(true)
+    try {
+      let cursor = null
+      if (page > 1) {
+        const existingCursor = pageCursorsRef.current[page - 1]
+        if (existingCursor) {
+          cursor = existingCursor
+        } else {
+          const nextCursors = { ...pageCursorsRef.current }
+          let lastDoc = null
+          for (let p = 1; p < page; p += 1) {
+            if (nextCursors[p]) {
+              lastDoc = nextCursors[p]
+              continue
+            }
+            const result = await getAllVehiclesPage({
+              pageSize: vehiclesPerPage,
+              cursor: lastDoc,
+              filters,
+              sortField,
+              sortDirection
+            })
+            nextCursors[p] = result.lastDoc
+            lastDoc = result.lastDoc
+          }
+          setPageCursors(nextCursors)
+          pageCursorsRef.current = nextCursors
+          cursor = nextCursors[page - 1] || null
+        }
+      }
+      const pageResult = await getAllVehiclesPage({
+        pageSize: vehiclesPerPage,
+        cursor,
+        filters,
+        sortField,
+        sortDirection
+      })
+      setVehicles(pageResult.vehicles)
+      setPageCursors(prev => {
+        const next = { ...prev, [page]: pageResult.lastDoc }
+        pageCursorsRef.current = next
+        return next
+      })
+      setCurrentPage(page)
+    } catch (err) {
+      console.error("車両取得エラーの詳細:", err)
+      setError("車両の読み込みに失敗しました。")
+    } finally {
+      setIsPageLoading(false)
+    }
   }
+
+  useEffect(() => {
+    if (paginatedVehicles.length === 0) return
+    setEditingValues(prev => {
+      const next = { ...prev }
+      let didChange = false
+      paginatedVehicles.forEach(vehicle => {
+        if (!vehicle.id || next[vehicle.id]) return
+        next[vehicle.id] = {
+          wholesalePrice: vehicle.wholesalePrice ? formatNumberWithCommas(vehicle.wholesalePrice) : "",
+          price: vehicle.price ? formatNumberWithCommas(vehicle.price) : "",
+          totalPayment: vehicle.totalPayment ? formatNumberWithCommas(vehicle.totalPayment) : ""
+        }
+        didChange = true
+      })
+      return didChange ? next : prev
+    })
+  }, [paginatedVehicles])
 
   if (loading) {
     return (
@@ -476,7 +642,7 @@ export default function AdminVehiclesPage() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">すべて</SelectItem>
-                {getUniqueValues('size').map((size) => (
+                {fixedSizes.map((size) => (
                   <SelectItem key={size} value={size}>
                     {size}
                   </SelectItem>
@@ -572,7 +738,7 @@ export default function AdminVehiclesPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {getSortedVehicles().map((vehicle, index) => (
+            {paginatedVehicles.map((vehicle, index) => (
               <TableRow key={vehicle.id}>
                 <TableCell className="text-right whitespace-nowrap">
                   <div className="flex gap-2 justify-end">
@@ -612,6 +778,8 @@ export default function AdminVehiclesPage() {
                           alt={`${vehicle.maker} ${vehicle.model}`}
                           fill
                           className="object-cover rounded"
+                          loading="lazy"
+                          sizes="96px"
                           onError={() => {
                             setImageErrors(prev => new Set(prev).add(vehicle.id!))
                           }}
@@ -711,6 +879,38 @@ export default function AdminVehiclesPage() {
           </TableBody>
         </Table>
       </div>
+
+      {totalPages > 1 && (
+        <div className="mt-4 flex items-center justify-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+            disabled={currentPage === 1 || isPageLoading}
+          >
+            前へ
+          </Button>
+          {visiblePages.map(page => (
+            <Button
+              key={page}
+              variant={page === currentPage ? "default" : "outline"}
+              size="sm"
+              onClick={() => handlePageChange(page)}
+              disabled={isPageLoading}
+            >
+              {page}
+            </Button>
+          ))}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
+            disabled={currentPage === totalPages || isPageLoading}
+          >
+            次へ
+          </Button>
+        </div>
+      )}
 
       {selectedVehicle && (
         <AlertDialog open onOpenChange={() => setSelectedVehicle(null)}>

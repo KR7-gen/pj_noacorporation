@@ -10,7 +10,10 @@ import {
   where,
   orderBy,
   Timestamp,
-  limit
+  limit,
+  startAfter,
+  getCountFromServer,
+  QueryConstraint
 } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import { db, storage } from "./firebase";
@@ -225,19 +228,11 @@ export const getLatestVehicles = async (limit: number = 4): Promise<Vehicle[]> =
 // 管理画面用：全車両を取得（一時保存も含む）
 export const getAllVehicles = async () => {
   try {
-    console.log("Firebaseから全車両データを取得中（管理画面用）...")
-    console.log("Firestore db オブジェクト:", db)
-    
     const vehiclesCollection = collection(db, "vehicles");
-    console.log("vehiclesコレクション参照:", vehiclesCollection)
-    
     const querySnapshot = await getDocs(vehiclesCollection);
-    console.log("Firestoreクエリ結果:", querySnapshot.docs.length, "件のドキュメント")
-    
     const vehicles = querySnapshot.docs.map(doc => {
       const data = doc.data();
-      console.log("ドキュメントデータ:", doc.id, data);
-      
+
       // 画像URLを正規化
       const normalizedImageUrls = normalizeImageUrls(data);
       
@@ -249,8 +244,6 @@ export const getAllVehicles = async () => {
         updatedAt: convertTimestamp(data.updatedAt)
       };
     }) as Vehicle[];
-    
-    console.log("変換後の車両データ:", vehicles)
     return vehicles;
   } catch (error) {
     console.error("Error getting all vehicles: ", error);
@@ -259,6 +252,138 @@ export const getAllVehicles = async () => {
       message: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined
     });
+    throw error;
+  }
+};
+
+type AdminVehicleFilters = {
+  maker?: string;
+  bodyType?: string;
+  size?: string;
+  status?: string;
+};
+
+const buildAdminVehicleConstraints = (
+  filters: AdminVehicleFilters | undefined,
+  sortField: "inspectionDate" | "negotiationDeadline" | null,
+  sortDirection: "asc" | "desc",
+  includeOrderBy: boolean
+) => {
+  const constraints: QueryConstraint[] = [];
+  if (filters?.maker && filters.maker !== "all") {
+    constraints.push(where("maker", "==", filters.maker));
+  }
+  if (filters?.bodyType && filters.bodyType !== "all") {
+    constraints.push(where("bodyType", "==", filters.bodyType));
+  }
+  if (filters?.size && filters.size !== "all") {
+    constraints.push(where("size", "==", filters.size));
+  }
+  if (filters?.status && filters.status !== "all") {
+    switch (filters.status) {
+      case "公開":
+        constraints.push(where("isPrivate", "==", false));
+        constraints.push(where("isSoldOut", "==", false));
+        constraints.push(where("isTemporarySave", "==", false));
+        break;
+      case "非公開":
+        constraints.push(where("isPrivate", "==", true));
+        constraints.push(where("isSoldOut", "==", false));
+        constraints.push(where("isTemporarySave", "==", false));
+        break;
+      case "商談中":
+        constraints.push(where("isNegotiating", "==", true));
+        break;
+      case "SOLD":
+        constraints.push(where("isSoldOut", "==", true));
+        break;
+      case "一時保存":
+        constraints.push(where("isTemporarySave", "==", true));
+        break;
+      default:
+        break;
+    }
+  }
+  if (includeOrderBy) {
+    if (sortField === "inspectionDate") {
+      constraints.push(orderBy("inspectionDate", sortDirection));
+    } else if (sortField === "negotiationDeadline") {
+      constraints.push(orderBy("negotiationDeadline", sortDirection));
+    } else {
+      constraints.push(orderBy("createdAt", "desc"));
+    }
+  }
+  return constraints;
+};
+
+export const getAllVehiclesCount = async (filters?: AdminVehicleFilters) => {
+  try {
+    const vehiclesCollection = collection(db, "vehicles");
+    const constraints = buildAdminVehicleConstraints(
+      filters,
+      null,
+      "desc",
+      false
+    );
+    const countQuery = constraints.length
+      ? query(vehiclesCollection, ...constraints)
+      : vehiclesCollection;
+    const snapshot = await getCountFromServer(countQuery);
+    return snapshot.data().count;
+  } catch (error) {
+    console.error("Error getting vehicles count: ", error);
+    throw error;
+  }
+};
+
+export const getAllVehiclesPage = async ({
+  pageSize,
+  cursor,
+  filters,
+  sortField,
+  sortDirection
+}: {
+  pageSize: number;
+  cursor?: any;
+  filters?: AdminVehicleFilters;
+  sortField: "inspectionDate" | "negotiationDeadline" | null;
+  sortDirection: "asc" | "desc";
+}) => {
+  try {
+    const vehiclesCollection = collection(db, "vehicles");
+    const constraints = buildAdminVehicleConstraints(
+      filters,
+      sortField,
+      sortDirection,
+      true
+    );
+    if (cursor) {
+      constraints.push(startAfter(cursor));
+    }
+    constraints.push(limit(pageSize));
+    const vehiclesQuery = query(vehiclesCollection, ...constraints);
+    const querySnapshot = await getDocs(vehiclesQuery);
+    const vehicles = querySnapshot.docs.map(doc => {
+      const data = doc.data();
+
+      // 画像URLを正規化
+      const normalizedImageUrls = normalizeImageUrls(data);
+
+      return {
+        id: doc.id,
+        ...data,
+        imageUrls: normalizedImageUrls,
+        createdAt: convertTimestamp(data.createdAt),
+        updatedAt: convertTimestamp(data.updatedAt)
+      };
+    }) as Vehicle[];
+    const lastDoc =
+      querySnapshot.docs.length > 0
+        ? querySnapshot.docs[querySnapshot.docs.length - 1]
+        : null;
+    return { vehicles, lastDoc };
+  } catch (error) {
+    console.error("Error getting vehicles page: ", error);
     throw error;
   }
 };
