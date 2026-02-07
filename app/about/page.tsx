@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation"
 const companyInfo = {
   name: "株式会社 Noa Corporation",
   established: "2009年",
-  capital: "000万円",
+  capital: "999万円",
   address: "〒329-1326　栃木県さくら市向河原3994-1",
   phone: "028-612-1474",
   fax: "028-612-1471",
