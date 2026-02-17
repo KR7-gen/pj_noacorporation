@@ -1373,27 +1373,30 @@ export default function InventoryPage() {
                       <div 
                         style={{
                           position: "absolute",
-                          top: "0",
+                          top: "50%",
                           left: "0",
                           width: "100%",
                           paddingTop: "0.5rem",
                           paddingBottom: "0.5rem",
-                          backgroundColor: vehicle.isSoldOut ? "#EA1313" : "#666666",
+                          backgroundColor: "transparent",
                           display: "flex",
                           alignItems: "center",
-                          justifyContent: "center"
+                          justifyContent: "center",
+                          transform: "translateY(-50%)"
                         }}
                       >
-                        <span style={{
-                          opacity: 1,
+                      <span
+                        className="text-[2.3rem] sm:text-[4.2rem] md:text-[5.1rem] lg:text-[2.5rem] xl:text-[3.2rem] 2xl:text-[3.8rem]"
+                        style={{
+                          opacity: 0.9,
                           fontFamily: "Noto Sans JP",
                           fontWeight: "700",
                           fontStyle: "Bold",
-                          fontSize: "1.14rem",
                           lineHeight: "100%",
                           letterSpacing: "0%",
-                          color: "#FFFFFF"
-                        }}>
+                          color: "#EA1313"
+                        }}
+                      >
                           {vehicle.isSoldOut ? "SOLD OUT" : "商談中"}
                         </span>
                       </div>

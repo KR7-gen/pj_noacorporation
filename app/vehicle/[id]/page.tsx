@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { useState, useEffect, useMemo } from "react"
 import Link from "next/link"
@@ -300,12 +300,12 @@ export default function VehicleDetailPage() {
                 <div className="relative overflow-hidden flex items-center justify-center w-full opacity-100">
                   {/* 商談中・SOLD OUT表示 */}
                   {vehicle.isSoldOut && (
-                    <div className="absolute top-0 left-0 right-0 text-white text-center py-3 font-bold z-20 bg-[#EA1313]">
+                    <div className="absolute top-1/2 -translate-y-1/2 left-0 right-0 text-[#EA1313] text-center py-3 font-bold z-20 text-[4.9rem] sm:text-[8.6rem] md:text-[10.4rem] lg:text-[4.6rem] xl:text-[5.8rem] 2xl:text-[7.7rem] opacity-90">
                       SOLD OUT
                     </div>
                   )}
                   {vehicle.isNegotiating && !vehicle.isSoldOut && (
-                    <div className="absolute top-0 left-0 right-0 text-white text-center py-3 font-bold z-20 bg-[#666666]">
+                    <div className="absolute top-1/2 -translate-y-1/2 left-0 right-0 text-[#EA1313] text-center py-3 font-bold z-20 text-[2.3rem] sm:text-[4.2rem] md:text-[5.1rem] lg:text-[2.5rem] xl:text-[3.2rem] 2xl:text-[3.8rem] opacity-90">
                       商談中
                       {vehicle.negotiationDeadline && (
                         <span className="ml-2 font-normal">
