@@ -582,6 +582,9 @@ export default function VehicleNewPage() {
         year: formData.year || "",
         month: formData.month || "",
         mileage: Number(formData.mileage?.toString().replace(/,/g, '')) || 0,
+        loadingCapacity: formData.loadingCapacity
+          ? Number(formData.loadingCapacity.toString().replace(/,/g, ''))
+          : undefined,
         price: Number(formData.price?.toString().replace(/,/g, '')) || 0,
         description: formData.description || "",
         imageUrls: validImageUrls, // 有効な画像URLのみを保存
