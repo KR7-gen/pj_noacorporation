@@ -534,7 +534,7 @@ export default function AdminVehiclesPage() {
     })
   }, [paginatedVehicles])
 
-  if (loading) {
+  if (loading && vehicles.length === 0) {
     return (
       <div className="container mx-auto py-10">
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-4">
