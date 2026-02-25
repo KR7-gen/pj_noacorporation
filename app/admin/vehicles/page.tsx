@@ -432,7 +432,7 @@ export default function AdminVehiclesPage() {
   const startIndex = (currentPage - 1) * vehiclesPerPage
   const endIndex = startIndex + vehiclesPerPage
   const paginatedVehicles = useServerPaging
-    ? sortedVehicles
+    ? (loading ? sortedVehicles.slice(startIndex, endIndex) : sortedVehicles)
     : sortedVehicles.slice(startIndex, endIndex)
 
   useEffect(() => {

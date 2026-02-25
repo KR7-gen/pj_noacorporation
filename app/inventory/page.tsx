@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import {useIsMobile} from "@/hooks/use-mobile"
 import { useRouter, useSearchParams } from "next/navigation"
@@ -86,6 +86,7 @@ export default function InventoryPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [maxPageButtons, setMaxPageButtons] = useState(10)
+  const listRef = useRef<HTMLDivElement | null>(null)
   
   // 検索条件の状態管理
   const [selectedType, setSelectedType] = useState(searchParams.get("type") || "all")
@@ -461,7 +462,15 @@ export default function InventoryPage() {
   // ページ変更ハンドラー
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    if (typeof window !== "undefined" && listRef.current) {
+      const rect = listRef.current.getBoundingClientRect()
+      const headerOffset = 120 // 固定ヘッダーぶん少し余白を取る
+      const targetTop = window.pageYOffset + rect.top - headerOffset
+      window.scrollTo({
+        top: Math.max(0, targetTop),
+        behavior: "smooth",
+      })
+    }
   }
 
   // デバッグ用：コンソールに出力
@@ -1203,7 +1212,9 @@ export default function InventoryPage() {
         </div>
 
        {/* 車両一覧 */}
-        <div style={{ 
+        <div
+          ref={listRef}
+          style={{ 
           width: "77.08%", 
           margin: "0 auto", 
           display: "flex", 
