@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { useParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -326,11 +327,13 @@ export default function VehicleDetailPage() {
                   )}
                   {/* メイン画像 */}
                   {images.length > 0 ? (
-                    <img
+                    <Image
                       src={images[currentIndex]}
                       alt={vehicle.name}
+                      width={1200}
+                      height={800}
                       className="w-full h-full object-contain lg:object-cover select-none"
-                      onError={handleImageError}
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 70vw, 50vw"
                     />
                   ) : (
                     <div className="w-full h-full bg-gray-200 flex items-center justify-center">
@@ -382,13 +385,15 @@ export default function VehicleDetailPage() {
                             }}
                           >
                             {images.slice(pageIndex * 12, (pageIndex + 1) * 12).map((img, idx) => (
-                              <img
+                              <Image
                                 key={pageIndex * 12 + idx}
                                 src={img}
                                 alt={`サムネイル${pageIndex * 12 + idx + 1}`}
+                                width={200}
+                                height={140}
                                 className={`object-cover rounded cursor-pointer border-2 h-[3.357rem] w-[4.571rem] md:h-[4.5rem] md:w-[6.5rem] lg:h-[3.357rem] lg:w-[4.571rem] ${currentIndex === pageIndex * 12 + idx ? 'border-blue-600' : 'border-transparent'}`}
+                                sizes="(max-width: 640px) 25vw, (max-width: 1024px) 15vw, 10vw"
                                 onClick={() => handleThumbClick(pageIndex * 12 + idx)}
-                                onError={handleImageError}
                               />
                             ))}
                           </div>
@@ -1333,26 +1338,26 @@ export default function VehicleDetailPage() {
                    </div>
 
                    {/* 車両画像 */}
-                   <div 
-                     style={{
-                       position: "relative",
-                       width: "100%",
-                       overflow: "hidden"
-                     }}
-                   >
-                     <img
-                       src={(relatedVehicle.imageUrls && relatedVehicle.imageUrls[0]) || relatedVehicle.imageUrl || "/placeholder.jpg"}
-                       alt={`${relatedVehicle.maker} ${relatedVehicle.model}`}
-                       style={{
-                         width: "100%",
-                         height: "100%",
-                         objectFit: "cover"
-                       }}
-                       onError={(e) => {
-                         (e.target as HTMLImageElement).src = "/placeholder.jpg";
-                       }}
-                     />
-                   </div>
+                  <div 
+                    style={{
+                      position: "relative",
+                      width: "100%",
+                      overflow: "hidden"
+                    }}
+                  >
+                    <Image
+                      src={(relatedVehicle.imageUrls && relatedVehicle.imageUrls[0]) || relatedVehicle.imageUrl || "/placeholder.jpg"}
+                      alt={`${relatedVehicle.maker} ${relatedVehicle.model}`}
+                      width={400}
+                      height={300}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover"
+                      }}
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    />
+                  </div>
 
                    {/* ボディタイプ + 詳細テーブル */}
                    <div 
@@ -2105,34 +2110,34 @@ export default function VehicleDetailPage() {
                       marginBottom: "0.571rem" // 8px ÷ 14px = 0.571rem
                     }}
                   >
-                    <img 
-                      src={(() => {
-                        const map: Record<string, string> = {
-                          crane: "/crane.jpg",
-                          dump: "/dump.jpg",
-                          mixer: "/mixer.jpg",
-                          "arm-roll": "/arm-roll.png",
-                          carrier: "/carrier.jpg",
-                          car_carrier: "/car_carrier.png",
-                          aerial: "/aerial.jpg",
-                          garbage: "/garbage.jpg",
-                          flatbed: "/flatbed.png",
-                          van: "/van.png",
-                          refrigerated: "/refrigerated_car.jpg",
-                          special: "/special.jpg",
-                        }
-                        return map[icon.icon] || "/special.jpg"
-                      })()}
-                      alt={icon.type}
-                      style={{
-                        maxWidth: "100%",
-                        maxHeight: "100%",
-                        objectFit: "contain"
-                      }}
-                      onError={(e) => {
-                        console.error(`画像読み込みエラー: ${icon.type}`, (e.target as HTMLImageElement).src);
-                      }}
-                    />
+                  <Image 
+                    src={(() => {
+                      const map: Record<string, string> = {
+                        crane: "/crane.jpg",
+                        dump: "/dump.jpg",
+                        mixer: "/mixer.jpg",
+                        "arm-roll": "/arm-roll.png",
+                        carrier: "/carrier.jpg",
+                        car_carrier: "/car_carrier.png",
+                        aerial: "/aerial.jpg",
+                        garbage: "/garbage.jpg",
+                        flatbed: "/flatbed.png",
+                        van: "/van.png",
+                        refrigerated: "/refrigerated_car.jpg",
+                        special: "/special.jpg",
+                      }
+                      return map[icon.icon] || "/special.jpg"
+                    })()}
+                    alt={icon.type}
+                    width={80}
+                    height={80}
+                    style={{
+                      maxWidth: "100%",
+                      maxHeight: "100%",
+                      objectFit: "contain"
+                    }}
+                    sizes="(max-width: 640px) 20vw, 10vw"
+                  />
                   </div>
                   <span 
                     className="body-type-card-text"

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import {useIsMobile} from "@/hooks/use-mobile"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -610,7 +611,7 @@ export default function InventoryPage() {
                       marginBottom: icon.type === "ダンプ・ローダーダンプ" ? "0.5rem" : "0.29rem"
                     }}
                   >
-                    <img 
+                    <Image
                       src={
                         icon.type === "クレーン" ? "/crane.jpg" :
                         icon.type === "ダンプ・ローダーダンプ" ? "/dump.jpg" :
@@ -626,14 +627,14 @@ export default function InventoryPage() {
                         "/special.jpg"
                       }
                       alt={icon.type}
+                      width={80}
+                      height={80}
                       style={{
                         maxWidth: "100%",
                         maxHeight: "100%",
                         objectFit: "contain"
                       }}
-                      onError={(e) => {
-                        console.error(`画像読み込みエラー: ${icon.type}`, (e.target as HTMLImageElement).src);
-                      }}
+                      sizes="(max-width: 640px) 25vw, (max-width: 1024px) 12vw, 8vw"
                     />
                   </div>
                   <span 
@@ -1351,18 +1352,17 @@ export default function InventoryPage() {
                     }}
                   >
                     {vehicle.imageUrls && vehicle.imageUrls.length > 0 && vehicle.imageUrls[0] ? (
-                      <img
+                      <Image
                         src={vehicle.imageUrls[0]}
                         alt={`${vehicle.maker} ${vehicle.name}`}
+                        width={400}
+                        height={300}
                         style={{
                           width: "100%",
                           height: "100%",
                           objectFit: "cover"
                         }}
-                        onError={(e) => {
-                          // エラーが発生した場合は画像を非表示にする
-                          (e.target as HTMLImageElement).style.display = "none";
-                        }}
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                       />
                     ) : (
                       <div style={{
@@ -2236,9 +2236,11 @@ export default function InventoryPage() {
                     margin: "0 auto 1.143rem auto"
                   }}
                 >
-                  <img 
+                  <Image 
                     src="/forum.png"
                     alt="フォーラム"
+                    width={23}
+                    height={23}
                     style={{
                       width: "1.429rem",
                       height: "1.429rem"

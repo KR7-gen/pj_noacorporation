@@ -405,9 +405,9 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
   const [currentPageIndex, setCurrentPageIndex] = useState(0)
   
-  // 買取価格を計算（車両価格（税込）から30万円を引く）
-  const calculatePurchasePrice = (totalPayment: number): number => {
-    return Math.max(0, totalPayment - 300000)
+  // 買取価格を計算（販売価格の税抜き価格から30万円を引く）
+  const calculatePurchasePrice = (priceExcludingTax: number): number => {
+    return Math.max(0, priceExcludingTax - 300000)
   }
 
   // 3枚ずつのグループに分ける
@@ -572,7 +572,7 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
           ) : achievements.length > 0 ? (
             // 実際のSOLD OUT車両データを表示（現在のページの3枚のみ）
             currentPageVehicles.map((vehicle) => {
-              const purchasePrice = calculatePurchasePrice(vehicle.totalPayment || 0)
+              const purchasePrice = calculatePurchasePrice(vehicle.price || 0)
               const parseYearNumber = (year: any) => {
                 if (!year) return 0
                 if (typeof year === 'string') {
@@ -1017,7 +1017,7 @@ const AchievementSection = ({ achievements, loading }: { achievements: Vehicle[]
               }
               
               // 実際の車両データの場合
-              const purchasePrice = calculatePurchasePrice(vehicle.totalPayment || 0)
+              const purchasePrice = calculatePurchasePrice(vehicle.price || 0)
               const parseYearNumber = (year: any) => {
                 if (!year) return 0
                 if (typeof year === 'string') {
@@ -1959,27 +1959,29 @@ const ContactSection = () => (
             height: "100%"
           }}>
             {/* ③フォームでの問い合わせ */}
-            <div 
-              style={{
-                width: "15.714rem",
-                height: "1.714rem",
-                display: "flex",
-                alignItems: "center",
-                gap: "0.286rem",
-                opacity: 1,
-                margin: "0 auto 1.143rem auto"
-              }}
-            >
-              <img 
-                src="/forum.png"
-                alt="フォーラム"
-                style={{
-                  width: "1.429rem",
-                  height: "1.429rem"
-                }}
-              />
-              <h3 style={{ fontWeight: "bold", fontSize: "1.143rem", margin: 0 }}>フォームでのお問い合わせ</h3>
-            </div>
+                <div 
+                  style={{
+                    width: "15.714rem",
+                    height: "1.714rem",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.286rem",
+                    opacity: 1,
+                    margin: "0 auto 1.143rem auto"
+                  }}
+                >
+                  <Image 
+                    src="/forum.png"
+                    alt="フォーラム"
+                    width={23}
+                    height={23}
+                    style={{
+                      width: "1.429rem",
+                      height: "1.429rem"
+                    }}
+                  />
+                  <h3 style={{ fontWeight: "bold", fontSize: "1.143rem", margin: 0 }}>フォームでのお問い合わせ</h3>
+                </div>
             {/* ④お問合せフォームへボタン */}
             <Link href="/contact" className="contact-form-button">
               <Button 

@@ -362,10 +362,13 @@ export default function HomePage() {
             {src: "/2_after_painting_examples.JPG", alt: "塗装後の車両例2"}
           ].map((image) => (
             <div key={image.src} className="w-1/3 aspect-[4/3]">
-              <img
+              <Image
                 src={image.src}
                 alt={image.alt}
+                width={800}
+                height={600}
                 className="w-full h-full object-cover"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               />
             </div>
           ))}
@@ -568,7 +571,7 @@ export default function HomePage() {
                       marginBottom: "0.29rem"
                     }}
                   >
-                    <img 
+                    <Image 
                       src={
                         icon.type === "クレーン" ? "/crane.jpg" :
                         icon.type === "ダンプ・ローダーダンプ" ? "/dump.jpg" :
@@ -584,14 +587,14 @@ export default function HomePage() {
                         "/special.jpg"
                       }
                       alt={icon.type}
+                      width={80}
+                      height={80}
                       style={{
                         maxWidth: "100%",
                         maxHeight: "100%",
                         objectFit: "contain"
                       }}
-                      onError={(e) => {
-                        console.error(`画像読み込みエラー: ${icon.type}`, (e.target as HTMLImageElement).src);
-                      }}
+                      sizes="(max-width: 640px) 20vw, (max-width: 1024px) 10vw, 6vw"
                     />
                   </div>
                   <span 
@@ -1077,7 +1080,7 @@ export default function HomePage() {
                     marginBottom: icon.type === "ダンプローダーダンプ" ? "0.5rem" : "0.29rem"
                   }}
                 >
-                  <img 
+                  <Image 
                     src={`/${icon.type === "クレーン" ? "crane" : 
                         icon.type === "ダンプ・ローダーダンプ" ? "dump" :
                         icon.type === "平ボディ" ? "flatbed" :
@@ -1091,14 +1094,14 @@ export default function HomePage() {
                         icon.type === "アームロール" ? "arm-roll" :
                         "special"}.${icon.type === "平ボディ" || icon.type === "アームロール" || icon.type === "キャリアカー・車両運搬車" ? "png" : "jpg"}`}
                     alt={icon.type}
+                    width={70}
+                    height={70}
                     style={{
                       maxWidth: "100%",
                       maxHeight: "100%",
                       objectFit: "contain"
                     }}
-                    onError={(e) => {
-                      console.error(`画像読み込みエラー: ${icon.type}`, (e.target as HTMLImageElement).src);
-                    }}
+                    sizes="(max-width: 640px) 20vw, (max-width: 1024px) 14vw, 10vw"
                   />
                 </div>
                 <span 
@@ -1537,18 +1540,17 @@ export default function HomePage() {
                     }}
                   >
                     {vehicle.imageUrls && vehicle.imageUrls.length > 0 && vehicle.imageUrls[0] ? (
-                      <img
+                      <Image
                         src={vehicle.imageUrls[0]}
                         alt={`${vehicle.maker} ${vehicle.name}`}
+                        width={400}
+                        height={300}
                         style={{
                           width: "100%",
                           height: "100%",
                           objectFit: "cover"
                         }}
-                        onError={(e) => {
-                          // エラーが発生した場合は画像を非表示にする
-                          (e.target as HTMLImageElement).style.display = "none";
-                        }}
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                       />
                     ) : (
                       <div style={{
@@ -2912,9 +2914,11 @@ export default function HomePage() {
                       }}
                     >
                       {step.title}
-                      <img
+                      <Image
                         src={`/${step.number === "01" ? "mail.svg" : step.number === "02" ? "airport_shuttle.svg" : step.number === "03" ? "calculate.svg" : "handshake.svg"}`}
                         alt={`FLOW ${step.number} icon`}
+                        width={step.number === "01" ? 38 : 46}
+                        height={step.number === "01" ? 30 : 46}
                         style={{
                           width: step.number === "01" ? "2.38rem" : "2.86rem",
                           height: step.number === "01" ? "1.91rem" : "2.86rem",
@@ -2922,6 +2926,7 @@ export default function HomePage() {
                           objectFit: "contain",
                           filter: "brightness(0.4)"
                         }}
+                        sizes="(max-width: 640px) 15vw, 8vw"
                       />
                       {step.number === "01" && "☎"}
                     </h3>
@@ -3014,9 +3019,11 @@ export default function HomePage() {
                         }}
                       >
                         {step.title}
-                        <img
+                        <Image
                           src={`/${step.number === "01" ? "mail.svg" : step.number === "02" ? "airport_shuttle.svg" : step.number === "03" ? "calculate.svg" : "handshake.svg"}`}
                           alt={`FLOW ${step.number} icon`}
+                          width={step.number === "01" ? 38 : 46}
+                          height={step.number === "01" ? 30 : 46}
                           style={{
                             width: step.number === "01" ? "2.38rem" : "2.86rem",
                             height: step.number === "01" ? "1.91rem" : "2.86rem",
@@ -3024,6 +3031,7 @@ export default function HomePage() {
                             objectFit: "contain",
                             filter: "brightness(0.4)"
                           }}
+                          sizes="(max-width: 640px) 15vw, 8vw"
                         />
                         {step.number === "01" && "☎"}
                       </h3>
@@ -3741,9 +3749,11 @@ export default function HomePage() {
                 <CardContent style={{ padding: 0, width: "100%", height: "100%", position: "relative", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
                   {/* 1段目：大きい画像 */}
                   <div style={{ width: "100%", height: "20.991rem", marginBottom: "0.571rem" }}>
-                    <img
+                    <Image
                       src="/shopinfo_truck1.jpg"
                       alt="店舗写真1"
+                      width={1200}
+                      height={800}
                       style={{
                         width: "100%",
                         height: "100%",
@@ -3751,13 +3761,16 @@ export default function HomePage() {
                         objectPosition: "center bottom",
                         borderRadius: "0rem"
                       }}
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 60vw"
                     />
                   </div>
                   {/* 2段目：小さい画像3枚横並び */}
                   <div style={{ width: "100%", display: "flex", gap: "0.571rem", justifyContent: "space-between" }}>
-                    <img
+                    <Image
                       src="/shopinfo_truck2.jpg"
                       alt="店舗写真2"
+                      width={400}
+                      height={250}
                       style={{
                         width: "31.25%",
                         height: "6.42rem",
@@ -3766,10 +3779,13 @@ export default function HomePage() {
                         borderRadius: "0rem",
                         boxShadow: "0 0.143rem 0.571rem rgba(0,0,0,0.10)"
                       }}
+                      sizes="(max-width: 640px) 33vw, 20vw"
                     />
-                    <img
+                    <Image
                       src="/shopinfo_truck3.jpg"
                       alt="店舗写真3"
+                      width={400}
+                      height={250}
                       style={{
                         width: "31.25%",
                         height: "6.42rem",
@@ -3778,10 +3794,13 @@ export default function HomePage() {
                         borderRadius: "0rem",
                         boxShadow: "0 0.143rem 0.571rem rgba(0,0,0,0.10)"
                       }}
+                      sizes="(max-width: 640px) 33vw, 20vw"
                     />
-                    <img
+                    <Image
                       src="/shopinfo_truck4.jpg"
                       alt="店舗写真4"
+                      width={400}
+                      height={250}
                       style={{
                         width: "31.25%",
                         height: "6.42rem",
@@ -3790,6 +3809,7 @@ export default function HomePage() {
                         borderRadius: "0rem",
                         boxShadow: "0 0.143rem 0.571rem rgba(0,0,0,0.10)"
                       }}
+                      sizes="(max-width: 640px) 33vw, 20vw"
                     />
                   </div>
                 </CardContent>
@@ -4089,9 +4109,11 @@ export default function HomePage() {
                     margin: "0 auto 1.143rem auto"
                   }}
                 >
-                  <img 
+                  <Image 
                     src="/forum.png"
                     alt="フォーラム"
+                    width={23}
+                    height={23}
                     style={{
                       width: "1.429rem",
                       height: "1.429rem"
