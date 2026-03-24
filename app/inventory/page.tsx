@@ -390,8 +390,8 @@ export default function InventoryPage() {
         if (aSold !== bSold) return aSold - bSold
         const aTime = toTime((a as any).createdAt)
         const bTime = toTime((b as any).createdAt)
-        // 昇順（古い=先に出品）
-        return aTime - bTime
+        // 降順（新しい=最近出品されたものが先頭）
+        return bTime - aTime
       })
     }
 
