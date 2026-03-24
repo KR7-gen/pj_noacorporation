@@ -369,29 +369,45 @@ export default function InventoryPage() {
     if (!sortField) {
       // デフォルト並び替え
       // 1) SOLD OUT は末尾へ
-      // 2) それ以外は作成日時の昇順（最初に出品されたものが先頭）
-      const toTime = (value: any): number => {
-        if (!value) return Number.MAX_SAFE_INTEGER
+      // 2) それ以外は作成日時の降順（最近出品されたものが先頭）
+      const toTime = (value: any, isDescending: boolean = true): number => {
+        if (!value) {
+          // 降順の場合は無効な日付を末尾に（MIN）、昇順の場合は末尾に（MAX）
+          return isDescending ? Number.MIN_SAFE_INTEGER : Number.MAX_SAFE_INTEGER
+        }
         // Firestore Timestamp
         if (typeof value === 'object' && value !== null) {
           if (typeof (value as any).toDate === 'function') {
-            try { return (value as any).toDate().getTime() } catch { /* noop */ }
+            try {
+              return (value as any).toDate().getTime()
+            } catch (error) {
+              console.warn('Failed to convert Firestore Timestamp:', error)
+              return isDescending ? Number.MIN_SAFE_INTEGER : Number.MAX_SAFE_INTEGER
+            }
           }
           if (value instanceof Date) return value.getTime()
         }
         // 数値 or 文字列
         const t = new Date(value).getTime()
-        return isNaN(t) ? Number.MAX_SAFE_INTEGER : t
+        if (isNaN(t)) {
+          return isDescending ? Number.MIN_SAFE_INTEGER : Number.MAX_SAFE_INTEGER
+        }
+        return t
       }
 
       return [...filteredVehicles].sort((a, b) => {
+        // 優先度1: SOLD OUT は末尾へ
         const aSold = a.isSoldOut ? 1 : 0
         const bSold = b.isSoldOut ? 1 : 0
         if (aSold !== bSold) return aSold - bSold
-        const aTime = toTime((a as any).createdAt)
-        const bTime = toTime((b as any).createdAt)
-        // 昇順（古い=先に出品）
-        return aTime - bTime
+
+        // 優先度2: 作成日時の降順（新しい順）
+        const aTime = toTime((a as any).createdAt, true)
+        const bTime = toTime((b as any).createdAt, true)
+        if (bTime !== aTime) return bTime - aTime
+
+        // 優先度3: IDで安定ソート（同じタイムスタンプの場合）
+        return (a.id || '').localeCompare(b.id || '')
       })
     }
 
