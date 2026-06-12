@@ -55,6 +55,14 @@ export function Footer() {
                     </Link>
                   </li>
                 ))}
+                <li className="col-span-2 lg:col-span-1">
+                  <a
+                    href="https://lp.noa-corporation.jp/"
+                    className="text-gray-400 hover:text-white transition-colors"
+                  >
+                    ー　中古トラック・商用車の在庫を見る（100台）
+                  </a>
+                </li>
               </ul>
             </div>
 
