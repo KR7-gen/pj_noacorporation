@@ -60,7 +60,7 @@ export function Footer() {
                     href="https://lp.noa-corporation.jp/"
                     className="text-gray-400 hover:text-white transition-colors"
                   >
-                    ー　中古トラック・商用車の在庫を見る（100台）
+                    ー　中古トラック・商用車の在庫を見る
                   </a>
                 </li>
               </ul>

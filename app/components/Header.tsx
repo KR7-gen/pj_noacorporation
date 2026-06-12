@@ -193,7 +193,7 @@ export function Header() {
                 flexShrink: 0
               }}
             >
-              中古トラック・商用車の在庫を見る（100台）
+              在庫車両
             </a>
             <a href="/rental"
               style={{
@@ -436,7 +436,7 @@ export function Header() {
             </div>
             <nav className="flex flex-col gap-6">
               <Link href="/inventory" className="text-base font-medium text-gray-700 hover:text-blue-600" onClick={handleCloseMenu}>販売在庫一覧</Link>
-              <a href="https://lp.noa-corporation.jp/" className="text-base font-medium text-gray-700 hover:text-blue-600" onClick={handleCloseMenu}>中古トラック・商用車の在庫を見る（100台）</a>
+              <a href="https://lp.noa-corporation.jp/" className="text-base font-medium text-gray-700 hover:text-blue-600" onClick={handleCloseMenu}>在庫車両</a>
               <Link href="/rental" className="text-base font-medium text-gray-700 hover:text-blue-600" onClick={handleCloseMenu}>レンタル車両</Link>
               <Link href="/purchase" className="text-base font-medium text-gray-700 hover:text-blue-600" onClick={handleCloseMenu}>買取はこちら</Link>
               <Link href="/about" className="text-base font-medium text-gray-700 hover:text-blue-600" onClick={handleCloseMenu}>私たちについて</Link>
