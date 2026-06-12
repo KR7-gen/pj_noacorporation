@@ -171,6 +171,30 @@ export function Header() {
             >
               販売在庫一覧
             </a>
+            <a href="https://lp.noa-corporation.jp/"
+              style={{
+                margin: "0",
+                height: "1.64rem",
+                opacity: 1,
+                fontFamily: "Noto Sans JP, sans-serif",
+                fontWeight: 700,
+                fontStyle: "bold",
+                fontSize: "1.14rem",
+                lineHeight: "100%",
+                letterSpacing: "0%",
+                background: "transparent",
+                color: "#1a1a1a",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: "0.29rem",
+                textDecoration: "none",
+                whiteSpace: "nowrap",
+                flexShrink: 0
+              }}
+            >
+              在庫車両
+            </a>
             <a href="/rental"
               style={{
                 margin: "0",
@@ -412,6 +436,7 @@ export function Header() {
             </div>
             <nav className="flex flex-col gap-6">
               <Link href="/inventory" className="text-base font-medium text-gray-700 hover:text-blue-600" onClick={handleCloseMenu}>販売在庫一覧</Link>
+              <a href="https://lp.noa-corporation.jp/" className="text-base font-medium text-gray-700 hover:text-blue-600" onClick={handleCloseMenu}>在庫車両</a>
               <Link href="/rental" className="text-base font-medium text-gray-700 hover:text-blue-600" onClick={handleCloseMenu}>レンタル車両</Link>
               <Link href="/purchase" className="text-base font-medium text-gray-700 hover:text-blue-600" onClick={handleCloseMenu}>買取はこちら</Link>
               <Link href="/about" className="text-base font-medium text-gray-700 hover:text-blue-600" onClick={handleCloseMenu}>私たちについて</Link>
